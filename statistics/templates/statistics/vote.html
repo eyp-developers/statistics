@@ -1,0 +1,77 @@
+{% extends 'statistics/base.html' %}
+
+{% load staticfiles %}
+
+{% block page_title %}Vote: {{ committee.committee_name }}{% endblock %}
+
+{% block content %}
+<h1 style="text-align: center">Voting for {{ committee.committee_name }} on {{ debate }}</h1>
+<br>
+<form class="form-horizontal" role="form" action="{% url 'statistics:vote' session.id committee.id %}" method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="{{ form.session.id_for_label }}">Session:</label>
+    <div class="col-sm-10">
+      {{ form.session.errors }}
+      <input type="text" class="form-control" name="{{ form.session.html_name }}" id="{{ form.session.id_for_label }}" maxlength=100 value="{{ form.session.value }}" readonly>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="{{ form.committee.id_for_label }}">Commitee:</label>
+    <div class="col-sm-10">
+      {{ form.committee.errors }}
+      <input type="text" class="form-control" name="{{ form.committee.html_name }}" id="{{ form.committee.id_for_label }}" maxlength=7 value="{{ form.committee.value }}" readonly>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="{{ form.debate.id_for_label }}">Debate:</label>
+    <div class="col-sm-10">
+      {{ form.debate.errors }}
+      <input type="text" class="form-control" name="{{ form.debate.html_name }}" id="{{ form.debate.id_for_label }}" value="{{ form.debate.value }}" readonly>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="{{ form.in_favour.id_for_label }}">Votes In Favour:</label>
+    <div class="col-sm-10">
+      {{ form.in_favour.errors }}
+      <input type="number" min="0" max="50" class="form-control" name="{{ form.in_favour.html_name }}" id="{{ form.in_favour.id_for_label }}" value="{{ form.in_favour.value }}">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="{{ form.against.id_for_label }}">Votes Against:</label>
+    <div class="col-sm-10">
+      {{ form.against.errors }}
+      <input type="number" min="0" max="50" class="form-control" name="{{ form.against.html_name }}" id="{{ form.against.id_for_label }}" value="{{ form.against.value }}">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="{{ form.abstentions.id_for_label }}">Abstentions:</label>
+    <div class="col-sm-10">
+      {{ form.abstentions.errors }}
+      <input type="number" min="0" max="50" class="form-control" name="{{ form.abstentions.html_name }}" id="{{ form.abstentions.id_for_label }}" value="{{ form.abstentions.value }}">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="{{ form.absent.id_for_label }}">Absent:</label>
+    <div class="col-sm-10">
+      {{ form.absent.errors }}
+      <input type="number" min="0" max="50" class="form-control" name="{{ form.absent.html_name }}" id="{{ form.absent.id_for_label }}" value="{{ form.absent.value }}">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" >Total Votes:</label>
+    <div class="col-sm-10">
+      <h5 id="total"><h5>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+  </div>
+</form>
+{% endblock %}
+
+{% block footer_scripts %}
+<script  type="text/javascript" src="{% static 'statistics/js/vote.js' %}"></script>
+{% endblock %}

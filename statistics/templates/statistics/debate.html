@@ -1,0 +1,62 @@
+{% extends 'statistics/base.html' %}
+
+{% load staticfiles %}
+
+{% block page_title %}Debate: {{ committee.committee_name }}{% endblock %}
+
+{% block content %}
+</div>
+<div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.session_picture }}') no-repeat center/cover;">
+<h1 class="session-name">Debate: {{ committee.committee_name }}</h1>
+<h3><a href="{% url 'statistics:session' session.pk %}">{{ session.session_name }}</a></h3>
+</div>
+<div class="container">
+  <h1 class="session-name" style="text-align: center;">{{ committee.committee_name }}</h1>
+  <h3 style="text-align: center;">{{ committee.committee_topic }}</h3>
+  <br>
+  <h2>Points Made:</h2>
+  <div id="points" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+  <h2>Subtopics Discussed:</h2>
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+      <div id="subtopics" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="text-align:center;">
+      <h2 id="total_points">Total Points:</h2>
+      <h4 id="total_type"></h4>
+      <h3 id="latest_point">Latest Point By:<h3>
+      <h4 id="latest_on">On:</h4>
+    </div>
+  </div>
+  <h2>Voting Summary:</h2>
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="text-align:center;">
+      <br>
+      <h1 id="total_counted">Votes Counted:</h1>
+      <h2 id="committees_counted">Committees Counted:</h2>
+      <h1 id="in_favour" style="color: #02c75f">In Favour:</h1>
+      <h1 id="against" style="color: #b62424">Against:</h1>
+      <h3 id="abstentions" style="color: #1e4e8a">Abstentions:</h3>
+      <h3 id="absent" style="color: #ffd326">Absent:</h3>
+
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+      <div id="debate_votes" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    </div>
+  </div>
+  <div id="committee_votes" style="min-width: 310px; height: 150px; margin: 0 auto"></div>
+
+
+<script type="text/javascript">
+    var session = {{ session.pk }};
+    var committee = {{ committee.pk }};
+    var max_rounds = {{ session.session_max_rounds }};
+    var debate_url = '{% url 'statistics:debate_api' session.pk committee.pk %}';
+</script>
+
+{% endblock %}
+
+{% block footer_scripts %}
+<script  type="text/javascript" src="{% static 'statistics/js/debate.js' %}"></script>
+{% endblock %}

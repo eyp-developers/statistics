@@ -1,0 +1,44 @@
+{% extends 'statistics/base.html' %}
+
+{% load staticfiles %}
+
+{% block page_title %}{{ session.session_name }}{% endblock %}
+
+{% block content %}
+</div>
+<div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.session_picture }}') no-repeat center/cover;">
+<h1 class="session-name">{{ session.session_name }}</h1>
+<h3>{{ session.session_description }}</h3>
+</div>
+<div class="container">
+
+{% if session_committee_list %}
+      <h1>Debates:</h1>
+      <div class="debates row" >
+      {% for committee in session_committee_list %}
+        <div class="debate-box col-xs-12 col-sm-6 col-md-4 col-lg-3">
+          <h2><a href="{% url 'statistics:debate' committee.session.id committee.id %}">{{ committee.committee_name }}</a></h2>
+          <p>{{ committee.committee_topic }}</p>
+        </div>
+      {% endfor %}
+    </div>
+{% else %}
+      <h2>No committees are available yet!</h2>
+{% endif %}
+
+<h2>Points Made Summary</h2>
+<div id="points" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<h2>Voting Summary</h2>
+<div id="votes" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<script type="text/javascript">
+  var session = {{ session_id }};
+  var session_url = '{% url 'statistics:session_api' session_id %}';
+</script>
+
+{% endblock %}
+
+{% block footer_scripts %}
+<script  type="text/javascript" src="{% static 'statistics/js/session.js' %}"></script>
+{% endblock %}
