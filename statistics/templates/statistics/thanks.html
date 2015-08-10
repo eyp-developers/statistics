@@ -1,0 +1,15 @@
+{% extends 'statistics/base.html' %}
+
+{% load staticfiles %}
+
+{% block page_title %}Thanks!{% endblock %}
+
+{% block content %}
+<div style="text-align: center">
+  <h1>Thanks!</h1>
+  <a href="{{ thanks_url }}" class="btn btn-default btn-lg">Submit Again</a>
+</div>
+{% endblock %}
+
+{% block footer_scripts %}
+{% endblock %}

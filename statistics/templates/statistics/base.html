@@ -1,0 +1,78 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+        <title>{% block page_title %}{% endblock %} | EYP Statistics</title>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+        {% load staticfiles %}
+        <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="{% static 'statistics/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'statistics/css/main.css' %}">
+
+        <script src="{% static 'statistics/js/modernizr-2.8.3-respond-1.4.2.min.js' %}"></script>
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <nav class="navbar navbar-inverse" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="{% url 'statistics:home'%}">GA Statistics</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li><a href="{% url 'statistics:home' %}">Home</a></li>
+              </ul>
+            </div><!--/.navbar-collapse -->
+          </div>
+        </nav>
+
+    <div class="container">
+
+      {% block content %}
+      {% endblock %}
+
+      <hr>
+
+      <footer>
+        <p>&copy; EYP Developers 2015</p>
+      </footer>
+    </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+        <script>window.jQuery || document.write('<script src="{% static 'statistics/js/jquery-1.11.2.min.js' %}"><\/script>')</script>
+
+        <script  type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+
+        <script src="{% static 'statistics/js/bootstrap.min.js' %}"></script>
+
+        <script src="{% static 'statistics/js/masonry.min.js' %}"></script>
+
+        {% block footer_scripts %}
+        {% endblock %}
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            e.src='//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            ga('create','UA-XXXXX-X','auto');ga('send','pageview');
+        </script>
+    </body>
+</html>
