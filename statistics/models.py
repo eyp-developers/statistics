@@ -133,7 +133,7 @@ class ActiveRound(models.Model):
     session = models.ForeignKey(Session)
     active_round = models.PositiveSmallIntegerField(null=True, blank=True)
 
-    def __unicode__(self):
+    def __int__(self):
         return self.active_round
 
 
