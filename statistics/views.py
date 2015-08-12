@@ -2,8 +2,10 @@ import json
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 
+#Importing all models for statistics.
 from .models import Session, Committee, Point, Vote, SubTopic, ActiveDebate, ActiveRound
 
+#Importing the forms too.
 from .forms import PointForm, VoteForm, ActiveDebateForm, ActiveRoundForm
 
 def home(request):
@@ -13,22 +15,33 @@ def home(request):
     return render(request, 'statistics/home.html', context)
 
 def session(request, session_id):
+    #The Session page uses static content and content that is constantly updated, the satic content is loaded with the view
+    #and the updating content updates with the session api, defined further down.
+
+    #The static data here is simply a list of the available committees (we can assume those don't change during live statistics)
+    #and the name and data of the session itself.
     session_committee_list = Committee.objects.filter(session__id=session_id)[:30]
     session = Session.objects.get(pk=session_id)
     context = {'session_committee_list': session_committee_list, 'session_id': session_id, 'session': session}
     return render(request, 'statistics/session.html', context)
 
 def debate(request, session_id, committee_id):
+    #Same for debates as for sessions, the only static content is the name and data of the committee and the session.
+    #The rest of the point/voting data comes through the api that can constantly be updated.
     c = Committee.objects.get(pk=committee_id)
     s = Session.objects.get(pk=session_id)
     context = {'committee': c, 'session': s}
     return render(request, 'statistics/debate.html', context)
 
 def committee(request, session_id, committee_id):
+    #The idea is not only to have a "debate page", where you can see how many points are made during the debate of a particular resolution,
+    #but also for there to be a "committee page", where delegates can see how many points their committee has made during each debate, what was the longest time between points etc.
+    #This should be made in due time.
     pass
 
 def point(request, session_id, committee_id):
-
+    #The Point view handles the submission of points, both creating the form from the data given, validating the form,
+    #and sending the user to the right place if the data submission was successful.
     active = ActiveDebate.objects.filter(session_id=session_id)[0].active_debate
     active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
     active_round = ActiveRound.objects.filter(session__pk=session_id)
