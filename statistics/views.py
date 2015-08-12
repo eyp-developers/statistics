@@ -35,40 +35,59 @@ def debate(request, session_id, committee_id):
 
 def committee(request, session_id, committee_id):
     #The idea is not only to have a "debate page", where you can see how many points are made during the debate of a particular resolution,
-    #but also for there to be a "committee page", where delegates can see how many points their committee has made during each debate, what was the longest time between points etc.
+    #but also for there to be a "committee page", where delegates can see how many points their
+    #committee has made during each debate, what was the longest time between points etc.
     #This should be made in due time.
     pass
 
 def point(request, session_id, committee_id):
     #The Point view handles the submission of points, both creating the form from the data given, validating the form,
     #and sending the user to the right place if the data submission was successful.
-    active = ActiveDebate.objects.filter(session_id=session_id)[0].active_debate
-    active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
-    active_round = ActiveRound.objects.filter(session__pk=session_id)
-    active_round_no = active_round[0].active_round
 
+    #Here we get the active debate, get the committee of the active debate and get the active round no.
+    active = ActiveDebate.objects.get(session_id=session_id).active_debate
+    active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
+    active_round_no = ActiveRound.objects.get(session__pk=session_id).active_round
+
+    #Get the subtopics of the active committee, and the loop through each one to create an array of subtopics.
     subtopics = SubTopic.objects.filter(committee=active_committee[0])
     subtopics_array = []
     for subtopic in subtopics:
         subtopics_array.append((subtopic.pk, subtopic.subtopic_text),)
+
+    #Get the committee and session of the committee that wants to make a point.
     committee = Committee.objects.get(pk=committee_id)
     session = Session.objects.get(pk=session_id)
 
+    #If the user is trying to submit data (method=POST), take a look at it
     if request.method == 'POST':
+        #Print what the user is trying to submit for the sake of server logs.
         print request.POST
-        form = PointForm(subtopics_array, request.POST)
-        if form.is_valid():
-            subtopic_submit_array = []
 
-            point = Point(session = Session.objects.filter(session_name=form.cleaned_data['session'])[0], committee_by=Committee.objects.filter(session__pk=session_id).filter(committee_name=form.cleaned_data['committee'])[0], active_debate=form.cleaned_data['debate'], active_round=form.cleaned_data['round_no'], point_type=form.cleaned_data['point_type'])
+        #Create an instance of the form and populate it with data from the request.
+        form = PointForm(subtopics_array, request.POST)
+
+        #Check if the form is valid.
+        if form.is_valid():
+            #Create a point from the data submitted
+            point = Point(session = Session.objects.filter(
+                session_name=form.cleaned_data['session'])[0],
+                committee_by=Committee.objects.filter(session__pk=session_id).filter(committee_name=form.cleaned_data['committee'])[0],
+                active_debate=form.cleaned_data['debate'], active_round=form.cleaned_data['round_no'],
+                point_type=form.cleaned_data['point_type']
+                )
+            #You need to first save the point before being able to add data to the ManyToManyField.
             point.save()
+            #For each subtopic in the selected subtopics, add the subtopic to the saved points list of subtopics.
             for s in form.cleaned_data['subtopics']:
                 st = SubTopic.objects.filter(pk=s)
                 point.subtopics.add(st[0])
 
+            #Once all that is done, send the user to the thank you page.
             return HttpResponseRedirect('/session/' + session_id + '/point/' + committee_id + '/thanks')
 
     else:
+        #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
         form = PointForm(subtopics_array, {'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'round_no': active_round_no})
 
 
@@ -76,31 +95,51 @@ def point(request, session_id, committee_id):
     return render(request, 'statistics/point.html', context)
 
 def vote(request, session_id, committee_id):
+    #The Vote form is just as complex as the Point form, and is made in a very similar manner.
+
+    #We get the current session and debate of the user, then get the active committee from the active debate.
     session = Session.objects.get(pk=session_id)
     committee = Committee.objects.get(pk=committee_id)
     active = ActiveDebate.objects.filter(session_id=session_id)[0].active_debate
     active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
 
+    #If the user is trying to submit something:
     if request.method == 'POST':
+        #Create an instance of the form and populate it with data from the request.
         form = VoteForm(request.POST)
 
+        #If the data in the form is valid
         if form.is_valid():
-            vote = Vote(session = Session.objects.filter(session_name=form.cleaned_data['session'])[0], committee_by=Committee.objects.filter(session__pk=session_id).filter(committee_name=form.cleaned_data['committee'])[0], active_debate=form.cleaned_data['debate'], in_favour=form.cleaned_data['in_favour'], against=form.cleaned_data['against'], abstentions=form.cleaned_data['abstentions'], absent=form.cleaned_data['absent'])
+            #Then make a vote from the data in the form.
+            vote = Vote(session = Session.objects.filter(
+                session_name=form.cleaned_data['session'])[0],
+                committee_by=Committee.objects.filter(session__pk=session_id).filter(committee_name=form.cleaned_data['committee'])[0],
+                active_debate=form.cleaned_data['debate'],
+                in_favour=form.cleaned_data['in_favour'],
+                against=form.cleaned_data['against'],
+                abstentions=form.cleaned_data['abstentions'],
+                absent=form.cleaned_data['absent']
+                )
+            #Save the vote to the database.
             vote.save()
+            #Then send the user to the thank you page.
             return HttpResponseRedirect('/session/' + session_id + '/vote/' + committee_id + '/thanks')
 
     else:
+        #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
         form = VoteForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
 
     context = {'session': session, 'committee': committee, 'debate': active, 'form': form}
     return render(request, 'statistics/vote.html', context)
 
 def thanks(request, session_id, committee_id):
+    #A thanks page that is given a url for the user to submit something again. We construct the url here and then set it as the href="" on the button
     thanks_url = '/session/' + session_id + '/point/' + committee_id
     context = {'thanks_url': thanks_url}
     return render(request, 'statistics/thanks.html', context)
 
 def vote_thanks(request, session_id, committee_id):
+    #Same thing as the last thanks page, but with a url constructed for voting instead.
     thanks_url = '/session/' + session_id + '/vote/' + committee_id
     context = {'thanks_url': thanks_url}
     return render(request, 'statistics/thanks.html', context)
