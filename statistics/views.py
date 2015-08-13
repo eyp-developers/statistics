@@ -145,6 +145,9 @@ def vote_thanks(request, session_id, committee_id):
     return render(request, 'statistics/thanks.html', context)
 
 def manage(request, session_id):
+    #The manage page contains 2 forms, one form for changing the active debate and one form for changing the active round.
+
+    #First we set up our variables, we need the session, the active debate, the active round, the max rounds and a list of committees
     session = Session.objects.get(pk=session_id)
     active_debate = ActiveDebate.objects.filter(session_id=session_id)[0]
     active = ActiveDebate.objects.filter(session_id=session_id)[0].active_debate
@@ -152,36 +155,56 @@ def manage(request, session_id):
     active_round_entry = ActiveRound.objects.filter(session__pk=session_id)[0]
     committees = Committee.objects.filter(session__pk=session_id)
     committees_array = []
+    #Here we make an array of committees that can be passed to the form
     for committee in committees:
         committees_array.append((committee.pk, committee.committee_name),)
+    #We need to make an array of each round with the round number and the place in the array
+    #So we first make an array with the round numbers (1,2,3)
     max_rounds = []
     max_rounds_array = []
     for i in range(session.session_max_rounds):
         n = i + 1
         max_rounds.append(n)
+    #Then we make an array with the value and the position, so the form can accept the data.
     for r in max_rounds:
         max_rounds_array.append((r, r),)
 
+    #If the user is trying to submit data
     if request.method == 'POST':
+        #For server log purposes, print response
         print request.POST
+        #if it's an active debate submission
         if 'active_debate' in request.POST:
+            #Create an instance of the form and populate it with data from the request.
             debate_form = ActiveDebateForm(committees_array, request.POST)
+            #If it's valid
             if debate_form.is_valid():
+                #Get the committee that you want to change the active debate to and then set the active debate to be the new committees committee name.
                 active_debate_committee = Committee.objects.get(pk=debate_form.cleaned_data['active_debate'])
                 active_debate.active_debate = active_debate_committee.committee_name
+                #Save the new active debate
                 active_debate.save()
+                #Send the user to the manage page
                 return HttpResponseRedirect('/session/' + session_id + '/manage')
             else:
                 print debate_form
+            #You also have to create an empty/default instance of the "opposite" form, since we've got two on this page.
             round_form = ActiveRoundForm(max_rounds_array, {'session': session.session_name})
+        #otherwise if it's an active round submission
         elif 'active_round' in request.POST:
+            #Create an instance of the form and populate it with data from the request.
             round_form = ActiveRoundForm(max_rounds_array, request.POST)
+            #If the submission is valid
             if round_form.is_valid():
+                #Change the active round entry to be the new round
                 active_round_entry.active_round = round_form.cleaned_data['active_round']
+                #Save the active round.
                 active_round_entry.save()
+                #Send the user back to the manage page
                 return HttpResponseRedirect('/session/' + session_id + '/manage')
             debate_form = ActiveDebateForm(committees_array, {'session': session.session_name})
 
+    #Otherwise, give the User some nice new forms.
     else:
         debate_form = ActiveDebateForm(committees_array, {'session': session.session_name})
         round_form = ActiveRoundForm(max_rounds_array, {'session': session.session_name})
@@ -190,44 +213,66 @@ def manage(request, session_id):
     return render(request, 'statistics/manage.html', context)
 
 def session_api(request, session_id):
+    #Since the graphs on the session page need to be able to livereload, we need to create
+    #a custom "API" that outputs the neccesary JSON to keep the graph alive
+
+    #First we need all the committees registered for that session
     committees = Committee.objects.filter(session__id=session_id)
+
+    #Then we need all the available points, direct responses and votes
     points = Point.objects.filter(session_id=session_id).filter(point_type='P')
     drs = Point.objects.filter(session_id=session_id).filter(point_type='DR')
     votes = Vote.objects.filter(session_id=session_id)
+
+    #Then we need a list of each of them.
     committee_list = []
     points_list = []
     drs_list = []
 
+    #And lists for different vote types
     in_favour = []
     against = []
     abstentions = []
     absent = []
 
+    #For each committee,
     for committee in committees:
+        #Let c be the name
         c = committee.committee_name
+        #p be the count of points
         p = points.filter(committee_by=committee).count()
+        #and d be the count of DRs.
         d = drs.filter(committee_by=committee).count()
+
+        #Append each newly made variable to our nice lists.
         committee_list.append(c)
         points_list.append(p)
         drs_list.append(d)
 
+        #Set the counter for each vote type to 0
         debate_in_favour = 0
         debate_against = 0
         debate_abstentions = 0
         debate_absent = 0
 
+        #Filter votes by the current committee
         v = votes.filter(active_debate=committee)
+
+        #For each vote in the new list of votes
         for vc in v:
+            #Add that votes count to the total count
             debate_in_favour += vc.in_favour
             debate_against += vc.against
             debate_abstentions += vc.abstentions
             debate_absent += vc.absent
 
+        #Then, append the totals to the full list.
         in_favour.append(debate_in_favour)
         against.append(debate_against)
         abstentions.append(debate_abstentions)
         absent.append(debate_absent)
 
+    #Finally output the result as JSON
     session_json = json.dumps({
     'committees': committee_list,
     'points': points_list,
@@ -240,50 +285,78 @@ def session_api(request, session_id):
     return HttpResponse(session_json, content_type='json')
 
 def debate_api(request, session_id, committee_id):
+    #The Debate API is very similar to the session API, but more complex due to more graphs and subtopics.
+
+    #We get the active debate and active round
     active_debate = ActiveDebate.objects.filter(session__pk=session_id)
     active_round = ActiveRound.objects.filter(session__pk=session_id)
     active_round_no = active_round[0].active_round
 
+    #We get the session, committee, and list of all committees.
     session = Session.objects.get(pk=session_id)
     committee = Committee.objects.filter(pk=committee_id)
     committees = Committee.objects.filter(session__id=session_id)
+
+    #Making an array with the committee name.
     committee_array_name = []
     committee_array_name.append(committee[0].committee_name)
 
+    #Getting all points (both Point and DR), just points, just DRs and all votes
     all_points = Point.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name)
     points = Point.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name).filter(point_type='P')
     drs = Point.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name).filter(point_type='DR')
     votes = Vote.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name)
 
+    #If the points couldn't be retreived (If there were no points made yet) then don't do anything
     if not all_points:
         pass
+    #But if there were points available
     else:
+        #We want the name of the committee that made the last point.
         latest_point_name = all_points.order_by('-timestamp')[0].committee_by.committee_name
+        #Then we want the subtopics that that point addressed.
         latest_point_subtopics = all_points.order_by('-timestamp')[0].subtopics.all()
         latest_point_subtopics_array = []
 
+        #For each sutopic the latest point addressed, append the text of the subtopic to the array
         for s in latest_point_subtopics:
             latest_point_subtopics_array.append(s.subtopic_text)
 
+        #Now we're moving away from just the latest point, we want all subtopics connected to the committee in question.
         subtopics = SubTopic.objects.filter(session__pk=session_id).filter(committee__committee_name=committee[0].committee_name)
+        #Get the maximum number of allowed rounds for the session in question.
         no_rounds = range(session.session_max_rounds)
+
+        #Set up the needed arrays
         subtopics_array = []
         subtopic_points_array = []
 
+        #For each available subtopic, append the subtopic text to the subtopics array
         for s in subtopics:
             subtopics_array.append(s.subtopic_text)
 
+        #For each round available
         for r in no_rounds:
+            #The round numer should be the round + 1
             r_n = r + 1
+            #Create an array for that round.
             round_array = []
+            #Filter all the points by that round number
             round_points = all_points.filter(active_round=r_n)
+            #For each subtopic
             for s in subtopics:
+                #Append the number of points made on that subtopic to the round array
                 round_array.append(round_points.filter(subtopics=s).count())
 
+            #Append the newly made array to the subtopic points array, this means that the subtopic points array
+            #will be an array containing an array for each available round, filled with a value for the number of points
+            #made on each subtopic.
             subtopic_points_array.append(round_array)
 
+        #A simple boolean for whether or not the debate in question is the active debate.
         is_active = active_debate[0].active_debate == committee[0].committee_name
 
+    #Setting up more arrays for the voting graphs and zeroing values.
     committees_list = []
     committees_voted_list = []
 
