@@ -32,7 +32,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/tom/Desktop/eypstats"
+set -gx VIRTUAL_ENV "/Users/tom/GitHub/statistics"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
