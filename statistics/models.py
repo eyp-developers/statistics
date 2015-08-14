@@ -98,6 +98,22 @@ class Session(models.Model):
     session_start_date = models.DateTimeField('start date')
     session_end_date = models.DateTimeField('end date')
 
+    #Setting up statistic types
+    STATISTICS = 'S'
+    CONTENT = 'C'
+    SINGLEFORM = 'JF'
+    SPLITFORM = 'SF'
+    NONE = 'N/A'
+    STATISTIC_TYPES = (
+        (STATISTICS, 'Statistics Only'),
+        (CONTENT, 'Point Content Only'),
+        (SINGLEFORM, 'Single Form Statistics'),
+        (SPLITFORM, 'Split Form Statistics'),
+        (NONE, 'No Statistics (Only Voting)')
+    )
+    #Making the statistics type a selectable option
+    session_statistics = models.CharField(max_length=3, choices=STATISTIC_TYPES, default=SPLITFORM)
+
     #Enabling/Disabling Session Settings
     session_rounds_enabled = models.BooleanField('debate rounds enabled', default=True)
     session_subtopics_enabled = models.BooleanField('committee subtopics enabled', default=True)
