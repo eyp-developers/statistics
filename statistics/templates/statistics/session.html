@@ -13,14 +13,21 @@
 <div class="container">
 
 {% if session_committee_list %}
-      <h1>Debates:</h1>
+      <h1>
+        Debates:
+      </h1>
       <div class="debates row" >
-      {% for committee in session_committee_list %}
-        <div class="debate-box col-xs-12 col-sm-6 col-md-4 col-lg-3">
-          <h2><a href="{% url 'statistics:debate' committee.session.id committee.id %}">{{ committee.committee_name }}</a></h2>
-          <p>{{ committee.committee_topic }}</p>
-        </div>
-      {% endfor %}
+        {% for committee in session_committee_list %}
+          <div class="debate-box col-md-4">
+            <h2>
+              <a href="{% url 'statistics:debate' committee.session.id committee.id %}">{{ committee.committee_name }}</a>
+            </h2>
+            <p>
+              {{ committee.committee_topic }}
+            </p>
+          </div>
+          {% cycle "" "" "</div><div class='row'>" %}
+        {% endfor %}
     </div>
 {% else %}
       <h2>No committees are available yet!</h2>
