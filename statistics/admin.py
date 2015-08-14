@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Session, Committee, SubTopic, ActiveDebate, ActiveRound, Point, Vote
+from .models import Session, Committee, SubTopic, ActiveDebate, ActiveRound, Point, ContentPoint, Vote
 
 #Setting up admin inlines for Committees and Suptopics, allows easy adding of committees in the "Session creation" page,
 #and Subtopics in the "Comiitee creation" page
@@ -56,6 +56,11 @@ class PointAdmin(admin.ModelAdmin):
     list_display = ('timestamp', 'session', 'point_type', 'committee_by', 'active_debate', 'active_round')
     list_filter = ['timestamp']
 
+class ContentPointAdmin(admin.ModelAdmin):
+    #Which things should be displayed in the list of content points, filtered by time.
+    list_display = ('timestamp', 'session', 'committee_by', 'active_debate', 'point_content')
+    list_filter = ['timestamp']
+
 class VoteAdmin(admin.ModelAdmin):
     #Which things should be displayed in the list of votes, filtered by time
     list_display = ('timestamp', 'session', 'committee_by', 'active_debate', 'in_favour', 'against', 'abstentions', 'absent', 'total_votes')
@@ -68,4 +73,5 @@ admin.site.register(SubTopic, SubTopicAdmin)
 admin.site.register(ActiveDebate, ActiveDebateAdmin)
 admin.site.register(ActiveRound, ActiveRoundAdmin)
 admin.site.register(Point, PointAdmin)
+admin.site.register(ContentPoint, ContentPointAdmin)
 admin.site.register(Vote, VoteAdmin)
