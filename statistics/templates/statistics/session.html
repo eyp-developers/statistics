@@ -8,7 +8,7 @@
 </div>
 <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.session_picture }}') no-repeat center/cover;">
 <h1 class="session-name">{{ session.session_name }}</h1>
-<h3>{{ session.session_description }}</h3>
+<h3 class="session-description">{{ session.session_description }}</h3>
 </div>
 <div class="container">
 
@@ -20,7 +20,7 @@
         {% for committee in session_committee_list %}
           <div class="debate-box col-md-4">
             <h2>
-              <a href="{% url 'statistics:debate' committee.session.id committee.id %}">{{ committee.committee_name }}</a>
+              <a href="{% url 'statistics:debate' committee.session.id committee.id %}" class="btn btn-primary btn-material-blue-500">{{ committee.committee_name }}</a>
             </h2>
             <p>
               {{ committee.committee_topic }}
