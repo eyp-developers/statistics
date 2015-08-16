@@ -288,7 +288,6 @@ def debate_api(request, session_id, committee_id):
     all_points = Point.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name)
     points = Point.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name).filter(point_type='P')
     drs = Point.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name).filter(point_type='DR')
-    votes = Vote.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name)
 
     #If the points couldn't be retreived (If there were no points made yet) then don't do anything
     if not all_points:
@@ -341,7 +340,6 @@ def debate_api(request, session_id, committee_id):
 
     #Setting up more arrays for the voting graphs and zeroing values.
     committees_list = []
-    committees_voted_list = []
 
     points_total = 0
     type_point = 0
@@ -349,17 +347,6 @@ def debate_api(request, session_id, committee_id):
 
     points_made = []
     drs_made = []
-
-    debate_in_favour = 0
-    debate_against = 0
-    debate_abstentions = 0
-    debate_absent = 0
-    total_counted = 0
-
-    committees_in_favour = []
-    committees_against = []
-    committees_abstentions = []
-    committees_absent = []
 
     for c in committees:
         com_name = c.committee_name
@@ -375,35 +362,6 @@ def debate_api(request, session_id, committee_id):
         points_made.append(p)
         drs_made.append(d)
 
-    for v in votes:
-        debate_in_favour += v.in_favour
-        debate_against += v.against
-        debate_abstentions += v.abstentions
-        debate_absent += v.absent
-        total = v.in_favour + v.against + v.abstentions + v.absent
-        total_counted += total
-
-        committees_in_favour.append(v.in_favour)
-        committees_against.append(v.against)
-        committees_abstentions.append(v.abstentions)
-        committees_absent.append(v.absent)
-
-        committees_voted_list.append(v.committee_by.committee_name)
-
-
-    committees_count = len(committees_list)
-    committees_voted = len(committees_voted_list)
-
-    debate_in_favour_array = []
-    debate_against_array = []
-    debate_abstentions_array = []
-    debate_absent_array = []
-
-    debate_in_favour_array.append(debate_in_favour)
-    debate_against_array.append(debate_against)
-    debate_abstentions_array.append(debate_abstentions)
-    debate_absent_array.append(debate_absent)
-
     if not all_points:
         debate_json = json.dumps({
         'committee_name': committee_array_name,
@@ -418,18 +376,6 @@ def debate_api(request, session_id, committee_id):
         'latest_point_subtopics': '',
         'subtopics': [],
         'subtopic_points': [],
-        'committees_voted_list': committees_voted_list,
-        'committees_count': committees_count,
-        'committees_voted': committees_voted,
-        'debate_in_favour': debate_in_favour_array,
-        'debate_against': debate_against_array,
-        'debate_abstentions': debate_abstentions_array,
-        'debate_absent': debate_absent_array,
-        'total_counted': total_counted,
-        'committees_in_favour': committees_in_favour,
-        'committees_against': committees_against,
-        'committees_abstentions': committees_abstentions,
-        'committees_absent': committees_absent,
         })
     else:
         debate_json = json.dumps({
@@ -445,18 +391,6 @@ def debate_api(request, session_id, committee_id):
         'latest_point_subtopics': latest_point_subtopics_array,
         'subtopics': subtopics_array,
         'subtopic_points': subtopic_points_array,
-        'committees_voted_list': committees_voted_list,
-        'committees_count': committees_count,
-        'committees_voted': committees_voted,
-        'debate_in_favour': debate_in_favour_array,
-        'debate_against': debate_against_array,
-        'debate_abstentions': debate_abstentions_array,
-        'debate_absent': debate_absent_array,
-        'total_counted': total_counted,
-        'committees_in_favour': committees_in_favour,
-        'committees_against': committees_against,
-        'committees_abstentions': committees_abstentions,
-        'committees_absent': committees_absent,
         })
     return HttpResponse(debate_json, content_type='json')
 
