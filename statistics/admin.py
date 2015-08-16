@@ -58,7 +58,7 @@ class PointAdmin(admin.ModelAdmin):
 
 class ContentPointAdmin(admin.ModelAdmin):
     #Which things should be displayed in the list of content points, filtered by time.
-    list_display = ('timestamp', 'session', 'committee_by', 'active_debate', 'point_content')
+    list_display = ('timestamp', 'session', 'committee_by', 'active_debate', 'point_content', 'point_type')
     list_filter = ['timestamp']
 
 class VoteAdmin(admin.ModelAdmin):

@@ -230,6 +230,15 @@ class ContentPoint(models.Model):
     #Then we need the actual point content, which is a simple TextField.
     point_content = models.TextField()
 
+    #Defining the two point types, Point and Direct Response, the default will be Point.
+    POINT = 'P'
+    DIRECT_RESPONSE = 'DR'
+    POINT_TYPES = (
+        (POINT, 'Point'),
+        (DIRECT_RESPONSE, 'Direct Response'),
+    )
+    point_type = models.CharField(max_length=2, choices=POINT_TYPES, default=POINT)
+
     #We can also add a definition for showing in admin panels etc.
     def __unicode__(self):
         return self.point_content
