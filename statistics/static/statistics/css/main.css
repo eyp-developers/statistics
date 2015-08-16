@@ -43,4 +43,9 @@
 }
 .session-name {
   font-size: 60px;
+  color: white;
+}
+
+.session-description {
+  color: white;
 }
