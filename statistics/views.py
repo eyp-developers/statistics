@@ -476,3 +476,9 @@ def debate_api(request, session_id, committee_id):
         'committees_absent': committees_absent,
         })
     return HttpResponse(debate_json, content_type='json')
+
+def content_api(session_id, committee_id, offset, count):
+    pass
+
+def content_latest_api(session_id, committee_id, since):
+    pass
