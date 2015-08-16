@@ -195,7 +195,7 @@ class Point(models.Model):
     committee_by = models.ForeignKey(Committee)
 
     #Which was the active debate at the time the point was made.
-    active_debate = models.CharField(max_length=7, blank=True, null=True)
+    active_debate = models.CharField(max_length=8, blank=True, null=True)
 
     #Which was the Active Round at the time the point was made.
     active_round = models.PositiveSmallIntegerField(null=True, blank=True)
@@ -215,6 +215,24 @@ class Point(models.Model):
     #Definition of the point in an admin list will be the point type, "P" or "DR"
     def __str__(self):
         return self.point_type
+
+#Creating the second kind of point, the content point, which contains the text of a given point. Based on Wolfskaempfs GA Stats.
+class ContentPoint(models.Model):
+    #The ContentPoint also needs to be affiliated with a certain session and committee
+    #(which committee it was made by and which debate was active) in the same way as the statistic points.
+    session = models.ForeignKey(Session)
+    committee_by = models.ForeignKey(Committee)
+    active_debate = models.CharField(max_length=8)
+
+    #It's also to have a timestamp of when the content point was last edited
+    timestamp = models.DateTimeField(auto_now=True)
+
+    #Then we need the actual point content, which is a simple TextField.
+    point_content = models.TextField()
+
+    #We can also add a definition for showing in admin panels etc.
+    def __unicode__(self):
+        return self.point_content
 
 #Defining the voting class, one "vote" is filled in for each voting committee on each topic.
 class Vote(models.Model):
