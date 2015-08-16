@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 
 #Importing all models for statistics.
-from .models import Session, Committee, Point, Vote, SubTopic, ActiveDebate, ActiveRound
+from .models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
 
 #Importing the forms too.
 from .forms import PointForm, VoteForm, ActiveDebateForm, ActiveRoundForm
@@ -477,8 +477,81 @@ def debate_api(request, session_id, committee_id):
         })
     return HttpResponse(debate_json, content_type='json')
 
-def content_api(session_id, committee_id, offset, count):
-    pass
+def content_api(request, session_id, committee_id, offset, count):
+    #We need the committee to filter by active debate name.
+    committee = Committee.objects.get(pk=committee_id)
+    #For the 'offset' and 'count' arguments to work, we need to be able to tell the filter from which point and to which point to filter from.
+    point_from = int(offset)
+    point_to = int(offset) + int(count)
+    #First we need all contentpoints from that session
+    contentpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.committee_name).order_by('-pk')[point_from:point_to]
+    #If there are no points, do nothing.
+    if not contentpoints:
+        pass
 
-def content_latest_api(session_id, committee_id, since):
-    pass
+    #But if we could find points
+    else:
+        #Create an empty array to put the contentpoints in
+        contentpoint_list = []
+        #Loop through the avaliable contentpoints
+        for p in contentpoints:
+            #For each contentpoint, we need the id of the point, who the point was by, the kind of point, and the content of the point.
+            committee_by = p.committee_by.committee_name
+            point_type = p.point_type
+            content = p.point_content
+            pk = p.pk
+
+            #Create a single object with out data.
+            thispoint = {
+            'committee_by': committee_by,
+            'point_type': point_type,
+            'content': content,
+            'pk': pk
+            }
+
+            contentpoint_list.append(thispoint)
+        #Then we need to turn the list into JSON.
+        content_json = json.dumps({
+        'contentpoints': contentpoint_list
+        })
+
+
+    return HttpResponse(content_json, content_type='json')
+
+def content_latest_api(request, session_id, committee_id, since):
+    #We need the committee to filter by active debate name.
+    committee = Committee.objects.get(pk=committee_id)
+    #We need to get the contentpoints that have a pk greater than the "since" pk.
+    contentpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.committee_name).filter(pk__gt=since).order_by('-pk')
+    #If there are no points, do nothing.
+    if not contentpoints:
+        pass
+
+    #But if we could find points
+    else:
+        #Create an empty array to put the contentpoints in
+        contentpoint_list = []
+        #Loop through the avaliable contentpoints
+        for p in contentpoints:
+            #For each contentpoint, we need the id of the point, who the point was by, the kind of point, and the content of the point.
+            committee_by = p.committee_by.committee_name
+            point_type = p.point_type
+            content = p.point_content
+            pk = p.pk
+
+            #Create a single object with out data.
+            thispoint = {
+            'committee_by': committee_by,
+            'point_type': point_type,
+            'content': content,
+            'pk': pk
+            }
+
+            contentpoint_list.append(thispoint)
+        #Then we need to turn the list into JSON.
+        content_json = json.dumps({
+        'contentpoints': contentpoint_list
+        })
+
+
+    return HttpResponse(content_json, content_type='json')
