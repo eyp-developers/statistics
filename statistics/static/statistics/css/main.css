@@ -1,27 +1,27 @@
-h1, h2, h3, h4, h5, h6 {
+/*h1, h2, h3, h4, h5, h6 {
   font-family: 'Oswald', sans-serif;
-}
+}*/
 .navbar-inverse {
-  background-image: none;
-  background-color: #1e4e8a;
-  border: none;
+  /*background-image: none;*/
+  /*background-color: #1e4e8a;*/
+  /*border: none;*/
 }
 .navbar {
   border-radius: 0px;
-  font-family: 'Oswald', sans-serif;
+  /*font-family: 'Oswald', sans-serif;*/
   margin-bottom: 0px;
 }
-.navbar-inverse .navbar-nav>li>a {
+/*.navbar-inverse .navbar-nav>li>a {
   color: #fff;
-}
-.navbar-inverse .navbar-brand {
+}*/
+/*.navbar-inverse .navbar-brand {
   color: #fff;
-}
+}*/
 .top-header {
   display: table;
   width: 100%;
   height: 400px;
-  color: white;
+  /*color: white;*/
   padding: 80px 30px 50px 100px;
 }
 @media (max-width: 768px) {
@@ -33,7 +33,7 @@ h1, h2, h3, h4, h5, h6 {
   display: table;
   width: 100%;
   height: 150px;
-  color: white;
+  /*color: white;*/
   padding: 30px 100px 50px 100px;
 }
 @media (max-width: 768px) {
