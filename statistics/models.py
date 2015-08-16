@@ -101,18 +101,18 @@ class Session(models.Model):
     #Setting up statistic types
     STATISTICS = 'S'
     CONTENT = 'C'
-    SINGLEFORM = 'JF'
+    JOINTFORM = 'JF'
     SPLITFORM = 'SF'
     NONE = 'N/A'
     STATISTIC_TYPES = (
         (STATISTICS, 'Statistics Only'),
         (CONTENT, 'Point Content Only'),
-        (SINGLEFORM, 'Single Form Statistics'),
+        (JOINTFORM, 'Joint Form Statistics'),
         (SPLITFORM, 'Split Form Statistics'),
         (NONE, 'No Statistics (Only Voting)')
     )
     #Making the statistics type a selectable option
-    session_statistics = models.CharField(max_length=3, choices=STATISTIC_TYPES, default=SPLITFORM)
+    session_statistics = models.CharField(max_length=3, choices=STATISTIC_TYPES, default=JOINTFORM)
 
     #Enabling/Disabling Session Settings
     session_rounds_enabled = models.BooleanField('debate rounds enabled', default=True)
