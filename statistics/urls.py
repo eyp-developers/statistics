@@ -4,7 +4,7 @@ from . import views
 
 #The URLs are quite important to the GA Stats system, as there's a custom API and system for accessing various forms
 #Sessions, Debates, Point Submit and Vote Submit pages are accessed using the id's of the session/committee.
-#The four special ones are the api urls that the debate and session pages use for the live reloading to function, they're linked to custom views that output some pretty JSON output.
+#The six special ones are the api urls that the debate and session pages use for the live reloading to function, they're linked to custom views that output some pretty JSON output.
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
@@ -18,6 +18,8 @@ urlpatterns = [
     url(r'^session/(?P<session_id>[0-9]+)/manage/$', views.manage, name='manage'),
     url(r'^api/session/(?P<session_id>[0-9]+)/$', views.session_api, name='session_api'),
     url(r'^api/session/(?P<session_id>[0-9]+)/debate/(?P<committee_id>[0-9]+)/$', views.debate_api, name='debate_api'),
+    url(r'^api/session/(?P<session_id>[0-9]+)/vote/$', views.session_vote_api, name='session_vote_api'),
+    url(r'^api/session/(?P<session_id>[0-9]+)/vote/(?P<committee_id>[0-9]+)/$', views.debate_vote_api, name='debate_vote_api'),
     url(r'^api/session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/offset/(?P<offset>[0-9]+)/count/(?P<count>[0-9]+)/$', views.content_api, name='content_api'),
     url(r'^api/session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/since/(?P<since>[0-9]+)/$', views.content_latest_api, name='content_latest_api'),
 ]
