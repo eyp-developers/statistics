@@ -22,7 +22,8 @@ def session(request, session_id):
     #and the name and data of the session itself.
     session_committee_list = Committee.objects.filter(session__id=session_id)[:30]
     session = Session.objects.get(pk=session_id)
-    context = {'session_committee_list': session_committee_list, 'session_id': session_id, 'session': session}
+    voting_enabled = session.session_voting_enabled
+    context = {'session_committee_list': session_committee_list, 'session_id': session_id, 'session': session, 'voting_enabled': voting_enabled}
     return render(request, 'statistics/session.html', context)
 
 def debate(request, session_id, committee_id):
