@@ -30,7 +30,8 @@ def debate(request, session_id, committee_id):
     #The rest of the point/voting data comes through the api that can constantly be updated.
     c = Committee.objects.get(pk=committee_id)
     s = Session.objects.get(pk=session_id)
-    context = {'committee': c, 'session': s}
+    voting_enabled = s.session_voting_enabled
+    context = {'committee': c, 'session': s, 'voting_enabled': voting_enabled}
     return render(request, 'statistics/debate.html', context)
 
 def committee(request, session_id, committee_id):
