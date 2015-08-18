@@ -42,7 +42,9 @@
     var max_rounds = {{ session.session_max_rounds }};
     var debate_url = '{% url 'statistics:debate_api' session.pk committee.pk %}';
     var vote_url = '{% url 'statistics:debate_vote_api' session.pk committee.pk %}';
-    var content_url = '{% url 'statistics:content_api' session.pk committee.pk 0 5 %}';
+    var content_url = '{% url 'statistics:content_api' session.pk committee.pk %}';
+    var newcontenturl = '{% url 'statistics:content_latest_api' session.pk committee.pk %}'
+    var statistics_url = '/'
 </script>
 
 {% endblock %}

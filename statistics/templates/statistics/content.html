@@ -3,5 +3,26 @@
 {% load staticfiles %}
 
 {% block statistics %}
-<h2>THESE ARE SOME REALLY COOL CONTENT POINTS.</h2>
+<div class="container">
+  <div id="content-div" style="height:400px;overflow:auto;">
+    <table id="content-table" class="table table-bordered scroll">
+      <thead>
+        <tr>
+          <th>Committee</th>
+          <th>Point</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer_scripts %}
+<script  type="text/javascript" src="{% static 'statistics/js/content_debate.js' %}"></script>
+{% if voting_enabled %}
+<script  type="text/javascript" src="{% static 'statistics/js/vote_debate.js' %}"></script>
+{% endif %}
 {% endblock %}
