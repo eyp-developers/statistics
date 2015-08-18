@@ -41,6 +41,7 @@ $(document).ready(function() {
       chart: {
         renderTo: 'committee_votes',
         defaultSeriesType: 'column',
+        backgroundColor: '#eee',
         events: {
             load: requestVoteData
         }
@@ -89,7 +90,8 @@ $(document).ready(function() {
   chart_debate_votes = new Highcharts.Chart({
       chart: {
         renderTo: 'debate_votes',
-        defaultSeriesType: 'column'
+        defaultSeriesType: 'column',
+        backgroundColor: '#eee'
       },
       title: {
         text: 'Total Standing'

@@ -39,6 +39,7 @@ $(document).ready(function() {
         chart: {
             renderTo: 'points',
             defaultSeriesType: 'column',
+            backgroundColor: '#eee',
             events: {
                 load: requestData
             }
@@ -108,7 +109,8 @@ $(document).ready(function() {
       chart_votes = new Highcharts.Chart({
           chart: {
             renderTo: 'votes',
-            defaultSeriesType: 'column'
+            defaultSeriesType: 'column',
+            backgroundColor: '#eee'
           },
           title: false,
           credits: false,

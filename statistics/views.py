@@ -589,6 +589,8 @@ def content_latest_api(request, session_id, committee_id):
     committee = Committee.objects.get(pk=committee_id)
     #We need to get the contentpoints that have a pk greater than the "since" pk.
     contentpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.committee_name).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
+    #We also need to count the points for the total
+    totalpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.committee_name).count()
     #Create an empty array to put the contentpoints in
     contentpoint_list = []
     #If there are no points, do nothing.
@@ -601,7 +603,8 @@ def content_latest_api(request, session_id, committee_id):
         contentpoint_list.append(thispoint)
 
         content_json = json.dumps({
-        'contentpoints': contentpoint_list
+        'contentpoints': contentpoint_list,
+        'totalpoints': totalpoints
         })
 
     #But if we could find points

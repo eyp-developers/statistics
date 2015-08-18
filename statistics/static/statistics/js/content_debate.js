@@ -13,18 +13,20 @@ function requestContentPointData() {
       latest_pk = response.contentpoints[0].pk;
       total = response.totalpoints;
       offset = 10;
-      for (point of response.contentpoints){
-        total_displayed++;
-        var row = table.insertRow(table.rows.length);
-        var committee = row.insertCell(0);
-        var content = row.insertCell(1);
-        var type = row.insertCell(2);
-        $(row).attr('id', point.pk)
-        committee.innerHTML = point.committee_by;
-        content.innerHTML = point.contentpoint;
-        type.innerHTML = point.point_type;
-        $(row).css('display', 'none');
-        $(row).fadeIn("slow");
+      if (typeof response.contentpoints[0].contentpoint !== "undefined"){
+        for (point of response.contentpoints){
+          total_displayed++;
+          var row = table.insertRow(table.rows.length);
+          var committee = row.insertCell(0);
+          var content = row.insertCell(1);
+          var type = row.insertCell(2);
+          $(row).attr('id', point.pk)
+          committee.innerHTML = point.committee_by;
+          content.innerHTML = point.contentpoint;
+          type.innerHTML = point.point_type;
+          $(row).css('display', 'none');
+          $(row).fadeIn("slow");
+        }
       }
     },
     cache: false
@@ -67,6 +69,7 @@ function requestNewContent(){
       total = response.totalpoints;
       if (typeof response.contentpoints[0].contentpoint !== "undefined") {
         for (point of response.contentpoints){
+          offset++;
           total_displayed++;
           var row = table.insertRow(0);
           var committee = row.insertCell(0);
