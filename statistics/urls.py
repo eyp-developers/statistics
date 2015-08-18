@@ -20,6 +20,6 @@ urlpatterns = [
     url(r'^api/session/(?P<session_id>[0-9]+)/debate/(?P<committee_id>[0-9]+)/$', views.debate_api, name='debate_api'),
     url(r'^api/session/(?P<session_id>[0-9]+)/vote/$', views.session_vote_api, name='session_vote_api'),
     url(r'^api/session/(?P<session_id>[0-9]+)/vote/(?P<committee_id>[0-9]+)/$', views.debate_vote_api, name='debate_vote_api'),
-    url(r'^api/session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/offset/(?P<offset>[0-9]+)/count/(?P<count>[0-9]+)/$', views.content_api, name='content_api'),
-    url(r'^api/session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/since/(?P<since>[0-9]+)/$', views.content_latest_api, name='content_latest_api'),
+    url(r'^api/session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/$', views.content_api, name='content_api'),
+    url(r'^api/session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/since/$', views.content_latest_api, name='content_latest_api'),
 ]
