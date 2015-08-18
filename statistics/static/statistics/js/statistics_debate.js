@@ -43,6 +43,7 @@ $(document).ready(function() {
         chart: {
             renderTo: 'points',
             defaultSeriesType: 'column',
+            backgroundColor: '#eee',
             events: {
                 load: requestStatisticsData
             }
@@ -111,7 +112,8 @@ $(document).ready(function() {
     chart_subtopics = new Highcharts.Chart({
       chart: {
           renderTo: 'subtopics',
-          type: 'bar'
+          type: 'bar',
+          backgroundColor: '#eee'
         },
         title: false,
         xAxis: {
