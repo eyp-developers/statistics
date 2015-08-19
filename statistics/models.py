@@ -164,6 +164,51 @@ class Committee(models.Model):
     #What the topic of the committee is, can be any length.
     committee_topic = models.TextField()
 
+    #We want to define an automatic color for the committee in question, based on the list of material design colors.
+    def committee_color(self):
+        color_id = self.pk%17
+        if color_id == 1:
+            return('red')
+        elif color_id == 2:
+            return('green')
+        elif color_id == 3:
+            return('yellow')
+        elif color_id == 4:
+            return('blue')
+        elif color_id == 5:
+            return('purple')
+        elif color_id == 6:
+            return('light-green')
+        elif color_id == 7:
+            return('orange')
+        elif color_id == 8:
+            return('cyan')
+        elif color_id == 9:
+            return('pink')
+        elif color_id == 10:
+            return('lime')
+        elif color_id == 11:
+            return('deep-orange')
+        elif color_id == 12:
+            return('light-blue')
+        elif color_id == 13:
+            return('deep-purple')
+        elif color_id == 14:
+            return('amber')
+        elif color_id == 15:
+            return('teal')
+        elif color_id == 16:
+            return('indigo')
+        else:
+            return('blue-grey')
+
+    #Then we need a text color depending on if the committee color is light or dark.
+    def committee_text_color(self):
+        if self.committee_color() in ['cyan', 'light-green', 'lime', 'yellow', 'amber', 'orange']:
+            return('black')
+        else:
+            return('white')
+
     #Defining how the committee will be displayed in a list.
     def __str__(self):
         return str(self.committee_name)
