@@ -27,6 +27,8 @@ function requestContentPointData() {
           content.innerHTML = point.contentpoint;
           type.innerHTML = point.point_type;
           $(row).css('display', 'none');
+          $(committee).addClass('label-material-' + point.committee_color)
+          $(committee).css('color', point.committee_text_color)
           $(row).fadeIn("slow");
         }
       }
@@ -54,6 +56,8 @@ function requestMoreContent() {
           content.innerHTML = point.contentpoint;
           type.innerHTML = point.point_type;
           $(row).css('display', 'none');
+          $(committee).addClass('label-material-' + point.committee_color)
+          $(committee).css('color', point.committee_text_color)
           $(row).fadeIn("slow");
         }
       }
@@ -82,6 +86,8 @@ function requestNewContent(){
           content.innerHTML = point.contentpoint;
           type.innerHTML = point.point_type;
           $(row).css('display', 'none');
+          $(committee).addClass('label-material-' + point.committee_color)
+          $(committee).css('color', point.committee_text_color)
           $(row).fadeIn("slow");
         }
       }

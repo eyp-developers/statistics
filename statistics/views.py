@@ -644,13 +644,17 @@ def content_api(request, session_id, committee_id):
             point_type = p.point_type
             content = p.point_content
             pk = p.pk
+            committee_color = p.committee_by.committee_color()
+            committee_text_color = p.committee_by.committee_text_color()
 
             #Create a single object with out data.
             thispoint = {
             'committee_by': committee_by,
             'point_type': point_type,
             'contentpoint': content,
-            'pk': pk
+            'pk': pk,
+            'committee_color': committee_color,
+            'committee_text_color': committee_text_color
             }
 
             contentpoint_list.append(thispoint)
@@ -695,13 +699,17 @@ def content_latest_api(request, session_id, committee_id):
             point_type = p.point_type
             content = p.point_content
             pk = p.pk
+            committee_color = p.committee_by.committee_color()
+            committee_text_color = p.committee_by.committee_text_color()
 
             #Create a single object with our data.
             thispoint = {
             'committee_by': committee_by,
             'point_type': point_type,
             'contentpoint': content,
-            'pk': pk
+            'pk': pk,
+            'committee_color': committee_color,
+            'committee_text_color': committee_text_color
             }
 
             contentpoint_list.append(thispoint)
