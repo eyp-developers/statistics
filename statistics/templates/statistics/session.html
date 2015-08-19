@@ -36,8 +36,13 @@
 <h2>Points Made Summary</h2>
 <div id="points" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
+{% if voting_enabled %}
+<script> var voting_enabled = true; </script>
 <h2>Voting Summary</h2>
 <div id="votes" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+{% else %}
+<script> var voting_enabled = false; </script>
+{% endif %}
 
 <script type="text/javascript">
   var session = {{ session_id }};

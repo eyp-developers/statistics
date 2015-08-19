@@ -14,21 +14,10 @@
   <h1 style="text-align: center; font-size: 60px;">{{ committee.committee_name }}</h1>
   <h3 style="text-align: center;">{{ committee.committee_topic }}</h3>
   <br>
-  <h2>Points Made:</h2>
-  <div id="points" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-
-  <h2>Subtopics Discussed:</h2>
-  <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-      <div id="subtopics" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="text-align:center;">
-      <h2 id="total_points">Total Points:</h2>
-      <h4 id="total_type"></h4>
-      <h3 id="latest_point">Latest Point By:<h3>
-      <h4 id="latest_on">On:</h4>
-    </div>
-  </div>
+</div>
+  {% block statistics %}{% endblock %}
+<div class="container">
+  {% if voting_enabled %}
   <h2>Voting Summary:</h2>
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="text-align:center;">
@@ -46,17 +35,23 @@
     </div>
   </div>
   <div id="committee_votes" style="min-width: 310px; height: 150px; margin: 0 auto"></div>
-
-
+  {% endif %}
 <script type="text/javascript">
     var session = {{ session.pk }};
     var committee = {{ committee.pk }};
     var max_rounds = {{ session.session_max_rounds }};
     var debate_url = '{% url 'statistics:debate_api' session.pk committee.pk %}';
+    var vote_url = '{% url 'statistics:debate_vote_api' session.pk committee.pk %}';
+    var content_url = '{% url 'statistics:content_api' session.pk committee.pk %}';
+    var newcontenturl = '{% url 'statistics:content_latest_api' session.pk committee.pk %}'
+    var statistics_url = '/'
 </script>
 
 {% endblock %}
 
 {% block footer_scripts %}
 <script  type="text/javascript" src="{% static 'statistics/js/debate.js' %}"></script>
+{% if voting_enabled %}
+<script  type="text/javascript" src="{% static 'statistics/js/vote_debate.js' %}"></script>
+{% endif %}
 {% endblock %}
