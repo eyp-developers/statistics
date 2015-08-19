@@ -13,6 +13,9 @@ class Session(models.Model):
     #Session Picture, currently a URL that links to a picture, can be taken from facebook, imgur etc. Should be changed to a file upload in future.
     session_picture = models.URLField()
 
+    #We want a contact email so we can send friendly emails to people.
+    session_email = models.EmailField()
+
     #All countries with EYP sessions recently (after googling)
     ALBANIA = 'AL'
     ARMENIA = 'AM'
