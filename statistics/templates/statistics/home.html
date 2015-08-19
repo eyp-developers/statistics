@@ -5,28 +5,28 @@
 {% block page_title %}Home{% endblock %}
 
 {% block content %}
-</div>
-<div class="jumbotron">
-  <div class="container">
-    <h1>What's going on in GA?</h1>
-    <p>GA Statistics is an EYP project that gathers statistics of General Assemblies at different Sessions around Europe.</p>
   </div>
-</div>
-<br>
-<div class="container">
-{% if latest_sessions_list %}
-    {% for session in latest_sessions_list %}
-    <div class="home-header well well-lg" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.session_picture }}') no-repeat center/cover;">
-      <a href="{% url 'statistics:session' session.pk %}" style="color: #fff"><h1 class="session-name">{{ session.session_name }}</h1>
-      <h3>{{ session.session_description }}</h3></a>
-    </div>
-    <br>
+  <div class="jumbotron">
+    <div class="container">
+      <h1>What's going on in GA?</h1>
+      <p>GA Statistics is an EYP project that gathers statistics of General Assemblies at different Sessions around Europe.</p>
+    </div><!--/.container -->
+  </div><!--/.jumbotron -->
+  <br>
+  <div class="container">
+    {% if latest_sessions_list %}
+      {% for session in latest_sessions_list %}
+        <div class="home-header well well-lg" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.session_picture }}') no-repeat center/cover;">
+          <a href="{% url 'statistics:session' session.pk %}" style="color: #fff">
+            <h1 class="session-name">{{ session.session_name }}</h1>
+            <h3>{{ session.session_description }}</h3>
+          </a>
+        </div><!--/.home-header well well-lg -->
+        <br>
     {% endfor %}
-{% else %}
-    <p>No polls are available.</p>
-{% endif %}
 
-{% endblock %}
+    {% else %}
+      <p>No sessions are available.</p>
+    {% endif %}
 
-{% block footer_scripts %}
-{% endblock %}
+{% endblock %} {% block footer_scripts %} {% endblock %}
