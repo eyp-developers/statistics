@@ -16,7 +16,7 @@
   <div class="container">
     {% if latest_sessions_list %}
       {% for session in latest_sessions_list %}
-        <div class="home-header well well-lg" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.session_picture }}') no-repeat center/cover;">
+        <div class="home-header well well-lg" style="background:  url('{{ session.session_picture }}') no-repeat center/cover;">
           <a href="{% url 'statistics:session' session.pk %}" style="color: #fff">
             <h1 class="session-name btn btn-material-blue-grey btn-raised">{{ session.session_name }}</h1>
             <br>
