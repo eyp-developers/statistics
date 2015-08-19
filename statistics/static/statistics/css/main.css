@@ -49,3 +49,13 @@
 .session-description {
   color: white;
 }
+
+.content-div {
+  height:800px;
+  overflow:auto;
+}
+@media (max-width: 992px) {
+  .content-div {
+    height: 400px;
+  }
+}

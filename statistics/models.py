@@ -98,6 +98,22 @@ class Session(models.Model):
     session_start_date = models.DateTimeField('start date')
     session_end_date = models.DateTimeField('end date')
 
+    #Setting up statistic types
+    STATISTICS = 'S'
+    CONTENT = 'C'
+    JOINTFORM = 'JF'
+    SPLITFORM = 'SF'
+    NONE = 'N/A'
+    STATISTIC_TYPES = (
+        (STATISTICS, 'Statistics Only'),
+        (CONTENT, 'Point Content Only'),
+        (JOINTFORM, 'Joint Form Statistics'),
+        (SPLITFORM, 'Split Form Statistics'),
+        (NONE, 'No Statistics (Only Voting)')
+    )
+    #Making the statistics type a selectable option
+    session_statistics = models.CharField(max_length=3, choices=STATISTIC_TYPES, default=JOINTFORM)
+
     #Enabling/Disabling Session Settings
     session_rounds_enabled = models.BooleanField('debate rounds enabled', default=True)
     session_subtopics_enabled = models.BooleanField('committee subtopics enabled', default=True)
@@ -213,6 +229,15 @@ class ContentPoint(models.Model):
 
     #Then we need the actual point content, which is a simple TextField.
     point_content = models.TextField()
+
+    #Defining the two point types, Point and Direct Response, the default will be Point.
+    POINT = 'P'
+    DIRECT_RESPONSE = 'DR'
+    POINT_TYPES = (
+        (POINT, 'Point'),
+        (DIRECT_RESPONSE, 'Direct Response'),
+    )
+    point_type = models.CharField(max_length=2, choices=POINT_TYPES, default=POINT)
 
     #We can also add a definition for showing in admin panels etc.
     def __unicode__(self):
