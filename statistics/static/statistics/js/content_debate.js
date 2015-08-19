@@ -25,8 +25,14 @@ function requestContentPointData() {
           $(row).attr('id', point.pk)
           committee.innerHTML = point.committee_by;
           content.innerHTML = point.contentpoint;
-          type.innerHTML = point.point_type;
+          if (point.point_type === 'P') {
+            type.innerHTML = '<img src="' + point_img + '" height="30" >';
+          } else {
+            type.innerHTML = '<img src="' + dr_img + '" height="30" >';
+          }
           $(row).css('display', 'none');
+          $(committee).addClass('label-material-' + point.committee_color)
+          $(committee).css('color', point.committee_text_color)
           $(row).fadeIn("slow");
         }
       }
@@ -52,8 +58,14 @@ function requestMoreContent() {
           $(row).attr('id', point.pk)
           committee.innerHTML = point.committee_by;
           content.innerHTML = point.contentpoint;
-          type.innerHTML = point.point_type;
+          if (point.point_type === 'P') {
+            type.innerHTML = '<img src="' + point_img + '" height="30" >';
+          } else {
+            type.innerHTML = '<img src="' + dr_img + '" height="30" >';
+          }
           $(row).css('display', 'none');
+          $(committee).addClass('label-material-' + point.committee_color)
+          $(committee).css('color', point.committee_text_color)
           $(row).fadeIn("slow");
         }
       }
@@ -80,8 +92,14 @@ function requestNewContent(){
           $(row).attr('id', point.pk)
           committee.innerHTML = point.committee_by;
           content.innerHTML = point.contentpoint;
-          type.innerHTML = point.point_type;
+          if (point.point_type === 'P') {
+            type.innerHTML = '<img src="' + point_img + '" height="30" >';
+          } else {
+            type.innerHTML = '<img src="' + dr_img + '" height="30" >';
+          }
           $(row).css('display', 'none');
+          $(committee).addClass('label-material-' + point.committee_color)
+          $(committee).css('color', point.committee_text_color)
           $(row).fadeIn("slow");
         }
       }
