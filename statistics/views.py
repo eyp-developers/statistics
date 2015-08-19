@@ -3,10 +3,10 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 
 #Importing all models for statistics.
-from .models import Session, Committee, Point, Vote, SubTopic, ActiveDebate, ActiveRound
+from .models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
 
 #Importing the forms too.
-from .forms import PointForm, VoteForm, ActiveDebateForm, ActiveRoundForm
+from .forms import PointForm, VoteForm, ContentForm, ActiveDebateForm, ActiveRoundForm
 
 def home(request):
     #All the home page needs is a list of all sessions ordered by the start date. We create the list, then the context and finally render the template.
@@ -22,7 +22,8 @@ def session(request, session_id):
     #and the name and data of the session itself.
     session_committee_list = Committee.objects.filter(session__id=session_id)[:30]
     session = Session.objects.get(pk=session_id)
-    context = {'session_committee_list': session_committee_list, 'session_id': session_id, 'session': session}
+    voting_enabled = session.session_voting_enabled
+    context = {'session_committee_list': session_committee_list, 'session_id': session_id, 'session': session, 'voting_enabled': voting_enabled}
     return render(request, 'statistics/session.html', context)
 
 def debate(request, session_id, committee_id):
@@ -30,8 +31,24 @@ def debate(request, session_id, committee_id):
     #The rest of the point/voting data comes through the api that can constantly be updated.
     c = Committee.objects.get(pk=committee_id)
     s = Session.objects.get(pk=session_id)
-    context = {'committee': c, 'session': s}
-    return render(request, 'statistics/debate.html', context)
+    #The statistics_type will let us render different templates based on the statistics selected by the user.
+    statistics_type = s.session_statistics
+    print statistics_type
+
+    #The voting enabled option lets us change the html content and js so that the voting is not displayed.
+    voting_enabled = s.session_voting_enabled
+    context = {'committee': c, 'session': s, 'statistics_type': statistics_type, 'voting_enabled': voting_enabled}
+
+    if statistics_type == 'JF':
+        return render(request, 'statistics/joint.html', context)
+    elif statistics_type == 'SF':
+        return render(request, 'statistics/joint.html', context)
+    elif statistics_type == 'S':
+        return render(request, 'statistics/statistics.html', context)
+    elif statistics_type == 'C':
+        return render(request, 'statistics/content.html', context)
+    else:
+        pass
 
 def committee(request, session_id, committee_id):
     #The idea is not only to have a "debate page", where you can see how many points are made during the debate of a particular resolution,
@@ -70,8 +87,7 @@ def point(request, session_id, committee_id):
         #Check if the form is valid.
         if form.is_valid():
             #Create a point from the data submitted
-            point = Point(session = Session.objects.filter(
-                session_name=form.cleaned_data['session'])[0],
+            point = Point(session = Session.objects.filter(session_name=form.cleaned_data['session'])[0],
                 committee_by=Committee.objects.filter(session__pk=session_id).filter(committee_name=form.cleaned_data['committee'])[0],
                 active_debate=form.cleaned_data['debate'], active_round=form.cleaned_data['round_no'],
                 point_type=form.cleaned_data['point_type']
@@ -92,7 +108,31 @@ def point(request, session_id, committee_id):
 
 
     context = {'debate': active, 'committee': committee, 'session': session, 'subtopics': subtopics, 'form': form}
-    return render(request, 'statistics/point.html', context)
+    return render(request, 'statistics/point_form.html', context)
+
+def content(request, session_id, committee_id):
+    session = Session.objects.get(pk=session_id)
+    committee = Committee.objects.get(pk=committee_id)
+    active = ActiveDebate.objects.get(session_id=session_id).active_debate
+    active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
+    if request.method == 'POST':
+        print request.POST
+
+        form = ContentForm(request.POST)
+        if form.is_valid():
+            contentpoint = ContentPoint(session = Session.objects.filter(session_name=form.cleaned_data['session'])[0],
+                committee_by = Committee.objects.filter(session__pk=session_id).filter(committee_name=form.cleaned_data['committee'])[0],
+                active_debate = form.cleaned_data['debate'],
+                point_type = form.cleaned_data['point_type'],
+                point_content = form.cleaned_data['content']
+                )
+            contentpoint.save()
+            return HttpResponseRedirect('/session/' + session_id + '/content/' + committee_id + '/thanks')
+    else:
+        form = ContentForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active})
+
+    context = {'debate': active, 'committee': committee, 'session': session, 'form': form}
+    return render(request, 'statistics/content_form.html', context)
 
 def vote(request, session_id, committee_id):
     #The Vote form is just as complex as the Point form, and is made in a very similar manner.
@@ -130,7 +170,7 @@ def vote(request, session_id, committee_id):
         form = VoteForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
 
     context = {'session': session, 'committee': committee, 'debate': active, 'form': form}
-    return render(request, 'statistics/vote.html', context)
+    return render(request, 'statistics/vote_form.html', context)
 
 def thanks(request, session_id, committee_id):
     #A thanks page that is given a url for the user to submit something again. We construct the url here and then set it as the href="" on the button
@@ -141,6 +181,12 @@ def thanks(request, session_id, committee_id):
 def vote_thanks(request, session_id, committee_id):
     #Same thing as the last thanks page, but with a url constructed for voting instead.
     thanks_url = '/session/' + session_id + '/vote/' + committee_id
+    context = {'thanks_url': thanks_url}
+    return render(request, 'statistics/thanks.html', context)
+
+def content_thanks(request, session_id, committee_id):
+    #Same thing as the last thanks page, but with a url constructed for contentpoints instead.
+    thanks_url = '/session/' + session_id + '/content/' + committee_id
     context = {'thanks_url': thanks_url}
     return render(request, 'statistics/thanks.html', context)
 
@@ -222,18 +268,11 @@ def session_api(request, session_id):
     #Then we need all the available points, direct responses and votes
     points = Point.objects.filter(session_id=session_id).filter(point_type='P')
     drs = Point.objects.filter(session_id=session_id).filter(point_type='DR')
-    votes = Vote.objects.filter(session_id=session_id)
 
     #Then we need a list of each of them.
     committee_list = []
     points_list = []
     drs_list = []
-
-    #And lists for different vote types
-    in_favour = []
-    against = []
-    abstentions = []
-    absent = []
 
     #For each committee,
     for committee in committees:
@@ -249,38 +288,11 @@ def session_api(request, session_id):
         points_list.append(p)
         drs_list.append(d)
 
-        #Set the counter for each vote type to 0
-        debate_in_favour = 0
-        debate_against = 0
-        debate_abstentions = 0
-        debate_absent = 0
-
-        #Filter votes by the current committee
-        v = votes.filter(active_debate=committee)
-
-        #For each vote in the new list of votes
-        for vc in v:
-            #Add that votes count to the total count
-            debate_in_favour += vc.in_favour
-            debate_against += vc.against
-            debate_abstentions += vc.abstentions
-            debate_absent += vc.absent
-
-        #Then, append the totals to the full list.
-        in_favour.append(debate_in_favour)
-        against.append(debate_against)
-        abstentions.append(debate_abstentions)
-        absent.append(debate_absent)
-
     #Finally output the result as JSON
     session_json = json.dumps({
     'committees': committee_list,
     'points': points_list,
     'drs': drs_list,
-    'in_favour': in_favour,
-    'against': against,
-    'abstentions': abstentions,
-    'absent': absent
     })
     return HttpResponse(session_json, content_type='json')
 
@@ -305,7 +317,6 @@ def debate_api(request, session_id, committee_id):
     all_points = Point.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name)
     points = Point.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name).filter(point_type='P')
     drs = Point.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name).filter(point_type='DR')
-    votes = Vote.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name)
 
     #If the points couldn't be retreived (If there were no points made yet) then don't do anything
     if not all_points:
@@ -358,7 +369,6 @@ def debate_api(request, session_id, committee_id):
 
     #Setting up more arrays for the voting graphs and zeroing values.
     committees_list = []
-    committees_voted_list = []
 
     points_total = 0
     type_point = 0
@@ -366,17 +376,6 @@ def debate_api(request, session_id, committee_id):
 
     points_made = []
     drs_made = []
-
-    debate_in_favour = 0
-    debate_against = 0
-    debate_abstentions = 0
-    debate_absent = 0
-    total_counted = 0
-
-    committees_in_favour = []
-    committees_against = []
-    committees_abstentions = []
-    committees_absent = []
 
     for c in committees:
         com_name = c.committee_name
@@ -392,35 +391,6 @@ def debate_api(request, session_id, committee_id):
         points_made.append(p)
         drs_made.append(d)
 
-    for v in votes:
-        debate_in_favour += v.in_favour
-        debate_against += v.against
-        debate_abstentions += v.abstentions
-        debate_absent += v.absent
-        total = v.in_favour + v.against + v.abstentions + v.absent
-        total_counted += total
-
-        committees_in_favour.append(v.in_favour)
-        committees_against.append(v.against)
-        committees_abstentions.append(v.abstentions)
-        committees_absent.append(v.absent)
-
-        committees_voted_list.append(v.committee_by.committee_name)
-
-
-    committees_count = len(committees_list)
-    committees_voted = len(committees_voted_list)
-
-    debate_in_favour_array = []
-    debate_against_array = []
-    debate_abstentions_array = []
-    debate_absent_array = []
-
-    debate_in_favour_array.append(debate_in_favour)
-    debate_against_array.append(debate_against)
-    debate_abstentions_array.append(debate_abstentions)
-    debate_absent_array.append(debate_absent)
-
     if not all_points:
         debate_json = json.dumps({
         'committee_name': committee_array_name,
@@ -435,18 +405,6 @@ def debate_api(request, session_id, committee_id):
         'latest_point_subtopics': '',
         'subtopics': [],
         'subtopic_points': [],
-        'committees_voted_list': committees_voted_list,
-        'committees_count': committees_count,
-        'committees_voted': committees_voted,
-        'debate_in_favour': debate_in_favour_array,
-        'debate_against': debate_against_array,
-        'debate_abstentions': debate_abstentions_array,
-        'debate_absent': debate_absent_array,
-        'total_counted': total_counted,
-        'committees_in_favour': committees_in_favour,
-        'committees_against': committees_against,
-        'committees_abstentions': committees_abstentions,
-        'committees_absent': committees_absent,
         })
     else:
         debate_json = json.dumps({
@@ -462,17 +420,245 @@ def debate_api(request, session_id, committee_id):
         'latest_point_subtopics': latest_point_subtopics_array,
         'subtopics': subtopics_array,
         'subtopic_points': subtopic_points_array,
-        'committees_voted_list': committees_voted_list,
-        'committees_count': committees_count,
-        'committees_voted': committees_voted,
-        'debate_in_favour': debate_in_favour_array,
-        'debate_against': debate_against_array,
-        'debate_abstentions': debate_abstentions_array,
-        'debate_absent': debate_absent_array,
-        'total_counted': total_counted,
-        'committees_in_favour': committees_in_favour,
-        'committees_against': committees_against,
-        'committees_abstentions': committees_abstentions,
-        'committees_absent': committees_absent,
         })
     return HttpResponse(debate_json, content_type='json')
+
+def session_vote_api(request, session_id):
+    #This is for returning the specific vote data from the vote API for the voting chart on the session page.
+
+    #First we need all the committees registered for that session
+    committees = Committee.objects.filter(session__id=session_id)
+    #Then all the votes for that session
+    votes = Vote.objects.filter(session_id=session_id)
+    #Then a list to add committee names to
+    committee_list = []
+
+    #And lists for different vote types
+    in_favour = []
+    against = []
+    abstentions = []
+    absent = []
+
+    #For each committee,
+    for committee in committees:
+        #Let c be the name
+        c = committee.committee_name
+
+        #Append each newly made variable to our nice lists.
+        committee_list.append(c)
+
+        #Set the counter for each vote type to 0
+        debate_in_favour = 0
+        debate_against = 0
+        debate_abstentions = 0
+        debate_absent = 0
+
+        #Filter votes by the current committee
+        v = votes.filter(active_debate=committee)
+
+        #For each vote in the new list of votes
+        for vc in v:
+            #Add that votes count to the total count
+            debate_in_favour += vc.in_favour
+            debate_against += vc.against
+            debate_abstentions += vc.abstentions
+            debate_absent += vc.absent
+
+        #Then, append the totals to the full list.
+        in_favour.append(debate_in_favour)
+        against.append(debate_against)
+        abstentions.append(debate_abstentions)
+        absent.append(debate_absent)
+
+    #Finally output the result as JSON
+    session_voting_json = json.dumps({
+    'committees': committee_list,
+    'in_favour': in_favour,
+    'against': against,
+    'abstentions': abstentions,
+    'absent': absent
+    })
+    return HttpResponse(session_voting_json, content_type='json')
+
+def debate_vote_api(request, session_id, committee_id):
+    #The Debate API is very similar to the session API, but more complex due to more graphs and subtopics.
+
+    #We get the active debate and active round
+    active_debate = ActiveDebate.objects.filter(session__pk=session_id)
+    active_round = ActiveRound.objects.filter(session__pk=session_id)
+    active_round_no = active_round[0].active_round
+
+    #We get the session, committee, and list of all committees.
+    session = Session.objects.get(pk=session_id)
+    committee = Committee.objects.filter(pk=committee_id)
+    committees = Committee.objects.filter(session__id=session_id)
+
+    #Making an array with the committee name.
+    committee_array_name = []
+    committee_array_name.append(committee[0].committee_name)
+
+    #Getting all votes
+    votes = Vote.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name)
+
+    #Setting up more arrays for the voting graphs and zeroing values.
+    committees_list = []
+    committees_voted_list = []
+
+    #Zeroing total values for the whole debate
+    debate_in_favour = 0
+    debate_against = 0
+    debate_abstentions = 0
+    debate_absent = 0
+    total_counted = 0
+
+    #Setting up arrays for committee specific votes
+    committees_in_favour = []
+    committees_against = []
+    committees_abstentions = []
+    committees_absent = []
+
+    for v in votes:
+        #For each vote, add the vote to the total
+        debate_in_favour += v.in_favour
+        debate_against += v.against
+        debate_abstentions += v.abstentions
+        debate_absent += v.absent
+        total = v.in_favour + v.against + v.abstentions + v.absent
+        total_counted += total
+
+        #Then add the vote to the list of votes, for that specific committee
+        committees_in_favour.append(v.in_favour)
+        committees_against.append(v.against)
+        committees_abstentions.append(v.abstentions)
+        committees_absent.append(v.absent)
+
+        committees_voted_list.append(v.committee_by.committee_name)
+
+    #Count the total committees and the ones that have voted for a nice counted/total fraction
+    committees_count = len(committees)
+    committees_voted = len(committees_voted_list)
+
+    #Set up arrays and put the totals in the arrays for highcharts.
+    debate_in_favour_array = []
+    debate_against_array = []
+    debate_abstentions_array = []
+    debate_absent_array = []
+
+    debate_in_favour_array.append(debate_in_favour)
+    debate_against_array.append(debate_against)
+    debate_abstentions_array.append(debate_abstentions)
+    debate_absent_array.append(debate_absent)
+
+    #Turn everything into JSON and render.
+    debate_json = json.dumps({
+    'committee_name': committee_array_name,
+    'committees_voted_list': committees_voted_list,
+    'committees_count': committees_count,
+    'committees_voted': committees_voted,
+    'debate_in_favour': debate_in_favour_array,
+    'debate_against': debate_against_array,
+    'debate_abstentions': debate_abstentions_array,
+    'debate_absent': debate_absent_array,
+    'total_counted': total_counted,
+    'committees_in_favour': committees_in_favour,
+    'committees_against': committees_against,
+    'committees_abstentions': committees_abstentions,
+    'committees_absent': committees_absent,
+    })
+    return HttpResponse(debate_json, content_type='json')
+
+def content_api(request, session_id, committee_id):
+    #We need the committee to filter by active debate name.
+    committee = Committee.objects.get(pk=committee_id)
+    #For the 'offset' and 'count' arguments to work, we need to be able to tell the filter from which point and to which point to filter from.
+    point_from = int(request.GET.get('offset'))
+    point_to = int(request.GET.get('offset')) + int(request.GET.get('count'))
+    #First we need all contentpoints from that session
+    contentpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.committee_name).order_by('-pk')[point_from:point_to]
+    #We also need to count the points for the total
+    totalpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.committee_name).count()
+    #If there are no points, do nothing.
+    if not contentpoints:
+        content_json = json.dumps({
+        'contentpoints': 'No content'
+        })
+
+    #But if we could find points
+    else:
+        #Create an empty array to put the contentpoints in
+        contentpoint_list = []
+        #Loop through the avaliable contentpoints
+        for p in contentpoints:
+            #For each contentpoint, we need the id of the point, who the point was by, the kind of point, and the content of the point.
+            committee_by = p.committee_by.committee_name
+            point_type = p.point_type
+            content = p.point_content
+            pk = p.pk
+
+            #Create a single object with out data.
+            thispoint = {
+            'committee_by': committee_by,
+            'point_type': point_type,
+            'contentpoint': content,
+            'pk': pk
+            }
+
+            contentpoint_list.append(thispoint)
+        #Then we need to turn the list into JSON.
+        content_json = json.dumps({
+        'contentpoints': contentpoint_list,
+        'totalpoints': totalpoints
+        })
+
+
+    return HttpResponse(content_json, content_type='json')
+
+def content_latest_api(request, session_id, committee_id):
+    #We need the committee to filter by active debate name.
+    committee = Committee.objects.get(pk=committee_id)
+    #We need to get the contentpoints that have a pk greater than the "since" pk.
+    contentpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.committee_name).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
+    #We also need to count the points for the total
+    totalpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.committee_name).count()
+    #Create an empty array to put the contentpoints in
+    contentpoint_list = []
+    #If there are no points, do nothing.
+    if not contentpoints:
+        #Create a single object with out data.
+        thispoint = {
+        'pk': request.GET.get('pk')
+        }
+
+        contentpoint_list.append(thispoint)
+
+        content_json = json.dumps({
+        'contentpoints': contentpoint_list,
+        'totalpoints': totalpoints
+        })
+
+    #But if we could find points
+    else:
+        #Loop through the avaliable contentpoints
+        for p in contentpoints:
+            #For each contentpoint, we need the id of the point, who the point was by, the kind of point, and the content of the point.
+            committee_by = p.committee_by.committee_name
+            point_type = p.point_type
+            content = p.point_content
+            pk = p.pk
+
+            #Create a single object with our data.
+            thispoint = {
+            'committee_by': committee_by,
+            'point_type': point_type,
+            'contentpoint': content,
+            'pk': pk
+            }
+
+            contentpoint_list.append(thispoint)
+        #Then we need to turn the list into JSON.
+        content_json = json.dumps({
+        'contentpoints': contentpoint_list
+        })
+
+
+    return HttpResponse(content_json, content_type='json')
