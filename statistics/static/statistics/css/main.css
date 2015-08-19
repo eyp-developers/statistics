@@ -1,6 +1,6 @@
-/*h1, h2, h3, h4, h5, h6 {
-  font-family: 'Oswald', sans-serif;
-}*/
+h1, h2, h3, h4, h5, h6, p, a {
+  font-family: 'Source Sans Pro', sans-serif;
+}
 .navbar-inverse {
   /*background-image: none;*/
   background-color: #1e4e8a;
