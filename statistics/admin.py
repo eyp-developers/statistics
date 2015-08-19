@@ -18,14 +18,14 @@ class SessionAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,                  {'fields': ['session_name', 'session_description', 'session_country', 'session_picture', 'session_admin_user', 'session_submission_user']}),
         ('Date information',    {'fields': ['session_start_date', 'session_end_date']}),
-        ('Session Settings',    {'fields': ['session_rounds_enabled', 'session_max_rounds', 'session_subtopics_enabled', 'session_voting_enabled']})
+        ('Session Settings',    {'fields': ['session_statistics', 'session_rounds_enabled', 'session_max_rounds', 'session_subtopics_enabled', 'session_voting_enabled']})
     ]
 
     #The inline should be the CommitteeInline to make it easy to make committees straight away.
     inlines = [CommitteeInline]
 
     #What fields should be shown when the sessinons are displayed in a list
-    list_display = ('session_name', 'session_country', 'session_start_date', 'session_end_date', 'session_ongoing', 'session_admin_user', 'session_submission_user')
+    list_display = ('session_name', 'session_country', 'session_start_date', 'session_end_date', 'session_ongoing', 'session_statistics', 'session_admin_user', 'session_submission_user')
 
     #How the list should be sorted, here by session start date
     list_filter = ['session_start_date']
@@ -58,7 +58,7 @@ class PointAdmin(admin.ModelAdmin):
 
 class ContentPointAdmin(admin.ModelAdmin):
     #Which things should be displayed in the list of content points, filtered by time.
-    list_display = ('timestamp', 'session', 'committee_by', 'active_debate', 'point_content')
+    list_display = ('timestamp', 'session', 'committee_by', 'active_debate', 'point_content', 'point_type')
     list_filter = ['timestamp']
 
 class VoteAdmin(admin.ModelAdmin):
