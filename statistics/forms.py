@@ -1,5 +1,8 @@
 from django import forms
 
+class SessionForm(forms.Form):
+    pass
+
 class PointForm(forms.Form):
     #The point form needs to be fed with special data, in the form of an array of subtopics.
     #To do this, we change the definition of the form to accept an extra argument, the array of subtopics.
