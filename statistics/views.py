@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
 
 #Importing the forms too.
-from .forms import PointForm, VoteForm, ContentForm, ActiveDebateForm, ActiveRoundForm
+from .forms import PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm
 
 def home(request):
     #All the home page needs is a list of all sessions ordered by the start date. We create the list, then the context and finally render the template.
@@ -67,7 +67,7 @@ def point(request, session_id, committee_id):
     active_round_no = ActiveRound.objects.get(session__pk=session_id).active_round
 
     #Get the subtopics of the active committee, and the loop through each one to create an array of subtopics.
-    subtopics = SubTopic.objects.filter(committee=active_committee[0])
+    subtopics = SubTopic.objects.filter(session_id=session_id).filter(committee=active_committee[0])
     subtopics_array = []
     for subtopic in subtopics:
         subtopics_array.append((subtopic.pk, subtopic.subtopic_text),)
@@ -134,6 +134,50 @@ def content(request, session_id, committee_id):
     context = {'debate': active, 'committee': committee, 'session': session, 'form': form}
     return render(request, 'statistics/content_form.html', context)
 
+def joint(request, session_id, committee_id):
+    session = Session.objects.get(pk=session_id)
+    committee = Committee.objects.get(pk=committee_id)
+    active = ActiveDebate.objects.get(session_id=session_id).active_debate
+    active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
+    active_round_no = ActiveRound.objects.get(session__pk=session_id).active_round
+
+    #Get the subtopics of the active committee, and the loop through each one to create an array of subtopics.
+    subtopics = SubTopic.objects.filter(session_id=session_id).filter(committee=active_committee[0])
+    subtopics_array = []
+    for subtopic in subtopics:
+        subtopics_array.append((subtopic.pk, subtopic.subtopic_text),)
+
+    if request.method == 'POST':
+        print request.POST
+
+        form = JointForm(subtopics_array, request.POST)
+        if form.is_valid():
+            contentpoint = ContentPoint(session = Session.objects.filter(session_name=form.cleaned_data['session'])[0],
+                committee_by = Committee.objects.filter(session__pk=session_id).filter(committee_name=form.cleaned_data['committee'])[0],
+                active_debate = form.cleaned_data['debate'],
+                point_type = form.cleaned_data['point_type'],
+                point_content = form.cleaned_data['content']
+                )
+            contentpoint.save()
+            #Create a point from the data submitted
+            point = Point(session = Session.objects.filter(session_name=form.cleaned_data['session'])[0],
+                committee_by=Committee.objects.filter(session__pk=session_id).filter(committee_name=form.cleaned_data['committee'])[0],
+                active_debate=form.cleaned_data['debate'], active_round=form.cleaned_data['round_no'],
+                point_type=form.cleaned_data['point_type']
+                )
+            #You need to first save the point before being able to add data to the ManyToManyField.
+            point.save()
+            #For each subtopic in the selected subtopics, add the subtopic to the saved points list of subtopics.
+            for s in form.cleaned_data['subtopics']:
+                st = SubTopic.objects.filter(pk=s)
+                point.subtopics.add(st[0])
+            return HttpResponseRedirect('/session/' + session_id + '/joint/' + committee_id + '/thanks')
+    else:
+        form = JointForm(subtopics_array, {'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'round_no': active_round_no})
+
+    context = {'debate': active, 'committee': committee, 'session': session, 'subtopics': subtopics, 'form': form}
+    return render(request, 'statistics/joint_form.html', context)
+
 def vote(request, session_id, committee_id):
     #The Vote form is just as complex as the Point form, and is made in a very similar manner.
 
@@ -187,6 +231,12 @@ def vote_thanks(request, session_id, committee_id):
 def content_thanks(request, session_id, committee_id):
     #Same thing as the last thanks page, but with a url constructed for contentpoints instead.
     thanks_url = '/session/' + session_id + '/content/' + committee_id
+    context = {'thanks_url': thanks_url}
+    return render(request, 'statistics/thanks.html', context)
+
+def joint_thanks(request, session_id, committee_id):
+    #Same thing as the last thanks page, but with a url constructed for contentpoints instead.
+    thanks_url = '/session/' + session_id + '/joint/' + committee_id
     context = {'thanks_url': thanks_url}
     return render(request, 'statistics/thanks.html', context)
 
