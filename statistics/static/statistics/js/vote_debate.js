@@ -41,7 +41,7 @@ $(document).ready(function() {
       chart: {
         renderTo: 'committee_votes',
         defaultSeriesType: 'column',
-        backgroundColor: '#eee',
+        backgroundColor: '#fff',
         events: {
             load: requestVoteData
         }
@@ -91,7 +91,7 @@ $(document).ready(function() {
       chart: {
         renderTo: 'debate_votes',
         defaultSeriesType: 'column',
-        backgroundColor: '#eee'
+        backgroundColor: '#fff'
       },
       title: {
         text: 'Total Standing'
