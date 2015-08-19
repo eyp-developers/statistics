@@ -1,8 +1,8 @@
-var latest_pk,
-    offset,
+var offset,
     total;
 
 var total_displayed = 0;
+var latest_pk = 0;
 
 function requestContentPointData() {
   $.ajax({
@@ -10,7 +10,9 @@ function requestContentPointData() {
     data: "offset=" + 0 + "&count=" + 10,
     success: function (response) {
       var table = document.getElementById("content-table").getElementsByTagName('tbody')[0];
-      latest_pk = response.contentpoints[0].pk;
+      if (typeof response.contentpoints[0].pk !== "undefined"){
+        latest_pk = response.contentpoints[0].pk;
+      }
       total = response.totalpoints;
       offset = 10;
       if (typeof response.contentpoints[0].contentpoint !== "undefined"){
