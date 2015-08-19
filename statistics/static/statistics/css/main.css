@@ -1,6 +1,6 @@
-/*h1, h2, h3, h4, h5, h6 {
-  font-family: 'Oswald', sans-serif;
-}*/
+h1, h2, h3, h4, h5, h6, p, a {
+  font-family: 'Source Sans Pro', sans-serif;
+}
 .navbar-inverse {
   /*background-image: none;*/
   background-color: #1e4e8a;
@@ -58,4 +58,16 @@
   .content-div {
     height: 400px;
   }
+}
+.content-div-content {
+  height:600px;
+  overflow:auto;
+}
+@media (max-width: 992px) {
+  .content-div-content {
+    height: 400px;
+  }
+}
+tbody tr td {
+  font-size: 18px;
 }
