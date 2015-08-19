@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
 
 #Importing the forms too.
-from .forms import PointForm, VoteForm, ActiveDebateForm, ActiveRoundForm
+from .forms import PointForm, VoteForm, ContentForm, ActiveDebateForm, ActiveRoundForm
 
 def home(request):
     #All the home page needs is a list of all sessions ordered by the start date. We create the list, then the context and finally render the template.
@@ -87,8 +87,7 @@ def point(request, session_id, committee_id):
         #Check if the form is valid.
         if form.is_valid():
             #Create a point from the data submitted
-            point = Point(session = Session.objects.filter(
-                session_name=form.cleaned_data['session'])[0],
+            point = Point(session = Session.objects.filter(session_name=form.cleaned_data['session'])[0],
                 committee_by=Committee.objects.filter(session__pk=session_id).filter(committee_name=form.cleaned_data['committee'])[0],
                 active_debate=form.cleaned_data['debate'], active_round=form.cleaned_data['round_no'],
                 point_type=form.cleaned_data['point_type']
@@ -109,7 +108,31 @@ def point(request, session_id, committee_id):
 
 
     context = {'debate': active, 'committee': committee, 'session': session, 'subtopics': subtopics, 'form': form}
-    return render(request, 'statistics/point.html', context)
+    return render(request, 'statistics/point_form.html', context)
+
+def content(request, session_id, committee_id):
+    session = Session.objects.get(pk=session_id)
+    committee = Committee.objects.get(pk=committee_id)
+    active = ActiveDebate.objects.get(session_id=session_id).active_debate
+    active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
+    if request.method == 'POST':
+        print request.POST
+
+        form = ContentForm(request.POST)
+        if form.is_valid():
+            contentpoint = ContentPoint(session = Session.objects.filter(session_name=form.cleaned_data['session'])[0],
+                committee_by = Committee.objects.filter(session__pk=session_id).filter(committee_name=form.cleaned_data['committee'])[0],
+                active_debate = form.cleaned_data['debate'],
+                point_type = form.cleaned_data['point_type'],
+                point_content = form.cleaned_data['content']
+                )
+            contentpoint.save()
+            return HttpResponseRedirect('/session/' + session_id + '/content/' + committee_id + '/thanks')
+    else:
+        form = ContentForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active})
+
+    context = {'debate': active, 'committee': committee, 'session': session, 'form': form}
+    return render(request, 'statistics/content_form.html', context)
 
 def vote(request, session_id, committee_id):
     #The Vote form is just as complex as the Point form, and is made in a very similar manner.
@@ -147,7 +170,7 @@ def vote(request, session_id, committee_id):
         form = VoteForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
 
     context = {'session': session, 'committee': committee, 'debate': active, 'form': form}
-    return render(request, 'statistics/vote.html', context)
+    return render(request, 'statistics/vote_form.html', context)
 
 def thanks(request, session_id, committee_id):
     #A thanks page that is given a url for the user to submit something again. We construct the url here and then set it as the href="" on the button
@@ -158,6 +181,12 @@ def thanks(request, session_id, committee_id):
 def vote_thanks(request, session_id, committee_id):
     #Same thing as the last thanks page, but with a url constructed for voting instead.
     thanks_url = '/session/' + session_id + '/vote/' + committee_id
+    context = {'thanks_url': thanks_url}
+    return render(request, 'statistics/thanks.html', context)
+
+def content_thanks(request, session_id, committee_id):
+    #Same thing as the last thanks page, but with a url constructed for contentpoints instead.
+    thanks_url = '/session/' + session_id + '/content/' + committee_id
     context = {'thanks_url': thanks_url}
     return render(request, 'statistics/thanks.html', context)
 
