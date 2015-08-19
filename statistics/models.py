@@ -204,7 +204,7 @@ class Committee(models.Model):
 
     #Then we need a text color depending on if the committee color is light or dark.
     def committee_text_color(self):
-        if self.committee_color in ['cyan', 'light-green', 'lime', 'yellow', 'amber', 'orange']:
+        if self.committee_color() in ['cyan', 'light-green', 'lime', 'yellow', 'amber', 'orange']:
             return('black')
         else:
             return('white')
