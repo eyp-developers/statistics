@@ -3,3 +3,4 @@
 *.codekit
 
 config.codekit
+**/.sass-cache/*
