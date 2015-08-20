@@ -20,9 +20,8 @@
 
   {% endblock %}
 
-
+{% if voting_enabled %}
   <div class="container well well-lg">
-    {% if voting_enabled %}
     <h2>Voting Summary:</h2>
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="text-align:center;">
@@ -40,7 +39,8 @@
       </div>
     </div>
     <div id="committee_votes" style="min-width: 310px; height: 150px; margin: 0 auto"></div>
-    {% endif %}
+  </div>
+{% endif %}
       <script type="text/javascript">
           var session = {{ session.pk }};
           var committee = {{ committee.pk }};
@@ -52,7 +52,6 @@
           var dr_img = '{% static 'statistics/images/dr.png' %}'
           var point_img = '{% static 'statistics/images/point.png' %}'
       </script>
-    </div>
 
 {% endblock %} <!--/ voting block-->
 
