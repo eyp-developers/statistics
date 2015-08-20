@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from views import views, auth
+from views import views, auth, apis
 
 #The URLs are quite important to the GA Stats system, as there's a custom API and system for accessing various forms
 #Sessions, Debates, Point Submit and Vote Submit pages are accessed using the id's of the session/committee.
@@ -26,10 +26,10 @@ urlpatterns = [
     url(r'^session/(?P<session_id>[0-9]+)/joint/(?P<committee_id>[0-9]+)/$', views.joint, name='joint'),
     url(r'^session/(?P<session_id>[0-9]+)/joint/(?P<committee_id>[0-9]+)/thanks/$', views.joint_thanks, name='joint_thanks'),
     url(r'^session/(?P<session_id>[0-9]+)/manage/$', views.manage, name='manage'),
-    url(r'^api/session/(?P<session_id>[0-9]+)/$', views.session_api, name='session_api'),
-    url(r'^api/session/(?P<session_id>[0-9]+)/debate/(?P<committee_id>[0-9]+)/$', views.debate_api, name='debate_api'),
-    url(r'^api/session/(?P<session_id>[0-9]+)/vote/$', views.session_vote_api, name='session_vote_api'),
-    url(r'^api/session/(?P<session_id>[0-9]+)/vote/(?P<committee_id>[0-9]+)/$', views.debate_vote_api, name='debate_vote_api'),
-    url(r'^api/session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/$', views.content_api, name='content_api'),
-    url(r'^api/session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/since/$', views.content_latest_api, name='content_latest_api'),
+    url(r'^api/session/(?P<session_id>[0-9]+)/$', apis.session_api, name='session_api'),
+    url(r'^api/session/(?P<session_id>[0-9]+)/debate/(?P<committee_id>[0-9]+)/$', apis.debate_api, name='debate_api'),
+    url(r'^api/session/(?P<session_id>[0-9]+)/vote/$', apis.session_vote_api, name='session_vote_api'),
+    url(r'^api/session/(?P<session_id>[0-9]+)/vote/(?P<committee_id>[0-9]+)/$', apis.debate_vote_api, name='debate_vote_api'),
+    url(r'^api/session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/$', apis.content_api, name='content_api'),
+    url(r'^api/session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/since/$', apis.content_latest_api, name='content_latest_api'),
 ]
