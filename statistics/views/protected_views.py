@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 #Importing all models for statistics.
 from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
@@ -21,7 +22,7 @@ from ..forms import SessionForm,  SessionEditForm, PointForm, VoteForm, ContentF
 
 
 
-
+@login_required(login_url = '/login/')
 def create_session(request):
     #If the user is trying to create a session
     if request.method == 'POST':
@@ -101,12 +102,23 @@ def create_session(request):
     context = {'form': form}
     return render(request, 'statistics/session_create.html', context)
 
+
+#################
+
+
+
+@login_required(login_url = '/login/')
 def welcome(request, session_id):
     session = Session.objects.get(pk=session_id)
     committees = Committee.objects.filter(session=session).order_by('committee_name')
     context = {'session': session, 'committees': committees}
     return render(request, 'statistics/welcome.html', context)
 
+
+#################
+
+
+@login_required(login_url = '/login/')
 def edit(request, session_id):
     s = Session.objects.get(pk=session_id)
     # If the User is trying to edit the session
@@ -158,10 +170,20 @@ def edit(request, session_id):
     return render(request, 'statistics/session_edit.html', context)
 
 
+
+
+#################
+
+@login_required(login_url = '/login/')
 def add(request, session_id):
     pass
 
 
+
+
+#################
+
+@login_required(login_url = '/login/')
 def point(request, session_id, committee_id):
     #The Point view handles the submission of points, both creating the form from the data given, validating the form,
     #and sending the user to the right place if the data submission was successful.
@@ -218,6 +240,12 @@ def point(request, session_id, committee_id):
     context = {'debate': active, 'committee': committee, 'session': session, 'subtopics': subtopics, 'form': form}
     return render(request, 'statistics/point_form.html', context)
 
+
+
+#################
+
+
+@login_required(login_url = '/login/')
 def content(request, session_id, committee_id):
     session = Session.objects.get(pk=session_id)
     committee = Committee.objects.get(pk=committee_id)
@@ -242,6 +270,11 @@ def content(request, session_id, committee_id):
     context = {'debate': active, 'committee': committee, 'session': session, 'form': form}
     return render(request, 'statistics/content_form.html', context)
 
+
+#################
+
+
+@login_required(login_url = '/login/')
 def joint(request, session_id, committee_id):
     session = Session.objects.get(pk=session_id)
     committee = Committee.objects.get(pk=committee_id)
@@ -289,6 +322,11 @@ def joint(request, session_id, committee_id):
     context = {'debate': active, 'committee': committee, 'session': session, 'subtopics': subtopics, 'form': form}
     return render(request, 'statistics/joint_form.html', context)
 
+
+#################
+
+
+@login_required(login_url = '/login/')
 def vote(request, session_id, committee_id):
     #The Vote form is just as complex as the Point form, and is made in a very similar manner.
 
@@ -327,30 +365,54 @@ def vote(request, session_id, committee_id):
     context = {'session': session, 'committee': committee, 'debate': active, 'form': form}
     return render(request, 'statistics/vote_form.html', context)
 
+
+#################
+
+
+@login_required(login_url = '/login/')
 def thanks(request, session_id, committee_id):
     #A thanks page that is given a url for the user to submit something again. We construct the url here and then set it as the href="" on the button
     thanks_url = '/session/' + session_id + '/point/' + committee_id
     context = {'thanks_url': thanks_url}
     return render(request, 'statistics/thanks.html', context)
 
+
+#################
+
+
+@login_required(login_url = '/login/')
 def vote_thanks(request, session_id, committee_id):
     #Same thing as the last thanks page, but with a url constructed for voting instead.
     thanks_url = '/session/' + session_id + '/vote/' + committee_id
     context = {'thanks_url': thanks_url}
     return render(request, 'statistics/thanks.html', context)
 
+
+#################
+
+
+@login_required(login_url = '/login/')
 def content_thanks(request, session_id, committee_id):
     #Same thing as the last thanks page, but with a url constructed for contentpoints instead.
     thanks_url = '/session/' + session_id + '/content/' + committee_id
     context = {'thanks_url': thanks_url}
     return render(request, 'statistics/thanks.html', context)
 
+#################
+
+
+@login_required(login_url = '/login/')
 def joint_thanks(request, session_id, committee_id):
     #Same thing as the last thanks page, but with a url constructed for contentpoints instead.
     thanks_url = '/session/' + session_id + '/joint/' + committee_id
     context = {'thanks_url': thanks_url}
     return render(request, 'statistics/thanks.html', context)
 
+
+#################
+
+
+@login_required(login_url = '/login/')
 def manage(request, session_id):
     #The manage page contains 2 forms, one form for changing the active debate and one form for changing the active round.
 
