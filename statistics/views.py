@@ -18,7 +18,7 @@ from .forms import SessionForm, PointForm, VoteForm, ContentForm, JointForm, Act
 
 def home(request):
     #All the home page needs is a list of all sessions ordered by the start date. We create the list, then the context and finally render the template.
-    latest_sessions_list = Session.objects.order_by('-session_start_date')[:20]
+    latest_sessions_list = Session.objects.filter(session_is_visible=True).order_by('-session_start_date')[:20]
     context = {'latest_sessions_list': latest_sessions_list}
     return render(request, 'statistics/home.html', context)
 
@@ -77,6 +77,7 @@ def create_session(request):
                 session_color = form.cleaned_data['color'],
                 session_rounds_enabled = True,
                 session_subtopics_enabled = True,
+                session_is_visible = False,
                 session_voting_enabled = voting,
                 session_max_rounds = form.cleaned_data['max_rounds'],
                 session_admin_user = admin_user,
@@ -102,8 +103,15 @@ def create_session(request):
 
 def welcome(request, session_id):
     session = Session.objects.get(pk=session_id)
-    context = {'session': session}
+    committees = Committee.objects.filter(session=session).order_by('committee_name')
+    context = {'session': session, 'committees': committees}
     return render(request, 'statistics/welcome.html', context)
+
+def edit(request, session_id):
+    pass
+
+def add(request, session_id):
+    pass
 
 def session(request, session_id):
     #The Session page uses static content and content that is constantly updated, the satic content is loaded with the view
