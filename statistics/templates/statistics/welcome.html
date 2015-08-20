@@ -98,7 +98,7 @@
             {% elif session.session_statistics == 'C' %}
             <td><a href="{% url 'statistics:content' session.pk committee.pk %}">{% url 'statistics:content' session.pk committee.pk %}</a></td>
             {% elif session.session_statistics == 'S' %}
-            <td><a href="{% url 'statistics:debate' session.pk committee.pk %}">{% url 'statistics:debate' session.pk committee.pk %}</a></td>
+            <td><a href="{% url 'statistics:point' session.pk committee.pk %}">{% url 'statistics:point' session.pk committee.pk %}</a></td>
             {% endif %}
             {% if session.session_voting_enabled %}
             <td><a href="{% url 'statistics:vote' session.pk committee.pk %}">{% url 'statistics:vote' session.pk committee.pk %}</a><td>
