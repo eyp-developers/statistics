@@ -372,8 +372,9 @@ def vote(request, session_id, committee_id):
 @login_required(login_url = '/login/')
 def thanks(request, session_id, committee_id):
     #A thanks page that is given a url for the user to submit something again. We construct the url here and then set it as the href="" on the button
+    session = Session.objects.get(pk=session_id)
     thanks_url = '/session/' + session_id + '/point/' + committee_id
-    context = {'thanks_url': thanks_url}
+    context = {'thanks_url': thanks_url, 'session': session}
     return render(request, 'statistics/thanks.html', context)
 
 
@@ -383,8 +384,9 @@ def thanks(request, session_id, committee_id):
 @login_required(login_url = '/login/')
 def vote_thanks(request, session_id, committee_id):
     #Same thing as the last thanks page, but with a url constructed for voting instead.
+    session = Session.objects.get(pk=session_id)
     thanks_url = '/session/' + session_id + '/vote/' + committee_id
-    context = {'thanks_url': thanks_url}
+    context = {'thanks_url': thanks_url, 'session': session}
     return render(request, 'statistics/thanks.html', context)
 
 
@@ -394,8 +396,9 @@ def vote_thanks(request, session_id, committee_id):
 @login_required(login_url = '/login/')
 def content_thanks(request, session_id, committee_id):
     #Same thing as the last thanks page, but with a url constructed for contentpoints instead.
+    session = Session.objects.get(pk=session_id)
     thanks_url = '/session/' + session_id + '/content/' + committee_id
-    context = {'thanks_url': thanks_url}
+    context = {'thanks_url': thanks_url, 'session': session}
     return render(request, 'statistics/thanks.html', context)
 
 #################
@@ -404,8 +407,9 @@ def content_thanks(request, session_id, committee_id):
 @login_required(login_url = '/login/')
 def joint_thanks(request, session_id, committee_id):
     #Same thing as the last thanks page, but with a url constructed for contentpoints instead.
+    session = Session.objects.get(pk=session_id)
     thanks_url = '/session/' + session_id + '/joint/' + committee_id
-    context = {'thanks_url': thanks_url}
+    context = {'thanks_url': thanks_url, 'session': session}
     return render(request, 'statistics/thanks.html', context)
 
 
