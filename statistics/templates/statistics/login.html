@@ -1,0 +1,18 @@
+{% extends 'statistics/base.html' %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block page_title %}Login{% endblock %}
+
+{% block content %}
+
+<div class="container col-lg-offset-4">
+  <h1>
+    <small>Log in</small>
+  </h1>
+
+    {% crispy form %}
+
+</div>
+
+{% endblock %}
