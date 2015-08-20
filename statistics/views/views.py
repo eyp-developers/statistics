@@ -13,10 +13,10 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib import messages
 
 #Importing all models for statistics.
-from .models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
+from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
 
 #Importing the forms too.
-from .forms import SessionForm,  SessionEditForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm, LoginForm
+from ..forms import SessionForm,  SessionEditForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm
 
 def home(request):
     #All the home page needs is a list of all sessions ordered by the start date. We create the list, then the context and finally render the template.
@@ -24,37 +24,7 @@ def home(request):
     context = {'latest_sessions_list': latest_sessions_list}
     return render(request, 'statistics/home.html', context)
 
-def ga_login(request):
-# This view is shown, when a user tries to view the submit form, but isn't logged in. After they log in, they'll be taken to /submit/.
-    form = LoginForm(request.POST or None)
 
-    if form.is_valid():
-        username = form.cleaned_data['username']
-        password = form.cleaned_data['password']
-        print username, password
-
-        user = authenticate(username=username,
-                            password=password)
-
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect('/')
-            else:
-                return HttpResponseRedirect('/login')
-        else:
-            return HttpResponseRedirect('/login')
-
-    template = 'statistics/login.html'
-    context = {'form': form}
-    return render(request, template, context)
-
-
-def ga_logout(request):
-    # If the user visits /logout/ he will be logged out.
-
-    logout(request)
-    return HttpResponseRedirect('/')
 
 
 def create_session(request):
