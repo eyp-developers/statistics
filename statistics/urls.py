@@ -8,6 +8,8 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
+    url(r'^login/$', views.ga_login, name='login'),
+    url(r'^logout/$', views.ga_logout, name='logout'),
     url(r'^create_session/$', views.create_session, name='create_session'),
     url(r'^welcome/(?P<session_id>[0-9]+)/$', views.welcome, name='welcome'),
     url(r'^edit/(?P<session_id>[0-9]+)/$', views.edit, name='edit'),
