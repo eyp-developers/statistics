@@ -39,6 +39,18 @@
               <ul class="nav navbar-nav">
                 <li><a href="{% url 'statistics:home' %}">Home</a></li>
               </ul><!--/.nav navbar-nav-->
+              <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  {% if user.is_authenticated = False %}
+                  <li><a href="#">Login</a></li>
+                  {% endif %} {% if user.is_staff %}
+                  <li><a href="/admin/">Go to Admin</a></li>
+                  {% endif %} {% if user.is_authenticated %}
+                  <li><a href="#">Logout</a></li>
+                  {% endif %}
+                </ul>
             </div><!--/.navbar-collapse -->
           </div><!--/.container -->
         </nav><!--/.navbar -->
