@@ -9,6 +9,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib import messages
 
 #Importing all models for statistics.
 from .models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
@@ -158,9 +159,37 @@ def edit(request, session_id):
 
             s.session_name = form.cleaned_data['name']
             s.session_description = form.cleaned_data['description']
+            s.session_picture = form.cleaned_data['picture']
+            s.session_email = form.cleaned_data['email']
+            s.session_country = form.cleaned_data['country']
+            s.session_start_date = start_date
+            s.session_end_date = end_date
+            s.session_statistics = form.cleaned_data['statistics']
+            s.session_voting_enabled = form.cleaned_data['voting']
+            s.session_max_rounds = form.cleaned_data['max_rounds']
+            s.session_color = form.cleaned_data['color']
+            s.session_is_visible = form.cleaned_data['is_visible']
+            #Save the newly edited session
+            s.save()
 
+            messages.add_message(request, messages.SUCCESS, 'Session Updated')
+    else:
+        form = SessionEditForm({'name': s.session_name,
+            'description': s.session_description,
+            'email': s.session_email,
+            'country': s.session_country,
+            'picture': s.session_picture,
+            'start_date': s.session_start_date,
+            'end_date': s.session_end_date,
+            'statistics': s.session_statistics,
+            'voting': s.session_voting_enabled,
+            'max_rounds': s.session_max_rounds,
+            'color': s.session_color,
+            'is_visible': s.session_is_visible})
 
-    pass
+        context = {'session': s, 'form': form}
+        return render(request, 'statistics/session_edit.html', context)
+
 
 def add(request, session_id):
     pass
