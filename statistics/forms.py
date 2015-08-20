@@ -229,7 +229,7 @@ class SessionEditForm(forms.Form):
         statistics = forms.ChoiceField(choices=STATISTIC_TYPES, required=True)
 
         #Since the voting choice is not a checkbox per se, the input type will be a CharField instead
-        voting = forms.CharField(max_length=4, required=True)
+        voting = forms.BooleanField(required=True)
 
         max_rounds = forms.IntegerField(min_value=1, max_value=10)
 
