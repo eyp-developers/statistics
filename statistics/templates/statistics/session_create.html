@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Session Creation - GA Statistics</title>
+		<meta name="description" content="Create a session on the GA Statistics Platform" />
+		<meta name="keywords" content="eyp, european, youth, parliament, ga, statistics" />
+		<meta name="author" content="Oliver Stenbom" />
+		<link rel="shortcut icon" href="../favicon.ico">
+
+		{% load staticfiles %}
+		<link rel="stylesheet" type="text/css" href="{% static 'statistics/css/normalize.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'statistics/css/session_create.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'statistics/css/session_create_component.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'statistics/css/cs-select.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'statistics/css/cs-skin-boxes.css' %}" />
+		<script src="{% static 'statistics/js/session_create/modernizr.custom.js' %}"></script>
+	</head>
+	<body>
+		<div class="container">
+
+			<div class="fs-form-wrap" id="fs-form-wrap">
+				<div class="fs-title">
+					<h1>Session Creation - GA Statistics</h1>
+				</div>
+				<form id="myform" class="fs-form fs-form-full" action="{% url 'statistics:create_session' %}" method="post" autocomplete="off">
+					{% csrf_token %}
+					<ol class="fs-fields">
+						<li>
+							<label class="fs-field-label fs-anim-upper" data-info="Keep it short, place and year please." for="{{ form.name.id_for_label }}">What is the short name of your session?</label>
+							{{ form.name.errors }}
+							<input class="fs-anim-lower" id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" type="text" placeholder="Izmir 2015" required/>
+						</li>
+						<li>
+							<label class="fs-field-label fs-anim-upper" data-info="This is the longer one, that fully describes the type of your event." for="{{ form.description.id_for_label }}">What is the description of your session?</label>
+							<input class="fs-anim-lower" id="{{ form.description.id_for_label }}" name="{{ form.description.html_name }}" type="text" placeholder="78th International Session of the European Youth Parliament" required/>
+						</li>
+						<li>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.email.id_for_label }}" data-info="We're not the kind of people who send spam, but we might send you a friendly email after your session asking how it went">What's your email address?</label>
+							<input class="fs-anim-lower" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" type="email" placeholder="john@doe.com" required/>
+						</li>
+						<li>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.picture.id_for_label }}" data-info="This makes the website look very pretty.">Could we get a picture to use for your session?</label>
+							<input class="fs-anim-lower" id="{{ form.picture.id_for_label }}" name="{{ form.picture.html_name }}" type="url" placeholder="http://images.google.com/yourface" required/>
+						</li>
+						<li>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.start_date.id_for_label }}" data-info="Year/Month/Date please.">When does your session start?</label>
+							<input class="fs-anim-lower" id="{{ form.start_date.id_for_label }}" name="{{ form.start_date.html_name }}" type="date" placeholder="dd/mm/yyyy" required/>
+						</li>
+						<li>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.end_date.id_for_label }}" data-info="Year/Month/Date please.">When does your session end?</label>
+							<input class="fs-anim-lower" id="{{ form.end_date.id_for_label }}" name="{{ form.end_date.html_name }}" type="date" placeholder="dd/mm/yyyy" required/>
+						</li>
+						<li data-input-trigger>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.country.id_for_label }}" data-info="The country your session is going to take place in. Sorry Dubfast, send me a message and I'll make you a special one.">What country is your session going to be in?</label>
+							<select class="cs-select cs-select-list fs-anim-lower" name="{{ form.country.html_name }}" id="{{ form.country.id_for_label }}">
+								<option value="" disabled="" selected>Pick a country</option>
+								{% for id,text in form.fields.country.choices  %}
+				        <option value="{{ id }}">{{ text }}</option>
+				        {% endfor %}
+							</select>
+						</li>
+						<li data-input-trigger>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.statistics.id_for_label }}" data-info="This defines what kind of statistics will be displayed.">What kind of statistics would you like to use?</label>
+							<div class="fs-radio-group fs-radio-custom clearfix fs-anim-lower" id="{{ form.statistics.id_for_label }}">
+								<span><input id="statistics" name="{{ form.statistics.html_name }}" type="radio" value="S"/><label for="statistics" class="radio-statistics">Statistics Only</label></span>
+								<span><input id="content" name="{{ form.statistics.html_name }}" type="radio" value="C"/><label for="content" class="radio-content">Content Only</label></span>
+								<span><input id="split" name="{{ form.statistics.html_name }}" type="radio" value="SF"/><label for="split" class="radio-split">Both Statistics &amp; Content, Different Forms</label></span>
+								<span><input id="joint" name="{{ form.statistics.html_name }}" type="radio" value="JF"/><label for="joint" class="radio-joint">Both Statistics &amp; Content, One Form</label></span>
+								<span><input id="none" name="{{ form.statistics.html_name }}" type="radio" value="N/A"/><label for="none" class="radio-none">No Statistics, Just Voting</label></span>
+							</div>
+						</li>
+						<li data-input-trigger>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.voting.id_for_label }}" data-info="This defines whether session wide voting is enabled or not.">Would you like to do your voting through GA Statistics?</label>
+							<div class="fs-radio-group fs-radio-custom clearfix fs-anim-lower" id="{{ form.voting.id_for_label }}">
+								<span><input id="votingyes" name="{{ form.voting.html_name }}" type="radio" value="True"/><label for="votingyes" class="radio-yes">Yes please.</label></span>
+								<span><input id="votingno" name="{{ form.voting.html_name }}" type="radio" value="False"/><label for="votingno" class="radio-no">No thanks.</label></span>
+							</div>
+						</li>
+						<li>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.max_rounds.id_for_label }}" data-info="Don't worry, you can change this later.">What's the maximum amount of rounds you'll have in a debate?</label>
+							<input class="fs-anim-lower" id="{{ form.max_rounds.id_for_label }}" name="{{ form.max_rounds.html_name }}" type="number" placeholder="3" required/>
+						</li>
+						<li data-input-trigger>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.color.id_for_label }}" data-info="This will change things like buttons and the header of your session.">Choose a color for your session.</label>
+							<select class="cs-select cs-select-color cs-skin-boxes fs-anim-lower" name="{{ form.color.html_name }}" id="{{ form.color.id_for_label }}">
+								<option value="" disabled selected>Pick a color</option>
+								<option value="#F44336" data-class="color-F44336">#F44336</option>
+								<option value="#E91E63" data-class="color-E91E63">#E91E63</option>
+								<option value="#9C27B0" data-class="color-9C27B0">#9C27B0</option>
+								<option value="#673AB7" data-class="color-673AB7">#673AB7</option>
+								<option value="#3F51B5" data-class="color-3F51B5">#3F51B5</option>
+								<option value="#2196F3" data-class="color-2196F3">#2196F3</option>
+								<option value="#03A9F4" data-class="color-03A9F4">#03A9F4</option>
+								<option value="#00BCD4" data-class="color-00BCD4">#00BCD4</option>
+								<option value="#009688" data-class="color-009688">#009688</option>
+								<option value="#4CAF50" data-class="color-4CAF50">#4CAF50</option>
+								<option value="#8BC34A" data-class="color-8BC34A">#8BC34A</option>
+								<option value="#CDDC39" data-class="color-CDDC39">#CDDC39</option>
+								<option value="#FFEB3B" data-class="color-FFEB3B">#FFEB3B</option>
+								<option value="#FFC107" data-class="color-FFC107">#FFC107</option>
+								<option value="#FF9800" data-class="color-FF9800">#FF9800</option>
+								<option value="#FF5722" data-class="color-FF5722">#FF5722</option>
+								<option value="#607D8B" data-class="color-607D8B">#607D8B</option>
+							</select>
+						</li>
+						<li>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.admin_password.id_for_label }}" data-info="This is the password you will use to delete points, add committees etc.">Enter a password to use for the administration of your session:</label>
+							<input class="fs-anim-lower" id="{{ form.admin_password.id_for_label }}" name="admin_password" type="password" placeholder="********" required/>
+						</li>
+						<li>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.submit_password.id_for_label }}" data-info="This is the password you can give to anyone who is going to submit data, it prevents eg. delegates from adding a few extra votes.">Enter a password to use when submitting points:</label>
+							<input class="fs-anim-lower" id="{{ form.submit_password.id_for_label }}" name="{{ form.submit_password.html_name }}" type="password" placeholder="*********" required/>
+						</li>
+					</ol><!-- /fs-fields -->
+					<button class="fs-submit" type="submit">Create Session</button>
+				</form><!-- /fs-form -->
+			</div><!-- /fs-form-wrap -->
+
+		</div><!-- /container -->
+		<script src="{% static 'statistics/js/session_create/classie.js' %}"></script>
+		<script src="{% static 'statistics/js/session_create/selectFx.js' %}"></script>
+		<script src="{% static 'statistics/js/session_create/fullscreenForm.js' %}"></script>
+		<script>
+			(function() {
+				var formWrap = document.getElementById( 'fs-form-wrap' );
+
+				[].slice.call( document.querySelectorAll( 'select.cs-select-color' ) ).forEach( function(el) {
+					new SelectFx( el, {
+						stickyPlaceholder: false,
+						onChange: function(val){
+							document.querySelectorAll('span.cs-placeholder')[1].style.backgroundColor = val;
+						}
+					});
+				} );
+
+				[].slice.call( document.querySelectorAll( 'select.cs-select-list' ) ).forEach( function(el) {
+					new SelectFx( el, {
+						stickyPlaceholder: false,
+						onChange: function(val){
+
+						}
+					});
+				} );
+
+				new FForm( formWrap, {
+					onReview : function() {
+						classie.add( document.body, 'overview' ); // for demo purposes only
+					}
+				} );
+			})();
+		</script>
+	</body>
+</html>
