@@ -44,11 +44,11 @@
                 <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   {% if user.is_authenticated = False %}
-                  <li><a href="#">Login</a></li>
+                  <li><a href="{% url 'statistics:login' %}">Login</a></li>
                   {% endif %} {% if user.is_staff %}
                   <li><a href="/admin/">Go to Admin</a></li>
                   {% endif %} {% if user.is_authenticated %}
-                  <li><a href="#">Logout</a></li>
+                  <li><a href="{% url 'statistics:logout' %}">Logout</a></li>
                   {% endif %}
                 </ul>
             </div><!--/.navbar-collapse -->
