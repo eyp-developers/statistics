@@ -118,7 +118,14 @@ class Session(models.Model):
     session_statistics = models.CharField(max_length=3, choices=STATISTIC_TYPES, default=JOINTFORM)
 
     #We want to define a color for the session that can be used when styling pages.
-    session_color = models.CharField(max_length=7)
+    session_color = models.CharField(max_length=20)
+
+    #Then we need a text color depending on if the committee color is light or dark.
+    def session_text_color(self):
+        if self.session_color() in ['cyan', 'light-green', 'lime', 'yellow', 'amber', 'orange']:
+            return('black')
+        else:
+            return('white')
 
     #We want a boolean to define whether the session should be visible to the public or not.
     session_is_visible = models.BooleanField('is visible')
