@@ -5,6 +5,71 @@
 {% block page_title %}Home{% endblock %}
 
 {% block content %}
+</div>
+<div class="jumbotron">
+  <div class="container">
+    <h1>Welcome to GA Statistics, {{ session.session_name }}</h1>
+    <p>Congratulations on creating your GA Stats Session, there are a few more things you need to do before you're ready to go.</p>
+  </div><!--/.container -->
+</div><!--/.jumbotron -->
+<br>
+<div class="container">
+{% if session.is_visible %}
+{% else %}
+<div class="alert alert-dismissable alert-warning">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    Your session isn't visible to the public yet, when you're ready to activate it, do so here: <a href="{% url 'statistics:edit' session.pk %}">{% url 'statistics:edit' session.pk %}</a>
+</div>
+{% endif %}
+<div class="alert alert-dismissable alert-info">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    This is really important stuff to know, but don't worry, you can always come back here with this url: <a href="{% url 'statistics:welcome' session.pk %}">{% url 'statistics:welcome' session.pk %}</a>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Usernames:</h3>
+    </div>
+    <div class="panel-body">
+      <h4>Your Admin Username is: <b>{{ session.session_admin_user }}</b><h4>
+      <h5>The Admin Password what you entered when you made the session.</h5>
+      <br>
+      <h4>Your Submission Username is: <b>{{ session.session_submission_user }}</b></h4>
+      <h5>The Submission Password what you entered when you made the session.</h5>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{ session.session_name }} Links:</h3>
+    </div>
+    <div class="panel-body">
+      <h2>Your Session ID is <b>{{ session.pk }}</b></h2>
+      <p>You can use your session ID for all kinds of things (some only if you're logged in as an admin).</p>
+
+      <h3>You can add your committees:</h3>
+      <h4><a href="{% url 'statistics:add' session.pk %}">{% url 'statistics:add' session.pk %}</a> - This is where you add all your committees and subtopics.</h3>
+
+      <h3>You can edit the session you just made:</h3>
+      <h4><a href="{% url 'statistics:edit' session.pk %}">{% url 'statistics:edit' session.pk %}</a> - This is where you can change things like the maximum amount of rounds you'll have.</h3>
+
+      <h3>You can manage your session:</h3>
+      <h4><a href="{% url 'statistics:manage' session.pk %}">{% url 'statistics:manage' session.pk %}</a> - This is where you let the system know which debate and round is going on at the moment.</h3>
+        <p>It's also where you can edit recent points, contentpoints and votes</p>
+    </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Committees:</h3>
   </div>
-  <h1>Welcome to GA Statistics.</h1>
+  <div class="panel-body">
+    {% if committees %}
+
+    {% else %}
+    <h3>No Committees Yet!</h3>
+    <h4>You can make some here: <a href="{% url 'statistics:add' session.pk %}">{% url 'statistics:add' session.pk %}</a></h4>
+    {% endif %}
+  </div>
+</div>
+
+
 {% endblock %} {% block footer_scripts %} {% endblock %}

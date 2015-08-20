@@ -120,6 +120,9 @@ class Session(models.Model):
     #We want to define a color for the session that can be used when styling pages.
     session_color = models.CharField(max_length=7)
 
+    #We want a boolean to define whether the session should be visible to the public or not.
+    session_is_visible = models.BooleanField('is visible')
+
     #Enabling/Disabling Session Settings
     session_rounds_enabled = models.BooleanField('debate rounds enabled', default=True)
     session_subtopics_enabled = models.BooleanField('committee subtopics enabled', default=True)
