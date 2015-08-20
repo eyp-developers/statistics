@@ -176,7 +176,9 @@ def edit(request, session_id):
 
 @login_required(login_url = '/login/')
 def add(request, session_id):
-    pass
+    session = Session.objects.get(pk=session_id)
+    context = {'session': session}
+    return render(request, 'statistics/session_add.html', context)
 
 
 
