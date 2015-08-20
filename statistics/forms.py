@@ -229,13 +229,49 @@ class SessionEditForm(forms.Form):
         statistics = forms.ChoiceField(choices=STATISTIC_TYPES, required=True)
 
         #Since the voting choice is not a checkbox per se, the input type will be a CharField instead
-        voting = forms.BooleanField(required=True)
+        voting = forms.BooleanField(required=False)
 
         max_rounds = forms.IntegerField(min_value=1, max_value=10)
 
-        color = forms.CharField(max_length=7, required=True)
+        RED = 'red'
+        PINK = 'pink'
+        PURPLE = 'purple'
+        DEEP_PURPLE = 'deep-purple'
+        INDIGO = 'indigo'
+        BLUE = 'blue'
+        LIGHT_BLUE = 'light-blue'
+        CYAN = 'cyan'
+        TEAL = 'teal'
+        GREEN = 'green'
+        LIGHT_GREEN = 'light-green'
+        LIME = 'lime'
+        YELLOW = 'yellow'
+        AMBER = 'amber'
+        ORANGE = 'orange'
+        DEEP_ORANGE = 'deep-orange'
+        BLUE_GREY = 'blue-grey'
+        COLOR_TYPES = (
+            (RED, 'Red'),
+            (PINK, 'Pink'),
+            (PURPLE, 'Purple'),
+            (DEEP_PURPLE, 'Deep Purple'),
+            (INDIGO, 'Indigo'),
+            (BLUE, 'Blue'),
+            (LIGHT_BLUE, 'Light Blue'),
+            (CYAN, 'Cyan'),
+            (TEAL, 'Teal'),
+            (GREEN, 'Green'),
+            (LIGHT_GREEN, 'Light Green'),
+            (LIME, 'Lime'),
+            (YELLOW, 'Yellow'),
+            (AMBER, 'Amber'),
+            (ORANGE, 'Orange'),
+            (DEEP_ORANGE, 'Deep Orange'),
+            (BLUE_GREY, 'Blue Grey'),
+        )
+        color = forms.ChoiceField(choices=COLOR_TYPES, required=True)
 
-        is_visible = forms.BooleanField(required=True)
+        is_visible = forms.BooleanField(required=False)
 
 class PointForm(forms.Form):
     #The point form needs to be fed with special data, in the form of an array of subtopics.
