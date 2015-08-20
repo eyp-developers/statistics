@@ -1,59 +1,28 @@
-import time
 import json
+from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
 
 from datetime import date
 from datetime import datetime
+import time
 
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
-from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth import login
+
+from django.contrib import messages
 
 #Importing all models for statistics.
 from .models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
 
 #Importing the forms too.
-from .forms import SessionForm,  SessionEditForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm, LoginForm
+from .forms import SessionForm, SessionEditForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm
 
 def home(request):
     #All the home page needs is a list of all sessions ordered by the start date. We create the list, then the context and finally render the template.
     latest_sessions_list = Session.objects.filter(session_is_visible=True).order_by('-session_start_date')[:20]
     context = {'latest_sessions_list': latest_sessions_list}
     return render(request, 'statistics/home.html', context)
-
-def ga_login(request):
-# This view is shown, when a user tries to view the submit form, but isn't logged in. After they log in, they'll be taken to /submit/.
-    form = LoginForm(request.POST or None)
-
-    if form.is_valid():
-        username = form.cleaned_data['username']
-        password = form.cleaned_data['password']
-        print username, password
-
-        user = authenticate(username=username,
-                            password=password)
-
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect('/')
-            else:
-                return HttpResponseRedirect('/login')
-        else:
-            return HttpResponseRedirect('/login')
-
-    template = 'statistics/login.html'
-    context = {'form': form}
-    return render(request, template, context)
-
-
-def ga_logout(request):
-    # If the user visits /logout/ he will be logged out.
-
-    logout(request)
-    return HttpResponseRedirect('/')
-
 
 def create_session(request):
     #If the user is trying to create a session
@@ -158,9 +127,36 @@ def edit(request, session_id):
 
             s.session_name = form.cleaned_data['name']
             s.session_description = form.cleaned_data['description']
+            s.session_picture = form.cleaned_data['picture']
+            s.session_email = form.cleaned_data['email']
+            s.session_country = form.cleaned_data['country']
+            s.session_start_date = start_date
+            s.session_end_date = end_date
+            s.session_statistics = form.cleaned_data['statistics']
+            s.session_voting_enabled = form.cleaned_data['voting']
+            s.session_max_rounds = form.cleaned_data['max_rounds']
+            s.session_color = form.cleaned_data['color']
+            s.session_is_visible = form.cleaned_data['is_visible']
+            #Save the newly edited session
+            s.save()
 
+            messages.add_message(request, messages.SUCCESS, 'Session Updated')
+    else:
+        form = SessionEditForm({'name': s.session_name,
+            'description': s.session_description,
+            'email': s.session_email,
+            'country': s.session_country,
+            'picture': s.session_picture,
+            'start_date': s.session_start_date,
+            'end_date': s.session_end_date,
+            'statistics': s.session_statistics,
+            'voting': s.session_voting_enabled,
+            'max_rounds': s.session_max_rounds,
+            'color': s.session_color,
+            'is_visible': s.session_is_visible})
 
-    pass
+        context = {'session': s, 'form': form}
+        return render(request, 'statistics/session_edit.html', context)
 
 def add(request, session_id):
     pass
