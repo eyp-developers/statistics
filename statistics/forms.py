@@ -1,5 +1,12 @@
 from django import forms
 
+from django.contrib.auth import get_user_model
+
+# Not all of the following imports are currently used. They are still here as this might change in the future.
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, ButtonHolder, Fieldset
+from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton
+
 class SessionForm(forms.Form):
 
     #The countries of the session need to be set up in the same way as the model.
@@ -327,3 +334,23 @@ class ActiveRoundForm(forms.Form):
     #Setting up arguments again.
     session = forms.CharField(max_length=100, required=True)
     active_round = forms.ChoiceField(choices=(), required=True)
+
+
+User = get_user_model()
+
+class LoginForm(forms.Form):
+    # This is the form a user fills out to log in
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
+
+    # Crispy Forms. This defines what the form should look like when displayed. This is specific to Bootstrap 3
+    helper = FormHelper()
+    helper.form_class = 'form-horizontal form-group'
+    helper.label_class = 'col-lg-1 form-control'
+    helper.field_class = 'col-lg-3 input-lg form-control'
+    helper.layout = Layout(
+        Field('username'),
+        Field('password'),
+        Submit('submit', 'Login', css_class='btn-default btn-lg col-lg-4 col-xs-12'),
+    )
