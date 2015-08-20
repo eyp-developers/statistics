@@ -8,7 +8,7 @@
   </div>
   <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.session_picture }}') no-repeat center/cover;">
     <h1 class="session-name">Debate: {{ committee.committee_name }}</h1>
-    <h3><a class="btn btn-material-blue-grey-200 btn-lg" href="{% url 'statistics:session' session.pk %}">{{ session.session_name }}</a></h3>
+    <h3><a class="btn btn-material-{{ session.session_color }}-200 btn-lg" href="{% url 'statistics:session' session.pk %}">Back to {{ session.session_name }}</a></h3>
   </div>
   <div class="container">
     <h1 style="text-align: center; font-size: 60px;">{{ committee.committee_name }}</h1>

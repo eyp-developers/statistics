@@ -18,9 +18,9 @@
       {% for session in latest_sessions_list %}
         <div class="home-header well well-lg" style="background:  url('{{ session.session_picture }}') no-repeat center/cover;">
           <a href="{% url 'statistics:session' session.pk %}" style="color: #fff">
-            <h1 class="session-name btn btn-material-blue-grey btn-raised">{{ session.session_name }}</h1>
+            <h1 class="session-name btn btn-material-{{ session.session_color }} btn-raised">{{ session.session_name }}</h1>
             <br>
-            <h3 class="btn btn-raised btn-material-blue-grey-200">{{ session.session_description }}</h3>
+            <h3 class="btn btn-raised btn-material-{{ session.session_color }}-200">{{ session.session_description }}</h3>
           </a><!--/.Link Element on top of the picture -->
         </div><!--/.home-header well well-lg -->
         <br>
