@@ -3,6 +3,7 @@ import json
 
 from datetime import date
 from datetime import datetime
+from time import strftime
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -173,22 +174,23 @@ def edit(request, session_id):
             s.save()
 
             messages.add_message(request, messages.SUCCESS, 'Session Updated')
+
     else:
         form = SessionEditForm({'name': s.session_name,
             'description': s.session_description,
             'email': s.session_email,
             'country': s.session_country,
             'picture': s.session_picture,
-            'start_date': s.session_start_date,
-            'end_date': s.session_end_date,
+            'start_date': s.session_start_date.strftime("%Y-%m-%d"),
+            'end_date': s.session_end_date.strftime("%Y-%m-%d"),
             'statistics': s.session_statistics,
             'voting': s.session_voting_enabled,
             'max_rounds': s.session_max_rounds,
             'color': s.session_color,
             'is_visible': s.session_is_visible})
 
-        context = {'session': s, 'form': form}
-        return render(request, 'statistics/session_edit.html', context)
+    context = {'session': s, 'form': form}
+    return render(request, 'statistics/session_edit.html', context)
 
 
 def add(request, session_id):
