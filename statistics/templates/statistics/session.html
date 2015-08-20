@@ -26,7 +26,7 @@
               {{ committee.committee_topic }}
             </p>
           </div>
-          {% cycle "" "" "</div><div class='row'>" %}
+          {% cycle "" "" "</div><div class='row'>" %} <!-- this ends the row after every third committee, thus ensuring that they are all properly aligned -->
         {% endfor %}
     </div>
 {% else %}
