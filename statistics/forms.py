@@ -1,7 +1,121 @@
 from django import forms
 
 class SessionForm(forms.Form):
-    pass
+
+    #The countries of the session need to be set up in the same way as the model.
+    ALBANIA = 'AL'
+    ARMENIA = 'AM'
+    AUSTRIA = 'AT'
+    AZERBAIJAN = 'AZ'
+    BELARUS = 'BY'
+    BELGIUM = 'BE'
+    BOSNIA_AND_HERZEGOVINA = 'BA'
+    CROATIA = 'HR'
+    CYPRUS = 'CY'
+    CZECH_REPUBLIC = 'CZ'
+    DENMARK = 'DK'
+    ESTONIA = 'EE'
+    FINLAND = 'FI'
+    FRANCE = 'FR'
+    GEORGIA = 'GE'
+    GERMANY = 'DE'
+    GREECE = 'GR'
+    HUNGARY = 'HU'
+    IRELAND = 'IE'
+    ITALY = 'IT'
+    KOSOVO = 'XK'
+    LATVIA = 'LV'
+    LITHUANIA = 'LT'
+    LUXEMBOURG = 'LU'
+    NETHERLANDS = 'NL'
+    NORWAY = 'NO'
+    POLAND = 'PL'
+    PORTUGAL = 'PT'
+    ROMANIA = 'RO'
+    RUSSIA = 'RU'
+    SERBIA = 'RS'
+    SLOVENIA = 'SI'
+    SPAIN = 'ES'
+    SWEDEN = 'SE'
+    SWITZERLAND = 'CH'
+    TURKEY = 'TR'
+    UKRAINE = 'UA'
+    UNITED_KINGDOM = 'GB'
+    SESSION_COUNTRIES = (
+        (ALBANIA, 'Albania'),
+        (ARMENIA, 'Armenia'),
+        (AUSTRIA, 'Austria'),
+        (AZERBAIJAN, 'Azerbaijan'),
+        (BELARUS, 'Belarus'),
+        (BELGIUM, 'Belgium'),
+        (BOSNIA_AND_HERZEGOVINA, 'Bosnia and Herzegovina'),
+        (CROATIA, 'Croatia'),
+        (CYPRUS, 'Cyprus'),
+        (CZECH_REPUBLIC, 'Czech Republic'),
+        (DENMARK, 'Denmark'),
+        (ESTONIA, 'Estonia'),
+        (FINLAND, 'Finland'),
+        (FRANCE, 'France'),
+        (GEORGIA, 'Georgia'),
+        (GERMANY, 'Germany'),
+        (GREECE, 'Greece'),
+        (HUNGARY, 'Hungary'),
+        (IRELAND, 'Ireland'),
+        (ITALY, 'Italy'),
+        (KOSOVO, 'Kosovo'),
+        (LATVIA, 'Latvia'),
+        (LITHUANIA, 'Lithuania'),
+        (LUXEMBOURG, 'Luxembourg'),
+        (NETHERLANDS, 'The Netherlands'),
+        (NORWAY, 'Norway'),
+        (POLAND, 'Poland'),
+        (PORTUGAL, 'Portugal'),
+        (ROMANIA, 'Romania'),
+        (RUSSIA, 'Russia'),
+        (SERBIA, 'Serbia'),
+        (SLOVENIA, 'Slovenia'),
+        (SPAIN, 'Spain'),
+        (SWEDEN, 'Sweden'),
+        (SWITZERLAND, 'Swizerland'),
+        (TURKEY, 'Turkey'),
+        (UKRAINE, 'Ukraine'),
+        (UNITED_KINGDOM, 'The United Kingdom'),
+    )
+
+    name = forms.CharField(max_length=100, required=True)
+    description = forms.CharField(max_length=200, required=True)
+    email = forms.EmailField()
+    country = forms.ChoiceField(choices=SESSION_COUNTRIES, required=True)
+    picture = forms.URLField(required=True)
+    start_date = forms.DateField(required=True)
+    end_date = forms.DateField(required=True)
+
+    #Setting up statistic types
+    STATISTICS = 'S'
+    CONTENT = 'C'
+    JOINTFORM = 'JF'
+    SPLITFORM = 'SF'
+    NONE = 'N/A'
+    STATISTIC_TYPES = (
+        (STATISTICS, 'Statistics Only'),
+        (CONTENT, 'Point Content Only'),
+        (JOINTFORM, 'Joint Form Statistics'),
+        (SPLITFORM, 'Split Form Statistics'),
+        (NONE, 'No Statistics (Only Voting)')
+    )
+    #Making the statistics type a selectable option
+    statistics = forms.ChoiceField(choices=STATISTIC_TYPES, required=True)
+
+    #Since the voting choice is not a checkbox per se, the input type will be a CharField instead
+    voting = forms.CharField(max_length=4, required=True)
+
+    max_rounds = forms.IntegerField(min_value=1, max_value=10)
+
+    color = forms.CharField(max_length=7, required=True)
+
+    admin_password = forms.CharField()
+    submit_password = forms.CharField()
+
 
 class PointForm(forms.Form):
     #The point form needs to be fed with special data, in the form of an array of subtopics.

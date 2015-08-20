@@ -117,6 +117,9 @@ class Session(models.Model):
     #Making the statistics type a selectable option
     session_statistics = models.CharField(max_length=3, choices=STATISTIC_TYPES, default=JOINTFORM)
 
+    #We want to define a color for the session that can be used when styling pages.
+    session_color = models.CharField(max_length=7)
+
     #Enabling/Disabling Session Settings
     session_rounds_enabled = models.BooleanField('debate rounds enabled', default=True)
     session_subtopics_enabled = models.BooleanField('committee subtopics enabled', default=True)
