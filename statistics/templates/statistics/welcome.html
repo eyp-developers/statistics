@@ -26,7 +26,7 @@
     This is really important stuff to know, but don't worry, you can always come back here with this url: <a href="{% url 'statistics:welcome' session.pk %}">{% url 'statistics:welcome' session.pk %}</a>
 </div>
 
-<div class="panel panel-default">
+<div class="panel panel-material-{{ session.session_color }}-300">
     <div class="panel-heading">
         <h3 class="panel-title">Usernames:</h3>
     </div>
@@ -38,7 +38,7 @@
       <h5>The Submission Password what you entered when you made the session.</h5>
     </div>
 </div>
-<div class="panel panel-default">
+<div class="panel panel-material-{{ session.session_color }}-300">
     <div class="panel-heading">
         <h3 class="panel-title">{{ session.session_name }} Links:</h3>
     </div>
@@ -57,19 +57,66 @@
         <p>It's also where you can edit recent points, contentpoints and votes</p>
     </div>
 </div>
-<div class="panel panel-default">
+<div class="panel panel-material-{{ session.session_color }}-300">
   <div class="panel-heading">
     <h3 class="panel-title">Committees:</h3>
   </div>
   <div class="panel-body">
     {% if committees %}
-
+    <table class="table table-striped table-hover ">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Debate URL</th>
+          {% if session.session_statistics == 'JF' %}
+          <th>Joint Form URL</th>
+          {% elif session.session_statistics == 'SF' %}
+          <th>Statistics Form URL</th>
+          <th>Content Form URL</th>
+          {% elif session.session_statistics == 'C' %}
+          <th>Content Form URL</th>
+          {% elif session.session_statistics == 'S' %}
+          <th>Statistics Form URL</th>
+          {% endif %}
+          {% if session.session_voting_enabled %}
+          <th>Voting URL<th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for committee in committees %}
+          <tr>
+            <td>{{ committee.pk }}</td>
+            <td>{{ committee.committee_name }}
+            <td><a href="{% url 'statistics:debate' session.pk committee.pk %}">{% url 'statistics:debate' session.pk committee.pk %}</a></td>
+            {% if session.session_statistics == 'JF' %}
+            <td><a href="{% url 'statistics:joint' session.pk committee.pk %}">{% url 'statistics:joint' session.pk committee.pk %}</a></td>
+            {% elif session.session_statistics == 'SF' %}
+            <td><a href="{% url 'statistics:point' session.pk committee.pk %}">{% url 'statistics:point' session.pk committee.pk %}</a></td>
+            <td><a href="{% url 'statistics:content' session.pk committee.pk %}">{% url 'statistics:content' session.pk committee.pk %}</a></td>
+            {% elif session.session_statistics == 'C' %}
+            <td><a href="{% url 'statistics:content' session.pk committee.pk %}">{% url 'statistics:content' session.pk committee.pk %}</a></td>
+            {% elif session.session_statistics == 'S' %}
+            <td><a href="{% url 'statistics:debate' session.pk committee.pk %}">{% url 'statistics:debate' session.pk committee.pk %}</a></td>
+            {% endif %}
+            {% if session.session_voting_enabled %}
+            <td><a href="{% url 'statistics:vote' session.pk committee.pk %}">{% url 'statistics:vote' session.pk committee.pk %}</a><td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
     {% else %}
     <h3>No Committees Yet!</h3>
     <h4>You can make some here: <a href="{% url 'statistics:add' session.pk %}">{% url 'statistics:add' session.pk %}</a></h4>
     {% endif %}
   </div>
 </div>
-
+<style>
+tbody tr td {
+    font-size: 15px;
+}
+</style>
 
 {% endblock %} {% block footer_scripts %} {% endblock %}
