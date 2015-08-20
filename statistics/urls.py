@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from views import views, auth, apis, public_views, protected_views
+from views import auth, apis, public_views, protected_views
 
 #The URLs are quite important to the GA Stats system, as there's a custom API and system for accessing various forms
 #Sessions, Debates, Point Submit and Vote Submit pages are accessed using the id's of the session/committee.
