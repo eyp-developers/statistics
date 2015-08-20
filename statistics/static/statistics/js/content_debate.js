@@ -7,7 +7,7 @@ var latest_pk = 0;
 function requestContentPointData() {
   $.ajax({
     url: content_url,
-    data: "offset=" + 0 + "&count=" + 10,
+    data: "offset=" + 0 + "&count=" + 20,
     success: function (response) {
       var table = document.getElementById("content-table").getElementsByTagName('tbody')[0];
       if (typeof response.contentpoints[0].pk !== "undefined"){
