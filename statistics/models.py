@@ -13,6 +13,9 @@ class Session(models.Model):
     #Session Picture, currently a URL that links to a picture, can be taken from facebook, imgur etc. Should be changed to a file upload in future.
     session_picture = models.URLField()
 
+    #We want a contact email so we can send friendly emails to people.
+    session_email = models.EmailField()
+
     #All countries with EYP sessions recently (after googling)
     ALBANIA = 'AL'
     ARMENIA = 'AM'
@@ -113,6 +116,9 @@ class Session(models.Model):
     )
     #Making the statistics type a selectable option
     session_statistics = models.CharField(max_length=3, choices=STATISTIC_TYPES, default=JOINTFORM)
+
+    #We want to define a color for the session that can be used when styling pages.
+    session_color = models.CharField(max_length=7)
 
     #Enabling/Disabling Session Settings
     session_rounds_enabled = models.BooleanField('debate rounds enabled', default=True)
