@@ -14,7 +14,7 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from .models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
 
 #Importing the forms too.
-from .forms import SessionForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm, LoginForm
+from .forms import SessionForm,  SessionEditForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm, LoginForm
 
 def home(request):
     #All the home page needs is a list of all sessions ordered by the start date. We create the list, then the context and finally render the template.
@@ -141,6 +141,25 @@ def welcome(request, session_id):
     return render(request, 'statistics/welcome.html', context)
 
 def edit(request, session_id):
+    s = Session.objects.get(pk=session_id)
+    # If the User is trying to edit the session
+    if request.method == 'POST':
+        #Fill an instance of the form with the request data.
+        form = SessionEditForm(request.POST)
+        #Check if the created form is a valid form.
+        if form.is_valid():
+            print 'is valid'
+            #We need to set up time varaibles for the start and end of sessions.
+            #We do this by creating date objects and combining the date objects with time midnight
+            t_start = form.cleaned_data['start_date']
+            t_end = form.cleaned_data['end_date']
+            start_date = datetime.combine(t_start, datetime.min.time())
+            end_date = datetime.combine(t_end, datetime.min.time())
+
+            s.session_name = form.cleaned_data['name']
+            s.session_description = form.cleaned_data['description']
+
+
     pass
 
 def add(request, session_id):
