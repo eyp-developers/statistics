@@ -20,7 +20,7 @@
         {% for committee in session_committee_list %}
           <div class="debate-box col-md-4">
             <h2>
-              <a href="{% url 'statistics:debate' committee.session.id committee.id %}" class="btn btn-primary btn-material-blue-500">{{ committee.committee_name }}</a>
+              <a href="{% url 'statistics:debate' committee.session.id committee.id %}" class="btn btn-primary btn-material-{{ session.session_color }}-800">{{ committee.committee_name }}</a>
             </h2>
             <p>
               {{ committee.committee_topic }}
