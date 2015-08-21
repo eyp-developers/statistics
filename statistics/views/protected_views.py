@@ -268,8 +268,8 @@ def add(request, session_id):
         form = CommitteeForm()
 
     context = {'session': session, 'committees': committees, 'subtopics': session_subtopics, 'form': form}
-    return render(request, 'statistics/session_add.html', context)
 
+    return check_authorization_and_render(request, 'statistics/welcome.html', context, session)
 
 
 
