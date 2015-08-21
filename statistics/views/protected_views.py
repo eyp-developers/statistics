@@ -17,7 +17,7 @@ from django.contrib.auth.decorators import login_required
 from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
 
 #Importing the forms too.
-from ..forms import SessionForm,  SessionEditForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm
+from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm
 
 
 
@@ -177,7 +177,57 @@ def edit(request, session_id):
 @login_required(login_url = '/login/')
 def add(request, session_id):
     session = Session.objects.get(pk=session_id)
-    context = {'session': session}
+    committees = Committee.objects.filter(session=session).order_by('committee_name')
+    session_subtopics = SubTopic.objects.filter(session=session)
+    if request.method == 'POST':
+        pk = request.POST.get('pk')
+        name = request.POST.get('name')
+        topic = request.POST.get('topic')
+        subtopics = json.loads(request.POST.get('subtopics'))
+
+        form = CommitteeForm({'pk': pk, 'name': name, 'topic': topic, 'subtopics': subtopics})
+        if form.is_valid():
+            print 'Form is valid'
+            committee_exists = False
+            for committee in committees:
+                if committee.pk == form.cleaned_data['id']:
+                    committee_exists = True
+
+            if committee_exists:
+                c = committees.filter(committee_name=form.cleaned_data['name'])[0]
+            else:
+                c = Committee()
+
+            c.session = session
+            c.committee_name = form.cleaned_data['name']
+            c.committee_topic = form.cleaned_data['topic']
+
+            for subtopic in form.cleaned_data['subtopics']:
+                subtopic_exists = False
+                for session_subtopic in session_subtopics:
+                    if session_subtopic.pk == subtopic.pk:
+                        subtopic_exists = True
+
+                if subtopic_exists:
+                    s = session_subtopics.filter(pk=subtopic.pk)
+                else:
+                    s = SubTopic()
+
+                s.session = session
+                s.committee = c
+                s.subtopic_text = subtopic.subtopic
+
+            if committee_exists:
+                messages.add_message(request, messages.SUCCESS, 'Committee Updated')
+            else:
+                messages.add_message(request, messages.SUCCESS, 'Committee Created')
+        else:
+            print 'Form not valid'
+            print form.errors
+    else:
+        form = CommitteeForm()
+
+    context = {'session': session, 'committees': committees, 'subtopics': session_subtopics, 'form': form}
     return render(request, 'statistics/session_add.html', context)
 
 
