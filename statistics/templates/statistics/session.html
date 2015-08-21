@@ -37,7 +37,11 @@
 <div id="points" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
 {% if voting_enabled %}
-<script> var voting_enabled = true; </script>
+<script>
+var voting_enabled = true;
+var voting_url = '{% url 'statistics:session_vote_api' session_id %}';
+
+</script>
 <h2>Voting Summary</h2>
 <div id="votes" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 {% else %}
@@ -53,4 +57,7 @@
 
 {% block footer_scripts %}
 <script  type="text/javascript" src="{% static 'statistics/js/session.js' %}"></script>
+{% if voting_enabled %}
+<script  type="text/javascript" src="{% static 'statistics/js/session_vote.js' %}"></script>
+{% endif %}
 {% endblock %}

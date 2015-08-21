@@ -15,7 +15,7 @@ def session_api(request, session_id):
     #a custom "API" that outputs the neccesary JSON to keep the graph alive
 
     #First we need all the committees registered for that session
-    committees = Committee.objects.filter(session__id=session_id)
+    committees = Committee.objects.filter(session__id=session_id).order_by('committee_name')
 
     #Then we need all the available points, direct responses and votes
     points = Point.objects.filter(session_id=session_id).filter(point_type='P')
@@ -59,7 +59,7 @@ def debate_api(request, session_id, committee_id):
     #We get the session, committee, and list of all committees.
     session = Session.objects.get(pk=session_id)
     committee = Committee.objects.filter(pk=committee_id)
-    committees = Committee.objects.filter(session__id=session_id)
+    committees = Committee.objects.filter(session__id=session_id).order_by('committee_name')
 
     #Making an array with the committee name.
     committee_array_name = []
@@ -179,7 +179,7 @@ def session_vote_api(request, session_id):
     #This is for returning the specific vote data from the vote API for the voting chart on the session page.
 
     #First we need all the committees registered for that session
-    committees = Committee.objects.filter(session__id=session_id)
+    committees = Committee.objects.filter(session__id=session_id).order_by('committee_name')
     #Then all the votes for that session
     votes = Vote.objects.filter(session_id=session_id)
     #Then a list to add committee names to
@@ -243,7 +243,7 @@ def debate_vote_api(request, session_id, committee_id):
     #We get the session, committee, and list of all committees.
     session = Session.objects.get(pk=session_id)
     committee = Committee.objects.filter(pk=committee_id)
-    committees = Committee.objects.filter(session__id=session_id)
+    committees = Committee.objects.filter(session__id=session_id).order_by('committee_name')
 
     #Making an array with the committee name.
     committee_array_name = []

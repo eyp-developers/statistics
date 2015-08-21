@@ -28,19 +28,19 @@
 
 <div class="panel panel-material-{{ session.session_color }}-300">
     <div class="panel-heading">
-        <h3 class="panel-title">Usernames:</h3>
+        <h3 class="panel-title">Usernames</h3>
     </div>
     <div class="panel-body">
-      <h4>Your Admin Username is: <b>{{ session.session_admin_user }}</b><h4>
-      <h5>The Admin Password what you entered when you made the session.</h5>
+      <h4>Your Admin Username is <b>{{ session.session_admin_user }}</b><h4>
+      <h5>The Admin Password that you entered when you made the session.</h5>
       <br>
-      <h4>Your Submission Username is: <b>{{ session.session_submission_user }}</b></h4>
-      <h5>The Submission Password what you entered when you made the session.</h5>
+      <h4>Your Submission Username is <b>{{ session.session_submission_user }}</b></h4>
+      <h5>The Submission Password that you entered when you made the session.</h5>
     </div>
 </div>
 <div class="panel panel-material-{{ session.session_color }}-300">
     <div class="panel-heading">
-        <h3 class="panel-title">{{ session.session_name }} Links:</h3>
+        <h3 class="panel-title">{{ session.session_name }} Links</h3>
     </div>
     <div class="panel-body">
       <h2>Your Session ID is <b>{{ session.pk }}</b></h2>
@@ -59,7 +59,7 @@
 </div>
 <div class="panel panel-material-{{ session.session_color }}-300">
   <div class="panel-heading">
-    <h3 class="panel-title">Committees:</h3>
+    <h3 class="panel-title">Committees</h3>
   </div>
   <div class="panel-body">
     {% if committees %}
@@ -98,7 +98,7 @@
             {% elif session.session_statistics == 'C' %}
             <td><a href="{% url 'statistics:content' session.pk committee.pk %}">{% url 'statistics:content' session.pk committee.pk %}</a></td>
             {% elif session.session_statistics == 'S' %}
-            <td><a href="{% url 'statistics:debate' session.pk committee.pk %}">{% url 'statistics:debate' session.pk committee.pk %}</a></td>
+            <td><a href="{% url 'statistics:point' session.pk committee.pk %}">{% url 'statistics:point' session.pk committee.pk %}</a></td>
             {% endif %}
             {% if session.session_voting_enabled %}
             <td><a href="{% url 'statistics:vote' session.pk committee.pk %}">{% url 'statistics:vote' session.pk committee.pk %}</a><td>
