@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^session/(?P<session_id>[0-9]+)/joint/(?P<committee_id>[0-9]+)/thanks/$', protected_views.joint_thanks, name='joint_thanks'),
     url(r'^session/(?P<session_id>[0-9]+)/manage/$', protected_views.manage, name='manage'),
     url(r'^api/session/(?P<session_id>[0-9]+)/$', apis.session_api, name='session_api'),
+    url(r'^api/committees/(?P<session_id>[0-9]+)/$', apis.committees_api, name='committees_api'),
     url(r'^api/session/(?P<session_id>[0-9]+)/debate/(?P<committee_id>[0-9]+)/$', apis.debate_api, name='debate_api'),
     url(r'^api/session/(?P<session_id>[0-9]+)/vote/$', apis.session_vote_api, name='session_vote_api'),
     url(r'^api/session/(?P<session_id>[0-9]+)/vote/(?P<committee_id>[0-9]+)/$', apis.debate_vote_api, name='debate_vote_api'),
