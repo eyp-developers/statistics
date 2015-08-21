@@ -411,7 +411,8 @@ def joint(request, session_id, committee_id):
         form = JointForm(subtopics_array, {'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'round_no': active_round_no})
 
     context = {'debate': active, 'committee': committee, 'session': session, 'subtopics': subtopics, 'form': form}
-    return render(request, 'statistics/joint_form.html', context)
+
+    return check_authorization_and_render(request, 'statistics/joint_form.html', context, session, False)
 
 
 #################
