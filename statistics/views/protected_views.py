@@ -113,13 +113,14 @@ def create_session(request):
 #################
 
 
-
 @login_required(login_url = '/login/')
 def welcome(request, session_id):
     session = Session.objects.get(pk=session_id)
     committees = Committee.objects.filter(session=session).order_by('committee_name')
     context = {'session': session, 'committees': committees}
-    return render(request, 'statistics/welcome.html', context)
+
+    return check_authorization_and_render(request, 'statistics/welcome.html', context, session)
+
 
 
 #################
