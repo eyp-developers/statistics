@@ -39,7 +39,7 @@ $('#committee-form').on('submit', function(event){
 function submit_committee() {
     var i = 1;
     var j = 1;
-    var k = 3;
+    var k = 2;
     var subtopics_array = []
     console.log("create post is working!") // sanity check
     console.log($('#id_pk').val())
@@ -87,7 +87,7 @@ function submit_committee() {
             j++;
           }
           while (k < counter_subtopics){
-            if ($('#subtopic-div-' + k) != undefined) {
+            if ($('#subtopic-div-' + k).length != 0) {
               deleteInput('subtopic-div-' + k);
             }
             k++;
