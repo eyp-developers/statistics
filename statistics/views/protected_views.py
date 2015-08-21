@@ -189,6 +189,7 @@ def add(request, session_id):
         form = CommitteeForm({'pk': pk, 'name': name, 'topic': topic})
         if form.is_valid():
             print 'Form is valid'
+            response_data = {}
             committee_exists = False
             for committee in committees:
                 if committee.pk == form.cleaned_data['pk']:
@@ -204,6 +205,7 @@ def add(request, session_id):
             c.committee_topic = form.cleaned_data['topic']
             c.save()
 
+            subtopics_pretty_array = []
             for subtopic in subtopics:
                 subtopic_exists = False
                 for session_subtopic in session_subtopics:
@@ -219,11 +221,16 @@ def add(request, session_id):
                 s.committee = c
                 s.subtopic_text = subtopic['subtopic']
                 s.save()
+                subtopics_pretty_array.append(s.subtopic_text)
 
-            if committee_exists:
-                messages.add_message(request, messages.SUCCESS, 'Committee Updated')
-            else:
-                messages.add_message(request, messages.SUCCESS, 'Committee Created')
+            response_data['pk'] = c.pk
+            response_data['subtopics'] = ', '.join(subtopics_pretty_array)
+
+            return HttpResponse(
+                json.dumps(response_data),
+                content_type="application/json"
+            )
+
         else:
             print 'Form not valid'
             print form.errors

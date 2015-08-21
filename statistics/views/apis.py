@@ -50,26 +50,26 @@ def session_api(request, session_id):
 
 def committees_api(request, session_id):
     session = Session.objects.get(pk=session_id)
-    if request.GET.get('pk') == 'latest':
-        #If we're asking for the latest committee (aka, we just added a committee), let's get the committee with the highest pk.
-        latest_committee = Committee.objects.filter(session=session).order_by('-pk')[0]
-        #Then lets get the subtopics for that committee
-        latest_committee_subtopics = SubTopic.objects.filter(committee=latest_committee)
-        #Then lets make a nice list of the subtopics.
-        latest_committee_subtopics_array = []
-        for subtopic in latest_committee_subtopics:
-            latest_committee_subtopics_array.append(subtopic.subtopic_text)
-        latest_subtopics = ', '.join(latest_committee_subtopics_array)
-        #Then lets make a JSON object with the data from that committee
-        thiscommittee = json.dumps({
-        'pk': latest_committee.pk,
-        'name': latest_committee.committee_name,
-        'topic': latest_committee.committee_topic,
-        'subtopics': latest_subtopics
-        })
-    else:
-        #Otherwise we're asking for a certain pk.
-        committee = committees.filter(pk=request.GET.get('pk'))
+    #Let's get the committee in question
+    committee = Committee.objects.get(pk=request.GET.get('pk'))
+    #Then lets get the subtopics for that committee
+    committee_subtopics = SubTopic.objects.filter(committee=committee)
+    #We need to make a nice array of the subtopics
+    committee_subtopics_array = []
+    for subtopic in committee_subtopics:
+        this_subtopic = {
+        'pk': subtopic.pk,
+        'subtopic': subtopic.subtopic_text
+        }
+        committee_subtopics_array.append(this_subtopic)
+    #Then lets make a JSON object with the data from that committee
+    thiscommittee = json.dumps({
+    'pk': committee.pk,
+    'name': committee.committee_name,
+    'topic': committee.committee_topic,
+    'subtopics': committee_subtopics_array
+    })
+
     return HttpResponse(thiscommittee, content_type='json')
 
 def debate_api(request, session_id, committee_id):
