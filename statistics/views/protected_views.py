@@ -17,7 +17,7 @@ from django.contrib.auth.decorators import login_required
 from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
 
 #Importing the forms too.
-from ..forms import SessionForm,  SessionEditForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm
+from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm
 
 
 
@@ -176,7 +176,84 @@ def edit(request, session_id):
 
 @login_required(login_url = '/login/')
 def add(request, session_id):
-    pass
+    session = Session.objects.get(pk=session_id)
+    committees = Committee.objects.filter(session=session).order_by('committee_name')
+    session_subtopics = SubTopic.objects.filter(session=session)
+    if request.method == 'POST':
+        pk = request.POST.get('pk')
+        name = request.POST.get('name')
+        topic = request.POST.get('topic')
+        subtopics = json.loads(request.POST.get('subtopics'))
+        print subtopics
+
+        form = CommitteeForm({'pk': pk, 'name': name, 'topic': topic})
+        if form.is_valid():
+            print 'Form is valid'
+            committee_exists = False
+            for committee in committees:
+                if committee.pk == form.cleaned_data['pk']:
+                    committee_exists = True
+
+            if committee_exists:
+                c = committees.filter(committee_name=form.cleaned_data['name'])[0]
+            else:
+                c = Committee()
+
+            c.session = session
+            c.committee_name = form.cleaned_data['name']
+            c.committee_topic = form.cleaned_data['topic']
+            c.save()
+
+            for subtopic in subtopics:
+                subtopic_exists = False
+                for session_subtopic in session_subtopics:
+                    if session_subtopic.pk == subtopic['pk']:
+                        subtopic_exists = True
+
+                if subtopic_exists:
+                    s = session_subtopics.filter(pk=subtopic['pk'])
+                else:
+                    s = SubTopic()
+
+                s.session = session
+                s.committee = c
+                s.subtopic_text = subtopic['subtopic']
+                s.save()
+
+            if committee_exists:
+                messages.add_message(request, messages.SUCCESS, 'Committee Updated')
+            else:
+                messages.add_message(request, messages.SUCCESS, 'Committee Created')
+        else:
+            print 'Form not valid'
+            print form.errors
+    elif request.method == 'GET':
+        if request.GET.get('pk') == 'latest':
+            #If we're asking for the latest committee (aka, we just added a committee), let's get the committee with the highest pk.
+            latest_committee = Committee.objects.filter(session=session).order_by('-pk')[0]
+            #Then lets get the subtopics for that committee
+            latest_committee_subtopics = SubTopic.objects.filter(committee=latest_committee)
+            #Then lets make a nice list of the subtopics.
+            latest_committee_subtopics_array = []
+            for subtopic in latest_committee_subtopics:
+                latest_committee_subtopics_array.append(subtopic.subtopic_text)
+            latest_subtopics = ', '.join(latest_committee_subtopics_array)
+            #Then lets make a JSON object with the data from that committee
+            thiscommittee = json.dumps({
+            'pk': latest_committee.pk,
+            'name': latest_committee.committee_name,
+            'topic': latest_committee.committee_topic,
+            'subtopics': latest_subtopics
+            })
+        else:
+            #Otherwise we're asking for a certain pk.
+            committee = committees.filter(pk=request.GET.get('pk'))
+        return HttpResponse(thiscommittee, content_type='json')
+    else:
+        form = CommitteeForm()
+
+    context = {'session': session, 'committees': committees, 'subtopics': session_subtopics, 'form': form}
+    return render(request, 'statistics/session_add.html', context)
 
 
 
