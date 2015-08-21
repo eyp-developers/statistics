@@ -359,8 +359,8 @@ def content(request, session_id, committee_id):
         form = ContentForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active})
 
     context = {'debate': active, 'committee': committee, 'session': session, 'form': form}
-    return render(request, 'statistics/content_form.html', context)
 
+    return check_authorization_and_render(request, 'statistics/content_form.html', context, session, False)
 
 #################
 
