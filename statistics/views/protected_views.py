@@ -247,7 +247,7 @@ def add(request, session_id):
 
     context = {'session': session, 'committees': committees, 'subtopics': session_subtopics, 'form': form}
 
-    return check_authorization_and_render(request, 'statistics/welcome.html', context, session)
+    return check_authorization_and_render(request, 'statistics/session_add.html', context, session)
 
 
 
