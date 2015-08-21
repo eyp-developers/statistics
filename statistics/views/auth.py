@@ -1,6 +1,7 @@
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model, authenticate, login, logout
@@ -26,8 +27,10 @@ def ga_login(request):
                 login(request, user)
                 return HttpResponseRedirect('/')
             else:
+                messages.add_message(request, messages.ERROR, 'Your user account is not active. Please contact an administrator.')
                 return HttpResponseRedirect('/login')
         else:
+            messages.add_message(request, messages.ERROR, 'This username password combination does not exist.')
             return HttpResponseRedirect('/login')
 
     template = 'statistics/login.html'
