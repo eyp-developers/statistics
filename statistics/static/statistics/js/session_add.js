@@ -2,13 +2,13 @@ var counter_subtopics = 3;
 var limit_subtopics = 30;
 var table = document.getElementById("committees-table").getElementsByTagName('tbody')[0];
 
-function addInput(divName){
+function addInput(divName, subtopicValue, subtopicId){
   var newdiv = document.createElement('div');
   newdiv.setAttribute("id", "subtopic-div-" + counter_subtopics)
   newdiv.innerHTML = '<label class="control-label col-sm-2" for="inputLarge"></label>' +
     '<div class="col-sm-8">' +
-    '<input type="hidden" name="subtopic_pk[]" id="subtopic-pk-'+ counter_subtopics +'" value="">' +
-    '<input class="form-control input-sm" type="text" name="subtopic[]" id="subtopic-'+ counter_subtopics +'" value="">' +
+    '<input type="hidden" name="subtopic_pk[]" id="subtopic-pk-'+ counter_subtopics +'" value="'+ subtopicId +'">' +
+    '<input class="form-control input-sm" type="text" name="subtopic[]" id="subtopic-'+ counter_subtopics +'" value="'+ subtopicValue +'">' +
     '</div>' +
     '<div class="col-sm-2">' +
     '<span class="input-group-btn">' +
@@ -31,6 +31,17 @@ NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
 function deleteInput(divName){
   document.getElementById(divName).remove();
 }
+
+function deleteSubtopics(except) {
+  var k = 1 + except;
+  while (k < counter_subtopics){
+    if ($('#subtopic-div-' + k).length != 0) {
+      deleteInput('subtopic-div-' + k);
+    }
+    k++;
+  }
+}
+
 $('#committee-form').on('submit', function(event){
     event.preventDefault();
     console.log("form submitted!")  // sanity check
@@ -39,7 +50,6 @@ $('#committee-form').on('submit', function(event){
 function submit_committee() {
     var i = 1;
     var j = 1;
-    var k = 2;
     var subtopics_array = []
     console.log("create post is working!") // sanity check
     console.log($('#id_pk').val())
@@ -67,10 +77,10 @@ function submit_committee() {
           var topic = row.insertCell(2);
           var subtopics = row.insertCell(3);
           var actions = row.insertCell(4);
-          id.innerHTML = $('#id_pk').val();
+          id.innerHTML = json.pk;
           name.innerHTML = $('#id_name').val();
           topic.innerHTML = $('#id_topic').val();
-          subtopics.innerHTML = subtopics_array.toString();
+          subtopics.innerHTML = json.subtopics;
           actions.innerHTML = '<a href="javascript:void(0)" class="btn btn-primary btn-material-'+ session_color +'-800 btn-xs" onclick="" ><span class="mdi-content-create" style="font-size: 10px; margin-right: 4px;"></span>Edit</a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-xs" onclick="" >Delete</a>';
           $(row).css('display', 'none');
           $(row).fadeIn("slow");
@@ -86,12 +96,7 @@ function submit_committee() {
             }
             j++;
           }
-          while (k < counter_subtopics){
-            if ($('#subtopic-div-' + k).length != 0) {
-              deleteInput('subtopic-div-' + k);
-            }
-            k++;
-          }
+          deleteSubtopics(1);
           $('#subtopic-1').val('General');
           counter_subtopics = 3;
           console.log(json); // log the returned json to the console
@@ -105,6 +110,23 @@ function submit_committee() {
             console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
         }
     });
+};
+
+function editCommittee(pk) {
+  $.ajax({
+    url: committees_api_url,
+    data: "pk=" + pk,
+    success: function (response) {
+      console.log('ajax success for: ' + response.name);
+      $('#id_pk').val(response.pk);
+      $('#id_name').val(response.name);
+      $('#id_topic').val(response.topic);
+      deleteSubtopics(0);
+      response.subtopics.forEach(function(subtopic) {
+        addInput('add_subtopics', subtopic.subtopic, subtopic.pk)
+      });
+    }
+  });
 };
 
 // This function gets cookie with a given name
