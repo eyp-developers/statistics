@@ -273,6 +273,12 @@ class SessionEditForm(forms.Form):
 
         is_visible = forms.BooleanField(required=False)
 
+class CommitteeForm(forms.Form):
+    pk = forms.IntegerField()
+    name = forms.CharField(max_length=8)
+    topic = forms.CharField(max_length=1000)
+    subtopics = forms.TypedMultipleChoiceField(empty_value=[], required=False)
+
 class PointForm(forms.Form):
     #The point form needs to be fed with special data, in the form of an array of subtopics.
     #To do this, we change the definition of the form to accept an extra argument, the array of subtopics.
