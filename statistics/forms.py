@@ -114,11 +114,11 @@ class SessionForm(forms.Form):
     statistics = forms.ChoiceField(choices=STATISTIC_TYPES, required=True)
 
     #Since the voting choice is not a checkbox per se, the input type will be a CharField instead
-    voting = forms.CharField(max_length=4, required=True)
+    voting = forms.CharField(max_length=5, required=True)
 
     max_rounds = forms.IntegerField(min_value=1, max_value=10)
 
-    color = forms.CharField(max_length=7, required=True)
+    color = forms.CharField(max_length=20, required=True)
 
     admin_password = forms.CharField()
     submit_password = forms.CharField()
@@ -272,6 +272,12 @@ class SessionEditForm(forms.Form):
         color = forms.ChoiceField(choices=COLOR_TYPES, required=True)
 
         is_visible = forms.BooleanField(required=False)
+
+class CommitteeForm(forms.Form):
+
+    pk = forms.IntegerField(required=False)
+    name = forms.CharField(max_length=8)
+    topic = forms.CharField(max_length=1000)
 
 class PointForm(forms.Form):
     #The point form needs to be fed with special data, in the form of an array of subtopics.

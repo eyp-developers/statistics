@@ -31,7 +31,7 @@ def session(request, session_id):
 
     #The static data here is simply a list of the available committees (we can assume those don't change during live statistics)
     #and the name and data of the session itself.
-    session_committee_list = Committee.objects.filter(session__id=session_id)[:30]
+    session_committee_list = Committee.objects.filter(session__id=session_id).order_by('committee_name')
     session = Session.objects.get(pk=session_id)
     voting_enabled = session.session_voting_enabled
     context = {'session_committee_list': session_committee_list, 'session_id': session_id, 'session': session, 'voting_enabled': voting_enabled}
