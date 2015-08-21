@@ -20,7 +20,11 @@ window.setTimeout(function() {
 }, 5000);
 </script>
 {% endif %}
-<h2>Add New Committee:</h2>
+<div class="panel panel-material-{{ session.session_color }}-300">
+  <div class="panel-heading">
+      <h3 class="panel-title">Add New Committee:</h3>
+  </div>
+  <div class="panel-body">
 <form class="form-horizontal">
   <fieldset>
     <div class="form-group">
@@ -37,33 +41,53 @@ window.setTimeout(function() {
       </div>
     </div>
     <div class="form-group">
-    <div id="add_subtopics">
-      <label class="control-label col-sm-2" for="inputLarge">Subtopics:</label>
-      <div class="col-sm-8">
-        <input class="form-control input-sm" type="text" id="General-Subtopic" value="General">
-      </div>
-      <div class="col-sm-2">
-        <span class="input-group-btn">
-            <button class="btn btn-primary btn-sm" type="button">Delete</button>
-        </span>
-      </div>
-      <label class="control-label col-sm-2" for="inputLarge"></label>
-      <div class="col-sm-8">
-        <input class="form-control input-sm" type="text" id="subtopic" value="">
-      </div>
-      <div class="col-sm-2">
-        <span class="input-group-btn">
-            <button class="btn btn-primary btn-sm" type="button">Delete</button>
-        </span>
-      </div>
+      <div id="add_subtopics">
+        <label class="control-label col-sm-2" for="inputLarge">Subtopics:</label>
+        <div class="col-sm-10">
+          <input class="form-control input-sm" type="text" id="General-Subtopic" value="General">
+        </div>
+        <br>
+        <br>
+        <div id="subtopic-1">
+          <label class="control-label col-sm-2" for="inputLarge"></label>
+          <div class="col-sm-8">
+            <input class="form-control input-sm" type="text" id="subtopic" value="">
+          </div>
+          <div class="col-sm-2">
+            <span class="input-group-btn">
+              <button class="btn btn-primary btn-material-{{ session.session_color }}-800 btn-sm" type="button" onclick="deleteInput('subtopic-1')">Delete</button>
+            </span>
+          </div>
+        </div>
       </div>
       <label class="control-label col-sm-2" for="inputLarge"></label>
       <div class="col-sm-10">
-        <a href="javascript:void(0)" class="btn btn-primary btn-sm" onclick="addInput('add_subtopics');" >Add Subtopic</a>
+        <a href="javascript:void(0)" class="btn btn-primary btn-material-{{ session.session_color }}-800 btn-sm" onclick="addInput('add_subtopics');" >Add Subtopic</a>
       </div>
+    </div>
+    <div class="form-group">
+        <div class="col-lg-10 col-lg-offset-2">
+            <button type="submit" class="btn btn-primary btn-material-{{ session.session_color }}-800">Save Committee</button>
+        </div>
     </div>
   </fieldset>
 </form>
+</div>
+</div>
+<script>
+function addInput(divName){
+     if (counter_subtopics == limit_subtopics)  {
+          alert("More than 10 subtopics is just confusing!");
+     }
+     else {
+          var newdiv = document.createElement('div');
+          newdiv.setAttribute("id", "subtopic-" + counter_subtopics)
+          newdiv.innerHTML = "<label class='control-label col-sm-2' for='inputLarge'></label><div class='col-sm-8'><input class='form-control input-sm' type='text' id='subtopic' value=''></div><div class='col-sm-2'><span class='input-group-btn'><button class='btn btn-primary btn-sm btn-material-{{ session.session_color }}-800' type='button' onclick='deleteInput(" + '"subtopic-' + counter_subtopics + '"' + ")' >Delete</button></span></div>";
+          document.getElementById(divName).appendChild(newdiv);
+          counter_subtopics++;
+     }
+}
+</script>
 {% endblock %} {% block footer_scripts %}
 <script  type="text/javascript" src="{% static 'statistics/js/session_add.js' %}"></script>
 {% endblock %}
