@@ -184,13 +184,14 @@ def add(request, session_id):
         name = request.POST.get('name')
         topic = request.POST.get('topic')
         subtopics = json.loads(request.POST.get('subtopics'))
+        print subtopics
 
-        form = CommitteeForm({'pk': pk, 'name': name, 'topic': topic, 'subtopics': subtopics})
+        form = CommitteeForm({'pk': pk, 'name': name, 'topic': topic})
         if form.is_valid():
             print 'Form is valid'
             committee_exists = False
             for committee in committees:
-                if committee.pk == form.cleaned_data['id']:
+                if committee.pk == form.cleaned_data['pk']:
                     committee_exists = True
 
             if committee_exists:
@@ -201,21 +202,23 @@ def add(request, session_id):
             c.session = session
             c.committee_name = form.cleaned_data['name']
             c.committee_topic = form.cleaned_data['topic']
+            c.save()
 
-            for subtopic in form.cleaned_data['subtopics']:
+            for subtopic in subtopics:
                 subtopic_exists = False
                 for session_subtopic in session_subtopics:
-                    if session_subtopic.pk == subtopic.pk:
+                    if session_subtopic.pk == subtopic['pk']:
                         subtopic_exists = True
 
                 if subtopic_exists:
-                    s = session_subtopics.filter(pk=subtopic.pk)
+                    s = session_subtopics.filter(pk=subtopic['pk'])
                 else:
                     s = SubTopic()
 
                 s.session = session
                 s.committee = c
-                s.subtopic_text = subtopic.subtopic
+                s.subtopic_text = subtopic['subtopic']
+                s.save()
 
             if committee_exists:
                 messages.add_message(request, messages.SUCCESS, 'Committee Updated')
