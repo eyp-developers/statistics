@@ -19,6 +19,21 @@ from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, Ac
 #Importing the forms too.
 from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm
 
+# This is a central function. It replaces 'render' in cases where the user has to be authorized to view the page, not just authenticated.
+def check_authorization_and_render(request, template, context, session, admin_only = True):
+    if admin_only:
+        if request.user == session.session_admin_user or request.user.is_superuser:
+            return render(request, template, context)
+        else:
+            messages.add_message(request, messages.ERROR, 'You are not authorized to view this page. You need to log in as the ' + session.session_name + 'admin.')
+            return HttpResponseRedirect('/login/')
+    else:
+        if request.user == session.session_admin_user or request.user == session.session_submission_user or request.user.is_superuser:
+            return render(request, template, context)
+        else:
+            messages.add_message(request, messages.ERROR, 'You are not authorized to view this page. You need to log in as the ' + session.session_name + 'admin.')
+            return HttpResponseRedirect('/login/')
+
 
 
 
@@ -106,13 +121,14 @@ def create_session(request):
 #################
 
 
-
 @login_required(login_url = '/login/')
 def welcome(request, session_id):
     session = Session.objects.get(pk=session_id)
     committees = Committee.objects.filter(session=session).order_by('committee_name')
     context = {'session': session, 'committees': committees}
-    return render(request, 'statistics/welcome.html', context)
+
+    return check_authorization_and_render(request, 'statistics/welcome.html', context, session)
+
 
 
 #################
@@ -167,8 +183,7 @@ def edit(request, session_id):
             'is_visible': s.session_is_visible})
 
     context = {'session': s, 'form': form}
-    return render(request, 'statistics/session_edit.html', context)
-
+    return check_authorization_and_render(request, 'statistics/session_edit.html', context, s)
 
 
 
@@ -238,8 +253,8 @@ def add(request, session_id):
         form = CommitteeForm()
 
     context = {'session': session, 'committees': committees, 'subtopics': session_subtopics, 'form': form}
-    return render(request, 'statistics/session_add.html', context)
 
+    return check_authorization_and_render(request, 'statistics/welcome.html', context, session)
 
 
 
@@ -300,8 +315,7 @@ def point(request, session_id, committee_id):
 
 
     context = {'debate': active, 'committee': committee, 'session': session, 'subtopics': subtopics, 'form': form}
-    return render(request, 'statistics/point_form.html', context)
-
+    return check_authorization_and_render(request, 'statistics/point_form.html', context, session, False)
 
 
 #################
@@ -330,8 +344,8 @@ def content(request, session_id, committee_id):
         form = ContentForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active})
 
     context = {'debate': active, 'committee': committee, 'session': session, 'form': form}
-    return render(request, 'statistics/content_form.html', context)
 
+    return check_authorization_and_render(request, 'statistics/content_form.html', context, session, False)
 
 #################
 
@@ -382,7 +396,8 @@ def joint(request, session_id, committee_id):
         form = JointForm(subtopics_array, {'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'round_no': active_round_no})
 
     context = {'debate': active, 'committee': committee, 'session': session, 'subtopics': subtopics, 'form': form}
-    return render(request, 'statistics/joint_form.html', context)
+
+    return check_authorization_and_render(request, 'statistics/joint_form.html', context, session, False)
 
 
 #################
@@ -425,7 +440,8 @@ def vote(request, session_id, committee_id):
         form = VoteForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
 
     context = {'session': session, 'committee': committee, 'debate': active, 'form': form}
-    return render(request, 'statistics/vote_form.html', context)
+
+    return check_authorization_and_render(request, 'statistics/vote_form.html', context, session, False)
 
 
 #################
@@ -545,4 +561,4 @@ def manage(request, session_id):
         round_form = ActiveRoundForm(max_rounds_array, {'session': session.session_name})
 
     context = {'session': session, 'committees': committees, 'active': active, 'active_round': active_round, 'debate_form': debate_form, 'round_form': round_form}
-    return render(request, 'statistics/manage.html', context)
+    return check_authorization_and_render(request, 'statistics/manage.html', context, session)
