@@ -118,6 +118,7 @@ tbody tr td {
 <script>
 var committee_post_url = '{% url 'statistics:add' session.pk %}';
 var session_color = '{{ session.session_color }}';
+var committees_api_url = '{% url 'statistics:committees_api' session.pk %}'
 </script>
 {% endblock %} {% block footer_scripts %}
 <script  type="text/javascript" src="{% static 'statistics/js/session_add.js' %}"></script>

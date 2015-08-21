@@ -48,6 +48,30 @@ def session_api(request, session_id):
     })
     return HttpResponse(session_json, content_type='json')
 
+def committees_api(request, session_id):
+    session = Session.objects.get(pk=session_id)
+    if request.GET.get('pk') == 'latest':
+        #If we're asking for the latest committee (aka, we just added a committee), let's get the committee with the highest pk.
+        latest_committee = Committee.objects.filter(session=session).order_by('-pk')[0]
+        #Then lets get the subtopics for that committee
+        latest_committee_subtopics = SubTopic.objects.filter(committee=latest_committee)
+        #Then lets make a nice list of the subtopics.
+        latest_committee_subtopics_array = []
+        for subtopic in latest_committee_subtopics:
+            latest_committee_subtopics_array.append(subtopic.subtopic_text)
+        latest_subtopics = ', '.join(latest_committee_subtopics_array)
+        #Then lets make a JSON object with the data from that committee
+        thiscommittee = json.dumps({
+        'pk': latest_committee.pk,
+        'name': latest_committee.committee_name,
+        'topic': latest_committee.committee_topic,
+        'subtopics': latest_subtopics
+        })
+    else:
+        #Otherwise we're asking for a certain pk.
+        committee = committees.filter(pk=request.GET.get('pk'))
+    return HttpResponse(thiscommittee, content_type='json')
+
 def debate_api(request, session_id, committee_id):
     #The Debate API is very similar to the session API, but more complex due to more graphs and subtopics.
 
