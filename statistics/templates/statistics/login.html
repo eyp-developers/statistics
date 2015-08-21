@@ -5,11 +5,26 @@
 {% block page_title %}Login{% endblock %}
 
 {% block content %}
-
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-dismissable alert-warning shadow-z-2">
+  <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+</div>
+{% endfor %}
+<script type="text/javascript">
+window.setTimeout(function() {
+  $(".alert").fadeTo(500, 0).slideUp(500, function(){
+    $(this).remove();
+  });
+}, 5000);
+</script>
+{% endif %}
 <div class="container col-lg-offset-4">
   <h1>
-    <small>Log in</small>
+    Login
   </h1>
+
+
 
     {% crispy form %}
 
