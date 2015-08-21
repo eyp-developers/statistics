@@ -175,8 +175,7 @@ def edit(request, session_id):
             'is_visible': s.session_is_visible})
 
     context = {'session': s, 'form': form}
-    return render(request, 'statistics/session_edit.html', context)
-
+    return check_authorization_and_render(request, 'statistics/session_edit.html', context, s)
 
 
 
