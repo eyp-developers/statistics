@@ -330,8 +330,7 @@ def point(request, session_id, committee_id):
 
 
     context = {'debate': active, 'committee': committee, 'session': session, 'subtopics': subtopics, 'form': form}
-    return render(request, 'statistics/point_form.html', context)
-
+    return check_authorization_and_render(request, 'statistics/point_form.html', context, session, False)
 
 
 #################
