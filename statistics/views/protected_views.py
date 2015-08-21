@@ -576,4 +576,4 @@ def manage(request, session_id):
         round_form = ActiveRoundForm(max_rounds_array, {'session': session.session_name})
 
     context = {'session': session, 'committees': committees, 'active': active, 'active_round': active_round, 'debate_form': debate_form, 'round_form': round_form}
-    return render(request, 'statistics/manage.html', context)
+    return check_authorization_and_render(request, 'statistics/manage.html', context, session)
