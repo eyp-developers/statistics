@@ -455,7 +455,8 @@ def vote(request, session_id, committee_id):
         form = VoteForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
 
     context = {'session': session, 'committee': committee, 'debate': active, 'form': form}
-    return render(request, 'statistics/vote_form.html', context)
+
+    return check_authorization_and_render(request, 'statistics/vote_form.html', context, session, False)
 
 
 #################
