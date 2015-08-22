@@ -12,13 +12,7 @@ window.setInterval(function(){
         latest_active_debate = result.active_debate_pk;
 
     });
+    if (latest_active_debate !== active_debate_on_load && latest_active_debate !== undefined && active_debate_on_load !== undefined) {
+      window.location.replace("../" + latest_active_debate);
+    }
 }, 5000);
-
-
-
-// Here we compare the two values and if they differ from each other we will redirect them to the new active committee
-window.setInterval(function(){
-  if (latest_active_debate !== active_debate_on_load && latest_active_debate !== undefined && active_debate_on_load !== undefined) {
-    window.location.replace("../" + latest_active_debate);
-  }
-}, 10000);
