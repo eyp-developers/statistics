@@ -132,10 +132,6 @@
     </div>
   </div>
 </div>
-<script>
-var point_url = '{% url 'statistics:data_api' session.pk %}',
-    point_latest_url = '{% url 'statistics:data_latest_api' session.pk %}';
-</script>
 {% endif %} {% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'C' %}
 <div class="panel panel-material-{{ session.session_color }}-300">
   <div class="panel-heading">
@@ -145,10 +141,6 @@ var point_url = '{% url 'statistics:data_api' session.pk %}',
 
   </div>
 </div>
-<script>
-var content_url = '{% url 'statistics:data_api' session.pk %}',
-    content_latest_url = '{% url 'statistics:data_latest_api' session.pk %}';
-</script>
 {% endif %} {% if session.session_voting_enabled %}
 <div class="panel panel-material-{{ session.session_color }}-300">
   <div class="panel-heading">
@@ -158,13 +150,11 @@ var content_url = '{% url 'statistics:data_api' session.pk %}',
 
   </div>
 </div>
-<script>
-var vote_url = '{% url 'statistics:data_api' session.pk %}',
-    vote_latest_url = '{% url 'statistics:data_latest_api' session.pk %}';
-</script>
 {% endif %}
 <script>
-var dr_img = '{% static 'statistics/images/dr.png' %}',
+var data_url = '{% url 'statistics:data_api' session.pk %}',
+    data_latest_url = '{% url 'statistics:data_latest_api' session.pk %}',
+    dr_img = '{% static 'statistics/images/dr.png' %}',
     point_img = '{% static 'statistics/images/point.png' %}',
     session_color = '{{ session.session_color }}';
 </script>

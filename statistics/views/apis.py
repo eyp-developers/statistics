@@ -528,7 +528,7 @@ def data_api(request, session_id):
             data_list.append(thisdata)
         #Then we need to turn the list into JSON.
         content_json = json.dumps({
-        'contentpoints': data_list,
+        'datapoints': data_list,
         'totalpoints': total
         })
 
@@ -567,7 +567,7 @@ def data_latest_api(request, session_id):
         data_list.append(thisdata)
 
         content_json = json.dumps({
-        'contentpoints': data_list,
+        'datapoints': data_list,
         'totalpoints': total
         })
 
@@ -608,9 +608,59 @@ def data_latest_api(request, session_id):
             data_list.append(thisdata)
         #Then we need to turn the list into JSON.
         content_json = json.dumps({
-        'contentpoints': data_list,
+        'datapoints': data_list,
         'totalpoints': total
         })
 
 
     return HttpResponse(content_json, content_type='json')
+
+def data_pk_api(request):
+    if request.method == 'POST':
+        #If the user is trying to save a peice of data.
+        pass
+    else:
+        json_datatype = str(request.GET.get('data_type'))
+        pk = int(request.GET.get('pk'))
+        thisdata = {}
+        if json_datatype == 'content':
+            data = ContentPoint.objects.get(pk=pk)
+            thisdata['point_type'] = data.point_type
+            thisdata['content'] = data.point_content
+        elif json_datatype == 'point':
+            data = Point.objects.get(pk=pk)
+            thisdata['point_type'] = data.point_type
+            thisdata['round_no'] = data.active_round
+            #Getting the subtopics for a point
+            subtopics_array = []
+            for subtopic in data.subtopics.all():
+                this_subtopic = {
+                'pk': subtopic.pk,
+                'subtopic': subtopic.subtopic_text
+                }
+                subtopics_array.append(this_subtopic)
+            thisdata['subtopics'] = subtopics_array
+            #Getting all the subtopics avaliable for a certain point
+            all_subtopics = SubTopic.objects.filter(committee=data.committee_by)
+            all_subtopics_array = []
+            for subtopic in all_subtopics:
+                this_subtopic = {
+                'pk': subtopic.pk,
+                'subtopic': subtopic.subtopic_text
+                }
+                all_subtopics_array.append(this_subtopic)
+            thisdata['all_subtopics'] = all_subtopics_array
+        elif json_datatype == 'vote':
+            data = Vote.objects.get(pk=pk)
+            thisdata['in_favour'] = data.in_favour
+            thisdata['against'] = data.against
+            thisdata['abstentions'] = data.abstentions
+            thisdata['absent'] = data.absent
+
+        thisdata['pk'] = data.pk
+        thisdata['committee_by'] = data.committee_by.committee_name
+        thisdata['active_debate'] = data.active_debate
+
+        content_json = json.dumps(thisdata)
+
+        return HttpResponse(content_json, content_type='json')
