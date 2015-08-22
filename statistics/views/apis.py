@@ -2,6 +2,7 @@ import json
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from time import strftime
 
 #Importing all models for statistics.
 from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
@@ -497,6 +498,7 @@ def data_api(request, session_id):
             #For each data point, we need the id of the point, who the point was by, the kind of point, and the content of the point.
             thisdata = {}
             thisdata['pk'] = d.pk
+            thisdata['last_changed'] = d.timestamp.strftime("%H:%M")
             thisdata['committee_by'] = d.committee_by.committee_name
             thisdata['active_debate'] = d.active_debate
             thisdata['committee_color'] = d.committee_by.committee_color()
@@ -576,6 +578,7 @@ def data_latest_api(request, session_id):
             #For each data point, we need the id of the point, who the point was by, the kind of point, and the content of the point.
             thisdata = {}
             thisdata['pk'] = d.pk
+            thisdata['last_changed'] = d.timestamp.strftime("%H:%M")
             thisdata['committee_by'] = d.committee_by.committee_name
             thisdata['active_debate'] = d.active_debate
             thisdata['committee_color'] = d.committee_by.committee_color()

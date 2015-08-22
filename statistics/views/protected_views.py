@@ -18,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
 
 #Importing the forms too.
-from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm
+from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, PointEditForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm
 
 # This is a central function. It replaces 'render' in cases where the user has to be authorized to view the page, not just authenticated.
 def check_authorization_and_render(request, template, context, session, admin_only = True):
@@ -598,6 +598,7 @@ def manage(request, session_id):
     else:
         debate_form = ActiveDebateForm(committees_array, {'session': session.session_name})
         round_form = ActiveRoundForm(max_rounds_array, {'session': session.session_name})
+        point_form = PointEditForm([], {'session': session.session_name})
 
-    context = {'session': session, 'committees': committees, 'active': active, 'active_round': active_round, 'debate_form': debate_form, 'round_form': round_form}
+    context = {'session': session, 'committees': committees, 'active': active, 'active_round': active_round, 'debate_form': debate_form, 'round_form': round_form, 'point_form': point_form}
     return check_authorization_and_render(request, 'statistics/manage.html', context, session)

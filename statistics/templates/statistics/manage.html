@@ -15,14 +15,14 @@
         <div class="col-sm-10">
           <select class="form-control" name="{{ debate_form.active_debate.html_name }}" id="{{ debate_form.active_debate.id_for_label }}">
             {% for id,text in debate_form.fields.active_debate.choices %}
-            <option value="{{ id }}" {% if text==a ctive %} selected {% endif %}>{{ text }}</option>
+            <option value="{{ id }}" {% if text == active %} selected {% endif %}>{{ text }}</option>
             {% endfor %}
           </select>
         </div>
       </div>
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-default">Update Active Debate</button>
+          <button type="submit" class="btn btn-flat btn-material-{{ session.session_color }}">Update Active Debate</button>
         </div>
       </div>
     </form>
@@ -36,14 +36,14 @@
         <div class="col-sm-10">
           <select class="form-control" name="{{ round_form.active_round.html_name }}" id="{{ round_form.active_round.id_for_label }}">
             {% for id,text in round_form.fields.active_round.choices %}
-            <option value="{{ id }}" {% if text==a ctive_round %} selected {% endif %}>{{ text }}</option>
+            <option value="{{ id }}" {% if text == active_round %} selected {% endif %}>{{ text }}</option>
             {% endfor %}
           </select>
         </div>
       </div>
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-default">Update Active Round</button>
+          <button type="submit" class="btn btn-flat btn-material-{{ session.session_color }}">Update Active Round</button>
         </div>
       </div>
     </form>
@@ -56,7 +56,8 @@
   </div>
   <div class="panel-body">
     <form role="form">
-      <table class="table table-striped table-hover ">
+      {% csrf_token %}
+      <table class="table table-hover" id="point-table">
         <thead>
           <tr>
             <th>ID</th>
@@ -66,15 +67,75 @@
             <th>Round No.</th>
             <th>Point Type</th>
             <th>Subtopics</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          
         </tbody>
       </table>
     </form>
   </div>
 </div>
+
+<div id="edit-point" class="modal fade" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <form class="form-horizontal" role="form">
+          <input type="hidden" class="form-control" name="{{ point_form.pk.html_name }}" id="{{ point_form.pk.id_for_label }}" value="" >
+          <input type="hidden" class="form-control" name="{{ point_form.session.html_name }}" id="{{ point_form.session.id_for_label }}" maxlength=100 value="{{ point_form.session.value }}" >
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="{{ point_form.committee.id_for_label }}">Commitee:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="{{ point_form.committee.html_name }}" id="{{ point_form.committee.id_for_label }}" maxlength=7 value="" >
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="{{ point_form.debate.id_for_label }}">Debate:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="{{ point_form.debate.html_name }}" id="{{ point_form.debate.id_for_label }}" value="" >
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="{{ point_form.round_no.id_for_label }}">Round Number:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="{{ point_form.round_no.html_name }}" id="{{ point_form.round_no.id_for_label }}" value="" >
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="{{ point_form.point_type.id_for_label }}">Point Type:</label>
+            <div class="col-sm-10">
+              <select class="form-control" name="{{ point_form.point_type.html_name }}" id="{{ point_form.point_type.id_for_label }}">
+                {% for id,text in point_form.fields.point_type.choices  %}
+                <option value="{{ id }}" >{{ text }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="{{ point_form.subtopics.id_for_label }}">Subtopics Addressed:</label>
+            <div class="col-sm-10">
+              <select multiple class="form-control" name="{{ point_form.subtopics.html_name }}" id="{{ point_form.subtopics.id_for_label }}">
+                {% for id,text in point_form.fields.subtopics.choices  %}
+                <option value="{{ id }}">{{ text }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-material-{{ session.session_color }}-400">Save Point</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var point_url = '{% url 'statistics:data_api' session.pk %}',
+    point_latest_url = '{% url 'statistics:data_latest_api' session.pk %}';
+</script>
 {% endif %} {% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'C' %}
 <div class="panel panel-material-{{ session.session_color }}-300">
   <div class="panel-heading">
@@ -84,6 +145,10 @@
 
   </div>
 </div>
+<script>
+var content_url = '{% url 'statistics:data_api' session.pk %}',
+    content_latest_url = '{% url 'statistics:data_latest_api' session.pk %}';
+</script>
 {% endif %} {% if session.session_voting_enabled %}
 <div class="panel panel-material-{{ session.session_color }}-300">
   <div class="panel-heading">
@@ -93,4 +158,23 @@
 
   </div>
 </div>
-{% endif %} {% endblock %} {% block footer_scripts %} {% endblock %}
+<script>
+var vote_url = '{% url 'statistics:data_api' session.pk %}',
+    vote_latest_url = '{% url 'statistics:data_latest_api' session.pk %}';
+</script>
+{% endif %}
+<script>
+var dr_img = '{% static 'statistics/images/dr.png' %}',
+    point_img = '{% static 'statistics/images/point.png' %}',
+    session_color = '{{ session.session_color }}';
+</script>
+<style>
+tbody tr td {
+    font-size: 15px;
+}
+</style>
+{% endblock %}
+
+{% block footer_scripts %}
+<script type="text/javascript" src="{% static 'statistics/js/manage_joint.js' %}" charset="utf-8"></script>
+{% endblock %}
