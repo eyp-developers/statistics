@@ -50,3 +50,6 @@ h1, h2, h3, h4, h5, h6, p, a, li, ul {
     height: 400px; } }
 tbody tr td {
   font-size: 18px; }
+
+.heavy-font-weight {
+  font-weight: 500; }
