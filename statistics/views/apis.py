@@ -54,7 +54,8 @@ def active_debate_api(request, session_id):
     active_committee = Committee.objects.filter(committee_name=active_debate.active_debate)[0]
 
     active_debate_json = json.dumps({
-    'active_debate_pk': active_committee.pk
+    'active_debate_pk': active_committee.pk,
+    'active_session_pk': session.pk
     })
     return HttpResponse(active_debate_json, content_type='json')
 

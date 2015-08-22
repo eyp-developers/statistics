@@ -48,16 +48,20 @@
           var debate_url = '{% url 'statistics:debate_api' session.pk committee.pk %}';
           var vote_url = '{% url 'statistics:debate_vote_api' session.pk committee.pk %}';
           var content_url = '{% url 'statistics:content_api' session.pk committee.pk %}';
-          var newcontenturl = '{% url 'statistics:content_latest_api' session.pk committee.pk %}'
-          var dr_img = '{% static 'statistics/images/dr.png' %}'
-          var point_img = '{% static 'statistics/images/point.png' %}'
+          var newcontenturl = '{% url 'statistics:content_api' session.pk committee.pk %}';
+          var active_debate_url = '{% url 'statistics:active_debate_api' session.pk %}';
+          var dr_img = '{% static 'statistics/images/dr.png' %}';
+          var point_img = '{% static 'statistics/images/point.png' %}';
       </script>
+
 
 {% endblock %} <!--/ voting block-->
 
 {% block footer_scripts %}
 <script  type="text/javascript" src="{% static 'statistics/js/debate.js' %}"></script>
+
 {% if voting_enabled %}
 <script  type="text/javascript" src="{% static 'statistics/js/vote_debate.js' %}"></script>
+
 {% endif %}
 {% endblock %} <!--/ footer_scripts block -->
