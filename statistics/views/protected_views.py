@@ -195,97 +195,98 @@ def add(request, session_id):
     committees = Committee.objects.filter(session=session).order_by('committee_name')
     session_subtopics = SubTopic.objects.filter(session=session)
     if request.method == 'POST':
-        pk = request.POST.get('pk')
-        name = request.POST.get('name')
-        topic = request.POST.get('topic')
-        subtopics = json.loads(request.POST.get('subtopics'))
+        if request.POST.get('delete') == 'true':
+            committee = Committee.objects.get(pk=request.POST.get('pk'))
 
-        form = CommitteeForm({'pk': pk, 'name': name, 'topic': topic})
-        if form.is_valid():
-            print 'Form is valid'
+            committee.delete()
+
             response_data = {}
-            committee_exists = False
-            for committee in committees:
-                if committee.pk == form.cleaned_data['pk']:
-                    committee_exists = True
-
-            if committee_exists:
-                c = committees.filter(committee_name=form.cleaned_data['name'])[0]
-            else:
-                c = Committee()
-
-            c.session = session
-            c.committee_name = form.cleaned_data['name']
-            c.committee_topic = form.cleaned_data['topic']
-            c.save()
-
-            subtopics_pretty_array = []
-            committee_subtopics = SubTopic.objects.filter(committee=c)
-            committee_new_subtopics = []
-            for subtopic in subtopics:
-                if subtopic['pk'] != '':
-                    subtopic_pk = int(subtopic['pk'])
-                else:
-                    subtopic_pk = ''
-                for committee_subtopic in committee_subtopics:
-                    print committee_subtopic.pk
-                    print subtopic['pk']
-                    if committee_subtopic.pk == subtopic_pk:
-                        print 'subtopic exists'
-                        subtopic_exists = True
-                        break
-                else:
-                    if subtopic['subtopic'] == 'General' and committee_subtopics.filter(subtopic_text='General'):
-                        subtopic_exists = True
-                        print 'subtopic exists'
-                    else:
-                        subtopic_exists = False
-                        print 'subtopic was not there'
-
-                if subtopic_exists:
-                    if subtopic['subtopic'] == 'General':
-                        s = committee_subtopics.filter(subtopic_text='General')[0]
-                    else:
-                        s = committee_subtopics.get(pk=subtopic['pk'])
-                else:
-                    s = SubTopic()
-
-                s.session = session
-                s.committee = c
-                s.subtopic_text = subtopic['subtopic']
-                s.save()
-                committee_new_subtopics.append(s)
-                subtopics_pretty_array.append(s.subtopic_text)
-
-            print committee_subtopics
-            print committee_new_subtopics
-            for subtopic in committee_subtopics:
-                if subtopic not in committee_new_subtopics:
-                    subtopic.delete()
-
-            response_data['pk'] = c.pk
-            response_data['subtopics'] = ', '.join(subtopics_pretty_array)
+            response_data['msg'] = 'Committee was deleted.'
 
             return HttpResponse(
                 json.dumps(response_data),
                 content_type="application/json"
             )
-
         else:
-            print 'Form not valid'
-            print form.errors
-    elif request.method == 'DELETE':
-        committee = Committee.objects.get(pk=int(QueryDict(request.body).get('pk')))
+            pk = request.POST.get('pk')
+            name = request.POST.get('name')
+            topic = request.POST.get('topic')
+            subtopics = json.loads(request.POST.get('subtopics'))
 
-        post.delete()
+            form = CommitteeForm({'pk': pk, 'name': name, 'topic': topic})
+            if form.is_valid():
+                print 'Form is valid'
+                response_data = {}
+                committee_exists = False
+                for committee in committees:
+                    if committee.pk == form.cleaned_data['pk']:
+                        committee_exists = True
 
-        response_data = {}
-        response_data['msg'] = 'Committee was deleted.'
+                if committee_exists:
+                    c = committees.filter(committee_name=form.cleaned_data['name'])[0]
+                else:
+                    c = Committee()
 
-        return HttpResponse(
-            json.dumps(response_data),
-            content_type="application/json"
-        )
+                c.session = session
+                c.committee_name = form.cleaned_data['name']
+                c.committee_topic = form.cleaned_data['topic']
+                c.save()
+
+                subtopics_pretty_array = []
+                committee_subtopics = SubTopic.objects.filter(committee=c)
+                committee_new_subtopics = []
+                for subtopic in subtopics:
+                    if subtopic['pk'] != '':
+                        subtopic_pk = int(subtopic['pk'])
+                    else:
+                        subtopic_pk = ''
+                    for committee_subtopic in committee_subtopics:
+                        print committee_subtopic.pk
+                        print subtopic['pk']
+                        if committee_subtopic.pk == subtopic_pk:
+                            print 'subtopic exists'
+                            subtopic_exists = True
+                            break
+                    else:
+                        if subtopic['subtopic'] == 'General' and committee_subtopics.filter(subtopic_text='General'):
+                            subtopic_exists = True
+                            print 'subtopic exists'
+                        else:
+                            subtopic_exists = False
+                            print 'subtopic was not there'
+
+                    if subtopic_exists:
+                        if subtopic['subtopic'] == 'General':
+                            s = committee_subtopics.filter(subtopic_text='General')[0]
+                        else:
+                            s = committee_subtopics.get(pk=subtopic['pk'])
+                    else:
+                        s = SubTopic()
+
+                    s.session = session
+                    s.committee = c
+                    s.subtopic_text = subtopic['subtopic']
+                    s.save()
+                    committee_new_subtopics.append(s)
+                    subtopics_pretty_array.append(s.subtopic_text)
+
+                print committee_subtopics
+                print committee_new_subtopics
+                for subtopic in committee_subtopics:
+                    if subtopic not in committee_new_subtopics:
+                        subtopic.delete()
+
+                response_data['pk'] = c.pk
+                response_data['subtopics'] = ', '.join(subtopics_pretty_array)
+
+                return HttpResponse(
+                    json.dumps(response_data),
+                    content_type="application/json"
+                )
+
+            else:
+                print 'Form not valid'
+                print form.errors
     else:
         form = CommitteeForm()
 
