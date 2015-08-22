@@ -1,10 +1,4 @@
-{% extends 'statistics/base.html' %}
-
-{% load staticfiles %}
-
-{% block page_title %}Manage: {{ session.session_name }}{% endblock %}
-
-{% block content %}
+{% extends 'statistics/base.html' %} {% load staticfiles %} {% block page_title %}Manage: {{ session.session_name }}{% endblock %} {% block content %}
 <h1>Manage {{ session.session_name }}</h1>
 <br>
 <div class="panel panel-material-{{ session.session_color }}-300">
@@ -15,13 +9,13 @@
     <h2>Active Debate: {{ active }}</h2>
     <form class="form-horizontal" role="form" action="{% url 'statistics:manage' session.id %}" method="post">
       {% csrf_token %}
-      <input type="hidden" class="form-control" name="{{ debate_form.session.html_name }}" id="{{ debate_form.session.id_for_label }}" maxlength=100 value="{{ debate_form.session.value }}" >
+      <input type="hidden" class="form-control" name="{{ debate_form.session.html_name }}" id="{{ debate_form.session.id_for_label }}" maxlength=100 value="{{ debate_form.session.value }}">
       <div class="form-group">
         <label class="control-label col-sm-2" for="{{ debate_form.active_debate.id_for_label }}">Set Active Debate:</label>
         <div class="col-sm-10">
           <select class="form-control" name="{{ debate_form.active_debate.html_name }}" id="{{ debate_form.active_debate.id_for_label }}">
-            {% for id,text in debate_form.fields.active_debate.choices  %}
-            <option value="{{ id }}" >{{ text }}</option>
+            {% for id,text in debate_form.fields.active_debate.choices %}
+            <option value="{{ id }}">{{ text }}</option>
             {% endfor %}
           </select>
         </div>
@@ -36,13 +30,13 @@
     <h2>Active Round: {{ active_round }}</h2>
     <form class="form-horizontal" role="form" action="{% url 'statistics:manage' session.id %}" method="post">
       {% csrf_token %}
-      <input type="hidden" class="form-control" name="{{ round_form.session.html_name }}" id="{{ round_form.session.id_for_label }}" maxlength=100 value="{{ round_form.session.value }}" >
+      <input type="hidden" class="form-control" name="{{ round_form.session.html_name }}" id="{{ round_form.session.id_for_label }}" maxlength=100 value="{{ round_form.session.value }}">
       <div class="form-group">
         <label class="control-label col-sm-2" for="{{ round_form.active_round.id_for_label }}">Set Active Debate:</label>
         <div class="col-sm-10">
           <select class="form-control" name="{{ round_form.active_round.html_name }}" id="{{ round_form.active_round.id_for_label }}">
-            {% for id,text in round_form.fields.active_round.choices  %}
-            <option value="{{ id }}" >{{ text }}</option>
+            {% for id,text in round_form.fields.active_round.choices %}
+            <option value="{{ id }}">{{ text }}</option>
             {% endfor %}
           </select>
         </div>
@@ -55,7 +49,12 @@
     </form>
   </div>
 </div>
-{% endblock %}
+<div class="panel panel-material-{{ session.session_color }}-300">
+  <div class="panel-heading">
+    <h3 class="panel-title">Edit Points Made</h3>
+  </div>
+  <div class="panel-body">
 
-{% block footer_scripts %}
-{% endblock %}
+  </div>
+</div>
+{% endblock %} {% block footer_scripts %} {% endblock %}
