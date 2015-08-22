@@ -457,3 +457,157 @@ def content_latest_api(request, session_id, committee_id):
 
 
     return HttpResponse(content_json, content_type='json')
+
+def data_api(request, session_id):
+    #For the 'offset' and 'count' arguments to work, we need to be able to tell the filter from which point and to which point to filter from.
+    point_from = int(request.GET.get('offset'))
+    point_to = int(request.GET.get('offset')) + int(request.GET.get('count'))
+    #First we need all datapoints from that session
+    json_datatype = str(request.GET.get('data_type'))
+    print json_datatype
+    if json_datatype == 'content':
+        print 'yup, content'
+        data = ContentPoint.objects.filter(session_id=session_id).order_by('-pk')[point_from:point_to]
+        #We also need to count the amount of data points for the total
+        total = ContentPoint.objects.filter(session_id=session_id).count()
+    elif json_datatype == 'point':
+        print 'yup, point'
+        data = Point.objects.filter(session_id=session_id).order_by('-pk')[point_from:point_to]
+        #We also need to count the amount of data points for the total
+        total = Point.objects.filter(session_id=session_id).count()
+    elif json_datatype == 'vote':
+        print 'yup, vote'
+        data = Vote.objects.filter(session_id=session_id).order_by('-pk')[point_from:point_to]
+        #We also need to count the amount of data points for the total
+        total = Vote.objects.filter(session_id=session_id).count()
+
+
+    #If there is no data, do nothing.
+    if not data:
+        content_json = json.dumps({
+        'data': 'No data'
+        })
+
+    #But if we could find data
+    else:
+        #Create an empty array to put the data in
+        data_list = []
+        #Loop through the avaliable data
+        for d in data:
+            #For each data point, we need the id of the point, who the point was by, the kind of point, and the content of the point.
+            thisdata = {}
+            thisdata['pk'] = d.pk
+            thisdata['committee_by'] = d.committee_by.committee_name
+            thisdata['active_debate'] = d.active_debate
+            thisdata['committee_color'] = d.committee_by.committee_color()
+            thisdata['committee_text_color'] = d.committee_by.committee_text_color()
+
+            #For the different kinds of data points, we need to get different types of data.
+            if request.GET.get('data_type') == 'content':
+                thisdata['point_type'] = d.point_type
+                thisdata['content'] = d.point_content
+            elif request.GET.get('data_type') == 'point':
+                thisdata['point_type'] = d.point_type
+                thisdata['round_no'] = d.active_round
+                subtopics_array = []
+                for subtopic in d.subtopics.all():
+                    this_subtopic = {
+                    'pk': subtopic.pk,
+                    'subtopic': subtopic.subtopic_text
+                    }
+                    subtopics_array.append(this_subtopic)
+                thisdata['subtopics'] = subtopics_array
+            elif request.GET.get('data_type') == 'vote':
+                thisdata['in_favour'] = d.in_favour
+                thisdata['against'] = d.against
+                thisdata['abstentions'] = d.abstentions
+                thisdata['absent'] = d.absent
+
+            data_list.append(thisdata)
+        #Then we need to turn the list into JSON.
+        content_json = json.dumps({
+        'contentpoints': data_list,
+        'totalpoints': total
+        })
+
+
+    return HttpResponse(content_json, content_type='json')
+
+def data_latest_api(request, session_id):
+    #First we need all datapoints from that session that have a greater pk than *
+    json_datatype = str(request.GET.get('data_type'))
+    print json_datatype
+    if json_datatype == 'content':
+        print 'yup, content'
+        data = ContentPoint.objects.filter(session_id=session_id).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
+        #We also need to count the amount of data points for the total
+        total = ContentPoint.objects.filter(session_id=session_id).count()
+    elif json_datatype == 'point':
+        print 'yup, point'
+        data = Point.objects.filter(session_id=session_id).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
+        #We also need to count the amount of data points for the total
+        total = Point.objects.filter(session_id=session_id).count()
+    elif json_datatype == 'vote':
+        print 'yup, vote'
+        data = Vote.objects.filter(session_id=session_id).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
+        #We also need to count the amount of data points for the total
+        total = Vote.objects.filter(session_id=session_id).count()
+
+    #Create an empty array to put the contentpoints in
+    data_list = []
+    #If there are no points, do nothing.
+    if not data:
+        #Create a single object with out data.
+        thisdata = {
+        'pk': request.GET.get('pk')
+        }
+
+        data_list.append(thisdata)
+
+        content_json = json.dumps({
+        'contentpoints': data_list,
+        'totalpoints': total
+        })
+
+    #But if we could find points
+    else:
+        #Loop through the avaliable contentpoints
+        for d in data:
+            #For each data point, we need the id of the point, who the point was by, the kind of point, and the content of the point.
+            thisdata = {}
+            thisdata['pk'] = d.pk
+            thisdata['committee_by'] = d.committee_by.committee_name
+            thisdata['active_debate'] = d.active_debate
+            thisdata['committee_color'] = d.committee_by.committee_color()
+            thisdata['committee_text_color'] = d.committee_by.committee_text_color()
+
+            #For the different kinds of data points, we need to get different types of data.
+            if request.GET.get('data_type') == 'content':
+                thisdata['point_type'] = d.point_type
+                thisdata['content'] = d.point_content
+            elif request.GET.get('data_type') == 'point':
+                thisdata['point_type'] = d.point_type
+                thisdata['round_no'] = d.active_round
+                subtopics_array = []
+                for subtopic in d.subtopics.all():
+                    this_subtopic = {
+                    'pk': subtopic.pk,
+                    'subtopic': subtopic.subtopic_text
+                    }
+                    subtopics_array.append(this_subtopic)
+                thisdata['subtopics'] = subtopics_array
+            elif request.GET.get('data_type') == 'vote':
+                thisdata['in_favour'] = d.in_favour
+                thisdata['against'] = d.against
+                thisdata['abstentions'] = d.abstentions
+                thisdata['absent'] = d.absent
+
+            data_list.append(thisdata)
+        #Then we need to turn the list into JSON.
+        content_json = json.dumps({
+        'contentpoints': data_list,
+        'totalpoints': total
+        })
+
+
+    return HttpResponse(content_json, content_type='json')

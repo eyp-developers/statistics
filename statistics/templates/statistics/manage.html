@@ -15,7 +15,7 @@
         <div class="col-sm-10">
           <select class="form-control" name="{{ debate_form.active_debate.html_name }}" id="{{ debate_form.active_debate.id_for_label }}">
             {% for id,text in debate_form.fields.active_debate.choices %}
-            <option value="{{ id }}" {% if text == active %} selected {% endif %} >{{ text }}</option>
+            <option value="{{ id }}" {% if text==a ctive %} selected {% endif %}>{{ text }}</option>
             {% endfor %}
           </select>
         </div>
@@ -36,7 +36,7 @@
         <div class="col-sm-10">
           <select class="form-control" name="{{ round_form.active_round.html_name }}" id="{{ round_form.active_round.id_for_label }}">
             {% for id,text in round_form.fields.active_round.choices %}
-            <option value="{{ id }}" {% if text == active_round %} selected {% endif %}>{{ text }}</option>
+            <option value="{{ id }}" {% if text==a ctive_round %} selected {% endif %}>{{ text }}</option>
             {% endfor %}
           </select>
         </div>
@@ -55,12 +55,24 @@
     <h3 class="panel-title">Edit Points</h3>
   </div>
   <div class="panel-body">
-    <table class="table table-striped table-hover ">
-      <thead>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
+    <form role="form">
+      <table class="table table-striped table-hover ">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Last Changed</th>
+            <th>Committee By</th>
+            <th>Committee On</th>
+            <th>Round No.</th>
+            <th>Point Type</th>
+            <th>Subtopics</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+      </table>
+    </form>
   </div>
 </div>
 {% endif %} {% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'C' %}
