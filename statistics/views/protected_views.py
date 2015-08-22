@@ -5,6 +5,7 @@ from datetime import date
 from datetime import datetime
 from time import strftime
 
+from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -345,7 +346,7 @@ def point(request, session_id, committee_id):
                 point.subtopics.add(st[0])
 
             #Once all that is done, send the user to the thank you page.
-            return HttpResponseRedirect('/session/' + session_id + '/point/' + committee_id + '/thanks')
+            return HttpResponseRedirect(reverse('statistics:point_thanks', args=[session_id, committee_id]))
 
     else:
         #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
@@ -377,7 +378,7 @@ def content(request, session_id, committee_id):
                 point_content = form.cleaned_data['content']
                 )
             contentpoint.save()
-            return HttpResponseRedirect('/session/' + session_id + '/content/' + committee_id + '/thanks')
+            return HttpResponseRedirect(reverse('statistics:content_thanks', args=[session_id, committee_id]))
     else:
         form = ContentForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active})
 
@@ -429,7 +430,7 @@ def joint(request, session_id, committee_id):
             for s in form.cleaned_data['subtopics']:
                 st = SubTopic.objects.filter(pk=s)
                 point.subtopics.add(st[0])
-            return HttpResponseRedirect('/session/' + session_id + '/joint/' + committee_id + '/thanks')
+            return HttpResponseRedirect(reverse('statistics:joint_thanks', args=[session_id, committee_id]))
     else:
         form = JointForm(subtopics_array, {'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'round_no': active_round_no})
 
@@ -471,7 +472,7 @@ def vote(request, session_id, committee_id):
             #Save the vote to the database.
             vote.save()
             #Then send the user to the thank you page.
-            return HttpResponseRedirect('/session/' + session_id + '/vote/' + committee_id + '/thanks')
+            return HttpResponseRedirect(reverse('statistics:vote_thanks', args=[session_id, committee_id]))
 
     else:
         #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
@@ -489,7 +490,7 @@ def vote(request, session_id, committee_id):
 def thanks(request, session_id, committee_id):
     #A thanks page that is given a url for the user to submit something again. We construct the url here and then set it as the href="" on the button
     session = Session.objects.get(pk=session_id)
-    thanks_url = '/session/' + session_id + '/point/' + committee_id
+    thanks_url = reverse('statistics:point', args=[session_id, committee_id])
     context = {'thanks_url': thanks_url, 'session': session}
     return render(request, 'statistics/thanks.html', context)
 
@@ -501,7 +502,7 @@ def thanks(request, session_id, committee_id):
 def vote_thanks(request, session_id, committee_id):
     #Same thing as the last thanks page, but with a url constructed for voting instead.
     session = Session.objects.get(pk=session_id)
-    thanks_url = '/session/' + session_id + '/vote/' + committee_id
+    thanks_url = reverse('statistics:vote', args=[session_id, committee_id])
     context = {'thanks_url': thanks_url, 'session': session}
     return render(request, 'statistics/thanks.html', context)
 
@@ -513,7 +514,7 @@ def vote_thanks(request, session_id, committee_id):
 def content_thanks(request, session_id, committee_id):
     #Same thing as the last thanks page, but with a url constructed for contentpoints instead.
     session = Session.objects.get(pk=session_id)
-    thanks_url = '/session/' + session_id + '/content/' + committee_id
+    thanks_url = reverse('statistics:content', args=[session_id, committee_id])
     context = {'thanks_url': thanks_url, 'session': session}
     return render(request, 'statistics/thanks.html', context)
 
@@ -574,7 +575,7 @@ def manage(request, session_id):
                 #Save the new active debate
                 active_debate.save()
                 #Send the user to the manage page
-                return HttpResponseRedirect('/manage/' + session_id)
+                return HttpResponseRedirect(reverse('statistics:manage', args=[session_id]))
             else:
                 print debate_form
             #You also have to create an empty/default instance of the "opposite" form, since we've got two on this page.
@@ -590,7 +591,7 @@ def manage(request, session_id):
                 #Save the active round.
                 active_round_entry.save()
                 #Send the user back to the manage page
-                return HttpResponseRedirect('/manage/' + session_id)
+                return HttpResponseRedirect(reverse('statistics:manage', args=[session_id]))
             debate_form = ActiveDebateForm(committees_array, {'session': session.session_name})
 
     #Otherwise, give the User some nice new forms.
