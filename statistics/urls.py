@@ -32,6 +32,6 @@ urlpatterns = [
     url(r'^api/session/(?P<session_id>[0-9]+)/vote/$', apis.session_vote_api, name='session_vote_api'),
     url(r'^api/session/(?P<session_id>[0-9]+)/vote/(?P<committee_id>[0-9]+)/$', apis.debate_vote_api, name='debate_vote_api'),
     url(r'^api/session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/$', apis.content_api, name='content_api'),
-    url(r'^api/session/(?P<session_id>[0-9]+)/vote/$', apis.session_vote_api, name='session_vote_api'),
+    url(r'^api/session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/since/$', apis.content_latest_api, name='content_latest_api'),
     url(r'^api/active_debate/(?P<session_id>[0-9]+)/$', apis.active_debate_api, name='active_debate_api'),
 ]
