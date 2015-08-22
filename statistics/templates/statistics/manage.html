@@ -49,12 +49,34 @@
     </form>
   </div>
 </div>
+{% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'S' %}
 <div class="panel panel-material-{{ session.session_color }}-300">
   <div class="panel-heading">
-    <h3 class="panel-title">Edit Points Made</h3>
+    <h3 class="panel-title">Edit Points</h3>
   </div>
   <div class="panel-body">
 
   </div>
 </div>
+{% endif %}
+{% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'C' %}
+<div class="panel panel-material-{{ session.session_color }}-300">
+  <div class="panel-heading">
+    <h3 class="panel-title">Edit Content Points</h3>
+  </div>
+  <div class="panel-body">
+
+  </div>
+</div>
+{% endif %}
+{% if session.session_voting_enabled %}
+<div class="panel panel-material-{{ session.session_color }}-300">
+  <div class="panel-heading">
+    <h3 class="panel-title">Edit Votes</h3>
+  </div>
+  <div class="panel-body">
+
+  </div>
+</div>
+{% endif %}
 {% endblock %} {% block footer_scripts %} {% endblock %}
