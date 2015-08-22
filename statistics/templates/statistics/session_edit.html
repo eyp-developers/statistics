@@ -109,7 +109,7 @@ window.setTimeout(function() {
           <label class="control-label col-sm-2" for="{{ form.voting.id_for_label }}"></label>
           <div class="col-sm-10">
             {{ form.voting.errors }}
-            <div class="togglebutton">
+            <div class="togglebutton togglebutton-material-{{ session.session_color }}">
                 <label>
                     <input type="checkbox" name="{{ form.voting.html_name }}" id="{{ form.voting.id_for_label }}" value="True" {% if session.session_voting_enabled == True %}checked{% endif %}>Voting Enabled
                 </label>
@@ -120,7 +120,7 @@ window.setTimeout(function() {
           <label class="control-label col-sm-2" for="{{ form.is_visible.id_for_label }}"></label>
           <div class="col-sm-10">
             {{ form.is_visible.errors }}
-            <div class="togglebutton">
+            <div class="togglebutton togglebutton-material-{{ session.session_color }}">
                 <label>
                     <input type="checkbox" name="{{ form.is_visible.html_name }}" id="{{ form.is_visible.id_for_label }}" value="True" {% if session.session_is_visible == True %}checked{% endif %}>Publicly Visible
                 </label>
