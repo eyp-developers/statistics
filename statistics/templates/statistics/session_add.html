@@ -101,7 +101,7 @@ window.setTimeout(function() {
           <td>{{ committee.committee_name }}</td>
           <td>{{ committee.committee_topic }}</td>
           <td>{% if subtopics %}{% for subtopic in subtopics %}{% if subtopic.committee == committee %}{{ subtopic.subtopic_text }}, {% endif %}{% endfor %}{% endif %}</td>
-          <td><a href="javascript:void(0)" class="btn btn-primary btn-material-{{ session.session_color }}-800 btn-xs" onclick="editCommittee('{{ committee.pk }}')" ><span class="mdi-content-create" style="font-size: 10px; margin-right: 4px;"></span>Edit</a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-xs" onclick="" >Delete</a></td>
+          <td><a href="javascript:void(0)" class="btn btn-primary btn-material-{{ session.session_color }}-800 btn-xs" onclick="editCommittee('{{ committee.pk }}')" ><span class="mdi-content-create" style="font-size: 10px; margin-right: 4px;"></span>Edit</a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-xs" onclick="deleteCommittee('{{ committee.pk }}')" >Delete</a></td>
         </tr>
         {% endfor %}
         {% else %}

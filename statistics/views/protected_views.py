@@ -199,7 +199,6 @@ def add(request, session_id):
         name = request.POST.get('name')
         topic = request.POST.get('topic')
         subtopics = json.loads(request.POST.get('subtopics'))
-        print subtopics
 
         form = CommitteeForm({'pk': pk, 'name': name, 'topic': topic})
         if form.is_valid():
@@ -275,6 +274,18 @@ def add(request, session_id):
         else:
             print 'Form not valid'
             print form.errors
+    elif request.method == 'DELETE':
+        committee = Committee.objects.get(pk=int(QueryDict(request.body).get('pk')))
+
+        post.delete()
+
+        response_data = {}
+        response_data['msg'] = 'Committee was deleted.'
+
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
     else:
         form = CommitteeForm()
 
