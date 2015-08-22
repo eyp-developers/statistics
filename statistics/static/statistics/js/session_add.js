@@ -4,7 +4,7 @@ var table = document.getElementById("committees-table").getElementsByTagName('tb
 
 function addInput(divName, subtopicValue, subtopicId){
   var newdiv = document.createElement('div');
-  newdiv.setAttribute("id", "subtopic-div-" + counter_subtopics)
+  newdiv.setAttribute("id", "subtopic-div-" + counter_subtopics);
   newdiv.innerHTML = '<label class="control-label col-sm-2" for="inputLarge"></label>' +
     '<div class="col-sm-8">' +
     '<input type="hidden" name="subtopic_pk[]" id="subtopic-pk-'+ counter_subtopics +'" value="'+ subtopicId +'">' +
@@ -20,14 +20,14 @@ function addInput(divName, subtopicValue, subtopicId){
 }
 Element.prototype.remove = function() {
     this.parentElement.removeChild(this);
-}
+};
 NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
     for(var i = this.length - 1; i >= 0; i--) {
         if(this[i] && this[i].parentElement) {
             this[i].parentElement.removeChild(this[i]);
         }
     }
-}
+};
 function deleteInput(divName){
   document.getElementById(divName).remove();
 }
@@ -35,7 +35,7 @@ function deleteInput(divName){
 function deleteSubtopics(except) {
   var k = 1 + except;
   while (k < counter_subtopics){
-    if ($('#subtopic-div-' + k).length != 0) {
+    if ($('#subtopic-div-' + k).length !== 0) {
       deleteInput('subtopic-div-' + k);
     }
     k++;
@@ -44,19 +44,19 @@ function deleteSubtopics(except) {
 
 $('#committee-form').on('submit', function(event){
     event.preventDefault();
-    console.log("form submitted!")  // sanity check
+    console.log("form submitted!");  // sanity check
     submit_committee();
 });
 function submit_committee() {
     var i = 1;
     var j = 1;
-    var subtopics_array = []
-    console.log("create post is working!") // sanity check
-    console.log($('#id_pk').val())
-    console.log($('#id_name').val())
-    console.log($('#id_topic').val())
+    var subtopics_array = [];
+    console.log("create post is working!"); // sanity check
+    console.log($('#id_pk').val());
+    console.log($('#id_name').val());
+    console.log($('#id_topic').val());
     while (i <= counter_subtopics){
-      if ($('#subtopic-' + i).val() != undefined) {
+      if ($('#subtopic-' + i).val() !== undefined) {
         console.log($('#subtopic-' + i).val());
         subtopics_array.push({pk: $('#subtopic-pk-'+i).val(), subtopic: $('#subtopic-'+i).val()});
       }
@@ -70,7 +70,7 @@ function submit_committee() {
 
         // handle a successful response
         success : function(json) {
-          if ($('#id_pk').val() != '') {
+          if ($('#id_pk').val() !== '') {
             deleteInput('committee-row-' + json.pk);
           }
           // Adding the newly created session to the table of sessions.
@@ -80,7 +80,7 @@ function submit_committee() {
           var topic = row.insertCell(2);
           var subtopics = row.insertCell(3);
           var actions = row.insertCell(4);
-          $(row).attr('id', 'committee-row-' + json.pk)
+          $(row).attr('id', 'committee-row-' + json.pk);
           id.innerHTML = json.pk;
           name.innerHTML = $('#id_name').val();
           topic.innerHTML = $('#id_topic').val();
@@ -94,7 +94,7 @@ function submit_committee() {
           $('#id_name').val(''); // remove the value from the input
           $('#id_topic').val(''); // remove the value from the input
           while (j <= counter_subtopics){
-            if ($('#subtopic-' + j).val() != undefined) {
+            if ($('#subtopic-' + j).val() !== undefined) {
               $('#subtopic-' + j).val('');
               $('#subtopic-pk-' + j).val('');
             }
@@ -114,7 +114,7 @@ function submit_committee() {
             console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
         }
     });
-};
+}
 
 function editCommittee(pk) {
   $.ajax({
@@ -128,18 +128,17 @@ function editCommittee(pk) {
       deleteSubtopics(0);
       response.subtopics.forEach(function(subtopic) {
         if (subtopic.subtopic != 'General'){
-          addInput('add_subtopics', subtopic.subtopic, subtopic.pk)
+          addInput('add_subtopics', subtopic.subtopic, subtopic.pk);
         }
       });
     },
     cache: false
   });
-};
+}
 
 function deleteCommittee(committee_pk) {
   console.log('lets delete ' + committee_pk);
-  if (confirm('Are you sure you want to delete this committee?')==true){
-      console.log(csrftoken)
+  if (confirm('Are you sure you want to delete this committee?') === true){
         $.ajax({
             url : committee_post_url, // the endpoint
             type : "POST", // http method
@@ -156,7 +155,7 @@ function deleteCommittee(committee_pk) {
     } else {
         return false;
     }
-};
+}
 
 // This function gets cookie with a given name
 function getCookie(name) {
