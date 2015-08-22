@@ -574,7 +574,7 @@ def manage(request, session_id):
                 #Save the new active debate
                 active_debate.save()
                 #Send the user to the manage page
-                return HttpResponseRedirect('/session/' + session_id + '/manage')
+                return HttpResponseRedirect('/manage/' + session_id)
             else:
                 print debate_form
             #You also have to create an empty/default instance of the "opposite" form, since we've got two on this page.
@@ -590,7 +590,7 @@ def manage(request, session_id):
                 #Save the active round.
                 active_round_entry.save()
                 #Send the user back to the manage page
-                return HttpResponseRedirect('/session/' + session_id + '/manage')
+                return HttpResponseRedirect('/manage/' + session_id)
             debate_form = ActiveDebateForm(committees_array, {'session': session.session_name})
 
     #Otherwise, give the User some nice new forms.
