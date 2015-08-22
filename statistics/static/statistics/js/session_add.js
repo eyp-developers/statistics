@@ -85,7 +85,7 @@ function submit_committee() {
           name.innerHTML = $('#id_name').val();
           topic.innerHTML = $('#id_topic').val();
           subtopics.innerHTML = json.subtopics;
-          actions.innerHTML = '<a href="javascript:void(0)" class="btn btn-primary btn-material-'+ session_color +'-800 btn-xs" onclick="editCommittee(' + "'" + json.pk + "'" + ')" ><span class="mdi-content-create" style="font-size: 10px; margin-right: 4px;"></span>Edit</a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-xs" onclick="" >Delete</a>';
+          actions.innerHTML = '<a href="javascript:void(0)" class="btn btn-primary btn-material-'+ session_color +'-800 btn-xs" onclick="editCommittee(' + "'" + json.pk + "'" + ')" ><span class="mdi-content-create" style="font-size: 10px; margin-right: 4px;"></span>Edit</a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-xs" onclick="deleteCommittee(' + "'" + json.pk + "'" + ')" >Delete</a>';
           $(row).css('display', 'none');
           $(row).fadeIn("slow");
 
@@ -131,8 +131,31 @@ function editCommittee(pk) {
           addInput('add_subtopics', subtopic.subtopic, subtopic.pk)
         }
       });
-    }
+    },
+    cache: false
   });
+};
+
+function deleteCommittee(committee_pk) {
+  console.log('lets delete ' + committee_pk);
+  if (confirm('Are you sure you want to delete this committee?')==true){
+      console.log(csrftoken)
+        $.ajax({
+            url : committee_post_url, // the endpoint
+            type : 'DELETE', // http method
+            data : { pk : committee_pk }, // data sent with the delete request
+            success : function(json) {
+                // delete the post from the page
+              deleteInput('committee-row-' + committee_pk);
+              console.log("post deletion successful");
+            },
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    } else {
+        return false;
+    }
 };
 
 // This function gets cookie with a given name
