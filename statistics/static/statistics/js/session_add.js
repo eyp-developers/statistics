@@ -70,6 +70,9 @@ function submit_committee() {
 
         // handle a successful response
         success : function(json) {
+          if ($('#id_pk').val() != '') {
+            deleteInput('committee-row-' + json.pk);
+          }
           // Adding the newly created session to the table of sessions.
           var row = table.insertRow(0);
           var id = row.insertCell(0);
@@ -77,11 +80,12 @@ function submit_committee() {
           var topic = row.insertCell(2);
           var subtopics = row.insertCell(3);
           var actions = row.insertCell(4);
+          $(row).attr('id', 'committee-row-' + json.pk)
           id.innerHTML = json.pk;
           name.innerHTML = $('#id_name').val();
           topic.innerHTML = $('#id_topic').val();
           subtopics.innerHTML = json.subtopics;
-          actions.innerHTML = '<a href="javascript:void(0)" class="btn btn-primary btn-material-'+ session_color +'-800 btn-xs" onclick="" ><span class="mdi-content-create" style="font-size: 10px; margin-right: 4px;"></span>Edit</a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-xs" onclick="" >Delete</a>';
+          actions.innerHTML = '<a href="javascript:void(0)" class="btn btn-primary btn-material-'+ session_color +'-800 btn-xs" onclick="editCommittee(' + "'" + json.pk + "'" + ')" ><span class="mdi-content-create" style="font-size: 10px; margin-right: 4px;"></span>Edit</a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-xs" onclick="" >Delete</a>';
           $(row).css('display', 'none');
           $(row).fadeIn("slow");
 
@@ -123,7 +127,9 @@ function editCommittee(pk) {
       $('#id_topic').val(response.topic);
       deleteSubtopics(0);
       response.subtopics.forEach(function(subtopic) {
-        addInput('add_subtopics', subtopic.subtopic, subtopic.pk)
+        if (subtopic.subtopic != 'General'){
+          addInput('add_subtopics', subtopic.subtopic, subtopic.pk)
+        }
       });
     }
   });

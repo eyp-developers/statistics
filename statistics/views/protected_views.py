@@ -221,14 +221,33 @@ def add(request, session_id):
             c.save()
 
             subtopics_pretty_array = []
+            committee_subtopics = SubTopic.objects.filter(committee=c)
+            committee_new_subtopics = []
             for subtopic in subtopics:
-                subtopic_exists = False
-                for session_subtopic in session_subtopics:
-                    if session_subtopic.pk == subtopic['pk']:
+                if subtopic['pk'] != '':
+                    subtopic_pk = int(subtopic['pk'])
+                else:
+                    subtopic_pk = ''
+                for committee_subtopic in committee_subtopics:
+                    print committee_subtopic.pk
+                    print subtopic['pk']
+                    if committee_subtopic.pk == subtopic_pk:
+                        print 'subtopic exists'
                         subtopic_exists = True
+                        break
+                else:
+                    if subtopic['subtopic'] == 'General' and committee_subtopics.filter(subtopic_text='General'):
+                        subtopic_exists = True
+                        print 'subtopic exists'
+                    else:
+                        subtopic_exists = False
+                        print 'subtopic was not there'
 
                 if subtopic_exists:
-                    s = session_subtopics.filter(pk=subtopic['pk'])
+                    if subtopic['subtopic'] == 'General':
+                        s = committee_subtopics.filter(subtopic_text='General')[0]
+                    else:
+                        s = committee_subtopics.get(pk=subtopic['pk'])
                 else:
                     s = SubTopic()
 
@@ -236,7 +255,14 @@ def add(request, session_id):
                 s.committee = c
                 s.subtopic_text = subtopic['subtopic']
                 s.save()
+                committee_new_subtopics.append(s)
                 subtopics_pretty_array.append(s.subtopic_text)
+
+            print committee_subtopics
+            print committee_new_subtopics
+            for subtopic in committee_subtopics:
+                if subtopic not in committee_new_subtopics:
+                    subtopic.delete()
 
             response_data['pk'] = c.pk
             response_data['subtopics'] = ', '.join(subtopics_pretty_array)

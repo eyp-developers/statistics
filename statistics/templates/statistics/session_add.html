@@ -96,7 +96,7 @@ window.setTimeout(function() {
       <tbody>
         {% if committees %}
         {% for committee in committees %}
-        <tr>
+        <tr id="committee-row-{{ committee.pk }}">
           <td>{{ committee.pk }}</td>
           <td>{{ committee.committee_name }}</td>
           <td>{{ committee.committee_topic }}</td>
