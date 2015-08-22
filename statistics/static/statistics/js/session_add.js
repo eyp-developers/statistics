@@ -142,8 +142,8 @@ function deleteCommittee(committee_pk) {
       console.log(csrftoken)
         $.ajax({
             url : committee_post_url, // the endpoint
-            type : 'DELETE', // http method
-            data : { pk : committee_pk }, // data sent with the delete request
+            type : "POST", // http method
+            data : { delete : true, pk : committee_pk }, // data sent with the delete request
             success : function(json) {
                 // delete the post from the page
               deleteInput('committee-row-' + committee_pk);
