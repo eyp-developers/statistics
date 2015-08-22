@@ -7,6 +7,14 @@ var offset_point,
     latest_point_pk = 0,
     latest_content_pk = 0;
 
+function requestData(type, offset, count) {
+    $.ajax({
+      url: data_url,
+      data: "data_type=" + type + "&offset=" + offset + "&count=" + 20,
+
+    });
+}
+
 function createPoint(pk, last_changed, by, on, round, type, subtopics, color, text_color) {
   //Setting up the new row in the table
   var table = document.getElementById("point-table").getElementsByTagName('tbody')[0],
@@ -35,9 +43,12 @@ function createPoint(pk, last_changed, by, on, round, type, subtopics, color, te
     point_type.innerHTML = '<img src="' + dr_img + '" height="30" >';
   }
   point_subtopics.innerHTML = subtopics;
-  point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-material-' + session_color + '-800 btn-fab btn-raised mdi-content-create" data-toggle="modal" data-target="#edit-point" onclick="" ></a><a href="javascript:void(0)" class="btn btn-danger btn-fab btn-raised mdi-action-delete" onclick="" ></a>';
+  point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-material-' + session_color + '-800 btn-fab btn-raised mdi-content-create" data-toggle="modal" data-target="#edit-point" onclick="editPoint(' + "'" + pk + "'" + ')" ></a><a href="javascript:void(0)" class="btn btn-danger btn-fab btn-raised mdi-action-delete" onclick="" ></a>';
   //Adding pretty color classes
   $(point_by).addClass('label-material-' + color + '-400');
   $(point_by).css('color', text_color);
   $(row).fadeIn("slow");
+}
+function editPoint(pk) {
+
 }
