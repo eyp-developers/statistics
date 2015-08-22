@@ -155,7 +155,7 @@ class Session(models.Model):
 #Defining the Active Debate Class that tells a session which debate is ongoing.
 class ActiveDebate(models.Model):
     session = models.ForeignKey(Session)
-    active_debate = models.CharField(max_length=7, blank=True, null=True)
+    active_debate = models.CharField(max_length=8, blank=True, null=True)
 
     def __str__(self):
         return self.active_debate
