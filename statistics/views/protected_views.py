@@ -199,11 +199,11 @@ def add(request, session_id):
         name = request.POST.get('name')
         topic = request.POST.get('topic')
         subtopics = json.loads(request.POST.get('subtopics'))
-        print subtopics
 
         form = CommitteeForm({'pk': pk, 'name': name, 'topic': topic})
         if form.is_valid():
             print 'Form is valid'
+            response_data = {}
             committee_exists = False
             for committee in committees:
                 if committee.pk == form.cleaned_data['pk']:
@@ -219,14 +219,34 @@ def add(request, session_id):
             c.committee_topic = form.cleaned_data['topic']
             c.save()
 
+            subtopics_pretty_array = []
+            committee_subtopics = SubTopic.objects.filter(committee=c)
+            committee_new_subtopics = []
             for subtopic in subtopics:
-                subtopic_exists = False
-                for session_subtopic in session_subtopics:
-                    if session_subtopic.pk == subtopic['pk']:
+                if subtopic['pk'] != '':
+                    subtopic_pk = int(subtopic['pk'])
+                else:
+                    subtopic_pk = ''
+                for committee_subtopic in committee_subtopics:
+                    print committee_subtopic.pk
+                    print subtopic['pk']
+                    if committee_subtopic.pk == subtopic_pk:
+                        print 'subtopic exists'
                         subtopic_exists = True
+                        break
+                else:
+                    if subtopic['subtopic'] == 'General' and committee_subtopics.filter(subtopic_text='General'):
+                        subtopic_exists = True
+                        print 'subtopic exists'
+                    else:
+                        subtopic_exists = False
+                        print 'subtopic was not there'
 
                 if subtopic_exists:
-                    s = session_subtopics.filter(pk=subtopic['pk'])
+                    if subtopic['subtopic'] == 'General':
+                        s = committee_subtopics.filter(subtopic_text='General')[0]
+                    else:
+                        s = committee_subtopics.get(pk=subtopic['pk'])
                 else:
                     s = SubTopic()
 
@@ -234,14 +254,38 @@ def add(request, session_id):
                 s.committee = c
                 s.subtopic_text = subtopic['subtopic']
                 s.save()
+                committee_new_subtopics.append(s)
+                subtopics_pretty_array.append(s.subtopic_text)
 
-            if committee_exists:
-                messages.add_message(request, messages.SUCCESS, 'Committee Updated')
-            else:
-                messages.add_message(request, messages.SUCCESS, 'Committee Created')
+            print committee_subtopics
+            print committee_new_subtopics
+            for subtopic in committee_subtopics:
+                if subtopic not in committee_new_subtopics:
+                    subtopic.delete()
+
+            response_data['pk'] = c.pk
+            response_data['subtopics'] = ', '.join(subtopics_pretty_array)
+
+            return HttpResponse(
+                json.dumps(response_data),
+                content_type="application/json"
+            )
+
         else:
             print 'Form not valid'
             print form.errors
+    elif request.method == 'DELETE':
+        committee = Committee.objects.get(pk=int(QueryDict(request.body).get('pk')))
+
+        post.delete()
+
+        response_data = {}
+        response_data['msg'] = 'Committee was deleted.'
+
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
     else:
         form = CommitteeForm()
 
