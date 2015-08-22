@@ -1,25 +1,24 @@
 var active_debate_on_load;
 var latest_active_debate;
 
-$.getJSON("http://localhost:8000/api/active_debate/2/", function(result){
+// Here we're getting the active debate json data and assign a value to active_debate_on_load which will stay the same the entire time the pages is not refreshed
+$.getJSON(active_debate_url, function(result){
       active_debate_on_load = result.active_debate_pk;
-      console.log(active_debate_on_load + " on load");
   });
 
+// This will check whether the active debate has changed every five seconds and assign the value to latest_active_debate
 window.setInterval(function(){
-  $.getJSON("http://localhost:8000/api/active_debate/2/", function(result){
+  $.getJSON(active_debate_url, function(result){
         latest_active_debate = result.active_debate_pk;
-        console.log(latest_active_debate + " latest");
 
     });
-}, 2000);
+}, 5000);
 
 
 
-
+// Here we compare the two values and if they differ from each other we will redirect them to the new active committee
 window.setInterval(function(){
-  console.log("checked");
   if (latest_active_debate !== active_debate_on_load) {
-    window.location.replace("http://stackoverflow.com/");
+    window.location.replace("../" + latest_active_debate);
   }
-}, 3000);
+}, 10000);
