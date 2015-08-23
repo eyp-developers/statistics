@@ -30,3 +30,33 @@
             {% endif %}
         </li>
         </ul>
+      {% if session and user.is_authenticated %}
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="{% url 'statistics:session' session.pk %}">Go to {{ session.session_name }}</a></li>
+        <li class="dropdown">
+          <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Manage {{ session.session_name }} <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+
+            <li><a href="{% url 'statistics:edit' session.pk %}">Session Management</a></li>
+
+            <li><a href="{% url 'statistics:manage' session.pk %}">Debate Management</a></li>
+
+            <li><a href="{% url 'statistics:add' session.pk %}">Committee Management</a></li>
+
+
+            <li><a href="{% url 'statistics:welcome' session.pk %}">Welcome Page</a></li>
+          </ul>
+        </li>
+
+
+
+      </ul>
+
+      {% endif %}
+
+    </div>
+    <!--/.navbar-collapse -->
+  </div>
+  <!--/.container -->
+</nav>
+<!--/.navbar -->
