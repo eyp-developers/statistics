@@ -633,7 +633,8 @@ def data_pk_api(request):
                 subtopics_array.append(this_subtopic)
             thisdata['subtopics'] = subtopics_array
             #Getting all the subtopics avaliable for a certain point
-            all_subtopics = SubTopic.objects.filter(committee=data.committee_by)
+            active_committee = Committee.objects.filter(session=data.session).filter(committee_name=data.active_debate)[0]
+            all_subtopics = SubTopic.objects.filter(committee=active_committee)
             all_subtopics_array = []
             for subtopic in all_subtopics:
                 this_subtopic = {

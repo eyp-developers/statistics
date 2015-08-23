@@ -159,20 +159,77 @@ function createVote(pk, last_changed, by, on, in_favour, against, abstentions, a
 
 
 function editPoint(pk) {
+  var data = "data_type=point&pk=" + pk;
   $.ajax({
     url: data_pk_url,
-    data: "data_type=point&pk=" + pk,
+    data: data,
     success: function (response) {
-      
+      $('#point_id_pk').val(response.pk);
+      document.getElementById("point_id_committee").options.namedItem(response.committee_by).selected = true;
+      document.getElementById("point_id_debate").options.namedItem(response.active_debate).selected = true;
+      document.getElementById("point_id_round_no").options.namedItem(response.round_no).selected = true;
+      document.getElementById("point_id_point_type").options.namedItem(response.point_type).selected = true;
+      var subtopics_select = document.getElementById("point_id_subtopics"),
+          j = 0;
+      while (subtopics_select.options.length > 0) {
+        subtopics_select.options.remove(0);
+      }
+      response.all_subtopics.forEach(function(subtopic) {
+        var s = document.createElement("option");
+        s.text = subtopic.subtopic;
+        $(s).attr('id', subtopic.pk);
+        subtopics_select.options.add(s, j);
+        j++;
+      });
+      response.subtopics.forEach(function(subtopic) {
+        subtopics_select.options.namedItem(subtopic.pk).selected = true;
+      });
     },
     cache: false
   });
 }
+
+
+function editContent(pk) {
+  var data = "data_type=content&pk=" + pk;
+  $.ajax({
+    url: data_pk_url,
+    data: data,
+    success: function (response) {
+      $('#content_id_pk').val(response.pk);
+      $('#content_id_content').val(response.content);
+      document.getElementById("content_id_committee").options.namedItem(response.committee_by).selected = true;
+      document.getElementById("content_id_debate").options.namedItem(response.active_debate).selected = true;
+      document.getElementById("content_id_point_type").options.namedItem(response.point_type).selected = true;
+    },
+    cache: false
+  });
+}
+
+function editVote(pk) {
+  var data = "data_type=vote&pk=" + pk;
+  $.ajax({
+    url: data_pk_url,
+    data: data,
+    success: function (response) {
+      $('#vote_id_pk').val(response.pk);
+      $('#vote_id_in_favour').val(response.in_favour);
+      $('#vote_id_against').val(response.against);
+      $('#vote_id_abstentions').val(response.abstentions);
+      $('#vote_id_absent').val(response.absent);
+      document.getElementById("vote_id_committee").options.namedItem(response.committee_by).selected = true;
+      document.getElementById("vote_id_debate").options.namedItem(response.active_debate).selected = true;
+    },
+    cache: false
+  });
+}
+
+
 function getTotal () {
-  var in_favour = $('#id_in_favour'),
-      against = $('#id_against'),
-      abstentions = $('#id_abstentions'),
-      absent = $('#id_absent');
+  var in_favour = $('#vote_id_in_favour'),
+      against = $('#vote_id_against'),
+      abstentions = $('#vote_id_abstentions'),
+      absent = $('#vote_id_absent');
   total = parseInt(in_favour.val()) + parseInt(against.val()) + parseInt(abstentions.val()) + parseInt(absent.val());
   $('#vote-total').html(total);
 }
