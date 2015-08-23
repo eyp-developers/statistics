@@ -5,7 +5,7 @@
 {% block page_title %}Vote: {{ committee.committee_name }}{% endblock %}
 
 {% block content %}
-<h1 style="text-align: center">Voting for {{ committee.committee_name }} on {{ debate }}</h1>
+<h1 style="text-align: center">Voting as {{ committee.committee_name }} on {{ debate }}</h1>
 <br>
 <form class="form-horizontal" role="form" action="{% url 'statistics:vote' session.id committee.id %}" method="post">
   {% csrf_token %}
