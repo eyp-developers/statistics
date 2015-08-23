@@ -345,6 +345,22 @@ class ContentForm(forms.Form):
     point_type = forms.ChoiceField(choices=POINT_TYPES, required=True)
     content = forms.CharField(required=True)
 
+class ContentEditForm(forms.Form):
+    #The contentpoint form needs special point types, but except for that it's a pretty simple form.
+    POINT = 'P'
+    DIRECT_RESPONSE = 'DR'
+    POINT_TYPES = (
+        (POINT, 'Point'),
+        (DIRECT_RESPONSE, 'Direct Response'),
+    )
+
+    pk = forms.IntegerField(min_value=0, required=True)
+    session = forms.CharField(max_length=100, required=True)
+    committee = forms.CharField(max_length=8, required=True)
+    debate = forms.CharField(max_length=8, required=True)
+    point_type = forms.ChoiceField(choices=POINT_TYPES, required=True)
+    content = forms.CharField(required=True)
+
 class JointForm(forms.Form):
     #The point form needs to be fed with special data, in the form of an array of subtopics.
     #To do this, we change the definition of the form to accept an extra argument, the array of subtopics.
@@ -373,6 +389,17 @@ class JointForm(forms.Form):
 
 class VoteForm(forms.Form):
     #The vote form is simpler, as there are no custom definitions required, just plain data.
+    session = forms.CharField(max_length=100, required=True)
+    committee = forms.CharField(max_length=8, required=True)
+    debate = forms.CharField(max_length=8, required=True)
+    in_favour = forms.IntegerField(min_value=0, required=True)
+    against = forms.IntegerField(min_value=0, required=True)
+    abstentions = forms.IntegerField(min_value=0, required=True)
+    absent = forms.IntegerField(min_value=0, required=True)
+
+class VoteEditForm(forms.Form):
+    #The vote form is simpler, as there are no custom definitions required, just plain data.
+    pk = forms.IntegerField(min_value=0, required=True)
     session = forms.CharField(max_length=100, required=True)
     committee = forms.CharField(max_length=8, required=True)
     debate = forms.CharField(max_length=8, required=True)

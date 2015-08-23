@@ -513,12 +513,8 @@ def data_api(request, session_id):
                 thisdata['round_no'] = d.active_round
                 subtopics_array = []
                 for subtopic in d.subtopics.all():
-                    this_subtopic = {
-                    'pk': subtopic.pk,
-                    'subtopic': subtopic.subtopic_text
-                    }
-                    subtopics_array.append(this_subtopic)
-                thisdata['subtopics'] = subtopics_array
+                    subtopics_array.append(subtopic.subtopic_text)
+                thisdata['subtopics'] = ', '.join(subtopics_array)
             elif request.GET.get('data_type') == 'vote':
                 thisdata['in_favour'] = d.in_favour
                 thisdata['against'] = d.against
@@ -529,7 +525,7 @@ def data_api(request, session_id):
         #Then we need to turn the list into JSON.
         content_json = json.dumps({
         'datapoints': data_list,
-        'totalpoints': total
+        'totaldata': total
         })
 
 
@@ -568,7 +564,7 @@ def data_latest_api(request, session_id):
 
         content_json = json.dumps({
         'datapoints': data_list,
-        'totalpoints': total
+        'totaldata': total
         })
 
     #But if we could find points
@@ -593,12 +589,8 @@ def data_latest_api(request, session_id):
                 thisdata['round_no'] = d.active_round
                 subtopics_array = []
                 for subtopic in d.subtopics.all():
-                    this_subtopic = {
-                    'pk': subtopic.pk,
-                    'subtopic': subtopic.subtopic_text
-                    }
-                    subtopics_array.append(this_subtopic)
-                thisdata['subtopics'] = subtopics_array
+                    subtopics_array.append(subtopic.subtopic_text)
+                thisdata['subtopics'] = ', '.join(subtopics_array)
             elif request.GET.get('data_type') == 'vote':
                 thisdata['in_favour'] = d.in_favour
                 thisdata['against'] = d.against
@@ -609,7 +601,7 @@ def data_latest_api(request, session_id):
         #Then we need to turn the list into JSON.
         content_json = json.dumps({
         'datapoints': data_list,
-        'totalpoints': total
+        'totaldata': total
         })
 
 
