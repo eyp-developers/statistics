@@ -16,6 +16,15 @@ class Session(models.Model):
     #We want a contact email so we can send friendly emails to people.
     session_email = models.EmailField()
 
+    # The following links will be displayed on the sessions main page if a link is provided
+    session_resolution_link = models.URLField(blank=True)
+
+    session_website_link = models.URLField(blank=True)
+
+    session_facebook_link = models.URLField(blank=True)
+
+    session_twitter_link = models.URLField(blank=True)
+
     #All countries with EYP sessions recently (after googling)
     ALBANIA = 'AL'
     ARMENIA = 'AM'
