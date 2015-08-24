@@ -613,12 +613,38 @@ def data_pk_api(request):
         if request.POST.get('delete') == 'true':
             pass
         else:
+            #Get all our valiables according to what kind of data we're dealing with.
+            json_datatype = str(request.POST.get('data-type'))
+            session = request.POST.get('session')
             pk = request.POST.get('pk')
-            committee = request.POST.get('pk')
-            debate = request.POST.get('pk')
-            round_no = request.POST.get('pk')
-            point_type = request.POST.get('pk')
-            subtopics = request.POST.get('pk')
+            committee = request.POST.get('committee')
+            debate = request.POST.get('debate')
+            if json_datatype == 'point':
+                round_no = request.POST.get('round_no')
+                point_type = request.POST.get('point_type')
+                subtopics = request.POST.get('subtopics')
+                all_subtopics = request.POST.get('all_subtopics')
+
+                #Set up and instance of the Point Edit form.
+                form = PointEditForm(all_subtopics, {'pk': pk, 'session': session, 'committee': committee, 'debate': debate, 'round_no': round_no, 'point_type': point_type, 'subtopics': subtopics})
+
+                if form.is_valid():
+                    #If the form is valid, get the Point and update it with our values.
+                    p = Point.objects.get(pk=form.cleaned_data['pk'])
+
+                    committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(committee_name=form.cleaned_data['committee'])
+                    p.committee_by = committee_by
+                    p.active_debate = form.cleaned_data['debate']
+                    p.active_round = form.cleaned_data['round_no']
+                    p.point_type = form.cleaned_data['point_type']
+            elif json_datatype == 'content':
+                point_type = request.POST.get('point_type')
+                content = request.POST.get('content')
+            elif json_datatype == 'vote':
+                in_favour = request.POST.get('in_favour')
+                against = request.POST.get('against')
+                abstentions = request.POST.get('abstentions')
+                absent = request.POST.get('absent')
     else:
         json_datatype = str(request.GET.get('data_type'))
         pk = int(request.GET.get('pk'))
