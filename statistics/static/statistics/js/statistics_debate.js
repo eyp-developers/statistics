@@ -43,7 +43,7 @@ $(document).ready(function() {
         chart: {
             renderTo: 'points',
             defaultSeriesType: 'column',
-            backgroundColor: '#eee',
+            backgroundColor: '#fff',
             events: {
                 load: requestStatisticsData
             }
@@ -113,7 +113,7 @@ $(document).ready(function() {
       chart: {
           renderTo: 'subtopics',
           type: 'bar',
-          backgroundColor: '#eee'
+          backgroundColor: '#fff'
         },
         title: false,
         xAxis: {

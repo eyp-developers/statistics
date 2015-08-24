@@ -36,6 +36,15 @@
 {% endif %}
 
 </div>
+
+{% if session.session_has_technical_problems %}
+  <div class="alert alert-material-{{ session.session_color }}-500 text-center">
+    <p>
+      Please note that this session experienced technical difficulties during the GA. As a result some data might be incomplete.
+    </p>
+  </div>
+{% endif %}
+
 <div class="container">
 
 {% if session_committee_list %}

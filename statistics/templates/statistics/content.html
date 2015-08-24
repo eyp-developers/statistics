@@ -4,20 +4,9 @@
 
 {% block statistics %}
 <div class="container">
-  <h2>Points Made:</h2>
-  <div id="content-div" class="content-div-content">
-    <table id="content-table" class="table table-bordered scroll">
-      <thead>
-        <tr>
-          <th>Committee</th>
-          <th>Point</th>
-          <th>Type</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-  </div>
+
+{% include 'statistics/debate_elements/point_summaries.html' %}
+
 {% endblock %}
 
 {% block footer_scripts %}
