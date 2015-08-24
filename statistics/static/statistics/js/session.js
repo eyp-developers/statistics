@@ -29,7 +29,7 @@ $(document).ready(function() {
         chart: {
             renderTo: 'points',
             defaultSeriesType: 'column',
-            backgroundColor: '#eee',
+            backgroundColor: '#fff',
             events: {
                 load: requestData
             }

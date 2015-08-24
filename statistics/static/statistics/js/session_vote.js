@@ -25,7 +25,7 @@ $(document).ready(function() {
         chart: {
           renderTo: 'votes',
           defaultSeriesType: 'column',
-          backgroundColor: '#eee',
+          backgroundColor: '#fff',
           events: {
               load: requestVoteData
           }
