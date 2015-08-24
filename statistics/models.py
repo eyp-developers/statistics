@@ -325,7 +325,7 @@ class Vote(models.Model):
     timestamp = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     #Which debate was active when the vote was submitted
-    active_debate = models.CharField(max_length=7)
+    active_debate = models.CharField(max_length=8)
 
     #Which committee the vote was by
     committee_by = models.ForeignKey(Committee)
