@@ -9,32 +9,6 @@
 <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.session_picture }}') no-repeat center/cover;">
 <h1 class="session-name">{{ session.session_name }}</h1>
 <h3 class="session-description">{{ session.session_description }}</h3>
-
-{% if session.session_website_link or session.session_resolution_link or session.session_facebook_link or session.session_twitter_link %}
-
-<div class="row">
-  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-1">
-
-    {% if session.session_website_link %}
-    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_website_link }}">{{ session.session_name }}'s Website</a>
-    {% endif %}
-
-    {% if session.session_resolution_link %}
-    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_website_link }}">View Resolutions</a>
-    {% endif %}
-
-    {% if session.session_facebook_link %}
-    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_website_link }}">{{ session.session_name }} on Facebook</a>
-    {% endif %}
-
-    {% if session.session_twitter_link %}
-    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_website_link }}">{{ session.session_name }} on Twitter</a>
-    {% endif %}
-  </div>
-</div>
-
-{% endif %}
-
 </div>
 <div class="container">
 
