@@ -51,21 +51,21 @@ $(document).ready(function() {
           useHTML: true
         },
         series: [{
-          name: 'For',
+          name: 'In Favour',
           data: [],
-          color: '#02c75f'
+          color: '#4CAF50'
         }, {
           name: 'Against',
           data: [],
-          color: '#b62424'
+          color: '#F44336'
         }, {
           name: 'Abstentions',
           data: [],
-          color: '#1e4e8a'
+          color: '#3F51B5'
         }, {
           name: 'Absent',
           data: [],
-          color: '#ffd326'
+          color: '#FFC107'
         }]
     });
 });
