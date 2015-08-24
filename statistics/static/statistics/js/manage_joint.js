@@ -274,7 +274,7 @@ $('#content-form').on('submit', function(event){
 $('#vote-form').on('submit', function(event){
     event.preventDefault();
     console.log("Vote form submitted!");  // sanity check
-    savePoint();
+    saveVote();
 });
 
 function savePoint() {
@@ -344,19 +344,21 @@ function saveVote() {
     url: data_pk_url,
     type: "POST",
     data: {'data-type': 'vote',
-      'session': $('#content_id_session').val(),
-      'pk': $('#content_id_pk').val(),
-      'committee': $('#content_id_committee').val(),
-      'debate': $('#content_id_debate').val(),
-      'point_type': $('#content_id_point_type').val(),
-      'content': $('#content_id_content').val()
+      'session': $('#vote_id_session').val(),
+      'pk': $('#vote_id_pk').val(),
+      'committee': $('#vote_id_committee').val(),
+      'debate': $('#vote_id_debate').val(),
+      'in_favour': $('#vote_id_in_favour').val(),
+      'against': $('#vote_id_against').val(),
+      'abstentions': $('#vote_id_abstentions').val(),
+      'absent': $('#vote_id_absent').val()
     },
     success: function(json) {
       console.log('success!');
       console.log(json);
-      deleteInput('content-' + json.pk);
-      createContent(json.pk, json.last_changed, json.by, json.debate, json.content, json.point_type, json.committee_color, json.committee_text_color);
-      $('#edit-content').modal('hide');
+      deleteInput('vote-' + json.pk);
+      createVote(json.pk, json.last_changed, json.by, json.debate, json.in_favour, json.against, json.abstentions, json.absent, json.committee_color, json.committee_text_color);
+      $('#edit-vote').modal('hide');
     },
     error : function(xhr,errmsg,err) {
       $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+

@@ -723,6 +723,8 @@ def data_pk_api(request):
                     response_data['against'] = v.against
                     response_data['abstentions'] = v.abstentions
                     response_data['absent'] = v.absent
+                    response_data['committee_color'] = v.committee_by.committee_color()
+                    response_data['committee_text_color'] = v.committee_by.committee_text_color()
 
                     content_json = json.dumps(response_data)
 
