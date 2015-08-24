@@ -258,7 +258,7 @@
         <form class="form-horizontal" role="form" method="post" id="vote-form">
           {% csrf_token %}
           <input type="hidden" class="form-control" name="{{ vote_form.pk.html_name }}" id="vote_{{ vote_form.pk.id_for_label }}" value="">
-          <input type="hidden" class="form-control" name="{{ vote_form.session.html_name }}" id="vote_{{ vote_form.session.id_for_label }}" maxlength=100 value="{{ session.pk }}">
+          <input type="hidden" class="form-control" name="{{ vote_form.session.html_name }}" id="vote_id_session" maxlength=100 value="{{ session.pk }}">
           <div class="form-group">
             <label class="control-label col-sm-2" for="{{ vote_form.committee.id_for_label }}">Commitee:</label>
             <div class="col-sm-10">
