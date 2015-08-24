@@ -304,6 +304,25 @@ class PointForm(forms.Form):
     point_type = forms.ChoiceField(choices=POINT_TYPES, required=True)
     subtopics = forms.MultipleChoiceField(choices=(), required=True)
 
+class PointEditForm(forms.Form):
+    #This is setting up the point types in the same way as they are set up in the models file
+    POINT = 'P'
+    DIRECT_RESPONSE = 'DR'
+    POINT_TYPES = (
+        (POINT, 'Point'),
+        (DIRECT_RESPONSE, 'Direct Response'),
+    )
+
+    #These are the other arguments that the point form needs for a successfully submitted point.
+    #Note that the choices of the point_type is the previously defined point types and that
+    #the choices for the subtopics needs to be set up, but empty.
+    pk = forms.IntegerField(min_value=0, required=True)
+    session = forms.IntegerField(min_value=0, required=True)
+    committee = forms.CharField(max_length=8, required=True)
+    debate = forms.CharField(max_length=8, required=True)
+    round_no = forms.IntegerField(min_value=0, required=True)
+    point_type = forms.ChoiceField(choices=POINT_TYPES, required=True)
+
 class ContentForm(forms.Form):
     #The contentpoint form needs special point types, but except for that it's a pretty simple form.
     POINT = 'P'
@@ -314,6 +333,22 @@ class ContentForm(forms.Form):
     )
 
     session = forms.CharField(max_length=100, required=True)
+    committee = forms.CharField(max_length=8, required=True)
+    debate = forms.CharField(max_length=8, required=True)
+    point_type = forms.ChoiceField(choices=POINT_TYPES, required=True)
+    content = forms.CharField(required=True)
+
+class ContentEditForm(forms.Form):
+    #The contentpoint form needs special point types, but except for that it's a pretty simple form.
+    POINT = 'P'
+    DIRECT_RESPONSE = 'DR'
+    POINT_TYPES = (
+        (POINT, 'Point'),
+        (DIRECT_RESPONSE, 'Direct Response'),
+    )
+
+    pk = forms.IntegerField(min_value=0, required=True)
+    session = forms.IntegerField(min_value=0, required=True)
     committee = forms.CharField(max_length=8, required=True)
     debate = forms.CharField(max_length=8, required=True)
     point_type = forms.ChoiceField(choices=POINT_TYPES, required=True)
@@ -355,6 +390,17 @@ class VoteForm(forms.Form):
     abstentions = forms.IntegerField(min_value=0, required=True)
     absent = forms.IntegerField(min_value=0, required=True)
 
+class VoteEditForm(forms.Form):
+    #The vote form is simpler, as there are no custom definitions required, just plain data.
+    pk = forms.IntegerField(min_value=0, required=True)
+    session = forms.IntegerField(min_value=0, required=True)
+    committee = forms.CharField(max_length=8, required=True)
+    debate = forms.CharField(max_length=8, required=True)
+    in_favour = forms.IntegerField(min_value=0, required=True)
+    against = forms.IntegerField(min_value=0, required=True)
+    abstentions = forms.IntegerField(min_value=0, required=True)
+    absent = forms.IntegerField(min_value=0, required=True)
+
 class ActiveDebateForm(forms.Form):
     #The Active Debate form is another more complex one, as it requires an array of the avaliable debates to chose from.
     #This is set up in the same way as the Point form, with a custom extra argument.
@@ -377,6 +423,8 @@ class ActiveRoundForm(forms.Form):
     session = forms.CharField(max_length=100, required=True)
     active_round = forms.ChoiceField(choices=(), required=True)
 
+class DeleteDataForm(forms.Form):
+    pk = forms.IntegerField(min_value=0, required=True)
 
 User = get_user_model()
 
