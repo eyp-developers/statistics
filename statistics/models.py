@@ -145,6 +145,9 @@ class Session(models.Model):
     session_voting_enabled = models.BooleanField('session-wide voting enabled', default=True)
     session_max_rounds = models.PositiveSmallIntegerField(default=3)
 
+    # If the session has had technical problems some data is probably missing. If this is activated a message will be shown to indidate this.
+    session_has_technical_problems = models.BooleanField('session has technical problems', default=False)
+
     #Defining two users for the session. The Admin user who can alter active debates, change points etc. and the
     #submit user, which will be the login for everyone at any given session who wants to submit a point.
     session_admin_user = models.ForeignKey(User, related_name = 'session_admin', blank = True)
