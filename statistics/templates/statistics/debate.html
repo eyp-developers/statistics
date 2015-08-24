@@ -21,9 +21,14 @@
   {% endblock %}
 
 {% if voting_enabled %}
-  <div class="container well well-lg">
-    <h2>Voting Summary:</h2>
-    <div class="row">
+  <div class="panel panel-material-{{ session.session_color }}">
+
+    <div class="panel-heading">
+      <h4>Voting Summary</h4>
+    </div>
+
+
+    <div class="row panel-body">
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="text-align:center;">
         <br>
         <h1 id="total_counted">Votes Counted:</h1>
