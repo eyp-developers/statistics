@@ -150,8 +150,8 @@ class Session(models.Model):
 
     #Defining two users for the session. The Admin user who can alter active debates, change points etc. and the
     #submit user, which will be the login for everyone at any given session who wants to submit a point.
-    session_admin_user = models.ForeignKey(User, related_name = 'session_admin', blank = True)
-    session_submission_user = models.ForeignKey(User, related_name = 'session_submit', blank = True)
+    session_admin_user = models.ForeignKey(User, related_name = 'session_admin', blank = True, null = True)
+    session_submission_user = models.ForeignKey(User, related_name = 'session_submit', blank = True, null = True)
 
     #Definition of the session for admin lists
     def __str__(self):
