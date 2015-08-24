@@ -667,11 +667,66 @@ def data_pk_api(request):
             elif json_datatype == 'content':
                 point_type = request.POST.get('point_type')
                 content = request.POST.get('content')
+
+                form = ContentEditForm({'pk': pk, 'session': session, 'committee': committee, 'debate': debate, 'point_type': point_type, 'content': content})
+
+                if form.is_valid():
+                    c = ContentPoint.objects.get(pk=form.cleaned_data['pk'])
+
+                    committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(committee_name=form.cleaned_data['committee'])[0]
+                    c.committee_by = committee_by
+                    c.active_debate = form.cleaned_data['debate']
+                    c.point_type = form.cleaned_data['point_type']
+                    c.point_content = form.cleaned_data['content']
+                    c.save()
+
+                    response_data['pk'] = c.pk
+                    response_data['last_changed'] = c.timestamp.strftime("%H:%M")
+                    response_data['by'] = c.committee_by.committee_name
+                    response_data['debate'] = c.active_debate
+                    response_data['point_type'] = c.point_type
+                    response_data['content'] = c.point_content
+                    response_data['committee_color'] = c.committee_by.committee_color()
+                    response_data['committee_text_color'] = c.committee_by.committee_text_color()
+
+                    content_json = json.dumps(response_data)
+
+                    return HttpResponse(content_json, content_type='json')
+
             elif json_datatype == 'vote':
                 in_favour = request.POST.get('in_favour')
                 against = request.POST.get('against')
                 abstentions = request.POST.get('abstentions')
                 absent = request.POST.get('absent')
+
+                form = VoteEditForm({'pk': pk, 'session': session, 'committee': committee, 'debate': debate, 'in_favour': in_favour, 'against': against, 'abstentions': abstentions, 'absent': absent})
+
+                if form.is_valid():
+
+                    v = Vote.objects.get(pk=form.cleaned_data['pk'])
+
+                    committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(committee_name=form.cleaned_data['committee'])[0]
+
+                    v.committee_by = committee_by
+                    v.active_debate = form.cleaned_data['debate']
+                    v.in_favour = form.cleaned_data['in_favour']
+                    v.against = form.cleaned_data['against']
+                    v.abstentions = form.cleaned_data['abstentions']
+                    v.absent = form.cleaned_data['absent']
+                    v.save()
+
+                    response_data['pk'] = v.pk
+                    response_data['last_changed'] = v.timestamp.strftime("%H:%M")
+                    response_data['by'] = v.committee_by.committee_name
+                    response_data['debate'] = v.active_debate
+                    response_data['in_favour'] = v.in_favour
+                    response_data['against'] = v.against
+                    response_data['abstentions'] = v.abstentions
+                    response_data['absent'] = v.absent
+
+                    content_json = json.dumps(response_data)
+
+                    return HttpResponse(content_json, content_type='json')
 
         return HttpResponse(
             json.dumps({'opps': 'something went wrong'}),

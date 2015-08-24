@@ -181,7 +181,7 @@
             <div class="col-sm-10">
               <select class="form-control" name="{{ content_form.committee.html_name }}" id="content_{{ content_form.committee.id_for_label }}">
                 {% for id,text in debate_form.fields.active_debate.choices %}
-                <option value="{{ id }}" id="{{ text }}">{{ text }}</option>
+                <option value="{{ text }}" id="{{ text }}">{{ text }}</option>
                 {% endfor %}
               </select>
             </div>
@@ -191,7 +191,7 @@
             <div class="col-sm-10">
               <select class="form-control" name="{{ content_form.debate.html_name }}" id="content_{{ content_form.debate.id_for_label }}">
                 {% for id,text in debate_form.fields.active_debate.choices %}
-                <option value="{{ id }}" id="{{ text }}">{{ text }}</option>
+                <option value="{{ text }}" id="{{ text }}">{{ text }}</option>
                 {% endfor %}
               </select>
             </div>
@@ -264,7 +264,7 @@
             <div class="col-sm-10">
               <select class="form-control" name="{{ vote_form.committee.html_name }}" id="vote_{{ vote_form.committee.id_for_label }}">
                 {% for id,text in debate_form.fields.active_debate.choices %}
-                <option value="{{ id }}" id="{{ text }}">{{ text }}</option>
+                <option value="{{ text }}" id="{{ text }}">{{ text }}</option>
                 {% endfor %}
               </select>
             </div>
@@ -274,7 +274,7 @@
             <div class="col-sm-10">
               <select class="form-control" name="{{ vote_form.debate.html_name }}" id="vote_{{ vote_form.debate.id_for_label }}">
                 {% for id,text in debate_form.fields.active_debate.choices %}
-                <option value="{{ id }}" id="{{ text }}">{{ text }}</option>
+                <option value="{{ text }}" id="{{ text }}">{{ text }}</option>
                 {% endfor %}
               </select>
             </div>
