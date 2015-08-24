@@ -6,37 +6,14 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-      <h2>Points Made:</h2>
-      <div id="points" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+      {% include 'statistics/debate_elements/points_made.html' %}
 
-      <h2>Subtopics by Round:</h2>
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <div id="subtopics" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="text-align:center;">
-          <h2 id="total_points">Total Points:</h2>
-          <h4 id="total_type"></h4>
-          <h3 id="latest_point">Latest Point By:<h3>
-          <h4 id="latest_on">On:</h4>
-        </div>
-      </div>
+      {% include 'statistics/debate_elements/subtopics.html' %}
+
     </div>
+    
     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-      <h2>Point Summaries:</h2>
-      <div id="content-div" class="content-div">
-        <table id="content-table" class="table table-bordered scroll">
-          <thead>
-            <tr>
-              <th>Committee</th>
-              <th>Point</th>
-              <th>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
+      {% include 'statistics/debate_elements/point_summaries.html' %}
     </div>
   </div>
 <div>
