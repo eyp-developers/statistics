@@ -637,6 +637,11 @@ def data_pk_api(request):
                     p.active_debate = form.cleaned_data['debate']
                     p.active_round = form.cleaned_data['round_no']
                     p.point_type = form.cleaned_data['point_type']
+                    p.subtopics.clear()
+                    for s in form.cleaned_data['subtopics']:
+                        st = Subtopic.objects.get(pk=int(s))
+                        p.subtopics.add(st)
+                    
             elif json_datatype == 'content':
                 point_type = request.POST.get('point_type')
                 content = request.POST.get('content')
