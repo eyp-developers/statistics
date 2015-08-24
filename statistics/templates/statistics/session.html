@@ -20,15 +20,15 @@
     {% endif %}
 
     {% if session.session_resolution_link %}
-    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_website_link }}">View Resolutions</a>
+    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_resolution_link }}">View Resolutions</a>
     {% endif %}
 
     {% if session.session_facebook_link %}
-    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_website_link }}">{{ session.session_name }} on Facebook</a>
+    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_facebook_link }}">{{ session.session_name }} on Facebook</a>
     {% endif %}
 
     {% if session.session_twitter_link %}
-    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_website_link }}">{{ session.session_name }} on Twitter</a>
+    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_twitter_link }}">{{ session.session_name }} on Twitter</a>
     {% endif %}
   </div>
 </div>
@@ -45,31 +45,48 @@
   </div>
 {% endif %}
 
-<div class="container">
+<div class="container" style="margin-top:20px;">
 
-{% if session_committee_list %}
-      <h1>
-        Debates:
-      </h1>
-      <div class="debates row" >
-        {% for committee in session_committee_list %}
-          <div class="debate-box col-md-4">
-            <h2>
-              <a href="{% url 'statistics:debate' committee.session.id committee.id %}" class="btn btn-primary btn-material-{{ session.session_color }}-800">{{ committee.committee_name }}</a>
-            </h2>
-            <p>
-              {{ committee.committee_topic }}
-            </p>
-          </div>
-          {% cycle "" "" "</div><div class='row'>" %} <!-- this ends the row after every third committee, thus ensuring that they are all properly aligned -->
-        {% endfor %}
+  <div class="panel panel-material-{{ session.session_color }}">
+
+    <div class="panel-heading">
+      <h4>Debates</h4>
     </div>
-{% else %}
-      <h2>No committees are available yet!</h2>
-{% endif %}
 
-<h2>Points Made Summary</h2>
-<div id="points" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div class="panel-body">
+      {% if session_committee_list %}
+            <div class="row">
+              {% for committee in session_committee_list %}
+                <div class="debate-box col-md-4">
+                    <a href="{% url 'statistics:debate' committee.session.id committee.id %}" class="btn btn-primary btn-material-{{ session.session_color }}-800">{{ committee.committee_name }}</a>
+                  <p>
+                    {{ committee.committee_topic }}
+                  </p>
+                </div>
+                {% cycle "" "" "</div><div class='row'>" %} <!-- this ends the row after every third committee, thus ensuring that they are all properly aligned -->
+              {% endfor %}
+          </div>
+      {% else %}
+            <h2>No committees are available yet!</h2>
+      {% endif %}
+    </div>
+
+  </div>
+
+
+
+
+<div class="panel panel-material-{{ session.session_color }}">
+  <div class="panel-heading">
+    <h4>Points Made Summary</h4>
+  </div>
+
+  <div class="panel-body">
+    <div id="points" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+  </div>
+
+</div>
+
 
 {% if voting_enabled %}
 <script>
@@ -77,8 +94,18 @@ var voting_enabled = true;
 var voting_url = '{% url 'statistics:session_vote_api' session_id %}';
 
 </script>
-<h2>Voting Summary</h2>
-<div id="votes" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<div class="panel panel-material-{{ session.session_color }}">
+  <div class="panel-heading">
+    <h4>Voting Summary</h4>
+  </div>
+
+  <div class="panel-body">
+    <div id="votes" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+  </div>
+
+</div>
+
 {% else %}
 <script> var voting_enabled = false; </script>
 {% endif %}
