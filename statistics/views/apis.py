@@ -536,19 +536,15 @@ def data_api(request, session_id):
 def data_latest_api(request, session_id):
     #First we need all datapoints from that session that have a greater pk than *
     json_datatype = str(request.GET.get('data_type'))
-    print json_datatype
     if json_datatype == 'content':
-        print 'yup, content'
         data = ContentPoint.objects.filter(session_id=session_id).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
         #We also need to count the amount of data points for the total
         total = ContentPoint.objects.filter(session_id=session_id).count()
     elif json_datatype == 'point':
-        print 'yup, point'
         data = Point.objects.filter(session_id=session_id).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
         #We also need to count the amount of data points for the total
         total = Point.objects.filter(session_id=session_id).count()
     elif json_datatype == 'vote':
-        print 'yup, vote'
         data = Vote.objects.filter(session_id=session_id).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
         #We also need to count the amount of data points for the total
         total = Vote.objects.filter(session_id=session_id).count()
