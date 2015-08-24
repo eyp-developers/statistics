@@ -192,10 +192,11 @@ function editPoint(pk) {
       }
       all_subtopics = [];
       response.all_subtopics.forEach(function(subtopic) {
-        all_subtopics.push(subtopic.subtopic);
+        all_subtopics.push(subtopic.pk.toString());
         var s = document.createElement("option");
         s.text = subtopic.subtopic;
         $(s).attr('id', subtopic.pk);
+        $(s).attr('value', subtopic.pk);
         subtopics_select.options.add(s, j);
         j++;
       });
@@ -283,10 +284,12 @@ function savePoint() {
   console.log($('#point_id_round_no').val());
   console.log($('#point_id_point_type').val());
   console.log($('#point_id_subtopics').val());
+  console.log(all_subtopics);
   $.ajax({
     url: data_pk_url,
     type: "POST",
     data: {'data-type': 'point',
+      'session': $('#point_id_session').val(),
       'pk': $('#point_id_pk').val(),
       'committee': $('#point_id_committee').val(),
       'debate': $('#point_id_debate').val(),
@@ -302,6 +305,58 @@ function savePoint() {
     cache: false
   });
 }
+
+// This function gets cookie with a given name
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+
+/*
+The functions below will create a header with csrftoken
+*/
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+function sameOrigin(url) {
+    // test that a given url is a same-origin URL
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+            // Send the token to same-origin, relative URLs only.
+            // Send the token only if the method warrants CSRF protection
+            // Using the CSRFToken value acquired earlier
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
 
 requestData('point', 0, 10);
 requestData('content', 0, 10);

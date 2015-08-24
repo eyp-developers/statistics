@@ -323,7 +323,7 @@ class PointEditForm(forms.Form):
     #Note that the choices of the point_type is the previously defined point types and that
     #the choices for the subtopics needs to be set up, but empty.
     pk = forms.IntegerField(min_value=0, required=True)
-    session = forms.CharField(max_length=100, required=True)
+    session = forms.IntegerField(min_value=0, required=True)
     committee = forms.CharField(max_length=8, required=True)
     debate = forms.CharField(max_length=8, required=True)
     round_no = forms.IntegerField(min_value=0, required=True)

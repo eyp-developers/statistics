@@ -342,8 +342,8 @@ def point(request, session_id, committee_id):
             point.save()
             #For each subtopic in the selected subtopics, add the subtopic to the saved points list of subtopics.
             for s in form.cleaned_data['subtopics']:
-                st = SubTopic.objects.filter(pk=s)
-                point.subtopics.add(st[0])
+                st = SubTopic.objects.get(pk=s)
+                point.subtopics.add(st)
 
             #Once all that is done, send the user to the thank you page.
             return HttpResponseRedirect(reverse('statistics:point_thanks', args=[session_id, committee_id]))
