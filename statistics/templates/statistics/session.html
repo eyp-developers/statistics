@@ -38,6 +38,14 @@
 </div>
 <div class="container">
 
+{% if session.session_has_technical_problems %}
+  <div class="alert alert-info">
+    <p>
+      Please note that this session experienced technical difficulties during the GA. As a result some data might be incomplete.
+    </p>
+  </div>
+{% endif %}
+
 {% if session_committee_list %}
       <h1>
         Debates:
