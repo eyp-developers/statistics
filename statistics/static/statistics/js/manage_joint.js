@@ -12,6 +12,22 @@ var offset_vote = 0,
     total_votes_displayed = 0,
     latest_vote_pk = 0;
 
+var all_subtopics;
+
+Element.prototype.remove = function() {
+    this.parentElement.removeChild(this);
+};
+NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+    for(var i = this.length - 1; i >= 0; i--) {
+        if(this[i] && this[i].parentElement) {
+            this[i].parentElement.removeChild(this[i]);
+        }
+    }
+};
+function deleteInput(id){
+  document.getElementById(id).remove();
+}
+
 function requestData(type, offset, count) {
     $.ajax({
       url: data_url,
@@ -174,13 +190,16 @@ function editPoint(pk) {
       while (subtopics_select.options.length > 0) {
         subtopics_select.options.remove(0);
       }
+      all_subtopics = [];
       response.all_subtopics.forEach(function(subtopic) {
+        all_subtopics.push(subtopic.subtopic);
         var s = document.createElement("option");
         s.text = subtopic.subtopic;
         $(s).attr('id', subtopic.pk);
         subtopics_select.options.add(s, j);
         j++;
       });
+      console.log(all_subtopics);
       response.subtopics.forEach(function(subtopic) {
         subtopics_select.options.namedItem(subtopic.pk).selected = true;
       });
@@ -219,6 +238,7 @@ function editVote(pk) {
       $('#vote_id_absent').val(response.absent);
       document.getElementById("vote_id_committee").options.namedItem(response.committee_by).selected = true;
       document.getElementById("vote_id_debate").options.namedItem(response.active_debate).selected = true;
+      getTotal();
     },
     cache: false
   });
@@ -237,6 +257,51 @@ function getTotal () {
 $( "input" ).keyup( getTotal );
 
 $(document).ready( getTotal );
+
+$('#point-form').on('submit', function(event){
+    event.preventDefault();
+    console.log("Point form submitted!");  // sanity check
+    savePoint();
+});
+
+$('#content-form').on('submit', function(event){
+    event.preventDefault();
+    console.log("Content form submitted!");  // sanity check
+    savePoint();
+});
+
+$('#vote-form').on('submit', function(event){
+    event.preventDefault();
+    console.log("Vote form submitted!");  // sanity check
+    savePoint();
+});
+
+function savePoint() {
+  console.log($('#point_id_pk').val());
+  console.log($('#point_id_committee').val());
+  console.log($('#point_id_debate').val());
+  console.log($('#point_id_round_no').val());
+  console.log($('#point_id_point_type').val());
+  console.log($('#point_id_subtopics').val());
+  $.ajax({
+    url: data_pk_url,
+    type: "POST",
+    data: {'data-type': 'point',
+      'pk': $('#point_id_pk').val(),
+      'committee': $('#point_id_committee').val(),
+      'debate': $('#point_id_debate').val(),
+      'round_no': $('#point_id_pk').val(),
+      'point_type': $('#point_id_point_type').val(),
+      'subtopics': $('#point_id_subtopics').val(),
+      'all_subtopics': all_subtopics
+    },
+    success: function(json) {
+      deleteInput('point-' + $('#point_id_pk').val());
+      createPoint(pk, last_changed, by, on, round, type, subtopics, color, text_color);
+    },
+    cache: false
+  });
+}
 
 requestData('point', 0, 10);
 requestData('content', 0, 10);

@@ -81,7 +81,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
-        <form class="form-horizontal" role="form">
+        <form class="form-horizontal" role="form" id="point-form">
           <input type="hidden" class="form-control" name="{{ point_form.pk.html_name }}" id="point_{{ point_form.pk.id_for_label }}" value="">
           <input type="hidden" class="form-control" name="{{ point_form.session.html_name }}" id="point_{{ point_form.session.id_for_label }}" maxlength=100 value="{{ point_form.session.value }}">
           <div class="form-group">
@@ -89,7 +89,7 @@
             <div class="col-sm-10">
               <select class="form-control" name="{{ point_form.committee.html_name }}" id="point_{{ point_form.committee.id_for_label }}">
                 {% for id,text in debate_form.fields.active_debate.choices %}
-                <option value="{{ id }}" id="{{ text }}">{{ text }}</option>
+                <option value="{{ text }}" id="{{ text }}">{{ text }}</option>
                 {% endfor %}
               </select>
             </div>
@@ -99,7 +99,7 @@
             <div class="col-sm-10">
               <select class="form-control" name="{{ point_form.debate.html_name }}" id="point_{{ point_form.debate.id_for_label }}">
                 {% for id,text in debate_form.fields.active_debate.choices %}
-                <option value="{{ id }}" id="{{ text }}">{{ text }}</option>
+                <option value="{{ text }}" id="{{ text }}">{{ text }}</option>
                 {% endfor %}
               </select>
             </div>
@@ -172,7 +172,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
-        <form class="form-horizontal" role="form" method="post">
+        <form class="form-horizontal" role="form" method="post" id="content-form">
           {% csrf_token %}
           <input type="hidden" class="form-control" name="{{ content_form.pk.html_name }}" id="content_{{ content_form.pk.id_for_label }}" value="">
           <input type="hidden" class="form-control" name="{{ content_form.session.html_name }}" id="content_{{ content_form.session.id_for_label }}" maxlength=100 value="{{ content_form.session.value }}">
@@ -255,7 +255,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
-        <form class="form-horizontal" role="form" method="post">
+        <form class="form-horizontal" role="form" method="post" id="vote-form">
           {% csrf_token %}
           <input type="hidden" class="form-control" name="{{ vote_form.pk.html_name }}" id="vote_{{ vote_form.pk.id_for_label }}" value="">
           <input type="hidden" class="form-control" name="{{ vote_form.session.html_name }}" id="vote_{{ vote_form.session.id_for_label }}" maxlength=100 value="{{ vote_form.session.value }}">
