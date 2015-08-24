@@ -268,7 +268,7 @@ $('#point-form').on('submit', function(event){
 $('#content-form').on('submit', function(event){
     event.preventDefault();
     console.log("Content form submitted!");  // sanity check
-    savePoint();
+    saveContent();
 });
 
 $('#vote-form').on('submit', function(event){
@@ -278,17 +278,10 @@ $('#vote-form').on('submit', function(event){
 });
 
 function savePoint() {
-  console.log($('#point_id_pk').val());
-  console.log($('#point_id_committee').val());
-  console.log($('#point_id_debate').val());
-  console.log($('#point_id_round_no').val());
-  console.log($('#point_id_point_type').val());
-  console.log(all_subtopics);
   var subtopics_array = [];
   $('#point_id_subtopics').val().forEach(function (subtopic) {
     subtopics_array.push({'pk': subtopic});
   });
-  console.log(subtopics_array);
   $.ajax({
     url: data_pk_url,
     type: "POST",
@@ -308,6 +301,62 @@ function savePoint() {
       deleteInput('point-' + json.pk);
       createPoint(json.pk, json.last_changed, json.by, json.debate, json.round_no, json.point_type, json.subtopics, json.committee_color, json.committee_text_color);
       $('#edit-point').modal('hide');
+    },
+    error : function(xhr,errmsg,err) {
+      $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+      console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    },
+    cache: false
+  });
+}
+
+function saveContent() {
+  $.ajax({
+    url: data_pk_url,
+    type: "POST",
+    data: {'data-type': 'content',
+      'session': $('#content_id_session').val(),
+      'pk': $('#content_id_pk').val(),
+      'committee': $('#content_id_committee').val(),
+      'debate': $('#content_id_debate').val(),
+      'point_type': $('#content_id_point_type').val(),
+      'content': $('#content_id_content').val()
+    },
+    success: function(json) {
+      console.log('success!');
+      console.log(json);
+      deleteInput('content-' + json.pk);
+      createContent(json.pk, json.last_changed, json.by, json.debate, json.content, json.point_type, json.committee_color, json.committee_text_color);
+      $('#edit-content').modal('hide');
+    },
+    error : function(xhr,errmsg,err) {
+      $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+      console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    },
+    cache: false
+  });
+}
+
+function saveVote() {
+  $.ajax({
+    url: data_pk_url,
+    type: "POST",
+    data: {'data-type': 'vote',
+      'session': $('#content_id_session').val(),
+      'pk': $('#content_id_pk').val(),
+      'committee': $('#content_id_committee').val(),
+      'debate': $('#content_id_debate').val(),
+      'point_type': $('#content_id_point_type').val(),
+      'content': $('#content_id_content').val()
+    },
+    success: function(json) {
+      console.log('success!');
+      console.log(json);
+      deleteInput('content-' + json.pk);
+      createContent(json.pk, json.last_changed, json.by, json.debate, json.content, json.point_type, json.committee_color, json.committee_text_color);
+      $('#edit-content').modal('hide');
     },
     error : function(xhr,errmsg,err) {
       $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
