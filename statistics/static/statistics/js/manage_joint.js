@@ -5,12 +5,15 @@ var offset_point = 0,
     total_points_displayed = 0,
     total_content_displayed = 0,
     latest_point_pk = 0,
-    latest_content_pk = 0;
+    latest_content_pk = 0,
+    new_point = false,
+    new_content = false;
 
 var offset_vote = 0,
     total_vote,
     total_votes_displayed = 0,
-    latest_vote_pk = 0;
+    latest_vote_pk = 0,
+    new_vote = false;
 
 var all_subtopics;
 
@@ -34,37 +37,52 @@ function requestData(type, offset, count) {
       data: "data_type=" + type + "&offset=" + offset + "&count=" + count,
       success: function (response) {
         if (type === 'point') {
-          if (typeof response.datapoints[0].pk !== "undefined") {
-            latest_point_pk = response.datapoints[0].pk;
-          }
           total_point = response.totaldata;
           offset_point += count;
           if (typeof response.datapoints[0].committee_by !== "undefined") {
             response.datapoints.forEach(function(point) {
-              createPoint(point.pk, point.last_changed, point.committee_by, point.active_debate, point.round_no, point.point_type, point.subtopics, point.committee_color, point.committee_text_color);
+              createPoint(-1, point.pk, point.last_changed, point.committee_by, point.active_debate, point.round_no, point.point_type, point.subtopics, point.committee_color, point.committee_text_color);
+              total_points_displayed++;
             });
           }
-        } else if (type === 'content') {
-          if (typeof response.datapoints[0].pk !== "undefined") {
-            latest_content_pk = response.datapoints[0].pk;
+          if (new_point === false) {
+            if (typeof response.datapoints[0].pk !== "undefined") {
+              latest_point_pk = response.datapoints[0].pk;
+            }
+            requestNewData('point');
+            new_point = true;
           }
+        } else if (type === 'content') {
           total_content = response.totaldata;
           offset_content += count;
           if (typeof response.datapoints[0].content !== "undefined") {
             response.datapoints.forEach(function(content) {
-              createContent(content.pk, content.last_changed, content.committee_by, content.active_debate, content.content, content.point_type, content.committee_color, content.committee_text_color);
+              createContent(-1, content.pk, content.last_changed, content.committee_by, content.active_debate, content.content, content.point_type, content.committee_color, content.committee_text_color);
+              total_content_displayed++;
             });
           }
-        } else if (type === 'vote') {
-          if (typeof response.datapoints[0].pk !== "undefined") {
-            latest_vote_pk = response.datapoints[0].pk;
+          if (new_content === false) {
+            if (typeof response.datapoints[0].pk !== "undefined") {
+              latest_content_pk = response.datapoints[0].pk;
+            }
+            requestNewData('content');
+            new_content = true;
           }
+        } else if (type === 'vote') {
           total_vote = response.totaldata;
           offset_vote += count;
           if (typeof response.datapoints[0].committee_by !== "undefined") {
             response.datapoints.forEach(function(vote) {
-              createVote(vote.pk, vote.last_changed, vote.committee_by, vote.active_debate, vote.in_favour, vote.against, vote.abstentions, vote.absent, vote.committee_color, vote.committee_text_color);
+              createVote(-1, vote.pk, vote.last_changed, vote.committee_by, vote.active_debate, vote.in_favour, vote.against, vote.abstentions, vote.absent, vote.committee_color, vote.committee_text_color);
+              total_votes_displayed++;
             });
+          }
+          if (new_vote === false) {
+            if (typeof response.datapoints[0].pk !== "undefined") {
+              latest_vote_pk = response.datapoints[0].pk;
+            }
+            requestNewData('vote');
+            new_vote = true;
           }
         }
       },
@@ -72,10 +90,67 @@ function requestData(type, offset, count) {
     });
 }
 
-function createPoint(pk, last_changed, by, on, round, type, subtopics, color, text_color) {
+function requestNewData(type) {
+    var new_latest;
+    if (type === 'point') {
+      new_latest = latest_point_pk;
+    } else if (type === 'content') {
+      new_latest = latest_content_pk;
+    } else if (type === 'vote') {
+      new_latest = latest_vote_pk;
+    }
+    $.ajax({
+      url: data_latest_url,
+      data: "data_type=" + type + "&pk=" + new_latest,
+      success: function (response) {
+        if (type === 'point') {
+          if (typeof response.datapoints[0].pk !== "undefined") {
+            latest_point_pk = response.datapoints[0].pk;
+          }
+          total_point = response.totaldata;
+          if (typeof response.datapoints[0].committee_by !== "undefined") {
+            response.datapoints.forEach(function(point) {
+              offset_point++;
+              createPoint(0, point.pk, point.last_changed, point.committee_by, point.active_debate, point.round_no, point.point_type, point.subtopics, point.committee_color, point.committee_text_color);
+              total_points_displayed++;
+            });
+          }
+        } else if (type === 'content') {
+          if (typeof response.datapoints[0].pk !== "undefined") {
+            latest_content_pk = response.datapoints[0].pk;
+          }
+          total_content = response.totaldata;
+          if (typeof response.datapoints[0].content !== "undefined") {
+            response.datapoints.forEach(function(content) {
+              offset_content++;
+              createContent(0, content.pk, content.last_changed, content.committee_by, content.active_debate, content.content, content.point_type, content.committee_color, content.committee_text_color);
+              total_content_displayed++;
+            });
+          }
+        } else if (type === 'vote') {
+          if (typeof response.datapoints[0].pk !== "undefined") {
+            latest_vote_pk = response.datapoints[0].pk;
+          }
+          total_vote = response.totaldata;
+          if (typeof response.datapoints[0].committee_by !== "undefined") {
+            response.datapoints.forEach(function(vote) {
+              offset_vote++;
+              createVote(0, vote.pk, vote.last_changed, vote.committee_by, vote.active_debate, vote.in_favour, vote.against, vote.abstentions, vote.absent, vote.committee_color, vote.committee_text_color);
+              total_votes_displayed++;
+            });
+          }
+        }
+
+        setTimeout(requestNewData, 3000, type);
+      },
+      cache: false
+    });
+}
+
+function createPoint(where, pk, last_changed, by, on, round, type, subtopics, color, text_color) {
   //Setting up the new row in the table
   var table = document.getElementById("point-table").getElementsByTagName('tbody')[0],
-      row = table.insertRow(0),
+      row = table.insertRow(where),
       point_id = row.insertCell(0),
       point_last_changed = row.insertCell(1),
       point_by = row.insertCell(2),
@@ -108,10 +183,10 @@ function createPoint(pk, last_changed, by, on, round, type, subtopics, color, te
 }
 
 
-function createContent(pk, last_changed, by, on, content, type, color, text_color){
+function createContent(where, pk, last_changed, by, on, content, type, color, text_color){
   //Setting up the new row in the table
   var table = document.getElementById("content-table").getElementsByTagName('tbody')[0],
-      row = table.insertRow(0),
+      row = table.insertRow(where),
       content_id = row.insertCell(0),
       content_last_changed = row.insertCell(1),
       content_by = row.insertCell(2),
@@ -141,10 +216,10 @@ function createContent(pk, last_changed, by, on, content, type, color, text_colo
 }
 
 
-function createVote(pk, last_changed, by, on, in_favour, against, abstentions, absent, color, text_color){
+function createVote(where, pk, last_changed, by, on, in_favour, against, abstentions, absent, color, text_color){
   //Setting up the new row in the table
   var table = document.getElementById("vote-table").getElementsByTagName('tbody')[0],
-      row = table.insertRow(0),
+      row = table.insertRow(where),
       vote_id = row.insertCell(0),
       vote_last_changed = row.insertCell(1),
       vote_by = row.insertCell(2),
@@ -299,7 +374,7 @@ function savePoint() {
       console.log('success!');
       console.log(json);
       deleteInput('point-' + json.pk);
-      createPoint(json.pk, json.last_changed, json.by, json.debate, json.round_no, json.point_type, json.subtopics, json.committee_color, json.committee_text_color);
+      createPoint(0, json.pk, json.last_changed, json.by, json.debate, json.round_no, json.point_type, json.subtopics, json.committee_color, json.committee_text_color);
       $('#edit-point').modal('hide');
     },
     error : function(xhr,errmsg,err) {
@@ -327,7 +402,7 @@ function saveContent() {
       console.log('success!');
       console.log(json);
       deleteInput('content-' + json.pk);
-      createContent(json.pk, json.last_changed, json.by, json.debate, json.content, json.point_type, json.committee_color, json.committee_text_color);
+      createContent(0, json.pk, json.last_changed, json.by, json.debate, json.content, json.point_type, json.committee_color, json.committee_text_color);
       $('#edit-content').modal('hide');
     },
     error : function(xhr,errmsg,err) {
@@ -357,7 +432,7 @@ function saveVote() {
       console.log('success!');
       console.log(json);
       deleteInput('vote-' + json.pk);
-      createVote(json.pk, json.last_changed, json.by, json.debate, json.in_favour, json.against, json.abstentions, json.absent, json.committee_color, json.committee_text_color);
+      createVote(0, json.pk, json.last_changed, json.by, json.debate, json.in_favour, json.against, json.abstentions, json.absent, json.committee_color, json.committee_text_color);
       $('#edit-vote').modal('hide');
     },
     error : function(xhr,errmsg,err) {
@@ -389,6 +464,42 @@ function deleteData(type, pk) {
     cache: false
   });
 }
+
+jQuery(
+  function($) {
+    $('#content-div').bind('scroll', function() {
+      if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+        if (total_content_displayed < total_content) {
+          requestData('content', offset_content, 10);
+        }
+      }
+    });
+  }
+);
+
+jQuery(
+  function($) {
+    $('#point-div').bind('scroll', function() {
+      if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+        if (total_points_displayed < total_point) {
+          requestData('point', offset_point, 10);
+        }
+      }
+    });
+  }
+);
+
+jQuery(
+  function($) {
+    $('#vote-div').bind('scroll', function() {
+      if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+        if (total_votes_displayed < total_vote) {
+          requestData('vote', offset_vote, 10);
+        }
+      }
+    });
+  }
+);
 
 
 // This function gets cookie with a given name
@@ -443,6 +554,6 @@ $.ajaxSetup({
 });
 
 
-requestData('point', 0, 10);
-requestData('content', 0, 10);
-requestData('vote', 0, 10);
+requestData('point', 0, 20);
+requestData('content', 0, 20);
+requestData('vote', 0, 20);
