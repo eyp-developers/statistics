@@ -609,8 +609,16 @@ def data_latest_api(request, session_id):
 
 def data_pk_api(request):
     if request.method == 'POST':
-        #If the user is trying to save a peice of data.
-        pass
+        #If the user is trying to save/delete a peice of data.
+        if request.POST.get('delete') == 'true':
+            pass
+        else:
+            pk = request.POST.get('pk')
+            committee = request.POST.get('pk')
+            debate = request.POST.get('pk')
+            round_no = request.POST.get('pk')
+            point_type = request.POST.get('pk')
+            subtopics = request.POST.get('pk')
     else:
         json_datatype = str(request.GET.get('data_type'))
         pk = int(request.GET.get('pk'))
