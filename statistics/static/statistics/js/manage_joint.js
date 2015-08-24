@@ -192,7 +192,7 @@ function editPoint(pk) {
       }
       all_subtopics = [];
       response.all_subtopics.forEach(function(subtopic) {
-        all_subtopics.push(subtopic.pk.toString());
+        all_subtopics.push({'pk': subtopic.pk.toString()});
         var s = document.createElement("option");
         s.text = subtopic.subtopic;
         $(s).attr('id', subtopic.pk);
@@ -283,8 +283,12 @@ function savePoint() {
   console.log($('#point_id_debate').val());
   console.log($('#point_id_round_no').val());
   console.log($('#point_id_point_type').val());
-  console.log($('#point_id_subtopics').val());
   console.log(all_subtopics);
+  var subtopics_array = [];
+  $('#point_id_subtopics').val().forEach(function (subtopic) {
+    subtopics_array.push({'pk': subtopic});
+  });
+  console.log(subtopics_array);
   $.ajax({
     url: data_pk_url,
     type: "POST",
@@ -293,14 +297,22 @@ function savePoint() {
       'pk': $('#point_id_pk').val(),
       'committee': $('#point_id_committee').val(),
       'debate': $('#point_id_debate').val(),
-      'round_no': $('#point_id_pk').val(),
+      'round_no': $('#point_id_round_no').val(),
       'point_type': $('#point_id_point_type').val(),
-      'subtopics': $('#point_id_subtopics').val(),
-      'all_subtopics': all_subtopics
+      'subtopics': JSON.stringify(subtopics_array),
+      'all_subtopics': JSON.stringify(all_subtopics)
     },
     success: function(json) {
-      deleteInput('point-' + $('#point_id_pk').val());
-      createPoint(pk, last_changed, by, on, round, type, subtopics, color, text_color);
+      console.log('success!');
+      console.log(json);
+      deleteInput('point-' + json.pk);
+      createPoint(json.pk, json.last_changed, json.by, json.debate, json.round_no, json.point_type, json.subtopics, json.committee_color, json.committee_text_color);
+      $('#edit-point').modal('hide');
+    },
+    error : function(xhr,errmsg,err) {
+      $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+      console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
     },
     cache: false
   });

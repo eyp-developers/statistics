@@ -7,6 +7,8 @@ from time import strftime
 #Importing all models for statistics.
 from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
 
+from ..forms import PointEditForm, ContentEditForm, VoteEditForm
+
 # #Importing the forms too.
 # from ..forms import SessionForm,  SessionEditForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm
 
@@ -614,34 +616,54 @@ def data_pk_api(request):
             pass
         else:
             #Get all our valiables according to what kind of data we're dealing with.
+            response_data = {}
             json_datatype = str(request.POST.get('data-type'))
-            session = request.POST.get('session')
-            pk = request.POST.get('pk')
+            session = int(request.POST.get('session'))
+            pk = int(request.POST.get('pk'))
             committee = request.POST.get('committee')
             debate = request.POST.get('debate')
             if json_datatype == 'point':
-                round_no = request.POST.get('round_no')
+                round_no = int(request.POST.get('round_no'))
                 point_type = request.POST.get('point_type')
-                subtopics = request.POST.get('subtopics')
-                all_subtopics = request.POST.get('all_subtopics')
+                subtopics = json.loads(request.POST.get('subtopics'))
+                all_subtopics = json.loads(request.POST.get('all_subtopics'))
 
                 #Set up and instance of the Point Edit form.
-                form = PointEditForm(all_subtopics, {'pk': pk, 'session': session, 'committee': committee, 'debate': debate, 'round_no': round_no, 'point_type': point_type, 'subtopics': subtopics})
+                form = PointEditForm({'pk': pk, 'session': session, 'committee': committee, 'debate': debate, 'round_no': round_no, 'point_type': point_type})
 
                 if form.is_valid():
+                    print 'is valid!'
                     #If the form is valid, get the Point and update it with our values.
                     p = Point.objects.get(pk=form.cleaned_data['pk'])
 
-                    committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(committee_name=form.cleaned_data['committee'])
+                    committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(committee_name=form.cleaned_data['committee'])[0]
                     p.committee_by = committee_by
                     p.active_debate = form.cleaned_data['debate']
                     p.active_round = form.cleaned_data['round_no']
                     p.point_type = form.cleaned_data['point_type']
+                    p.save()
                     p.subtopics.clear()
-                    for s in form.cleaned_data['subtopics']:
-                        st = Subtopic.objects.get(pk=int(s))
+                    subtopics_array = []
+                    for s in subtopics:
+                        st = SubTopic.objects.get(pk=int(s.get('pk')))
                         p.subtopics.add(st)
-                    
+                        subtopics_array.append(st.subtopic_text)
+
+                    response_data['pk'] = p.pk
+                    response_data['last_changed'] = p.timestamp.strftime("%H:%M")
+                    response_data['by'] = p.committee_by.committee_name
+                    response_data['debate'] = p.active_debate
+                    response_data['round_no'] = p.active_round
+                    response_data['point_type'] = p.point_type
+                    response_data['subtopics'] = ', '.join(subtopics_array)
+                    response_data['committee_color'] = p.committee_by.committee_color()
+                    response_data['committee_text_color'] = p.committee_by.committee_text_color()
+
+                    content_json = json.dumps(response_data)
+
+                    return HttpResponse(content_json, content_type='json')
+
+
             elif json_datatype == 'content':
                 point_type = request.POST.get('point_type')
                 content = request.POST.get('content')
@@ -650,6 +672,11 @@ def data_pk_api(request):
                 against = request.POST.get('against')
                 abstentions = request.POST.get('abstentions')
                 absent = request.POST.get('absent')
+
+        return HttpResponse(
+            json.dumps({'opps': 'something went wrong'}),
+            content_type='json'
+        )
     else:
         json_datatype = str(request.GET.get('data_type'))
         pk = int(request.GET.get('pk'))
