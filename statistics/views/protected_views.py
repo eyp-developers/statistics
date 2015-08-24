@@ -18,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
 
 #Importing the forms too.
-from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm
+from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, PointEditForm, VoteForm, VoteEditForm, ContentForm, ContentEditForm, JointForm, ActiveDebateForm, ActiveRoundForm
 
 # This is a central function. It replaces 'render' in cases where the user has to be authorized to view the page, not just authenticated.
 def check_authorization_and_render(request, template, context, session, admin_only = True):
@@ -261,11 +261,11 @@ def point(request, session_id, committee_id):
             point.save()
             #For each subtopic in the selected subtopics, add the subtopic to the saved points list of subtopics.
             for s in form.cleaned_data['subtopics']:
-                st = SubTopic.objects.filter(pk=s)
-                point.subtopics.add(st[0])
+                st = SubTopic.objects.get(pk=s)
+                point.subtopics.add(st)
 
             #Once all that is done, send the user to the thank you page.
-            return HttpResponseRedirect(reverse('statistics:point_thanks', args=[session_id, committee_id]))
+            return HttpResponseRedirect(reverse('statistics:thanks', args=[session_id, committee_id]))
 
     else:
         #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
@@ -517,6 +517,9 @@ def manage(request, session_id):
     else:
         debate_form = ActiveDebateForm(committees_array, {'session': session.session_name})
         round_form = ActiveRoundForm(max_rounds_array, {'session': session.session_name})
+        point_form = PointEditForm([], {'session': session.session_name})
+        content_form = ContentEditForm({'session': session.session_name})
+        vote_form = VoteEditForm({'session': session.session_name})
 
-    context = {'session': session, 'committees': committees, 'active': active, 'active_round': active_round, 'debate_form': debate_form, 'round_form': round_form}
+    context = {'session': session, 'committees': committees, 'active': active, 'active_round': active_round, 'debate_form': debate_form, 'round_form': round_form, 'point_form': point_form, 'content_form': content_form, 'vote_form': vote_form}
     return check_authorization_and_render(request, 'statistics/manage.html', context, session)
