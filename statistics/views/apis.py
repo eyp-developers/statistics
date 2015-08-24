@@ -7,7 +7,7 @@ from time import strftime
 #Importing all models for statistics.
 from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
 
-from ..forms import PointEditForm, ContentEditForm, VoteEditForm
+from ..forms import PointEditForm, ContentEditForm, VoteEditForm, DeleteDataForm
 
 # #Importing the forms too.
 # from ..forms import SessionForm,  SessionEditForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm
@@ -613,7 +613,23 @@ def data_pk_api(request):
     if request.method == 'POST':
         #If the user is trying to save/delete a peice of data.
         if request.POST.get('delete') == 'true':
-            pass
+            json_datatype = str(request.POST.get('data-type'))
+            form = DeleteDataForm({'pk': int(request.POST.get('pk'))})
+            if form.is_valid():
+                if json_datatype == 'point':
+                    d = Point.objects.get(pk=form.cleaned_data['pk'])
+                if json_datatype == 'content':
+                    d = ContentPoint.objects.get(pk=form.cleaned_data['pk'])
+                if json_datatype == 'vote':
+                    d = Vote.objects.get(pk=form.cleaned_data['pk'])
+                d.delete()
+                response_data = {}
+                response_data['msg'] = 'Data deleted'
+
+                response_json = json.dumps(response_data)
+
+                return HttpResponse(response_json, content_type='json')
+
         else:
             #Get all our valiables according to what kind of data we're dealing with.
             response_data = {}
