@@ -423,6 +423,8 @@ class ActiveRoundForm(forms.Form):
     session = forms.CharField(max_length=100, required=True)
     active_round = forms.ChoiceField(choices=(), required=True)
 
+class DeleteDataForm(forms.Form):
+    pk = forms.IntegerField(min_value=0, required=True)
 
 User = get_user_model()
 

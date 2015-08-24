@@ -100,7 +100,7 @@ function createPoint(pk, last_changed, by, on, round, type, subtopics, color, te
     point_type.innerHTML = '<img src="' + dr_img + '" height="30" >';
   }
   point_subtopics.innerHTML = subtopics;
-  point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-material-' + session_color + '-800 btn-fab btn-raised mdi-content-create" data-toggle="modal" data-target="#edit-point" onclick="editPoint(' + "'" + pk + "'" + ')" ></a><a href="javascript:void(0)" class="btn btn-danger btn-fab btn-raised mdi-action-delete" onclick="" ></a>';
+  point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-material-' + session_color + '-800 btn-fab btn-raised mdi-content-create" data-toggle="modal" data-target="#edit-point" onclick="editPoint(' + "'" + pk + "'" + ')" ></a><a href="javascript:void(0)" class="btn btn-danger btn-fab btn-raised mdi-action-delete" onclick="deleteData(' + "'point', " + "'" + pk + "'" + ')" ></a>';
   //Adding pretty color classes
   $(point_by).addClass('label-material-' + color + '-400');
   $(point_by).css('color', text_color);
@@ -133,7 +133,7 @@ function createContent(pk, last_changed, by, on, content, type, color, text_colo
   } else {
     content_type.innerHTML = '<img src="' + dr_img + '" height="30" >';
   }
-  content_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-material-' + session_color + '-800 btn-fab btn-raised mdi-content-create" data-toggle="modal" data-target="#edit-content" onclick="editContent(' + "'" + pk + "'" + ')" ></a><a href="javascript:void(0)" class="btn btn-danger btn-fab btn-raised mdi-action-delete" onclick="" ></a>';
+  content_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-material-' + session_color + '-800 btn-fab btn-raised mdi-content-create" data-toggle="modal" data-target="#edit-content" onclick="editContent(' + "'" + pk + "'" + ')" ></a><a href="javascript:void(0)" class="btn btn-danger btn-fab btn-raised mdi-action-delete" onclick="deleteData(' + "'content', " + "'" + pk + "'" + ')" ></a>';
   //Adding pretty color classes and fading in
   $(content_by).addClass('label-material-' + color + '-400');
   $(content_by).css('color', text_color);
@@ -166,7 +166,7 @@ function createVote(pk, last_changed, by, on, in_favour, against, abstentions, a
   vote_against.innerHTML = against;
   vote_abstentions.innerHTML = abstentions;
   vote_absent.innerHTML = absent;
-  vote_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-material-' + session_color + '-800 btn-fab btn-raised mdi-content-create" data-toggle="modal" data-target="#edit-vote" onclick="editVote(' + "'" + pk + "'" + ')" ></a><a href="javascript:void(0)" class="btn btn-danger btn-fab btn-raised mdi-action-delete" onclick="" ></a>';
+  vote_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-material-' + session_color + '-800 btn-fab btn-raised mdi-content-create" data-toggle="modal" data-target="#edit-vote" onclick="editVote(' + "'" + pk + "'" + ')" ></a><a href="javascript:void(0)" class="btn btn-danger btn-fab btn-raised mdi-action-delete" onclick="deleteData(' + "'vote', " + "'" + pk + "'" + ')" ></a>';
   //Adding pretty color classes and fading in
   $(vote_by).addClass('label-material-' + color + '-400');
   $(vote_by).css('color', text_color);
@@ -368,6 +368,28 @@ function saveVote() {
     cache: false
   });
 }
+
+function deleteData(type, pk) {
+  $.ajax({
+    url: data_pk_url,
+    type: "POST",
+    data: {'delete' : true,
+      'data-type': type,
+      'pk': pk
+    },
+    success: function(json) {
+      console.log('Delete success!');
+      deleteInput(type + '-' + pk);
+    },
+    error : function(xhr,errmsg,err) {
+      $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+      console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    },
+    cache: false
+  });
+}
+
 
 // This function gets cookie with a given name
 function getCookie(name) {

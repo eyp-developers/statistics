@@ -265,7 +265,7 @@ def point(request, session_id, committee_id):
                 point.subtopics.add(st)
 
             #Once all that is done, send the user to the thank you page.
-            return HttpResponseRedirect(reverse('statistics:point_thanks', args=[session_id, committee_id]))
+            return HttpResponseRedirect(reverse('statistics:thanks', args=[session_id, committee_id]))
 
     else:
         #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
