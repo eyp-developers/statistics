@@ -1,0 +1,95 @@
+<nav class="navbar {% if session.session_color %} navbar-material-{{ session.session_color }} {% else %} navbar-inverse {% endif %} shadow-z-1" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'statistics:home'%}">GA Statistics</a>
+    </div>
+    <!-- /.navbar-header -->
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="{% url 'statistics:home' %}">Home</a></li>
+      </ul>
+      <!--/.nav navbar-nav-->
+
+      <ul class="nav navbar-nav navbar-right">
+
+        <li class="dropdown">
+          <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            {% if user.is_authenticated = False %}
+            <li><a href="{% url 'statistics:login' %}">Login</a></li>
+            {% endif %} {% if user.is_staff %}
+            <li><a href="/admin/">Go to Admin</a></li>
+            {% endif %} {% if user.is_authenticated %}
+            <li><a href="{% url 'statistics:logout' %}">Logout</a></li>
+            {% endif %}
+        </li>
+        </ul>
+      </ul>
+
+      {% if session and user.is_authenticated %}
+
+
+      <ul class="nav navbar-nav navbar-right">
+
+        <li><a href="{% url 'statistics:session' session.pk %}">Go to {{ session.session_name }}</a></li>
+
+        {% if committee %}
+
+        <li class="dropdown">
+          <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Manage {{ committee.committee_name }} <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+
+            <li><a href="{% url 'statistics:debate' session.pk committee.pk %}">Go to {{ committee.committee_name }}</a></li>
+
+            <li><a href="{% url 'statistics:vote' session.pk committee.pk %}">Vote as  {{ committee.committee_name }}</a></li>
+
+
+            <li><a href="{% url 'statistics:content' session.pk committee.pk %}">Submit Content as {{ committee.committee_name }}</a></li>
+
+            <li><a href="{% url 'statistics:point' session.pk committee.pk %}">Submit Statistics as {{ committee.committee_name }}</a></li>
+
+            <li><a href="{% url 'statistics:joint' session.pk committee.pk %}">Submit both as {{ committee.committee_name }}</a></li>
+
+
+
+          </ul>
+        </li>
+
+        {% endif %}
+
+
+        <li class="dropdown">
+          <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Manage {{ session.session_name }} <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+
+            <li><a href="{% url 'statistics:welcome' session.pk %}">Management Overview</a></li>
+
+
+            <li><a href="{% url 'statistics:manage' session.pk %}">Debate Management</a></li>
+
+            <li><a href="{% url 'statistics:add' session.pk %}">Committee Management</a></li>
+
+            <li><a href="{% url 'statistics:edit' session.pk %}">Session Settings</a></li>
+
+
+          </ul>
+        </li>
+
+
+
+      </ul>
+
+      {% endif %}
+
+    </div>
+    <!--/.navbar-collapse -->
+  </div>
+  <!--/.container -->
+</nav>
+<!--/.navbar -->

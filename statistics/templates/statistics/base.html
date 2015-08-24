@@ -24,36 +24,8 @@
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <nav class="navbar {% if session.session_color %} navbar-material-{{ session.session_color }} {% else %} navbar-inverse {% endif %} shadow-z-1" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="{% url 'statistics:home'%}">GA Statistics</a>
-             </div> <!-- /.navbar-header -->
-            <div id="navbar" class="navbar-collapse collapse">
-              <ul class="nav navbar-nav">
-                <li><a href="{% url 'statistics:home' %}">Home</a></li>
-              </ul><!--/.nav navbar-nav-->
-              <ul class="nav navbar-nav navbar-right">
-              <li class="dropdown">
-                <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  {% if user.is_authenticated = False %}
-                  <li><a href="{% url 'statistics:login' %}">Login</a></li>
-                  {% endif %} {% if user.is_staff %}
-                  <li><a href="/admin/">Go to Admin</a></li>
-                  {% endif %} {% if user.is_authenticated %}
-                  <li><a href="{% url 'statistics:logout' %}">Logout</a></li>
-                  {% endif %}
-                </ul>
-            </div><!--/.navbar-collapse -->
-          </div><!--/.container -->
-        </nav><!--/.navbar -->
+
+        {% include "statistics/navbar.html" %}
 
     <div class="container">
 
