@@ -305,12 +305,6 @@ class PointForm(forms.Form):
     subtopics = forms.MultipleChoiceField(choices=(), required=True)
 
 class PointEditForm(forms.Form):
-    #The point form needs to be fed with special data, in the form of an array of subtopics.
-    #To do this, we change the definition of the form to accept an extra argument, the array of subtopics.
-    def __init__(self, subtopic_choices, *args, **kwargs):
-        super(PointEditForm, self).__init__(*args, **kwargs)
-        self.fields['subtopics'].choices = subtopic_choices
-
     #This is setting up the point types in the same way as they are set up in the models file
     POINT = 'P'
     DIRECT_RESPONSE = 'DR'
@@ -328,7 +322,6 @@ class PointEditForm(forms.Form):
     debate = forms.CharField(max_length=8, required=True)
     round_no = forms.IntegerField(min_value=0, required=True)
     point_type = forms.ChoiceField(choices=POINT_TYPES, required=True)
-    subtopics = forms.MultipleChoiceField(choices=(), required=True)
 
 class ContentForm(forms.Form):
     #The contentpoint form needs special point types, but except for that it's a pretty simple form.
