@@ -234,11 +234,12 @@ def point(request, session_id, committee_id=None):
     #and sending the user to the right place if the data submission was successful.
     session = Session.objects.get(pk=session_id)
     #Get the committee and session of the committee that wants to make a point.
+
     if committee_id:
-        committee = Committee.objects.get(pk=committee_id)
+        render_committee = Committee.objects.get(pk=committee_id)
         all_form = False
     else:
-        committee = ''
+        render_committee = ''
         all_form = True
 
     #Here we get the active debate, get the committee of the active debate and get the active round no.
@@ -302,12 +303,12 @@ def point(request, session_id, committee_id=None):
         if all_form:
             form = PointForm(subtopics_array, {'session': session.session_name, 'committee': '', 'debate': active, 'round_no': active_round_no})
         else:
-            form = PointForm(subtopics_array, {'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'round_no': active_round_no})
+            form = PointForm(subtopics_array, {'session': session.session_name, 'committee': render_committee.committee_name, 'debate': active, 'round_no': active_round_no})
 
     if all_form:
         context = {'debate': active, 'all_form': all_form, 'session': session, 'subtopics': subtopics, 'form': form, 'committees': committees_array, 'rounds': max_rounds_array}
     else:
-        context = {'debate': active, 'all_form': all_form, 'committee': committee, 'session': session, 'subtopics': subtopics, 'form': form, 'committees': committees_array, 'rounds': max_rounds_array}
+        context = {'debate': active, 'all_form': all_form, 'committee': render_committee, 'session': session, 'subtopics': subtopics, 'form': form, 'committees': committees_array, 'rounds': max_rounds_array}
     return check_authorization_and_render(request, 'statistics/point_form.html', context, session, False)
 
 
@@ -319,10 +320,10 @@ def content(request, session_id, committee_id=None):
     session = Session.objects.get(pk=session_id)
 
     if committee_id:
-        committee = Committee.objects.get(pk=committee_id)
+        render_committee = Committee.objects.get(pk=committee_id)
         all_form = False
     else:
-        committee = ''
+        render_committee = ''
         all_form = True
 
     active = ActiveDebate.objects.get(session_id=session_id).active_debate
@@ -351,12 +352,12 @@ def content(request, session_id, committee_id=None):
         if all_form:
             form = ContentForm({'session': session.session_name, 'committee': '', 'debate': active})
         else:
-            form = ContentForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active})
+            form = ContentForm({'session': session.session_name, 'committee': render_committee.committee_name, 'debate': active})
 
     if all_form:
         context = {'debate': active, 'session': session, 'form': form, 'committees': committees_array, 'all_form': all_form}
     else:
-        context = {'debate': active, 'committee': committee, 'session': session, 'form': form, 'committees': committees_array, 'all_form': all_form}
+        context = {'debate': active, 'committee': render_committee, 'session': session, 'form': form, 'committees': committees_array, 'all_form': all_form}
 
     return check_authorization_and_render(request, 'statistics/content_form.html', context, session, False)
 
@@ -368,10 +369,10 @@ def joint(request, session_id, committee_id=None):
     session = Session.objects.get(pk=session_id)
 
     if committee_id:
-        committee = Committee.objects.get(pk=committee_id)
+        render_committee = Committee.objects.get(pk=committee_id)
         all_form = False
     else:
-        committee = ''
+        render_committee = ''
         all_form = True
 
     active = ActiveDebate.objects.get(session_id=session_id).active_debate
@@ -432,12 +433,12 @@ def joint(request, session_id, committee_id=None):
         if all_form:
             form = JointForm(subtopics_array, {'session': session.session_name, 'committee': '', 'debate': active, 'round_no': active_round_no})
         else:
-            form = JointForm(subtopics_array, {'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'round_no': active_round_no})
+            form = JointForm(subtopics_array, {'session': session.session_name, 'committee': render_committee.committee_name, 'debate': active, 'round_no': active_round_no})
 
     if all_form:
         context = {'debate': active, 'session': session, 'subtopics': subtopics, 'form': form, 'all_form': all_form, 'committees': committees_array, 'rounds': max_rounds_array, 'round_no': active_round_no}
     else:
-        context = {'debate': active, 'committee': committee, 'session': session, 'subtopics': subtopics, 'form': form, 'all_form': all_form, 'committees': committees_array, 'rounds': max_rounds_array, 'round_no': active_round_no}
+        context = {'debate': active, 'committee': render_committee, 'session': session, 'subtopics': subtopics, 'form': form, 'all_form': all_form, 'committees': committees_array, 'rounds': max_rounds_array, 'round_no': active_round_no}
 
     return check_authorization_and_render(request, 'statistics/joint_form.html', context, session, False)
 
@@ -452,10 +453,10 @@ def vote(request, session_id, committee_id=None):
     #We get the current session and debate of the user, then get the active committee from the active debate.
     session = Session.objects.get(pk=session_id)
     if committee_id:
-        committee = Committee.objects.get(pk=committee_id)
+        render_committee = Committee.objects.get(pk=committee_id)
         all_form = False
     else:
-        committee = ''
+        render_committee = ''
         all_form = True
     active = ActiveDebate.objects.filter(session_id=session_id)[0].active_debate
     active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
@@ -493,11 +494,11 @@ def vote(request, session_id, committee_id=None):
         if all_form:
             form = VoteForm({'session': session.session_name, 'committee': '', 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
         else:
-            form = VoteForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
+            form = VoteForm({'session': session.session_name, 'committee': render_committee.committee_name, 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
     if all_form:
         context = {'session': session, 'debate': active, 'form': form, 'all_form': all_form, 'committees': committees_array}
     else:
-        context = {'session': session, 'committee': committee, 'debate': active, 'form': form, 'all_form': all_form, 'committees': committees_array}
+        context = {'session': session, 'committee': render_committee, 'debate': active, 'form': form, 'all_form': all_form, 'committees': committees_array}
 
     return check_authorization_and_render(request, 'statistics/vote_form.html', context, session, False)
 
