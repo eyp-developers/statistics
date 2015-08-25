@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/$', protected_views.content, name='content'),
     url(r'^session/(?P<session_id>[0-9]+)/content/all/$', protected_views.content, name='content_all'),
     url(r'^session/(?P<session_id>[0-9]+)/joint/(?P<committee_id>[0-9]+)/$', protected_views.joint, name='joint'),
+    url(r'^session/(?P<session_id>[0-9]+)/joint/all/$', protected_views.joint, name='joint_all'),
     url(r'^api/session/(?P<session_id>[0-9]+)/$', apis.session_api, name='session_api'),
     url(r'^api/committees/(?P<session_id>[0-9]+)/$', apis.committees_api, name='committees_api'),
     url(r'^api/session/(?P<session_id>[0-9]+)/data/$', apis.data_api, name='data_api'),

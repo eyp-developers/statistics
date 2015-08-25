@@ -229,14 +229,38 @@ def add(request, session_id):
 #################
 
 @login_required(login_url = '/login/')
-def point(request, session_id, committee_id):
+def point(request, session_id, committee_id=None):
     #The Point view handles the submission of points, both creating the form from the data given, validating the form,
     #and sending the user to the right place if the data submission was successful.
+    session = Session.objects.get(pk=session_id)
+    #Get the committee and session of the committee that wants to make a point.
+    if committee_id:
+        committee = Committee.objects.get(pk=committee_id)
+        all_form = False
+    else:
+        committee = ''
+        all_form = True
 
     #Here we get the active debate, get the committee of the active debate and get the active round no.
     active = ActiveDebate.objects.get(session_id=session_id).active_debate
     active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
     active_round_no = ActiveRound.objects.get(session__pk=session_id).active_round
+
+    committees = Committee.objects.filter(session__pk=session_id)
+    committees_array = []
+    #Here we make an array of committees that can be passed to the form
+    for committee in committees:
+        committees_array.append((committee.pk, committee.committee_name),)
+    #We need to make an array of each round with the round number and the place in the array
+    #So we first make an array with the round numbers (1,2,3)
+    max_rounds = []
+    max_rounds_array = []
+    for i in range(session.session_max_rounds):
+        n = i + 1
+        max_rounds.append(n)
+    #Then we make an array with the value and the position, so the form can accept the data.
+    for r in max_rounds:
+        max_rounds_array.append((r, r),)
 
     subtopics_array = []
     #Get the subtopics of the active committee, and the loop through each one to create an array of subtopics.
@@ -246,10 +270,6 @@ def point(request, session_id, committee_id):
         subtopics = []
     for subtopic in subtopics:
         subtopics_array.append((subtopic.pk, subtopic.subtopic_text),)
-
-    #Get the committee and session of the committee that wants to make a point.
-    committee = Committee.objects.get(pk=committee_id)
-    session = Session.objects.get(pk=session_id)
 
     #If the user is trying to submit data (method=POST), take a look at it
     if request.method == 'POST':
@@ -279,10 +299,15 @@ def point(request, session_id, committee_id):
 
     else:
         #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
-        form = PointForm(subtopics_array, {'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'round_no': active_round_no})
+        if all_form:
+            form = PointForm(subtopics_array, {'session': session.session_name, 'committee': '', 'debate': active, 'round_no': active_round_no})
+        else:
+            form = PointForm(subtopics_array, {'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'round_no': active_round_no})
 
-
-    context = {'debate': active, 'committee': committee, 'session': session, 'subtopics': subtopics, 'form': form}
+    if all_form:
+        context = {'debate': active, 'all_form': all_form, 'session': session, 'subtopics': subtopics, 'form': form, 'committees': committees_array, 'rounds': max_rounds_array}
+    else:
+        context = {'debate': active, 'all_form': all_form, 'committee': committee, 'session': session, 'subtopics': subtopics, 'form': form, 'committees': committees_array, 'rounds': max_rounds_array}
     return check_authorization_and_render(request, 'statistics/point_form.html', context, session, False)
 
 
