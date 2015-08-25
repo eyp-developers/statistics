@@ -25,9 +25,9 @@ function requestStatisticsData() {
             $('#total_type').html('(' + response.type_point + ' Points, ' + response.type_dr + ' Direct Responses)');
             $('#latest_point').html('Latest Point By: ' + response.latest_point_name);
 
-            var latest_on = 'On: '
+            var latest_on = 'On: ';
             for (i_latest = 0; i_latest < response.latest_point_subtopics.length; ++i_latest) {
-              latest_on += response.latest_point_subtopics[i_latest] + ', '
+              latest_on += response.latest_point_subtopics[i_latest] + ', ';
             }
             $('#latest_on').html(latest_on);
 
@@ -101,12 +101,12 @@ $(document).ready(function() {
         series: [{
             name: 'Direct Response',
             data: [],
-            color: '#b62424'
+            color: '#F44336'
         },
         {
             name: 'Point',
             data: [],
-            color: '#1e4e8a'
+            color: '#3F51B5'
         }]
     });
     chart_subtopics = new Highcharts.Chart({
@@ -147,7 +147,7 @@ $(document).ready(function() {
     var i = 1;
     var name;
     var color_array;
-    color_array = ["#fff", "#1e4e8a", "#ffd326", "#02c75f", "#b62424", "#b61db1", "#323232"]
+    color_array = ["#fff", "#3F51B5", "#F44336", "#673AB7", "#009688",  "#E91E63", "#FFC107", "#607D8B", "#FF5722"];
     while (i <= max_rounds) {
       name = 'Round ' + i;
       chart_subtopics.addSeries({
