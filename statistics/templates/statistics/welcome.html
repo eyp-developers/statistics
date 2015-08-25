@@ -107,6 +107,21 @@
         {% endfor %}
       </tbody>
     </table>
+    <p>We highly recommend using the links above and giving them to your chairs/journos/orgas who will fill in data for one committee each. Using those links minimises the probability of something going wrong = less work for you.
+      However, if you only have one small group of people filling in all statistics, there are some special forms that can make their lives a little easier:</p>
+      {% if session.session_statistics == 'JF' %}
+      <h5>Joint Form for any committee: <a href="{% url 'statistics:joint_all' session.pk %}">{% url 'statistics:joint_all' session.pk %}</a></h5>
+      {% elif session.session_statistics == 'SF' %}
+      <h5>Statistics Form for any committee: <a href="{% url 'statistics:point_all' session.pk %}">{% url 'statistics:point_all' session.pk %}</a></h5>
+      <h5>Content Form for any committee: <a href="{% url 'statistics:content_all' session.pk %}">{% url 'statistics:content_all' session.pk %}</a></h5>
+      {% elif session.session_statistics == 'C' %}
+      <h5>Content Form for any committee: <a href="{% url 'statistics:content_all' session.pk %}">{% url 'statistics:content_all' session.pk %}</a></h5>
+      {% elif session.session_statistics == 'S' %}
+      <h5>Statistics Form for any committee: <a href="{% url 'statistics:point_all' session.pk %}">{% url 'statistics:point_all' session.pk %}</a></h5>
+      {% endif %}
+      {% if session.session_voting_enabled %}
+      <h5>Voting Form for any committee: <a href="{% url 'statistics:vote_all' session.pk %}">{% url 'statistics:vote_all' session.pk %}</a></h5>
+      {% endif %}
     {% else %}
     <h3>No Committees Yet!</h3>
     <h4>You can make some here: <a href="{% url 'statistics:add' session.pk %}">{% url 'statistics:add' session.pk %}</a></h4>
