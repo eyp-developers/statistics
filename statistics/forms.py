@@ -97,6 +97,10 @@ class SessionForm(forms.Form):
     start_date = forms.DateField(required=True)
     end_date = forms.DateField(required=True)
 
+    website = forms.URLField(required=False)
+    facebook = forms.URLField(required=False)
+    twitter = forms.URLField(required=False)
+
     #Setting up statistic types
     STATISTICS = 'S'
     CONTENT = 'C'
