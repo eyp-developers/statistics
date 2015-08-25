@@ -275,7 +275,7 @@ def point(request, session_id, committee_id):
                 point.subtopics.add(st)
 
             #Once all that is done, send the user to the thank you page.
-            return HttpResponseRedirect(reverse('statistics:thanks', args=[session_id, committee_id]))
+            messages.add_message(request, messages.SUCCESS, 'Point Successfully Submitted')
 
     else:
         #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
@@ -307,7 +307,7 @@ def content(request, session_id, committee_id):
                 point_content = form.cleaned_data['content']
                 )
             contentpoint.save()
-            return HttpResponseRedirect(reverse('statistics:content_thanks', args=[session_id, committee_id]))
+            messages.add_message(request, messages.SUCCESS, 'Content Point Successfully Submitted')
     else:
         form = ContentForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active})
 
@@ -359,7 +359,7 @@ def joint(request, session_id, committee_id):
             for s in form.cleaned_data['subtopics']:
                 st = SubTopic.objects.filter(pk=s)
                 point.subtopics.add(st[0])
-            return HttpResponseRedirect(reverse('statistics:joint_thanks', args=[session_id, committee_id]))
+            messages.add_message(request, messages.SUCCESS, 'Joint Point Successfully Submitted')
     else:
         form = JointForm(subtopics_array, {'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'round_no': active_round_no})
 
@@ -400,8 +400,8 @@ def vote(request, session_id, committee_id):
                 )
             #Save the vote to the database.
             vote.save()
-            #Then send the user to the thank you page.
-            return HttpResponseRedirect(reverse('statistics:vote_thanks', args=[session_id, committee_id]))
+            #Then send the user a success message.
+            messages.add_message(request, messages.SUCCESS, 'Point Successfully Submitted')
 
     else:
         #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
@@ -410,53 +410,6 @@ def vote(request, session_id, committee_id):
     context = {'session': session, 'committee': committee, 'debate': active, 'form': form}
 
     return check_authorization_and_render(request, 'statistics/vote_form.html', context, session, False)
-
-
-#################
-
-
-@login_required(login_url = '/login/')
-def thanks(request, session_id, committee_id):
-    #A thanks page that is given a url for the user to submit something again. We construct the url here and then set it as the href="" on the button
-    session = Session.objects.get(pk=session_id)
-    thanks_url = reverse('statistics:point', args=[session_id, committee_id])
-    context = {'thanks_url': thanks_url, 'session': session}
-    return render(request, 'statistics/thanks.html', context)
-
-
-#################
-
-
-@login_required(login_url = '/login/')
-def vote_thanks(request, session_id, committee_id):
-    #Same thing as the last thanks page, but with a url constructed for voting instead.
-    session = Session.objects.get(pk=session_id)
-    thanks_url = reverse('statistics:vote', args=[session_id, committee_id])
-    context = {'thanks_url': thanks_url, 'session': session}
-    return render(request, 'statistics/thanks.html', context)
-
-
-#################
-
-
-@login_required(login_url = '/login/')
-def content_thanks(request, session_id, committee_id):
-    #Same thing as the last thanks page, but with a url constructed for contentpoints instead.
-    session = Session.objects.get(pk=session_id)
-    thanks_url = reverse('statistics:content', args=[session_id, committee_id])
-    context = {'thanks_url': thanks_url, 'session': session}
-    return render(request, 'statistics/thanks.html', context)
-
-#################
-
-
-@login_required(login_url = '/login/')
-def joint_thanks(request, session_id, committee_id):
-    #Same thing as the last thanks page, but with a url constructed for contentpoints instead.
-    session = Session.objects.get(pk=session_id)
-    thanks_url = '/session/' + session_id + '/joint/' + committee_id
-    context = {'thanks_url': thanks_url, 'session': session}
-    return render(request, 'statistics/thanks.html', context)
 
 
 #################
