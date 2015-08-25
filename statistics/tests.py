@@ -122,10 +122,14 @@ class SessionViewTests(TestCase):
         self.session = create_session()
 
     def test_session_view_with_all_standard_values(self):
+        """
+        This test makes sure an empty (no committees) session will be shown correctly.
+        """
         response = self.client.get(reverse("statistics:session", args = [self.session.pk]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Leipzig 2015")
         self.assertContains(response, "80th International Session of the European Youth Parliament")
+        self.assertContains(response, "No committees are available yet!")
         self.assertContains(response, "Account")
         self.assertContains(response, "Login")
 
