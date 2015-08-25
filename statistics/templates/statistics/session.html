@@ -16,19 +16,19 @@
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-1">
 
     {% if session.session_website_link %}
-    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_website_link }}">{{ session.session_name }}'s Website</a>
+    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_website_link }}" target="_blank">{{ session.session_name }}'s Website</a>
     {% endif %}
 
     {% if session.session_resolution_link %}
-    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_resolution_link }}">View Resolutions</a>
+    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_resolution_link }}" target="_blank">View Resolutions</a>
     {% endif %}
 
     {% if session.session_facebook_link %}
-    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_facebook_link }}">{{ session.session_name }} on Facebook</a>
+    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_facebook_link }}" target="_blank">{{ session.session_name }} on Facebook</a>
     {% endif %}
 
     {% if session.session_twitter_link %}
-    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_twitter_link }}">{{ session.session_name }} on Twitter</a>
+    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_twitter_link }}" target="_blank">{{ session.session_name }} on Twitter</a>
     {% endif %}
   </div>
 </div>
