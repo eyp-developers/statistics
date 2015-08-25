@@ -56,6 +56,20 @@ class HomeViewTests(TestCase):
         self.assertContains(response, "Login")
         self.assertQuerysetEqual(response.context['latest_sessions_list'], ["<Session: Leipzig 2015>"])
 
+    def test_home_view_with_two_sessions_created(self):
+        """
+        This test will create two sessions with all the standard values and see whether they shows up properly
+        """
+        create_session() #Creating Session 1
+        create_session() #Creating Session 2
+        response = self.client.get(reverse("statistics:home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Leipzig 2015")
+        self.assertContains(response, "80th International Session of the European Youth Parliament")
+        self.assertContains(response, "Account")
+        self.assertContains(response, "Login")
+        self.assertQuerysetEqual(response.context['latest_sessions_list'], ["<Session: Leipzig 2015>", "<Session: Leipzig 2015>"])
+
 class LoginViewTests(TestCase):
 
     def setUp(self):
