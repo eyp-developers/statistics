@@ -18,7 +18,7 @@
       {% for session in active_sessions %}
         <div class="alert alert-dismissable alert-info">
           <button type="button" class="close" data-dismiss="alert">×</button>
-          <h4 style="margin-top: 6px;"><span class="mdi-social-whatshot"></span><strong><a href="{% url 'statistics:session' session.pk %}" class="alert-link">{{session.session_name}}</a></strong>, is going on!</h4>
+          <h4 style="margin-top: 6px;"><span class="mdi-social-whatshot"></span>   <strong><a href="{% url 'statistics:session' session.pk %}" class="alert-link">{{session.session_name}}</a></strong>, is going on!</h4>
         </div>
       {% endfor %}
     {% endif %}
