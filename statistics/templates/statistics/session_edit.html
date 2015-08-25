@@ -63,6 +63,34 @@ window.setTimeout(function() {
           </div>
         </div>
         <div class="form-group">
+          <label class="control-label col-sm-2" for="{{ form.website.id_for_label }}">Website:</label>
+          <div class="col-sm-10">
+            {{ form.website.errors }}
+            <input type="url" class="form-control" name="{{ form.website.html_name }}" id="{{ form.website.id_for_label }}" maxlength=100 value="{{ form.website.value }}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="{{ form.facebook.id_for_label }}">Facebook:</label>
+          <div class="col-sm-10">
+            {{ form.facebook.errors }}
+            <input type="url" class="form-control" name="{{ form.facebook.html_name }}" id="{{ form.facebook.id_for_label }}" maxlength=100 value="{{ form.facebook.value }}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="{{ form.twitter.id_for_label }}">Twitter:</label>
+          <div class="col-sm-10">
+            {{ form.twitter.errors }}
+            <input type="url" class="form-control" name="{{ form.twitter.html_name }}" id="{{ form.twitter.id_for_label }}" maxlength=100 value="{{ form.twitter.value }}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="{{ form.resolution.id_for_label }}">Link to Resolution Booklet:</label>
+          <div class="col-sm-10">
+            {{ form.resolution.errors }}
+            <input type="url" class="form-control" name="{{ form.resolution.html_name }}" id="{{ form.resolution.id_for_label }}" maxlength=100 value="{{ form.resolution.value }}">
+          </div>
+        </div>
+        <div class="form-group">
           <label class="control-label col-sm-2" for="{{ form.start_date.id_for_label }}">Start Date:</label>
           <div class="col-sm-10">
             {{ form.start_date.errors }}
@@ -123,6 +151,17 @@ window.setTimeout(function() {
             <div class="togglebutton togglebutton-material-{{ session.session_color }}">
                 <label>
                     <input type="checkbox" name="{{ form.is_visible.html_name }}" id="{{ form.is_visible.id_for_label }}" value="True" {% if session.session_is_visible == True %}checked{% endif %}>Publicly Visible
+                </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="{{ form.technical_problems.id_for_label }}"></label>
+          <div class="col-sm-10">
+            {{ form.technical_problems.errors }}
+            <div class="togglebutton togglebutton-material-{{ session.session_color }}">
+                <label>
+                    <input type="checkbox" name="{{ form.technical_problems.html_name }}" id="{{ form.technical_problems.id_for_label }}" value="True" {% if session.session_has_technical_problems == True %}checked{% endif %}>Technical Problems
                 </label>
             </div>
           </div>
