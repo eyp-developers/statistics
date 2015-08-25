@@ -37,6 +37,7 @@ class HomeViewTests(TestCase):
         """
         response = self.client.get(reverse("statistics:home"))
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "What's going on in GA?")
         self.assertContains(response, "No sessions are available.")
         self.assertContains(response, "Account")
         self.assertContains(response, "Login")
@@ -53,6 +54,7 @@ class HomeViewTests(TestCase):
         self.assertContains(response, "80th International Session of the European Youth Parliament")
         self.assertContains(response, "Account")
         self.assertContains(response, "Login")
+        self.assertQuerysetEqual(response.context['latest_sessions_list'], ["<Session: Leipzig 2015>"])
 
 class LoginViewTests(TestCase):
 
