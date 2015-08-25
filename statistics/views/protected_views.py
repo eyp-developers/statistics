@@ -74,6 +74,10 @@ def edit(request, session_id):
             s.session_name = form.cleaned_data['name']
             s.session_description = form.cleaned_data['description']
             s.session_picture = form.cleaned_data['picture']
+            s.session_resolution_link = form.cleaned_data['resolution']
+            s.session_website_link = form.cleaned_data['website']
+            s.session_facebook_link = form.cleaned_data['facebook']
+            s.session_twitter_link = form.cleaned_data['twitter']
             s.session_email = form.cleaned_data['email']
             s.session_country = form.cleaned_data['country']
             s.session_start_date = start_date
@@ -83,6 +87,7 @@ def edit(request, session_id):
             s.session_max_rounds = form.cleaned_data['max_rounds']
             s.session_color = form.cleaned_data['color']
             s.session_is_visible = form.cleaned_data['is_visible']
+            s.session_has_technical_problems = form.cleaned_data['technical_problems']
             #Save the newly edited session
             s.save()
 
@@ -94,13 +99,18 @@ def edit(request, session_id):
             'email': s.session_email,
             'country': s.session_country,
             'picture': s.session_picture,
+            'website': s.session_website_link,
+            'facebook': s.session_facebook_link,
+            'twitter': s.session_twitter_link,
+            'resolution': s.session_resolution_link,
             'start_date': s.session_start_date.strftime("%Y-%m-%d"),
             'end_date': s.session_end_date.strftime("%Y-%m-%d"),
             'statistics': s.session_statistics,
             'voting': s.session_voting_enabled,
             'max_rounds': s.session_max_rounds,
             'color': s.session_color,
-            'is_visible': s.session_is_visible})
+            'is_visible': s.session_is_visible,
+            'technical_problems': s.session_has_technical_problems})
 
     context = {'session': s, 'form': form}
     return check_authorization_and_render(request, 'statistics/session_edit.html', context, s)
