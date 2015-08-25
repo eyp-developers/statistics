@@ -101,6 +101,21 @@ class HomeViewTests(TestCase):
         self.assertQuerysetEqual(response.context['latest_sessions_list'], [ "<Session: Leipzig 2015>"])
 
 
+class SessionViewTests(TestCase):
+
+    def setUp(self):
+        self.user = create_user_max()
+        self.session = create_session()
+
+    def test_session_view_with_all_standard_values(self):
+        response = self.client.get(reverse("statistics:session", args = [self.session.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Leipzig 2015")
+        self.assertContains(response, "80th International Session of the European Youth Parliament")
+        self.assertContains(response, "Account")
+        self.assertContains(response, "Login")
+
+
 class LoginViewTests(TestCase):
 
     def setUp(self):
