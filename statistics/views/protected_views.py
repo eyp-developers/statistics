@@ -446,14 +446,25 @@ def joint(request, session_id, committee_id=None):
 
 
 @login_required(login_url = '/login/')
-def vote(request, session_id, committee_id):
+def vote(request, session_id, committee_id=None):
     #The Vote form is just as complex as the Point form, and is made in a very similar manner.
 
     #We get the current session and debate of the user, then get the active committee from the active debate.
     session = Session.objects.get(pk=session_id)
-    committee = Committee.objects.get(pk=committee_id)
+    if committee_id:
+        committee = Committee.objects.get(pk=committee_id)
+        all_form = False
+    else:
+        committee = ''
+        all_form = True
     active = ActiveDebate.objects.filter(session_id=session_id)[0].active_debate
     active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
+
+    committees = Committee.objects.filter(session__pk=session_id)
+    committees_array = []
+    #Here we make an array of committees that can be passed to the form
+    for committee in committees:
+        committees_array.append((committee.pk, committee.committee_name),)
 
     #If the user is trying to submit something:
     if request.method == 'POST':
@@ -479,9 +490,14 @@ def vote(request, session_id, committee_id):
 
     else:
         #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
-        form = VoteForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
-
-    context = {'session': session, 'committee': committee, 'debate': active, 'form': form}
+        if all_form:
+            form = VoteForm({'session': session.session_name, 'committee': '', 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
+        else:
+            form = VoteForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
+    if all_form:
+        context = {'session': session, 'debate': active, 'form': form, 'all_form': all_form, 'committees': committees_array}
+    else:
+        context = {'session': session, 'committee': committee, 'debate': active, 'form': form, 'all_form': all_form, 'committees': committees_array}
 
     return check_authorization_and_render(request, 'statistics/vote_form.html', context, session, False)
 
