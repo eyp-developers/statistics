@@ -129,6 +129,16 @@ class SessionViewTests(TestCase):
         self.assertContains(response, "Account")
         self.assertContains(response, "Login")
 
+    def test_session_view_with_one_committee(self):
+        committee = create_committee(session=self.session)
+        response = self.client.get(reverse("statistics:session", args = [self.session.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Leipzig 2015")
+        self.assertContains(response, "80th International Session of the European Youth Parliament")
+        self.assertContains(response, "ENVI")
+        self.assertContains(response, ips_1_p)
+        self.assertContains(response, "Account")
+        self.assertContains(response, "Login")
 
 class LoginViewTests(TestCase):
 
