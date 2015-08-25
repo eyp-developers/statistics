@@ -47,6 +47,13 @@
 
 <div class="container" style="margin-top:20px;">
 
+  {% if active_debate %}
+      <div class="alert alert-dismissable alert-info">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h4 style="margin-top: 6px;"><span class="mdi-social-whatshot"></span>   <strong><a href="{% url 'statistics:debate' session.pk active_debate_committee.pk %}" class="alert-link">{{active_debate_committee.committee_name}}</a></strong>, is going on!</h4>
+      </div>
+  {% endif %}
+
   <div class="panel panel-material-{{ session.session_color }}">
 
     <div class="panel-heading">

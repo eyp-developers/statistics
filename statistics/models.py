@@ -164,6 +164,7 @@ class Session(models.Model):
     session_ongoing.boolean = True
     session_ongoing.short_description = 'Session Ongoing'
 
+
 #Defining the Active Debate Class that tells a session which debate is ongoing.
 class ActiveDebate(models.Model):
     session = models.ForeignKey(Session)

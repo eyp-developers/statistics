@@ -22,7 +22,25 @@ from ..forms import SessionForm,  SessionEditForm, PointForm, VoteForm, ContentF
 def home(request):
     #All the home page needs is a list of all sessions ordered by the start date. We create the list, then the context and finally render the template.
     latest_sessions_list = Session.objects.filter(session_is_visible=True).order_by('-session_start_date')[:20]
-    context = {'latest_sessions_list': latest_sessions_list}
+    active_sessions = []
+    for session in Session.objects.all():
+        if Point.objects.filter(session=session):
+            latest_point = Point.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+        else:
+            latest_point = time.strptime("23/05/1996", "%d/%m/%Y")
+        if ContentPoint.objects.filter(session=session):
+            latest_content = ContentPoint.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+        else:
+            latest_content = time.strptime("23/05/1996", "%d/%m/%Y")
+        if Vote.objects.filter(session=session):
+            latest_vote = Vote.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+        else:
+            latest_vote = time.strptime("23/05/1996", "%d/%m/%Y")
+        today = datetime.now().date()
+        if (latest_point == today) or (latest_content == today) or (latest_vote == today):
+            active_sessions.append(session)
+
+    context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions}
     return render(request, 'statistics/home.html', context)
 
 def session(request, session_id):
@@ -33,8 +51,29 @@ def session(request, session_id):
     #and the name and data of the session itself.
     session_committee_list = Committee.objects.filter(session__id=session_id).order_by('committee_name')
     session = Session.objects.get(pk=session_id)
+
+    #Getting the latest of everything to check if the date of them was today.
+    if Point.objects.filter(session=session):
+        latest_point = Point.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+    else:
+        latest_point = time.strptime("23/05/1996", "%d/%m/%Y")
+    if ContentPoint.objects.filter(session=session):
+        latest_content = ContentPoint.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+    else:
+        latest_content = time.strptime("23/05/1996", "%d/%m/%Y")
+    if Vote.objects.filter(session=session):
+        latest_vote = Vote.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+    else:
+        latest_vote = time.strptime("23/05/1996", "%d/%m/%Y")
+    today = datetime.now().date()
+    if (latest_point == today) or (latest_content == today) or (latest_vote == today):
+        active_debate = ActiveDebate.objects.filter(session=session)[0].active_debate
+        active_debate_committee = Committee.objects.filter(session=session).filter(committee_name=active_debate)[0]
+    else:
+        active_debate = []
+        active_debate_committee = []
     voting_enabled = session.session_voting_enabled
-    context = {'session_committee_list': session_committee_list, 'session_id': session_id, 'session': session, 'voting_enabled': voting_enabled}
+    context = {'session_committee_list': session_committee_list, 'session_id': session_id, 'session': session, 'voting_enabled': voting_enabled, 'active_debate': active_debate, 'active_debate_committee': active_debate_committee}
     return render(request, 'statistics/session.html', context)
 
 def debate(request, session_id, committee_id):
