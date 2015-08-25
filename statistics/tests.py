@@ -10,7 +10,7 @@ from .models import Session
 
 # Create your tests here.
 
-def create_session(timedelta=0, duration=10, statistics_type="JF", is_visible=True, name="Leipzig 2015", description="80th International Session of the European Youth Parliament", picture="https://upload.wikimedia.org/wikipedia/commons/c/c4/PM5544_with_non-PAL_signals.png", email="test@example.com", country="DE", color="deep-orange", admin_user=None, submission_user=None):
+def create_session(name="Leipzig 2015", description="80th International Session of the European Youth Parliament", picture="https://upload.wikimedia.org/wikipedia/commons/c/c4/PM5544_with_non-PAL_signals.png", email="test@example.com", country="DE", color="deep-orange", admin_user=None, submission_user=None, timedelta=0, duration=10, statistics_type="JF", is_visible=True):
     """
     This will create a session with the above specified data and defaults.
     """
