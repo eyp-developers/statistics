@@ -134,6 +134,9 @@ class SessionViewTests(TestCase):
         self.assertContains(response, "Login")
 
     def test_session_view_with_one_committee(self):
+        """
+        This test makes sure that a session with one committee will properly display it.
+        """
         committee = create_committee(session=self.session)
         response = self.client.get(reverse("statistics:session", args = [self.session.pk]))
         self.assertEqual(response.status_code, 200)
@@ -145,6 +148,9 @@ class SessionViewTests(TestCase):
         self.assertContains(response, "Login")
 
     def test_session_view_with_two_committees(self):
+        """
+        This test will make sure that a session with two committees will properly display them.
+        """
         committee = create_committee(session=self.session)
         committee2 = create_committee(session=self.session, name="AFCO", topic=lor_1_p)
         response = self.client.get(reverse("statistics:session", args = [self.session.pk]))
