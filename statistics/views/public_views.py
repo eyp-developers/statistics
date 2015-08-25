@@ -117,8 +117,11 @@ def create_session(request):
             #We need to create a session, active debate and active round. We also need to create 2 new users for the session.
             session = Session(session_name = form.cleaned_data['name'],
                 session_description = form.cleaned_data['description'],
-                session_picture = form.cleaned_data['picture'],
                 session_email = form.cleaned_data['email'],
+                session_picture = form.cleaned_data['picture'],
+                session_website_link = form.cleaned_data['website'],
+                session_facebook_link = form.cleaned_data['facebook'],
+                session_twitter_link = form.cleaned_data['twitter'],
                 session_country = form.cleaned_data['country'],
                 session_start_date = start_date,
                 session_end_date = end_date,
