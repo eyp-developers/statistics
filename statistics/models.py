@@ -164,27 +164,6 @@ class Session(models.Model):
     session_ongoing.boolean = True
     session_ongoing.short_description = 'Session Ongoing'
 
-    def ga_ongoing(self):
-        latest_point = Point.objects.filter(session=self).order_by('-timestamp')[0].timestamp.date()
-        latest_content = ContentPoint.objects.filter(session=self).order_by('-timestamp')[0].timestamp.date()
-        latest_vote = Vote.objects.filter(session=self).order_by('-timestamp')[0].timestamp.date()
-        today = timezone.now().date()
-        if (latest_point == today) or (latest_content == today) or (latest_vote == today):
-            return True
-        else:
-            return False
-    ga_ongoing.boolean = True
-    ga_ongoing.admin_order_field = 'session_start_date'
-    ga_ongoing.short_description = 'GA Ongoing'
-
-    def debate_ongoing(self):
-        if ga_ongoing == True:
-            return ActiveDebate.objects.get(session=self).active_debate
-        else:
-            return 'None'
-    debate_ongoing.admin_order_field = 'session_start_date'
-    debate_ongoing.short_description = 'Current Debate'
-
 
 #Defining the Active Debate Class that tells a session which debate is ongoing.
 class ActiveDebate(models.Model):
