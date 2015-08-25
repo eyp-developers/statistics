@@ -85,6 +85,22 @@ class HomeViewTests(TestCase):
         self.assertContains(response, "Login")
         self.assertQuerysetEqual(response.context['latest_sessions_list'], [])
 
+    def test_home_view_with_one_public_and_one_non_public_session_created(self):
+        """
+        This test will create one public and one non public session and test whether they show up and do not show up as expected.
+        """
+        create_session(is_visible=False) #Creating non public Session 1
+        create_session() # Creating public Session 1
+        response = self.client.get(reverse("statistics:home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "What's going on in GA?")
+        self.assertContains(response, "Leipzig 2015")
+        self.assertContains(response, "80th International Session of the European Youth Parliament")
+        self.assertContains(response, "Account")
+        self.assertContains(response, "Login")
+        self.assertQuerysetEqual(response.context['latest_sessions_list'], [ "<Session: Leipzig 2015>"])
+
+
 class LoginViewTests(TestCase):
 
     def setUp(self):
