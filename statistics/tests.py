@@ -14,7 +14,7 @@ from .models import Session, Committee
 
 # 1 Paragraph long Lorem Ipsum
 ips_1_p = "Emerging economies: The EUs joint free trade deal with multiple African countries has received both criticism and acclaim. How should the EU benefit from mutual trade and political cooperation whilst ensuring the development of human rights and enhancing environmental protection in the region?"
-
+lor_1_p = "No mans land: Technologies with the potential to revolutionise transport, such as driverless cars and drone deliveries, will soon be ready to enter the commercial market. Balancing both the risks of introducing these technologies too early with their possible economic benefits, how should the EU position itself when legislating the introduction of these innovations?"
 
 
 
