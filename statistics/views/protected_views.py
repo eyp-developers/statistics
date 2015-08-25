@@ -266,7 +266,10 @@ def point(request, session_id, committee_id=None):
     subtopics_array = []
     #Get the subtopics of the active committee, and the loop through each one to create an array of subtopics.
     if active_committee:
-        subtopics = SubTopic.objects.filter(session_id=session_id).filter(committee=active_committee[0])
+        if all_form:
+            subtopics = SubTopic.objects.filter(session_id=session_id)
+        else:
+            subtopics = SubTopic.objects.filter(session_id=session_id).filter(committee=active_committee[0])
     else:
         subtopics = []
     for subtopic in subtopics:
