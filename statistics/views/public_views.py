@@ -5,6 +5,7 @@ from datetime import date
 from datetime import datetime
 from time import strftime
 
+from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -183,7 +184,7 @@ def create_session(request):
             active_round.save()
 
             #Once we've done all that, lets say thanks for all that hard work.
-            return HttpResponseRedirect('/welcome/' + str(session.pk) + '/')
+            return HttpResponseRedirect(reverse('statistics:welcome', args=[session.pk]))
         else:
             print 'Wasnt valid'
             print form.errors
