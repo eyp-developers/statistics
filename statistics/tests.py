@@ -70,6 +70,19 @@ class HomeViewTests(TestCase):
         self.assertContains(response, "Login")
         self.assertQuerysetEqual(response.context['latest_sessions_list'], ["<Session: Leipzig 2015>", "<Session: Leipzig 2015>"])
 
+    def test_home_view_with_one_non_public_session_created(self):
+        """
+        This test will create one non public session and test whether it does not show up and shows the proper message instead.
+        """
+        create_session(is_visible=False) #Creating Session 1
+        response = self.client.get(reverse("statistics:home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "What's going on in GA?")
+        self.assertContains(response, "No sessions are available.")
+        self.assertContains(response, "Account")
+        self.assertContains(response, "Login")
+        self.assertQuerysetEqual(response.context['latest_sessions_list'], [])
+
 class LoginViewTests(TestCase):
 
     def setUp(self):
