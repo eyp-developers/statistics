@@ -46,6 +46,18 @@
 							<input class="fs-anim-lower" id="{{ form.picture.id_for_label }}" name="{{ form.picture.html_name }}" type="url" placeholder="http://images.google.com/yourface" required/>
 						</li>
 						<li>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.facebook.id_for_label }}" data-info="Useful for people to find your session on fb!">Could we get a link to your session's facebook page?</label>
+							<input class="fs-anim-lower" id="{{ form.facebook.id_for_label }}" name="{{ form.facebook.html_name }}" type="url" placeholder="http://facebook.com/yoursession"/>
+						</li>
+						<li>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.website.id_for_label }}" data-info="Don't worry if you don't have one.">Could we get a link to your session website? (If you've got one..)</label>
+							<input class="fs-anim-lower" id="{{ form.website.id_for_label }}" name="{{ form.website.html_name }}" type="url" placeholder="http://aneypsession.com"/>
+						</li>
+						<li>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.twitter.id_for_label }}" data-info="Don't worry if you don't have one.">Could we get a link to your session twitter? (If you have one)</label>
+							<input class="fs-anim-lower" id="{{ form.twitter.id_for_label }}" name="{{ form.twitter.html_name }}" type="url" placeholder="http://twitter.com/yoursession"/>
+						</li>
+						<li>
 							<label class="fs-field-label fs-anim-upper" for="{{ form.start_date.id_for_label }}" data-info="Year/Month/Date please.">When does your session start?</label>
 							<input class="fs-anim-lower" id="{{ form.start_date.id_for_label }}" name="{{ form.start_date.html_name }}" type="date" placeholder="dd/mm/yyyy" required/>
 						</li>
@@ -69,7 +81,6 @@
 								<span><input id="content" name="{{ form.statistics.html_name }}" type="radio" value="C"/><label for="content" class="radio-content">Content Only</label></span>
 								<span><input id="split" name="{{ form.statistics.html_name }}" type="radio" value="SF"/><label for="split" class="radio-split">Both Statistics &amp; Content, Different Forms</label></span>
 								<span><input id="joint" name="{{ form.statistics.html_name }}" type="radio" value="JF"/><label for="joint" class="radio-joint">Both Statistics &amp; Content, One Form</label></span>
-								<span><input id="none" name="{{ form.statistics.html_name }}" type="radio" value="N/A"/><label for="none" class="radio-none">No Statistics, Just Voting</label></span>
 							</div>
 						</li>
 						<li data-input-trigger>
