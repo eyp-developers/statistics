@@ -216,6 +216,11 @@ class SessionEditForm(forms.Form):
         start_date = forms.DateField(required=True)
         end_date = forms.DateField(required=True)
 
+        website = forms.URLField(required=False)
+        facebook = forms.URLField(required=False)
+        twitter = forms.URLField(required=False)
+        resolution = forms.URLField(required=False)
+
         #Setting up statistic types
         STATISTICS = 'S'
         CONTENT = 'C'
@@ -276,6 +281,8 @@ class SessionEditForm(forms.Form):
         color = forms.ChoiceField(choices=COLOR_TYPES, required=True)
 
         is_visible = forms.BooleanField(required=False)
+
+        technical_problems = forms.BooleanField(required=False)
 
 class CommitteeForm(forms.Form):
 
