@@ -13,7 +13,7 @@ from .models import Session
 # Here we define some placeholder text we can use throughout the tests.
 
 # 1 Paragraph long Lorem Ipsum
-ips_1_p = "An existential crisis: In light of the 2017 EU referendum in the United Kingdom and pressure from the UK’s corporate sector to renegotiate with other Member States, how should the EU deal with the increased call for a ‘Europe a la carte’ and referenda that are potentially harmful to its own existence, whilst maintaining its democratic principles?"
+ips_1_p = "Emerging economies: The EUs joint free trade deal with multiple African countries has received both criticism and acclaim. How should the EU benefit from mutual trade and political cooperation whilst ensuring the development of human rights and enhancing environmental protection in the region?"
 
 
 
