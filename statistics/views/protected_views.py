@@ -315,11 +315,25 @@ def point(request, session_id, committee_id=None):
 
 
 @login_required(login_url = '/login/')
-def content(request, session_id, committee_id):
+def content(request, session_id, committee_id=None):
     session = Session.objects.get(pk=session_id)
-    committee = Committee.objects.get(pk=committee_id)
+
+    if committee_id:
+        committee = Committee.objects.get(pk=committee_id)
+        all_form = False
+    else:
+        committee = ''
+        all_form = True
+
     active = ActiveDebate.objects.get(session_id=session_id).active_debate
     active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
+
+    committees = Committee.objects.filter(session__pk=session_id)
+    committees_array = []
+    #Here we make an array of committees that can be passed to the form
+    for committee in committees:
+        committees_array.append((committee.pk, committee.committee_name),)
+
     if request.method == 'POST':
         print request.POST
 
@@ -334,9 +348,15 @@ def content(request, session_id, committee_id):
             contentpoint.save()
             messages.add_message(request, messages.SUCCESS, 'Content Point Successfully Submitted')
     else:
-        form = ContentForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active})
+        if all_form:
+            form = ContentForm({'session': session.session_name, 'committee': '', 'debate': active})
+        else:
+            form = ContentForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active})
 
-    context = {'debate': active, 'committee': committee, 'session': session, 'form': form}
+    if all_form:
+        context = {'debate': active, 'session': session, 'form': form, 'committees': committees_array, 'all_form': all_form}
+    else:
+        context = {'debate': active, 'committee': committee, 'session': session, 'form': form, 'committees': committees_array, 'all_form': all_form}
 
     return check_authorization_and_render(request, 'statistics/content_form.html', context, session, False)
 
