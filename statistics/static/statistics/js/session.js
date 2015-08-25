@@ -19,7 +19,7 @@ function requestData() {
 }
 
 $(document).ready(function() {
-  var $debates = $('.debates')
+  var $debates = $('.debates');
         $debates.masonry({
             itemSelector: '.debate-box',
             columnWidth: '.debate-box',
@@ -87,12 +87,12 @@ $(document).ready(function() {
         series: [{
             name: 'Direct Response',
             data: [],
-            color: '#b62424'
+            color: '#F44336'
         },
         {
             name: 'Point',
             data: [],
-            color: '#1e4e8a'
+            color: '#3F51B5'
         }]
     });
 });
