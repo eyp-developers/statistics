@@ -22,7 +22,25 @@ from ..forms import SessionForm,  SessionEditForm, PointForm, VoteForm, ContentF
 def home(request):
     #All the home page needs is a list of all sessions ordered by the start date. We create the list, then the context and finally render the template.
     latest_sessions_list = Session.objects.filter(session_is_visible=True).order_by('-session_start_date')[:20]
-    context = {'latest_sessions_list': latest_sessions_list}
+    active_sessions = []
+    for session in Session.objects.all():
+        if Point.objects.filter(session=session):
+            latest_point = Point.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+        else:
+            latest_point = time.strptime("23/05/1996", "%d/%m/%Y")
+        if ContentPoint.objects.filter(session=session):
+            latest_content = ContentPoint.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+        else:
+            latest_content = time.strptime("23/05/1996", "%d/%m/%Y")
+        if Vote.objects.filter(session=session):
+            latest_vote = Vote.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+        else:
+            latest_vote = time.strptime("23/05/1996", "%d/%m/%Y")
+        today = datetime.now().date()
+        if (latest_point == today) or (latest_content == today) or (latest_vote == today):
+            active_sessions.append(session)
+
+    context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions}
     return render(request, 'statistics/home.html', context)
 
 def session(request, session_id):
