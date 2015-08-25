@@ -144,6 +144,8 @@ def create_session(request):
             admin_group = Group.objects.get(name='SessionAdmin')
             admin_group.user_set.add(admin_user)
 
+            authenticate(username=admin_user.username, password=admin_user.password)
+
             #Creating the Submit user
             submit_user = User.objects.create_user(username = name,
                 email = form.cleaned_data['email'],
