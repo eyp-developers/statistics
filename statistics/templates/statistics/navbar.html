@@ -34,7 +34,7 @@
 
       <ul class="nav navbar-nav navbar-right">
 
-        {% url 'statistics:session' session.pk as session_url %}
+        {% url 'statistics:session' session.pk as session_url %} <!-- here we set a variable session_url which we will compare to the current url in the next line -->
         {% if not request.get_full_path = session_url %}
         <li><a href="{% url 'statistics:session' session.pk %}">Go to {{ session.session_name }}</a></li>
         {% endif %}
