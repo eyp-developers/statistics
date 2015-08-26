@@ -1,6 +1,8 @@
 {% extends 'statistics/base.html' %} {% load staticfiles %} {% block page_title %}Manage: {{ session.session_name }}{% endblock %} {% block content %}
 <h1>Manage {{ session.session_name }}</h1>
 <br>
+<div id="results">
+</div>
 <div class="panel panel-material-{{ session.session_color }}-300">
   <div class="panel-heading">
     <h3 class="panel-title">Change Active Debate/Round</h3>
@@ -336,5 +338,14 @@
   }
 </style>
 {% endblock %} {% block footer_scripts %}
-<script type="text/javascript" src="{% static 'statistics/js/manage_joint.js' %}" charset="utf-8"></script>
+<script type="text/javascript" src="{% static 'statistics/js/manage.js' %}" charset="utf-8"></script>
+<script>
+{% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'S' %}
+requestData('point', 0, 20);
+{% endif %} {% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'C' %}
+requestData('content', 0, 20);
+{% endif %} {% if session.session_voting_enabled %}
+requestData('vote', 0, 20);
+{% endif %}
+</script>
 {% endblock %}
