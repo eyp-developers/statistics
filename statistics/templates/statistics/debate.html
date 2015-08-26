@@ -10,6 +10,13 @@
     <h1 class="session-name">Debate: {{ committee.committee_name }}</h1>
     <h3><a class="btn btn-material-{{ session.session_color }}-200 btn-lg" href="{% url 'statistics:session' session.pk %}">Back to {{ session.session_name }}</a></h3>
   </div>
+  {% if no_stats %}
+      <div class="alert alert-material-{{ session.session_color }}-500 text-center">
+        <p>
+          GA Statistics hasn't started yet for {{ session.session_name }}!
+        </p>
+      </div>
+  {% endif %}
   <div class="container">
     <h1 style="text-align: center; font-size: 60px;">{{ committee.committee_name }}</h1>
     <h3 style="text-align: center;">{{ committee.committee_topic }}</h3>
