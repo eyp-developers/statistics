@@ -12,7 +12,7 @@ function requestData() {
             chart_points.redraw();
 
             // call it again after one second
-            setTimeout(requestData, 1000);
+            setTimeout(requestData, 2000);
         },
         cache: false
     });
