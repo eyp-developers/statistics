@@ -1,6 +1,20 @@
 {% extends 'statistics/base.html' %} {% load staticfiles %} {% block page_title %}Manage: {{ session.session_name }}{% endblock %} {% block content %}
 <h1>Manage {{ session.session_name }}</h1>
 <br>
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-dismissable alert-success shadow-z-2">
+  <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+</div>
+{% endfor %}
+<script type="text/javascript">
+window.setTimeout(function() {
+  $(".alert").fadeTo(500, 0).slideUp(500, function(){
+    $(this).remove();
+  });
+}, 5000);
+</script>
+{% endif %}
 <div id="results">
 </div>
 <div class="panel panel-material-{{ session.session_color }}-300">
