@@ -41,7 +41,12 @@ def home(request):
         if (latest_point == today) or (latest_content == today) or (latest_vote == today):
             active_sessions.append(session)
 
-    context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions}
+    user = request.user
+    if user and not user.is_superuser:
+        session = Session.objects.filter(session_admin_user=user)[0]
+        context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions, 'admin_session': True, 'session': session}
+    else:
+        context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions}
     return render(request, 'statistics/home.html', context)
 
 def session(request, session_id):
