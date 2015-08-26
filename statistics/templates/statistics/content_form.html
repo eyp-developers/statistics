@@ -2,12 +2,26 @@
 
 {% load staticfiles %}
 
-{% block page_title %}Submit Content Point: {{ committee.committee_name }}{% endblock %}
+{% block page_title %}Submit Content Point: {% if committee %}{{ committee.committee_name }}{% else %}All{% endif %}{% endblock %}
 
 {% block content %}
-<h1 style="text-align: center">Submit a content point from {{ committee.committee_name }} on {{ debate }}</h1>
+<h1 style="text-align: center">{% if all_form %}Submit Points{% else %}Submit a content point from {{ committee.committee_name }} on {{ debate }}{% endif %}</h1>
 <br>
-<form class="form-horizontal" role="form" action="{% url 'statistics:content' session.id committee.id %}" method="post">
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-dismissable alert-success shadow-z-2">
+  <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+</div>
+{% endfor %}
+<script type="text/javascript">
+window.setTimeout(function() {
+  $(".alert").fadeTo(500, 0).slideUp(500, function(){
+    $(this).remove();
+  });
+}, 5000);
+</script>
+{% endif %}
+<form class="form-horizontal" role="form" action="{% if all_form %}{% url 'statistics:content_all' session.id %}{% else %}{% url 'statistics:content' session.id committee.id %}{% endif %}" method="post">
   {% csrf_token %}
   <div class="form-group">
     <label class="control-label col-sm-2" for="{{ form.session.id_for_label }}">Session:</label>
@@ -20,14 +34,30 @@
     <label class="control-label col-sm-2" for="{{ form.committee.id_for_label }}">Commitee:</label>
     <div class="col-sm-10">
       {{ form.committee.errors }}
-      <input type="text" class="form-control" name="{{ form.committee.html_name }}" id="{{ form.committee.id_for_label }}" maxlength=8 value="{{ form.committee.value }}" readonly>
+      {% if all_form %}
+      <select class="form-control" name="{{ form.committee.html_name }}" id="{{ form.committee.id_for_label }}" required>
+        {% for id,text in committees %}
+        <option value="{{ text }}">{{ text }}</option>
+        {% endfor %}
+      </select>
+      {% else %}
+      <input type="text" class="form-control" name="{{ form.committee.html_name }}" id="{{ form.committee.id_for_label }}" maxlength=8 value="{{ form.committee.value }}" readonly required>
+      {% endif %}
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="{{ form.debate.id_for_label }}">Debate:</label>
     <div class="col-sm-10">
       {{ form.debate.errors }}
-      <input type="text" class="form-control" name="{{ form.debate.html_name }}" id="{{ form.debate.id_for_label }}" value="{{ form.debate.value }}" readonly>
+      {% if all_form %}
+      <select class="form-control" name="{{ form.debate.html_name }}" id="{{ form.debate.id_for_label }}" required>
+        {% for id,text in committees %}
+        <option value="{{ text }}" {% if text == debate %}selected{% endif %}>{{ text }}</option>
+        {% endfor %}
+      </select>
+      {% else %}
+      <input type="text" class="form-control" name="{{ form.debate.html_name }}" id="{{ form.debate.id_for_label }}" maxlength=8 value="{{ form.debate.value }}" readonly required>
+      {% endif %}
     </div>
   </div>
   <div class="form-group">

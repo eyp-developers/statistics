@@ -229,27 +229,51 @@ def add(request, session_id):
 #################
 
 @login_required(login_url = '/login/')
-def point(request, session_id, committee_id):
+def point(request, session_id, committee_id=None):
     #The Point view handles the submission of points, both creating the form from the data given, validating the form,
     #and sending the user to the right place if the data submission was successful.
+    session = Session.objects.get(pk=session_id)
+    #Get the committee and session of the committee that wants to make a point.
+
+    if committee_id:
+        render_committee = Committee.objects.get(pk=committee_id)
+        all_form = False
+    else:
+        render_committee = ''
+        all_form = True
 
     #Here we get the active debate, get the committee of the active debate and get the active round no.
     active = ActiveDebate.objects.get(session_id=session_id).active_debate
     active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
     active_round_no = ActiveRound.objects.get(session__pk=session_id).active_round
 
+    committees = Committee.objects.filter(session__pk=session_id)
+    committees_array = []
+    #Here we make an array of committees that can be passed to the form
+    for committee in committees:
+        committees_array.append((committee.pk, committee.committee_name),)
+    #We need to make an array of each round with the round number and the place in the array
+    #So we first make an array with the round numbers (1,2,3)
+    max_rounds = []
+    max_rounds_array = []
+    for i in range(session.session_max_rounds):
+        n = i + 1
+        max_rounds.append(n)
+    #Then we make an array with the value and the position, so the form can accept the data.
+    for r in max_rounds:
+        max_rounds_array.append((r, r),)
+
     subtopics_array = []
     #Get the subtopics of the active committee, and the loop through each one to create an array of subtopics.
     if active_committee:
-        subtopics = SubTopic.objects.filter(session_id=session_id).filter(committee=active_committee[0])
+        if all_form:
+            subtopics = SubTopic.objects.filter(session_id=session_id)
+        else:
+            subtopics = SubTopic.objects.filter(session_id=session_id).filter(committee=active_committee[0])
     else:
         subtopics = []
     for subtopic in subtopics:
         subtopics_array.append((subtopic.pk, subtopic.subtopic_text),)
-
-    #Get the committee and session of the committee that wants to make a point.
-    committee = Committee.objects.get(pk=committee_id)
-    session = Session.objects.get(pk=session_id)
 
     #If the user is trying to submit data (method=POST), take a look at it
     if request.method == 'POST':
@@ -275,14 +299,19 @@ def point(request, session_id, committee_id):
                 point.subtopics.add(st)
 
             #Once all that is done, send the user to the thank you page.
-            return HttpResponseRedirect(reverse('statistics:thanks', args=[session_id, committee_id]))
+            messages.add_message(request, messages.SUCCESS, 'Point Successfully Submitted')
 
     else:
         #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
-        form = PointForm(subtopics_array, {'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'round_no': active_round_no})
+        if all_form:
+            form = PointForm(subtopics_array, {'session': session.session_name, 'committee': '', 'debate': active, 'round_no': active_round_no})
+        else:
+            form = PointForm(subtopics_array, {'session': session.session_name, 'committee': render_committee.committee_name, 'debate': active, 'round_no': active_round_no})
 
-
-    context = {'debate': active, 'committee': committee, 'session': session, 'subtopics': subtopics, 'form': form}
+    if all_form:
+        context = {'debate': active, 'all_form': all_form, 'session': session, 'subtopics': subtopics, 'form': form, 'committees': committees_array, 'rounds': max_rounds_array}
+    else:
+        context = {'debate': active, 'all_form': all_form, 'committee': render_committee, 'session': session, 'subtopics': subtopics, 'form': form, 'committees': committees_array, 'rounds': max_rounds_array}
     return check_authorization_and_render(request, 'statistics/point_form.html', context, session, False)
 
 
@@ -290,11 +319,25 @@ def point(request, session_id, committee_id):
 
 
 @login_required(login_url = '/login/')
-def content(request, session_id, committee_id):
+def content(request, session_id, committee_id=None):
     session = Session.objects.get(pk=session_id)
-    committee = Committee.objects.get(pk=committee_id)
+
+    if committee_id:
+        render_committee = Committee.objects.get(pk=committee_id)
+        all_form = False
+    else:
+        render_committee = ''
+        all_form = True
+
     active = ActiveDebate.objects.get(session_id=session_id).active_debate
     active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
+
+    committees = Committee.objects.filter(session__pk=session_id)
+    committees_array = []
+    #Here we make an array of committees that can be passed to the form
+    for committee in committees:
+        committees_array.append((committee.pk, committee.committee_name),)
+
     if request.method == 'POST':
         print request.POST
 
@@ -307,11 +350,17 @@ def content(request, session_id, committee_id):
                 point_content = form.cleaned_data['content']
                 )
             contentpoint.save()
-            return HttpResponseRedirect(reverse('statistics:content_thanks', args=[session_id, committee_id]))
+            messages.add_message(request, messages.SUCCESS, 'Content Point Successfully Submitted')
     else:
-        form = ContentForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active})
+        if all_form:
+            form = ContentForm({'session': session.session_name, 'committee': '', 'debate': active})
+        else:
+            form = ContentForm({'session': session.session_name, 'committee': render_committee.committee_name, 'debate': active})
 
-    context = {'debate': active, 'committee': committee, 'session': session, 'form': form}
+    if all_form:
+        context = {'debate': active, 'session': session, 'form': form, 'committees': committees_array, 'all_form': all_form}
+    else:
+        context = {'debate': active, 'committee': render_committee, 'session': session, 'form': form, 'committees': committees_array, 'all_form': all_form}
 
     return check_authorization_and_render(request, 'statistics/content_form.html', context, session, False)
 
@@ -319,12 +368,35 @@ def content(request, session_id, committee_id):
 
 
 @login_required(login_url = '/login/')
-def joint(request, session_id, committee_id):
+def joint(request, session_id, committee_id=None):
     session = Session.objects.get(pk=session_id)
-    committee = Committee.objects.get(pk=committee_id)
+
+    if committee_id:
+        render_committee = Committee.objects.get(pk=committee_id)
+        all_form = False
+    else:
+        render_committee = ''
+        all_form = True
+
     active = ActiveDebate.objects.get(session_id=session_id).active_debate
     active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
     active_round_no = ActiveRound.objects.get(session__pk=session_id).active_round
+
+    committees = Committee.objects.filter(session__pk=session_id)
+    committees_array = []
+    #Here we make an array of committees that can be passed to the form
+    for committee in committees:
+        committees_array.append((committee.pk, committee.committee_name),)
+    #We need to make an array of each round with the round number and the place in the array
+    #So we first make an array with the round numbers (1,2,3)
+    max_rounds = []
+    max_rounds_array = []
+    for i in range(session.session_max_rounds):
+        n = i + 1
+        max_rounds.append(n)
+    #Then we make an array with the value and the position, so the form can accept the data.
+    for r in max_rounds:
+        max_rounds_array.append((r, r),)
 
     subtopics_array = []
     #Get the subtopics of the active committee, and the loop through each one to create an array of subtopics.
@@ -359,11 +431,17 @@ def joint(request, session_id, committee_id):
             for s in form.cleaned_data['subtopics']:
                 st = SubTopic.objects.filter(pk=s)
                 point.subtopics.add(st[0])
-            return HttpResponseRedirect(reverse('statistics:joint_thanks', args=[session_id, committee_id]))
+            messages.add_message(request, messages.SUCCESS, 'Joint Point Successfully Submitted')
     else:
-        form = JointForm(subtopics_array, {'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'round_no': active_round_no})
+        if all_form:
+            form = JointForm(subtopics_array, {'session': session.session_name, 'committee': '', 'debate': active, 'round_no': active_round_no})
+        else:
+            form = JointForm(subtopics_array, {'session': session.session_name, 'committee': render_committee.committee_name, 'debate': active, 'round_no': active_round_no})
 
-    context = {'debate': active, 'committee': committee, 'session': session, 'subtopics': subtopics, 'form': form}
+    if all_form:
+        context = {'debate': active, 'session': session, 'subtopics': subtopics, 'form': form, 'all_form': all_form, 'committees': committees_array, 'rounds': max_rounds_array, 'round_no': active_round_no}
+    else:
+        context = {'debate': active, 'committee': render_committee, 'session': session, 'subtopics': subtopics, 'form': form, 'all_form': all_form, 'committees': committees_array, 'rounds': max_rounds_array, 'round_no': active_round_no}
 
     return check_authorization_and_render(request, 'statistics/joint_form.html', context, session, False)
 
@@ -372,14 +450,25 @@ def joint(request, session_id, committee_id):
 
 
 @login_required(login_url = '/login/')
-def vote(request, session_id, committee_id):
+def vote(request, session_id, committee_id=None):
     #The Vote form is just as complex as the Point form, and is made in a very similar manner.
 
     #We get the current session and debate of the user, then get the active committee from the active debate.
     session = Session.objects.get(pk=session_id)
-    committee = Committee.objects.get(pk=committee_id)
+    if committee_id:
+        render_committee = Committee.objects.get(pk=committee_id)
+        all_form = False
+    else:
+        render_committee = ''
+        all_form = True
     active = ActiveDebate.objects.filter(session_id=session_id)[0].active_debate
     active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
+
+    committees = Committee.objects.filter(session__pk=session_id)
+    committees_array = []
+    #Here we make an array of committees that can be passed to the form
+    for committee in committees:
+        committees_array.append((committee.pk, committee.committee_name),)
 
     #If the user is trying to submit something:
     if request.method == 'POST':
@@ -400,63 +489,21 @@ def vote(request, session_id, committee_id):
                 )
             #Save the vote to the database.
             vote.save()
-            #Then send the user to the thank you page.
-            return HttpResponseRedirect(reverse('statistics:vote_thanks', args=[session_id, committee_id]))
+            #Then send the user a success message.
+            messages.add_message(request, messages.SUCCESS, 'Point Successfully Submitted')
 
     else:
         #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
-        form = VoteForm({'session': session.session_name, 'committee': committee.committee_name, 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
-
-    context = {'session': session, 'committee': committee, 'debate': active, 'form': form}
+        if all_form:
+            form = VoteForm({'session': session.session_name, 'committee': '', 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
+        else:
+            form = VoteForm({'session': session.session_name, 'committee': render_committee.committee_name, 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
+    if all_form:
+        context = {'session': session, 'debate': active, 'form': form, 'all_form': all_form, 'committees': committees_array}
+    else:
+        context = {'session': session, 'committee': render_committee, 'debate': active, 'form': form, 'all_form': all_form, 'committees': committees_array}
 
     return check_authorization_and_render(request, 'statistics/vote_form.html', context, session, False)
-
-
-#################
-
-
-@login_required(login_url = '/login/')
-def thanks(request, session_id, committee_id):
-    #A thanks page that is given a url for the user to submit something again. We construct the url here and then set it as the href="" on the button
-    session = Session.objects.get(pk=session_id)
-    thanks_url = reverse('statistics:point', args=[session_id, committee_id])
-    context = {'thanks_url': thanks_url, 'session': session}
-    return render(request, 'statistics/thanks.html', context)
-
-
-#################
-
-
-@login_required(login_url = '/login/')
-def vote_thanks(request, session_id, committee_id):
-    #Same thing as the last thanks page, but with a url constructed for voting instead.
-    session = Session.objects.get(pk=session_id)
-    thanks_url = reverse('statistics:vote', args=[session_id, committee_id])
-    context = {'thanks_url': thanks_url, 'session': session}
-    return render(request, 'statistics/thanks.html', context)
-
-
-#################
-
-
-@login_required(login_url = '/login/')
-def content_thanks(request, session_id, committee_id):
-    #Same thing as the last thanks page, but with a url constructed for contentpoints instead.
-    session = Session.objects.get(pk=session_id)
-    thanks_url = reverse('statistics:content', args=[session_id, committee_id])
-    context = {'thanks_url': thanks_url, 'session': session}
-    return render(request, 'statistics/thanks.html', context)
-
-#################
-
-
-@login_required(login_url = '/login/')
-def joint_thanks(request, session_id, committee_id):
-    #Same thing as the last thanks page, but with a url constructed for contentpoints instead.
-    session = Session.objects.get(pk=session_id)
-    thanks_url = '/session/' + session_id + '/joint/' + committee_id
-    context = {'thanks_url': thanks_url, 'session': session}
-    return render(request, 'statistics/thanks.html', context)
 
 
 #################
@@ -504,6 +551,7 @@ def manage(request, session_id):
                 #Save the new active debate
                 active_debate.save()
                 #Send the user to the manage page
+                messages.add_message(request, messages.SUCCESS, 'Active Debate Saved')
                 return HttpResponseRedirect(reverse('statistics:manage', args=[session_id]))
             else:
                 print debate_form
@@ -520,6 +568,7 @@ def manage(request, session_id):
                 #Save the active round.
                 active_round_entry.save()
                 #Send the user back to the manage page
+                messages.add_message(request, messages.SUCCESS, 'Active Round Saved')
                 return HttpResponseRedirect(reverse('statistics:manage', args=[session_id]))
             debate_form = ActiveDebateForm(committees_array, {'session': session.session_name})
 
