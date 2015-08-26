@@ -44,15 +44,21 @@
 
             <li><a href="{% url 'statistics:debate' session.pk committee.pk %}">Go to {{ committee.committee_name }}</a></li>
 
+            {% if session.session_voting_enabled %}
             <li><a href="{% url 'statistics:vote' session.pk committee.pk %}">Vote as  {{ committee.committee_name }}</a></li>
+            {% endif %}
 
+            {% if session.session_statistics = "C" or session.session_statistics = "SF" %}
+            <li><a href="{% url 'statistics:content' session.pk committee.pk %}">Submit Point as {{ committee.committee_name }}</a></li>
+            {% endif %}
 
-            <li><a href="{% url 'statistics:content' session.pk committee.pk %}">Submit Content as {{ committee.committee_name }}</a></li>
-
+            {% if session.session_statistics = "S" or session.session_statistics = "SF" %}
             <li><a href="{% url 'statistics:point' session.pk committee.pk %}">Submit Statistics as {{ committee.committee_name }}</a></li>
+            {% endif %}
 
-            <li><a href="{% url 'statistics:joint' session.pk committee.pk %}">Submit both as {{ committee.committee_name }}</a></li>
-
+            {% if session.session_statistics = "JF" %}
+            <li><a href="{% url 'statistics:joint' session.pk committee.pk %}">Submit as {{ committee.committee_name }}</a></li>
+            {% endif %}
 
 
           </ul>
