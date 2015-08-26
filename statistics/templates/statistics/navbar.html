@@ -45,7 +45,11 @@
           <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Manage {{ committee.committee_name }} <b class="caret"></b></a>
           <ul class="dropdown-menu">
 
-            <li><a href="{% url 'statistics:debate' session.pk committee.pk %}">Go to {{ committee.committee_name }}</a></li>
+            {% url 'statistics:debate' session.pk committee.pk as committee_url %} <!-- here we set a variable session_url which we will compare to the current url in the next line -->
+            {% if not request.get_full_path = committee_url %}
+            <li><a href="{% url 'statistics:debate' session.pk committee.pk %}">Back to {{ committee.committee_name }}</a></li>
+            {% endif %}
+
 
             {% if session.session_voting_enabled %}
             <li><a href="{% url 'statistics:vote' session.pk committee.pk %}">Vote as  {{ committee.committee_name }}</a></li>
