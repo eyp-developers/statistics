@@ -2,10 +2,6 @@ from django import forms
 
 from django.contrib.auth import get_user_model
 
-# Not all of the following imports are currently used. They are still here as this might change in the future.
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, ButtonHolder, Fieldset
-from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton
 
 class SessionForm(forms.Form):
 
