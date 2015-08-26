@@ -5,6 +5,7 @@ from datetime import date
 from datetime import datetime
 from time import strftime
 
+from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -22,7 +23,32 @@ from ..forms import SessionForm,  SessionEditForm, PointForm, VoteForm, ContentF
 def home(request):
     #All the home page needs is a list of all sessions ordered by the start date. We create the list, then the context and finally render the template.
     latest_sessions_list = Session.objects.filter(session_is_visible=True).order_by('-session_start_date')[:20]
-    context = {'latest_sessions_list': latest_sessions_list}
+    active_sessions = []
+    for session in Session.objects.all():
+        if Point.objects.filter(session=session):
+            latest_point = Point.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+        else:
+            latest_point = time.strptime("23/05/1996", "%d/%m/%Y")
+        if ContentPoint.objects.filter(session=session):
+            latest_content = ContentPoint.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+        else:
+            latest_content = time.strptime("23/05/1996", "%d/%m/%Y")
+        if Vote.objects.filter(session=session):
+            latest_vote = Vote.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+        else:
+            latest_vote = time.strptime("23/05/1996", "%d/%m/%Y")
+        today = datetime.now().date()
+        if (latest_point == today) or (latest_content == today) or (latest_vote == today):
+            active_sessions.append(session)
+    
+    context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions}
+    user = request.user
+    if user.get_username() and not user.is_superuser:
+        for session in Session.objects.all():
+            if user == session.session_admin_user:
+                admin_session = session
+                context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions, 'admin_session': True, 'session': session}
+
     return render(request, 'statistics/home.html', context)
 
 def session(request, session_id):
@@ -33,8 +59,33 @@ def session(request, session_id):
     #and the name and data of the session itself.
     session_committee_list = Committee.objects.filter(session__id=session_id).order_by('committee_name')
     session = Session.objects.get(pk=session_id)
+
+    no_stats = True
+    #Getting the latest of everything to check if the date of them was today.
+    if Point.objects.filter(session=session):
+        latest_point = Point.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+        no_stats = False
+    else:
+        latest_point = time.strptime("23/05/1996", "%d/%m/%Y")
+    if ContentPoint.objects.filter(session=session):
+        latest_content = ContentPoint.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+        no_stats = False
+    else:
+        latest_content = time.strptime("23/05/1996", "%d/%m/%Y")
+    if Vote.objects.filter(session=session):
+        latest_vote = Vote.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+        no_stats = False
+    else:
+        latest_vote = time.strptime("23/05/1996", "%d/%m/%Y")
+    today = datetime.now().date()
+    if (latest_point == today) or (latest_content == today) or (latest_vote == today):
+        active_debate = ActiveDebate.objects.filter(session=session)[0].active_debate
+        active_debate_committee = Committee.objects.filter(session=session).filter(committee_name=active_debate)[0]
+    else:
+        active_debate = []
+        active_debate_committee = []
     voting_enabled = session.session_voting_enabled
-    context = {'session_committee_list': session_committee_list, 'session_id': session_id, 'session': session, 'voting_enabled': voting_enabled}
+    context = {'session_committee_list': session_committee_list, 'session_id': session_id, 'session': session, 'voting_enabled': voting_enabled, 'active_debate': active_debate, 'active_debate_committee': active_debate_committee, 'no_stats': no_stats}
     return render(request, 'statistics/session.html', context)
 
 def debate(request, session_id, committee_id):
@@ -46,9 +97,18 @@ def debate(request, session_id, committee_id):
     statistics_type = s.session_statistics
     print statistics_type
 
+    no_stats = True
+    #Getting the latest of everything to check if the date of them was today.
+    if Point.objects.filter(session=s):
+        no_stats = False
+    elif ContentPoint.objects.filter(session=s):
+        no_stats = False
+    elif Vote.objects.filter(session=s):
+        no_stats = False
+
     #The voting enabled option lets us change the html content and js so that the voting is not displayed.
     voting_enabled = s.session_voting_enabled
-    context = {'committee': c, 'session': s, 'statistics_type': statistics_type, 'voting_enabled': voting_enabled}
+    context = {'committee': c, 'session': s, 'statistics_type': statistics_type, 'voting_enabled': voting_enabled, 'no_stats': no_stats}
 
     if statistics_type == 'JF':
         return render(request, 'statistics/joint.html', context)
@@ -105,6 +165,8 @@ def create_session(request):
             admin_group = Group.objects.get(name='SessionAdmin')
             admin_group.user_set.add(admin_user)
 
+            authenticate(username=admin_user.username, password=admin_user.password)
+
             #Creating the Submit user
             submit_user = User.objects.create_user(username = name,
                 email = form.cleaned_data['email'],
@@ -142,7 +204,7 @@ def create_session(request):
             active_round.save()
 
             #Once we've done all that, lets say thanks for all that hard work.
-            return HttpResponseRedirect('/welcome/' + str(session.pk) + '/')
+            return HttpResponseRedirect(reverse('statistics:welcome', args=[session.pk]))
         else:
             print 'Wasnt valid'
             print form.errors

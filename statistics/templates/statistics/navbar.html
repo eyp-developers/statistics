@@ -16,7 +16,7 @@
       <ul class="nav navbar-nav navbar-right">
 
         <li class="dropdown">
-          <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
+          <a href="#" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
           <ul class="dropdown-menu">
             {% if user.is_authenticated = False %}
             <li><a href="{% url 'statistics:login' %}">Login</a></li>
@@ -29,12 +29,15 @@
         </ul>
       </ul>
 
-      {% if session and user.is_authenticated %}
+      {% if session and user.is_authenticated or admin_session%}
 
 
       <ul class="nav navbar-nav navbar-right">
 
+        {% url 'statistics:session' session.pk as session_url %} <!-- here we set a variable session_url which we will compare to the current url in the next line -->
+        {% if not request.get_full_path = session_url %}
         <li><a href="{% url 'statistics:session' session.pk %}">Go to {{ session.session_name }}</a></li>
+        {% endif %}
 
         {% if committee %}
 
@@ -42,17 +45,27 @@
           <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Manage {{ committee.committee_name }} <b class="caret"></b></a>
           <ul class="dropdown-menu">
 
-            <li><a href="{% url 'statistics:debate' session.pk committee.pk %}">Go to {{ committee.committee_name }}</a></li>
+            {% url 'statistics:debate' session.pk committee.pk as committee_url %} <!-- here we set a variable session_url which we will compare to the current url in the next line -->
+            {% if not request.get_full_path = committee_url %}
+            <li><a href="{% url 'statistics:debate' session.pk committee.pk %}">Back to {{ committee.committee_name }}</a></li>
+            {% endif %}
 
+
+            {% if session.session_voting_enabled %}
             <li><a href="{% url 'statistics:vote' session.pk committee.pk %}">Vote as  {{ committee.committee_name }}</a></li>
+            {% endif %}
 
+            {% if session.session_statistics = "C" or session.session_statistics = "SF" %}
+            <li><a href="{% url 'statistics:content' session.pk committee.pk %}">Submit Point as {{ committee.committee_name }}</a></li>
+            {% endif %}
 
-            <li><a href="{% url 'statistics:content' session.pk committee.pk %}">Submit Content as {{ committee.committee_name }}</a></li>
-
+            {% if session.session_statistics = "S" or session.session_statistics = "SF" %}
             <li><a href="{% url 'statistics:point' session.pk committee.pk %}">Submit Statistics as {{ committee.committee_name }}</a></li>
+            {% endif %}
 
-            <li><a href="{% url 'statistics:joint' session.pk committee.pk %}">Submit both as {{ committee.committee_name }}</a></li>
-
+            {% if session.session_statistics = "JF" %}
+            <li><a href="{% url 'statistics:joint' session.pk committee.pk %}">Submit as {{ committee.committee_name }}</a></li>
+            {% endif %}
 
 
           </ul>
