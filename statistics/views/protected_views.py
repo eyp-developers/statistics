@@ -551,6 +551,7 @@ def manage(request, session_id):
                 #Save the new active debate
                 active_debate.save()
                 #Send the user to the manage page
+                messages.add_message(request, messages.SUCCESS, 'Active Debate Saved')
                 return HttpResponseRedirect(reverse('statistics:manage', args=[session_id]))
             else:
                 print debate_form
@@ -567,6 +568,7 @@ def manage(request, session_id):
                 #Save the active round.
                 active_round_entry.save()
                 #Send the user back to the manage page
+                messages.add_message(request, messages.SUCCESS, 'Active Round Saved')
                 return HttpResponseRedirect(reverse('statistics:manage', args=[session_id]))
             debate_form = ActiveDebateForm(committees_array, {'session': session.session_name})
 
