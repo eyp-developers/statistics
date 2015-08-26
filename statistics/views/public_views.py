@@ -42,7 +42,7 @@ def home(request):
             active_sessions.append(session)
 
     user = request.user
-    if user and not user.is_superuser:
+    if user.get_username() and not user.is_superuser:
         session = Session.objects.filter(session_admin_user=user)[0]
         context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions, 'admin_session': True, 'session': session}
     else:
