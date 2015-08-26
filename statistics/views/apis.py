@@ -17,12 +17,18 @@ def session_api(request, session_id):
     #Since the graphs on the session page need to be able to livereload, we need to create
     #a custom "API" that outputs the neccesary JSON to keep the graph alive
 
+    session = Session.objects.get(pk=session_id)
+
     #First we need all the committees registered for that session
     committees = Committee.objects.filter(session__id=session_id).order_by('committee_name')
 
     #Then we need all the available points, direct responses and votes
-    points = Point.objects.filter(session_id=session_id).filter(point_type='P')
-    drs = Point.objects.filter(session_id=session_id).filter(point_type='DR')
+    if session.session_statistics != 'C':
+        points = Point.objects.filter(session_id=session_id).filter(point_type='P')
+        drs = Point.objects.filter(session_id=session_id).filter(point_type='DR')
+    else:
+        points = ContentPoint.objects.filter(session_id=session_id).filter(point_type='P')
+        drs = ContentPoint.objects.filter(session_id=session_id).filter(point_type='DR')
 
     #Then we need a list of each of them.
     committee_list = []
