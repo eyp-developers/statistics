@@ -53,17 +53,21 @@ def session(request, session_id):
     session_committee_list = Committee.objects.filter(session__id=session_id).order_by('committee_name')
     session = Session.objects.get(pk=session_id)
 
+    no_stats = True
     #Getting the latest of everything to check if the date of them was today.
     if Point.objects.filter(session=session):
         latest_point = Point.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+        no_stats = False
     else:
         latest_point = time.strptime("23/05/1996", "%d/%m/%Y")
     if ContentPoint.objects.filter(session=session):
         latest_content = ContentPoint.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+        no_stats = False
     else:
         latest_content = time.strptime("23/05/1996", "%d/%m/%Y")
     if Vote.objects.filter(session=session):
         latest_vote = Vote.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
+        no_stats = False
     else:
         latest_vote = time.strptime("23/05/1996", "%d/%m/%Y")
     today = datetime.now().date()
@@ -74,7 +78,7 @@ def session(request, session_id):
         active_debate = []
         active_debate_committee = []
     voting_enabled = session.session_voting_enabled
-    context = {'session_committee_list': session_committee_list, 'session_id': session_id, 'session': session, 'voting_enabled': voting_enabled, 'active_debate': active_debate, 'active_debate_committee': active_debate_committee}
+    context = {'session_committee_list': session_committee_list, 'session_id': session_id, 'session': session, 'voting_enabled': voting_enabled, 'active_debate': active_debate, 'active_debate_committee': active_debate_committee, 'no_stats': no_stats}
     return render(request, 'statistics/session.html', context)
 
 def debate(request, session_id, committee_id):
@@ -86,9 +90,18 @@ def debate(request, session_id, committee_id):
     statistics_type = s.session_statistics
     print statistics_type
 
+    no_stats = True
+    #Getting the latest of everything to check if the date of them was today.
+    if Point.objects.filter(session=s):
+        no_stats = False
+    elif ContentPoint.objects.filter(session=s):
+        no_stats = False
+    elif Vote.objects.filter(session=s):
+        no_stats = False
+
     #The voting enabled option lets us change the html content and js so that the voting is not displayed.
     voting_enabled = s.session_voting_enabled
-    context = {'committee': c, 'session': s, 'statistics_type': statistics_type, 'voting_enabled': voting_enabled}
+    context = {'committee': c, 'session': s, 'statistics_type': statistics_type, 'voting_enabled': voting_enabled, 'no_stats': no_stats}
 
     if statistics_type == 'JF':
         return render(request, 'statistics/joint.html', context)
