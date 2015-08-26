@@ -32,7 +32,7 @@ function requestStatisticsData() {
             $('#latest_on').html(latest_on);
 
             // call it again after one second
-            setTimeout(requestStatisticsData, 1000);
+            setTimeout(requestStatisticsData, 2000);
         },
         cache: false
     });
