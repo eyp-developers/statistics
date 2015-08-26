@@ -24,10 +24,10 @@ window.setTimeout(function() {
 </div>
 <div class="panel panel-material-{{ session.session_color }}-300">
   <div class="panel-heading">
-    <h3 class="panel-title">Add/Edit Committee:</h3>
+    <h3 class="panel-title">Add/Edit Committee</h3>
   </div>
   <div class="panel-body">
-    <form class="form-horizontal" id="committee-form" action="{% url 'statistics:add' session.pk %}" method="post" >
+    <form class="" id="committee-form" action="{% url 'statistics:add' session.pk %}" method="post" >
       <fieldset>
         {% csrf_token %}
         <div class="form-group">
@@ -82,7 +82,7 @@ window.setTimeout(function() {
 </div>
 <div class="panel panel-material-{{ session.session_color }}-300">
   <div class="panel-heading">
-    <h3 class="panel-title">Your Committees:</h3>
+    <h3 class="panel-title">Your Committees</h3>
   </div>
   <div class="panel-body">
     <table class="table table-hover" id="committees-table">
