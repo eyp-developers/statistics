@@ -29,7 +29,7 @@
         </ul>
       </ul>
 
-      {% if session and user.is_authenticated %}
+      {% if session and user.is_authenticated or admin_session%}
 
 
       <ul class="nav navbar-nav navbar-right">
