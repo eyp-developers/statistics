@@ -105,6 +105,15 @@ function submit_committee() {
           counter_subtopics = 3;
           console.log(json); // log the returned json to the console
           console.log("success"); // another sanity check
+          $('#results').html('<div class="alert alert-dismissable alert-success">'+
+                          '<button type="button" class="close" data-dismiss="alert">×</button>'+
+                          'Committee Saved</a>.'+
+                          '</div>');
+          window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+              $(this).remove();
+            });
+          }, 5000);
         },
 
         // handle a non-successful response
