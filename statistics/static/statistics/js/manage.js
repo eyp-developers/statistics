@@ -382,11 +382,29 @@ function savePoint() {
       deleteInput('point-' + json.pk);
       createPoint(0, json.pk, json.last_changed, json.by, json.debate, json.round_no, json.point_type, json.subtopics, json.committee_color, json.committee_text_color);
       $('#edit-point').modal('hide');
+      $('#results').html('<div class="alert alert-dismissable alert-success">'+
+                          '<button type="button" class="close" data-dismiss="alert">×</button>'+
+                          'Point Saved</a>.'+
+                          '</div>');
+      window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove();
+        });
+      }, 5000);
     },
     error: function(xhr, errmsg, err) {
       $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
       console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+      $('#results').html('<div class="alert alert-dismissable alert-danger">'+
+                          '<button type="button" class="close" data-dismiss="alert">×</button>'+
+                          'There was an error, check your internet and try again!</a>.'+
+                          '</div>');
+      window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove();
+        });
+      }, 5000);
     },
     cache: false
   });
@@ -411,11 +429,29 @@ function saveContent() {
       deleteInput('content-' + json.pk);
       createContent(0, json.pk, json.last_changed, json.by, json.debate, json.content, json.point_type, json.committee_color, json.committee_text_color);
       $('#edit-content').modal('hide');
+      $('#results').html('<div class="alert alert-dismissable alert-success">'+
+                          '<button type="button" class="close" data-dismiss="alert">×</button>'+
+                          'Content Point Saved</a>.'+
+                          '</div>');
+      window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove();
+        });
+      }, 5000);
     },
     error: function(xhr, errmsg, err) {
       $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
       console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+      $('#results').html('<div class="alert alert-dismissable alert-danger">'+
+                    '<button type="button" class="close" data-dismiss="alert">×</button>'+
+                    'There was an error, check your internet and try again!</a>.'+
+                    '</div>');
+      window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove();
+        });
+      }, 5000);
     },
     cache: false
   });
@@ -442,11 +478,29 @@ function saveVote() {
       deleteInput('vote-' + json.pk);
       createVote(0, json.pk, json.last_changed, json.by, json.debate, json.in_favour, json.against, json.abstentions, json.absent, json.committee_color, json.committee_text_color);
       $('#edit-vote').modal('hide');
+      $('#results').html('<div class="alert alert-dismissable alert-success">'+
+                          '<button type="button" class="close" data-dismiss="alert">×</button>'+
+                          'Vote Saved</a>.'+
+                          '</div>');
+      window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove();
+        });
+      }, 5000);
     },
     error: function(xhr, errmsg, err) {
       $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
       console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+      $('#results').html('<div class="alert alert-dismissable alert-danger">'+
+                    '<button type="button" class="close" data-dismiss="alert">×</button>'+
+                    'There was an error, check your internet and try again!</a>.'+
+                    '</div>');
+      window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove();
+        });
+      }, 5000);
     },
     cache: false
   });
@@ -564,8 +618,3 @@ $.ajaxSetup({
     }
   }
 });
-
-
-requestData('point', 0, 20);
-requestData('content', 0, 20);
-requestData('vote', 0, 20);
