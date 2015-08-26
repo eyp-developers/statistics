@@ -16,7 +16,7 @@
       <ul class="nav navbar-nav navbar-right">
 
         <li class="dropdown">
-          <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
+          <a href="#" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
           <ul class="dropdown-menu">
             {% if user.is_authenticated = False %}
             <li><a href="{% url 'statistics:login' %}">Login</a></li>
@@ -34,7 +34,10 @@
 
       <ul class="nav navbar-nav navbar-right">
 
+        {% url 'statistics:session' session.pk as session_url %}
+        {% if not request.get_full_path = session_url %}
         <li><a href="{% url 'statistics:session' session.pk %}">Go to {{ session.session_name }}</a></li>
+        {% endif %}
 
         {% if committee %}
 
