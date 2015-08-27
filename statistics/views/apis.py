@@ -24,9 +24,11 @@ def session_api(request, session_id):
 
     #Then we need all the available points, direct responses and votes
     if session.session_statistics != 'C':
+        all_points = Point.objects.filter(session_id=session_id)
         points = Point.objects.filter(session_id=session_id).filter(point_type='P')
         drs = Point.objects.filter(session_id=session_id).filter(point_type='DR')
     else:
+        all_points = ContentPoint.objects.filter(session_id=session_id)
         points = ContentPoint.objects.filter(session_id=session_id).filter(point_type='P')
         drs = ContentPoint.objects.filter(session_id=session_id).filter(point_type='DR')
 
@@ -35,26 +37,51 @@ def session_api(request, session_id):
     points_list = []
     drs_list = []
 
-    #For each committee,
-    for committee in committees:
-        #Let c be the name
-        c = committee.committee_name
-        #p be the count of points
-        p = points.filter(committee_by=committee).count()
-        #and d be the count of DRs.
-        d = drs.filter(committee_by=committee).count()
+    if not all_points:
+        session_json = json.dumps({
+        'committees': '',
+        'points': '',
+        'drs': '',
+        'total_points': '0',
+        'type_point': '',
+        'type_dr': '',
+        'ppm': '',
+        })
+    else:
+        total_points = all_points.count()
+        type_point = points.count()
+        type_dr = drs.count()
+        total_votes = votes.count()
+        total_in_favour = votes.filter()
+        first_point = all_points[0].timestamp
+        latest_point = all_points[-1].timestamp
+        time_diff = latest_point - first_point
+        minutes = (time_diff.days * 1440) + (time_diff.seconds / 60)
+        ppm = total_points / minutes
+        #For each committee,
+        for committee in committees:
+            #Let c be the name
+            c = committee.committee_name
+            #p be the count of points
+            p = points.filter(committee_by=committee).count()
+            #and d be the count of DRs.
+            d = drs.filter(committee_by=committee).count()
 
-        #Append each newly made variable to our nice lists.
-        committee_list.append(c)
-        points_list.append(p)
-        drs_list.append(d)
+            #Append each newly made variable to our nice lists.
+            committee_list.append(c)
+            points_list.append(p)
+            drs_list.append(d)
 
-    #Finally output the result as JSON
-    session_json = json.dumps({
-    'committees': committee_list,
-    'points': points_list,
-    'drs': drs_list,
-    })
+        #Finally output the result as JSON
+        session_json = json.dumps({
+        'committees': committee_list,
+        'points': points_list,
+        'drs': drs_list,
+        'total_points': total_points,
+        'type_point': type_point,
+        'type_dr': type_dr,
+        'ppm': ppm,
+        })
     return HttpResponse(session_json, content_type='json')
 
 def active_debate_api(request, session_id):
@@ -226,6 +253,11 @@ def session_vote_api(request, session_id):
     committees = Committee.objects.filter(session__id=session_id).order_by('committee_name')
     #Then all the votes for that session
     votes = Vote.objects.filter(session_id=session_id)
+    total_votes = 0
+    total_in_favour = 0
+    total_against = 0
+    total_abstentions = 0
+    total_absent = 0
     #Then a list to add committee names to
     committee_list = []
 
@@ -265,14 +297,25 @@ def session_vote_api(request, session_id):
         against.append(debate_against)
         abstentions.append(debate_abstentions)
         absent.append(debate_absent)
+        total_in_favour += debate_in_favour
+        total_against += debate_against
+        total_abstentions += debate_abstentions
+        total_absent += debate_absent
+
 
     #Finally output the result as JSON
+    total_votes = total_in_favour + total_against + total_abstaining + total_absent
     session_voting_json = json.dumps({
     'committees': committee_list,
     'in_favour': in_favour,
     'against': against,
     'abstentions': abstentions,
-    'absent': absent
+    'absent': absent,
+    'total_votes': total_votes,
+    'total_in_favour': total_in_favour,
+    'total_against': total_against,
+    'total_abstaining': total_abstaining,
+    'total_absent': total_absent,
     })
     return HttpResponse(session_voting_json, content_type='json')
 
