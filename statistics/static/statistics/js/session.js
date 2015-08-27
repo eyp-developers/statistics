@@ -11,6 +11,10 @@ function requestData() {
             chart_points.series[1].setData(response.points, false);
             chart_points.redraw();
 
+            $('#total_points').html('Total Points: ' + response.total_points);
+            $('#total_type').html('(' + response.type_point + ' Points, ' + response.type_dr + ' Direct Responses)');
+            $('#ppm').html('Points Per Minute: ' + response.ppm);
+
             // call it again after one second
             setTimeout(requestData, 2000);
         },
