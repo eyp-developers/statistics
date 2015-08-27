@@ -24,11 +24,11 @@ def session_api(request, session_id):
 
     #Then we need all the available points, direct responses and votes
     if session.session_statistics != 'C':
-        all_points = Point.objects.filter(session_id=session_id)
+        all_points = Point.objects.filter(session_id=session_id).order_by('timestamp')
         points = Point.objects.filter(session_id=session_id).filter(point_type='P')
         drs = Point.objects.filter(session_id=session_id).filter(point_type='DR')
     else:
-        all_points = ContentPoint.objects.filter(session_id=session_id)
+        all_points = ContentPoint.objects.filter(session_id=session_id).order_by('timestamp')
         points = ContentPoint.objects.filter(session_id=session_id).filter(point_type='P')
         drs = ContentPoint.objects.filter(session_id=session_id).filter(point_type='DR')
 
@@ -51,10 +51,8 @@ def session_api(request, session_id):
         total_points = all_points.count()
         type_point = points.count()
         type_dr = drs.count()
-        total_votes = votes.count()
-        total_in_favour = votes.filter()
         first_point = all_points[0].timestamp
-        latest_point = all_points[-1].timestamp
+        latest_point = all_points.reverse()[0].timestamp
         time_diff = latest_point - first_point
         minutes = (time_diff.days * 1440) + (time_diff.seconds / 60)
         ppm = total_points / minutes
@@ -304,7 +302,7 @@ def session_vote_api(request, session_id):
 
 
     #Finally output the result as JSON
-    total_votes = total_in_favour + total_against + total_abstaining + total_absent
+    total_votes = total_in_favour + total_against + total_abstentions + total_absent
     session_voting_json = json.dumps({
     'committees': committee_list,
     'in_favour': in_favour,
@@ -314,7 +312,7 @@ def session_vote_api(request, session_id):
     'total_votes': total_votes,
     'total_in_favour': total_in_favour,
     'total_against': total_against,
-    'total_abstaining': total_abstaining,
+    'total_abstentions': total_abstentions,
     'total_absent': total_absent,
     })
     return HttpResponse(session_voting_json, content_type='json')
