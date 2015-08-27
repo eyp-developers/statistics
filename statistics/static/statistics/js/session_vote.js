@@ -13,6 +13,12 @@ function requestVoteData() {
             chart_votes.series[3].setData(response.absent, false);
             chart_votes.redraw();
 
+            $('#total_votes').html('Total Votes: ' + response.total_votes);
+            $('#total_in_favour').html('Total In Favour: ' + response.total_in_favour);
+            $('#total_against').html('Total Against: ' + response.total_against);
+            $('#total_abstentions').html('Total Abstentions: ' + response.total_abstentions);
+            $('#total_absent').html('Total Absent: ' + response.total_absent);
+
             // call it again after one second
             setTimeout(requestData, 1000);
         },
