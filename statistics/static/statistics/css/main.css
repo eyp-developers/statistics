@@ -8,6 +8,9 @@ h1, h2, h3, h4, h5, h6, p, a, li, ul {
   border-radius: 0px;
   margin-bottom: 0px; }
 
+.no-decoration:hover {
+  text-decoration: none; }
+
 .top-header {
   display: table;
   width: 100%;
@@ -17,6 +20,7 @@ h1, h2, h3, h4, h5, h6, p, a, li, ul {
 @media (max-width: 768px) {
   .top-header {
     padding: 80px 30px 40px 30px; } }
+
 .home-header {
   display: table;
   width: 100%;
@@ -26,6 +30,7 @@ h1, h2, h3, h4, h5, h6, p, a, li, ul {
 @media (max-width: 768px) {
   .home-header {
     padding: 30px 30px 40px 30px; } }
+
 .session-name {
   font-size: 60px;
   color: white;
@@ -41,6 +46,7 @@ h1, h2, h3, h4, h5, h6, p, a, li, ul {
 @media (max-width: 992px) {
   .content-div {
     height: 400px; } }
+
 .content-div-content {
   height: 600px;
   overflow: auto; }
@@ -48,6 +54,7 @@ h1, h2, h3, h4, h5, h6, p, a, li, ul {
 @media (max-width: 992px) {
   .content-div-content {
     height: 400px; } }
+
 tbody tr td {
   font-size: 18px; }
 
