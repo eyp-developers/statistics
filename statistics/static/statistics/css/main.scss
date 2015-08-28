@@ -1,3 +1,4 @@
+// out: ../css/main.css
 h1, h2, h3, h4, h5, h6, p, a, li, ul {
   font-family: 'Source Sans Pro', sans-serif;
 }
@@ -7,6 +8,10 @@ h1, h2, h3, h4, h5, h6, p, a, li, ul {
 .navbar {
   border-radius: 0px;
   margin-bottom: 0px;
+}
+
+.no-decoration:hover {
+  text-decoration: none;
 }
 
 .top-header {
