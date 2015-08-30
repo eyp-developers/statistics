@@ -23,7 +23,7 @@ As soon as we reach our next major release, the platform will be available at [s
 Will follow as soon as the project is available on the eyp.org server. As soon as the project is online you'll be able to add your session by visiting [stats.eyp.org/create_session](http://stats.eyp.org/create_session).
 
 
-## I would like this and that
+## I would like to have a new feature!
 
 Please feel free to share your ideas! We'd love to hear them! Just add them to the issues of the project. You can also inquire about becoming a member of EYP Developers by contacting any of the projects maintainers.
 
