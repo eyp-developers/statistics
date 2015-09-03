@@ -70,50 +70,64 @@ function submit_committee() {
 
         // handle a successful response
         success : function(json) {
-          if ($('#id_pk').val() !== '') {
-            deleteInput('committee-row-' + json.pk);
-          }
-          // Adding the newly created session to the table of sessions.
-          var row = table.insertRow(0);
-          var id = row.insertCell(0);
-          var name = row.insertCell(1);
-          var topic = row.insertCell(2);
-          var subtopics = row.insertCell(3);
-          var actions = row.insertCell(4);
-          $(row).attr('id', 'committee-row-' + json.pk);
-          id.innerHTML = json.pk;
-          name.innerHTML = $('#id_name').val();
-          topic.innerHTML = $('#id_topic').val();
-          subtopics.innerHTML = json.subtopics;
-          actions.innerHTML = '<a href="javascript:void(0)" class="btn btn-primary btn-material-'+ session_color +'-800 btn-xs" onclick="editCommittee(' + "'" + json.pk + "'" + ')" ><span class="mdi-content-create" style="font-size: 10px; margin-right: 4px;"></span>Edit</a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-xs" onclick="deleteCommittee(' + "'" + json.pk + "'" + ')" >Delete</a>';
-          $(row).css('display', 'none');
-          $(row).fadeIn("slow");
-
-          // Removing values from the form.
-          $('#id_pk').val(''); // remove the value from the input
-          $('#id_name').val(''); // remove the value from the input
-          $('#id_topic').val(''); // remove the value from the input
-          while (j <= counter_subtopics){
-            if ($('#subtopic-' + j).val() !== undefined) {
-              $('#subtopic-' + j).val('');
-              $('#subtopic-pk-' + j).val('');
+          console.log(json);
+          if (json.errors === undefined) {
+            if ($('#id_pk').val() !== '') {
+              deleteInput('committee-row-' + json.pk);
             }
-            j++;
+            // Adding the newly created session to the table of sessions.
+            var row = table.insertRow(0);
+            var id = row.insertCell(0);
+            var name = row.insertCell(1);
+            var topic = row.insertCell(2);
+            var subtopics = row.insertCell(3);
+            var actions = row.insertCell(4);
+            $(row).attr('id', 'committee-row-' + json.pk);
+            id.innerHTML = json.pk;
+            name.innerHTML = $('#id_name').val();
+            topic.innerHTML = $('#id_topic').val();
+            subtopics.innerHTML = json.subtopics;
+            actions.innerHTML = '<a href="javascript:void(0)" class="btn btn-primary btn-material-'+ session_color +'-800 btn-xs" onclick="editCommittee(' + "'" + json.pk + "'" + ')" ><span class="mdi-content-create" style="font-size: 10px; margin-right: 4px;"></span>Edit</a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-xs" onclick="deleteCommittee(' + "'" + json.pk + "'" + ')" >Delete</a>';
+            $(row).css('display', 'none');
+            $(row).fadeIn("slow");
+
+            // Removing values from the form.
+            $('#id_pk').val(''); // remove the value from the input
+            $('#id_name').val(''); // remove the value from the input
+            $('#id_topic').val(''); // remove the value from the input
+            while (j <= counter_subtopics){
+              if ($('#subtopic-' + j).val() !== undefined) {
+                $('#subtopic-' + j).val('');
+                $('#subtopic-pk-' + j).val('');
+              }
+              j++;
+            }
+            deleteSubtopics(1);
+            $('#subtopic-1').val('General');
+            counter_subtopics = 3;
+            console.log(json); // log the returned json to the console
+            console.log("success"); // another sanity check
+            $('#results').html('<div class="alert alert-dismissable alert-success">'+
+                            '<button type="button" class="close" data-dismiss="alert">×</button>'+
+                            'Committee Saved</a>.'+
+                            '</div>');
+            window.setTimeout(function() {
+              $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove();
+              });
+            }, 5000);
           }
-          deleteSubtopics(1);
-          $('#subtopic-1').val('General');
-          counter_subtopics = 3;
-          console.log(json); // log the returned json to the console
-          console.log("success"); // another sanity check
-          $('#results').html('<div class="alert alert-dismissable alert-success">'+
-                          '<button type="button" class="close" data-dismiss="alert">×</button>'+
-                          'Committee Saved</a>.'+
-                          '</div>');
-          window.setTimeout(function() {
-            $(".alert").fadeTo(500, 0).slideUp(500, function(){
-              $(this).remove();
-            });
-          }, 5000);
+          else {
+              $('#results').html('<div class="alert alert-dismissable alert-danger">'+
+                              '<button type="button" class="close" data-dismiss="alert">×</button>'+
+                              json.errors.name + '</a>.'+
+                              '</div>');
+              window.setTimeout(function() {
+                $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                  $(this).remove();
+                });
+              }, 5000);
+          }
         },
 
         // handle a non-successful response
@@ -121,6 +135,15 @@ function submit_committee() {
             //$('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
             //    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
             console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            $('#results').html('<div class="alert alert-dismissable alert-danger">'+
+                            '<button type="button" class="close" data-dismiss="alert">×</button>'+
+                            'Something Went Wrong..</a>.'+
+                            '</div>');
+            window.setTimeout(function() {
+              $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove();
+              });
+            }, 5000);
         }
     });
 }

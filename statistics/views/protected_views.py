@@ -143,17 +143,17 @@ def add(request, session_id):
             topic = request.POST.get('topic')
             subtopics = json.loads(request.POST.get('subtopics'))
 
+            response_data = {}
             form = CommitteeForm({'pk': pk, 'name': name, 'topic': topic})
             if form.is_valid():
                 print 'Form is valid'
-                response_data = {}
                 committee_exists = False
                 for committee in committees:
                     if committee.pk == form.cleaned_data['pk']:
                         committee_exists = True
 
                 if committee_exists:
-                    c = committees.filter(committee_name=form.cleaned_data['name'])[0]
+                    c = committees.filter(pk=form.cleaned_data['pk'])[0]
                 else:
                     c = Committee()
 
@@ -217,6 +217,11 @@ def add(request, session_id):
             else:
                 print 'Form not valid'
                 print form.errors
+                response_data['errors'] = form.errors
+                return HttpResponse(
+                    json.dumps(response_data),
+                    content_type="application/json"
+                )
     else:
         form = CommitteeForm()
 
