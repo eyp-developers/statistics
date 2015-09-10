@@ -40,7 +40,7 @@ def home(request):
         today = datetime.now().date()
         if (latest_point == today) or (latest_content == today) or (latest_vote == today):
             active_sessions.append(session)
-    
+
     context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions}
     user = request.user
     if user.get_username() and not user.is_superuser:
@@ -110,7 +110,7 @@ def debate(request, session_id, committee_id):
     voting_enabled = s.session_voting_enabled
     context = {'committee': c, 'session': s, 'statistics_type': statistics_type, 'voting_enabled': voting_enabled, 'no_stats': no_stats}
 
-    if statistics_type == 'JF':
+    if statistics_type == 'JF': # Should use or statement
         return render(request, 'statistics/joint.html', context)
     elif statistics_type == 'SF':
         return render(request, 'statistics/joint.html', context)
