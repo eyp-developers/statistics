@@ -134,12 +134,10 @@ def committee(request, session_id, committee_id):
 def create_session(request):
     #If the user is trying to create a session
     if request.method == 'POST':
-        print request.POST
         #Fill an instance of a SessionForm with the request data.
         form = SessionForm(request.POST)
 
         if form.is_valid():
-            print 'is valid'
             #We need to set up time varaibles for the start and end of sessions.
             #We do this by creating date objects and combining the date objects with time midnight
             t_start = form.cleaned_data['start_date']
