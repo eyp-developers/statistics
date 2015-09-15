@@ -22,7 +22,7 @@ from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, Poin
 
 # This is a central function. It replaces 'render' in cases where the user has to be authorized to view the page, not just authenticated.
 def check_authorization_and_render(request, template, context, session, admin_only = True):
-    if admin_only:
+    if admin_only: # This also refers to the session admin user AND any superuser
         if request.user == session.session_admin_user or request.user.is_superuser:
             return render(request, template, context)
         else:
@@ -40,7 +40,7 @@ def check_authorization_and_render(request, template, context, session, admin_on
 
 #################
 
-
+# This view should be renamed to overview in accordance to what the user sees
 @login_required(login_url = '/login/')
 def welcome(request, session_id):
     session = Session.objects.get(pk=session_id)

@@ -2,7 +2,7 @@
 Catering all the statistics lovers of the European Youth Parliament
 
 ***
-Welcome! We aim to provide a GA Statistics platform, which can be used on any given session with any set of committees or statistics requirements. It's completely open source and uses [Python](http://python.org) in conjunction with the [Django Web Framework](https://www.djangoproject.com/).
+Welcome! We aim to provide a GA+ platform, which can be used on any given session with any set of committees or statistics requirements. It's completely open source and uses [Python](http://python.org) in conjunction with the [Django Web Framework](https://www.djangoproject.com/).
 
 ***
 ### [View all screenshots here](http://imgur.com/a/uPiFy#0)
