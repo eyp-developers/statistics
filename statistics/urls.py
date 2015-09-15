@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^edit/(?P<session_id>[0-9]+)/$', protected_views.edit, name='edit'),
     url(r'^committees/(?P<session_id>[0-9]+)/$', protected_views.add, name='add'),
     url(r'^manage/(?P<session_id>[0-9]+)/$', protected_views.manage, name='manage'),
+    url(r'^runningorder/(?P<session_id>[0-9]+)/$', protected_views.runningorder, name='runningorder'),
     url(r'^session/(?P<session_id>[0-9]+)/$', public_views.session, name='session'),
     url(r'^session/(?P<session_id>[0-9]+)/debate/(?P<committee_id>[0-9]+)/$', public_views.debate, name='debate'),
     url(r'^session/(?P<session_id>[0-9]+)/committee/(?P<committee_id>[0-9]+)/$', public_views.committee, name='committee'),
