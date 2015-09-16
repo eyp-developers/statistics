@@ -193,6 +193,8 @@ class Committee(models.Model):
     #What the topic of the committee is, can be any length.
     committee_topic = models.TextField()
 
+    next_subtopics = models.ManyToManyField('SubTopic', blank=True, related_name='next_subtopics+')
+
     #We want to define an automatic color for the committee in question, based on the list of material design colors.
     def committee_color(self):
         color_id = self.pk%17
@@ -253,9 +255,55 @@ class SubTopic(models.Model):
     #Name/Text of the subtopic. Should be short and catchy.
     subtopic_text = models.CharField(max_length=200, blank=True, null=True)
 
+    #We want to define an automatic color for the committee in question, based on the list of material design colors.
+    def subtopic_color(self):
+        color_id = self.pk%17
+        if color_id == 1:
+            return('red')
+        elif color_id == 2:
+            return('green')
+        elif color_id == 3:
+            return('yellow')
+        elif color_id == 4:
+            return('blue')
+        elif color_id == 5:
+            return('purple')
+        elif color_id == 6:
+            return('light-green')
+        elif color_id == 7:
+            return('orange')
+        elif color_id == 8:
+            return('cyan')
+        elif color_id == 9:
+            return('pink')
+        elif color_id == 10:
+            return('lime')
+        elif color_id == 11:
+            return('deep-orange')
+        elif color_id == 12:
+            return('light-blue')
+        elif color_id == 13:
+            return('deep-purple')
+        elif color_id == 14:
+            return('amber')
+        elif color_id == 15:
+            return('teal')
+        elif color_id == 16:
+            return('indigo')
+        else:
+            return('blue-grey')
+
+    #Then we need a text color depending on if the committee color is light or dark.
+    def subtopic_text_color(self):
+        if self.subtopic_color() in ['cyan', 'light-green', 'lime', 'yellow', 'amber', 'orange']:
+            return('black')
+        else:
+            return('white')
+
     #Defining what should be displayed in the admin list, it should be the suptopic text.
     def __str__(self):
         return self.subtopic_text
+
 
 #Defining a Point, which is one peice of data that is submitted for every point of debate.
 class Point(models.Model):
@@ -289,6 +337,23 @@ class Point(models.Model):
     #Definition of the point in an admin list will be the point type, "P" or "DR"
     def __str__(self):
         return self.point_type
+
+#For the running order, we need to set up a queueing system we can access at any point.
+class RunningOrder(models.Model):
+    #The running order has to be affiliated with a certain session
+    session = models.ForeignKey(Session)
+    #and it needs a position
+    position = models.PositiveSmallIntegerField()
+    #then we need to know which committee it is that wants to make a point
+    committee_by = models.ForeignKey(Committee)
+    #Finally we need to know what kind of point it is.
+    POINT = 'P'
+    DIRECT_RESPONSE = 'DR'
+    POINT_TYPES = (
+        (POINT, 'Point'),
+        (DIRECT_RESPONSE, 'Direct Response'),
+    )
+    point_type = models.CharField(max_length=2, choices=POINT_TYPES, default=POINT)
 
 #Creating the second kind of point, the content point, which contains the text of a given point. Based on Wolfskaempfs GA Stats.
 class ContentPoint(models.Model):

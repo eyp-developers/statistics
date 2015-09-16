@@ -18,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
 
 #Importing the forms too.
-from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, PointEditForm, VoteForm, VoteEditForm, ContentForm, ContentEditForm, JointForm, ActiveDebateForm, ActiveRoundForm
+from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, PointEditForm, PredictForm, PredictEditForm, VoteForm, VoteEditForm, ContentForm, ContentEditForm, JointForm, ActiveDebateForm, ActiveRoundForm
 
 # This is a central function. It replaces 'render' in cases where the user has to be authorized to view the page, not just authenticated.
 def check_authorization_and_render(request, template, context, session, admin_only = True):
@@ -587,6 +587,49 @@ def manage(request, session_id):
 
     context = {'session': session, 'committees': committees, 'active': active, 'active_round': active_round, 'debate_form': debate_form, 'round_form': round_form, 'point_form': point_form, 'content_form': content_form, 'vote_form': vote_form}
     return check_authorization_and_render(request, 'statistics/manage.html', context, session)
+
+#################
+
+
+@login_required(login_url = '/login/')
+def predict(request, session_id, committee_id):
+    session = Session.objects.get(pk=session_id)
+    committee = Committee.objects.get(pk=committee_id)
+    active_debate = ActiveDebate.objects.filter(session_id=session_id)[0].active_debate
+    active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active_debate)[0]
+    active_subtopics = SubTopic.objects.filter(committee=active_committee)
+    subtopics_next_array = []
+    subtopics_array = []
+    for subtopic in active_subtopics:
+        subtopics_array.append((subtopic.pk, subtopic.subtopic_text),)
+    #If the user is trying to submit data (method=POST), take a look at it
+    if request.method == 'POST':
+        #Print what the user is trying to submit for the sake of server logs.
+        print request.POST
+
+        #Create an instance of the form and populate it with data from the request.
+        form = PredictForm(subtopics_array, request.POST)
+
+        #Check if the form is valid.
+        if form.is_valid():
+            #For each subtopic in the selected subtopics, add the subtopic to the committees next_subtopics list.
+            committee.next_subtopics.clear()
+            for s in form.cleaned_data['next_subtopics']:
+                st = SubTopic.objects.get(pk=s)
+                committee.next_subtopics.add(st)
+
+            #Once all that is done, send the user to the thank you page.
+            messages.add_message(request, messages.SUCCESS, 'Point Successfully Predicted')
+
+    else:
+        #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
+        form = PredictForm(subtopics_array, {'session': session, 'committee': committee})
+
+    for subtopic in committee.next_subtopics.all():
+        subtopics_next_array.append(subtopic.subtopic_text)
+    edit_form = PredictEditForm()
+    context = {'session': session, 'committee': committee, 'active_debate': active_debate, 'form': form, 'edit_form': edit_form, 'next_subtopics': subtopics_next_array}
+    return check_authorization_and_render(request, 'statistics/predict_form.html', context, session)
 
 
 #################

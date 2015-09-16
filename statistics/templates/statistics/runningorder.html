@@ -18,18 +18,17 @@ window.setTimeout(function() {
 </div>
 <div class="container-fluid runningorder-flex">
   <div class="runningorder-manage">
-    <div class="panel panel-material-{{ session.session_color }}-300">
+    <div class="panel panel-material-{{ session.session_color }}-300 runningorder-panel">
       <div class="panel-heading">
-        <h3 class="panel-title">Change Active Debate/Round</h3>
+        <h3 class="panel-title">Active Debate: {{ active }}</h3>
       </div>
       <div class="panel-body">
-        <h2>Active Debate: {{ active }}</h2>
-        <form class="form-horizontal" role="form" action="{% url 'statistics:manage' session.id %}" method="post">
+        <form class="form-horizontal" role="form" action="{% url 'statistics:runningorder' session.id %}" method="post">
           {% csrf_token %}
           <input type="hidden" class="form-control" name="{{ debate_form.session.html_name }}" id="{{ debate_form.session.id_for_label }}" maxlength=100 value="{{ debate_form.session.value }}">
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ debate_form.active_debate.id_for_label }}">Set Active Debate:</label>
-            <div class="col-sm-10">
+            <label class="control-label col-sm-4" for="{{ debate_form.active_debate.id_for_label }}">Set Active Debate:</label>
+            <div class="col-sm-4">
               <select class="form-control" name="{{ debate_form.active_debate.html_name }}" id="{{ debate_form.active_debate.id_for_label }}">
                 {% for id,text in debate_form.fields.active_debate.choices %}
                 <option value="{{ id }}" {% if text == active %} selected {% endif %}>{{ text }}</option>
@@ -37,21 +36,25 @@ window.setTimeout(function() {
               </select>
             </div>
           </div>
-          <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
+          <div class="form-group" style="margin-bottom: 0px;">
+            <div class="col-sm-offset-2 col-sm-4">
               <button type="submit" class="btn btn-flat btn-material-{{ session.session_color }}">Update Active Debate</button>
             </div>
           </div>
         </form>
-        <br>
-        {% if session.session_statistics != 'C'  %}
-        <h2>Active Round: {{ active_round }}</h2>
-        <form class="form-horizontal" role="form" action="{% url 'statistics:manage' session.id %}" method="post">
+      </div>
+    </div>
+    <div class="panel panel-material-{{ session.session_color }}-300 runningorder-panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Active Round: {{ active_round }}</h3>
+      </div>
+      <div class="panel-body">
+        <form class="form-horizontal" role="form" action="{% url 'statistics:runningorder' session.id %}" method="post">
           {% csrf_token %}
           <input type="hidden" class="form-control" name="{{ round_form.session.html_name }}" id="{{ round_form.session.id_for_label }}" maxlength=100 value="{{ round_form.session.value }}">
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ round_form.active_round.id_for_label }}">Set Active Debate:</label>
-            <div class="col-sm-10">
+            <label class="control-label col-sm-4" for="{{ round_form.active_round.id_for_label }}">Set Active Debate:</label>
+            <div class="col-sm-4">
               <select class="form-control" name="{{ round_form.active_round.html_name }}" id="{{ round_form.active_round.id_for_label }}">
                 {% for id,text in round_form.fields.active_round.choices %}
                 <option value="{{ id }}" {% if text == active_round %} selected {% endif %}>{{ text }}</option>
@@ -59,71 +62,65 @@ window.setTimeout(function() {
               </select>
             </div>
           </div>
-          <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
+          <div class="form-group" style="margin-bottom: 0px;">
+            <div class="col-sm-offset-2 col-sm-4">
               <button type="submit" class="btn btn-flat btn-material-{{ session.session_color }}">Update Active Round</button>
             </div>
           </div>
         </form>
-        {% endif %}
       </div>
     </div>
   </div>
   <div class="runningorder-order">
-    <div class="btn-group btn-group-justified">
-      <a href="javascript:void(0)" class="btn btn-success">Up Next</a>
-      <a href="javascript:void(0)" class="btn btn-default btn-lg">AFCO</a>
-      <a href="javascript:void(0)" class="btn btn-warning">Delete</a>
-    </div>
-    <div class="btn-group btn-group-justified">
-      <a href="javascript:void(0)" class="btn btn-primary">Followed By</a>
-      <a href="javascript:void(0)" class="btn btn-default btn-lg">FEMM</a>
-      <a href="javascript:void(0)" class="btn btn-warning">Delete</a>
-    </div>
-    <div class="btn-group btn-group-justified">
-      <a href="javascript:void(0)" class="btn btn-primary">Then</a>
-      <a href="javascript:void(0)" class="btn btn-default btn-lg">JURI</a>
-      <a href="javascript:void(0)" class="btn btn-warning">Delete</a>
-    </div>
-    <div class="btn-group btn-group-justified">
-      <a href="javascript:void(0)" class="btn btn-default btn-lg"></a>
-      <a href="javascript:void(0)" class="btn btn-default btn-lg">TRAN</a>
-      <a href="javascript:void(0)" class="btn btn-warning">Delete</a>
-    </div>
-    <div class="btn-group btn-group-justified">
-      <a href="javascript:void(0)" class="btn btn-default btn-lg"></a>
-      <a href="javascript:void(0)" class="btn btn-default btn-lg">INTA</a>
-      <a href="javascript:void(0)" class="btn btn-warning">Delete</a>
-    </div>
-    <div class="btn-group btn-group-justified">
-      <a href="javascript:void(0)" class="btn btn-default btn-lg"></a>
-      <a href="javascript:void(0)" class="btn btn-default btn-lg">AFCO</a>
-      <a href="javascript:void(0)" class="btn btn-warning">Delete</a>
+    <div class="panel panel-material-{{ session.session_color }}">
+      <div class="panel-heading">
+        <h4>Running Order</h4>
+      </div>
+      <div class="panel-body">
+        <table class="table table-hover" id="runningorder-table">
+          <thead>
+              <tr>
+                  <th>#</th>
+                  <th>By</th>
+                  <th>On</th>
+                  <th>Round No.</th>
+                  <th>Point Type</th>
+                  <th>Subtopics</th>
+                  <th>Actions</th>
+              </tr>
+          </thead>
+          <tbody id="sortable" class="sortable">
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
   <div class="runningorder-buttons">
-      <a href="javascript:void(0)" class="btn runningorder-button btn-material-{{ session.session_color }}"><h1>Recognise</h1></a>
+      <a href="javascript:void(0)" class="btn runningorder-button btn-material-{{ session.session_color }}" onclick="runningOrderAction('R')"><h1>Recognise</h1></a>
       <a href="javascript:void(0)" class="btn runningorder-button btn-warning"><h3>Undo last<br>recognition</h3></a>
       <a href="javascript:void(0)" class="btn runningorder-button btn-danger"><h2>Clear Queue</h2></a>
   </div>
   <div class="runningorder-committees">
     {% for committee in committees %}
-    <div class="runningorder-committee" style="height: 7{{committee.pk}}%;">
-      <div class="runningorder-committeename">
+    <div class="runningorder-committee panel panel-material-{{ session.session_color }}-300" id="committee-{{committee.pk}}" style="margin-bottom: 0px; height: 75%;">
+      <div class="runningorder-committeename panel-heading">
         <h1>{{committee.committee_name}}</h1>
       </div>
       <div class="runningorder-committeebuttons">
-          <div class="runningorder-committeebutton">
-            <h4>{{committee.pk}}</h4>
+          <div class="runningorder-committeedata">
+            <p style="vertical-align: middle;" id="subtopics-{{committee.pk}}"></p>
           </div>
           <div class="runningorder-committeebutton">
-            <h4>2</h4>
+            <a href="javascript:void(0)" class="btn btn-default btn-xs" style="margin: 6px 1px;"><span class="badge" id="debate-{{committee.pk}}">0</span></a>
           </div>
           <div class="runningorder-committeebutton">
-            <a href="javascript:void(0)" class="btn btn-info" style="margin: 6px 1px;">Point</a>
+            <a href="javascript:void(0)" class="btn btn-default btn-xs" style="margin: 6px 1px;"><span class="badge" id="session-{{committee.pk}}">0</span></a>
           </div>
           <div class="runningorder-committeebutton">
-            <a href="javascript:void(0)" class="btn btn-danger" style="margin: 6px 1px;">DR</a>
+            <a href="javascript:void(0)" class="btn btn-info btn-xs" onclick="addToRunningOrder('{{ committee.pk }}', 'P')" style="margin: 6px 1px;">Point</a>
+          </div>
+          <div class="runningorder-committeebutton">
+            <a href="javascript:void(0)" class="btn btn-danger btn-xs" onclick="addToRunningOrder('{{ committee.pk }}', 'DR')" style="margin: 6px 1px;">DR</a>
           </div>
       </div>
     </div>
@@ -133,6 +130,7 @@ window.setTimeout(function() {
 
 <script>
   var data_url = '{% url 'statistics:data_api' session.pk %}',
+      runningorder_url = '{% url 'statistics:runningorder_api' session.pk %}',
       data_latest_url = '{% url 'statistics:data_latest_api' session.pk %}',
       data_pk_url = '{% url 'statistics:data_pk_api' %}'
       dr_img = '{% static 'statistics/images/dr.png' %}',
@@ -145,6 +143,6 @@ window.setTimeout(function() {
   }
 </style>
 {% endblock %} {% block footer_scripts %}
-<!--<script type="text/javascript" src="{% static 'statistics/js/manage.js' %}" charset="utf-8"></script>
-<script>-->
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script type="text/javascript" src="{% static 'statistics/js/runningorder.js' %}" charset="utf-8"></script>
 {% endblock %}
