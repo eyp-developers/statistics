@@ -3,11 +3,12 @@ import json
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from time import strftime
+from decimal import *
 
 #Importing all models for statistics.
-from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
+from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound
 
-from ..forms import PointEditForm, ContentEditForm, VoteEditForm, DeleteDataForm
+from ..forms import PointEditForm, ContentEditForm, VoteEditForm, PredictEditForm, RunningOrderForm, DeleteDataForm
 
 # #Importing the forms too.
 # from ..forms import SessionForm,  SessionEditForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm
@@ -55,7 +56,10 @@ def session_api(request, session_id):
         latest_point = all_points.reverse()[0].timestamp
         time_diff = latest_point - first_point
         minutes = (time_diff.days * 1440) + (time_diff.seconds / 60)
-        ppm = total_points / minutes
+        if total_points > 0:
+            mpp = Decimal(minutes) / Decimal(total_points)
+        else:
+            mpp = 0
         #For each committee,
         for committee in committees:
             #Let c be the name
@@ -78,7 +82,7 @@ def session_api(request, session_id):
         'total_points': total_points,
         'type_point': type_point,
         'type_dr': type_dr,
-        'ppm': ppm,
+        'mpp': round(mpp, 3),
         })
     return HttpResponse(session_json, content_type='json')
 
@@ -530,6 +534,9 @@ def data_api(request, session_id):
         data = Vote.objects.filter(session_id=session_id).order_by('-pk')[point_from:point_to]
         #We also need to count the amount of data points for the total
         total = Vote.objects.filter(session_id=session_id).count()
+    elif json_datatype == 'predict':
+        data = Point.objects.filter(session_id=session_id).filter(committee_by_id=int(request.GET.get('committee_id'))).order_by('-pk')[point_from:point_to]
+        total = Point.objects.filter(session_id=session_id).filter(committee_by_id=int(request.GET.get('committee_id'))).count()
 
 
     #If there is no data, do nothing.
@@ -557,7 +564,7 @@ def data_api(request, session_id):
             if request.GET.get('data_type') == 'content':
                 thisdata['point_type'] = d.point_type
                 thisdata['content'] = d.point_content
-            elif request.GET.get('data_type') == 'point':
+            elif request.GET.get('data_type') == 'point' or request.GET.get('data_type') == 'predict':
                 thisdata['point_type'] = d.point_type
                 thisdata['round_no'] = d.active_round
                 subtopics_array = []
@@ -595,6 +602,9 @@ def data_latest_api(request, session_id):
         data = Vote.objects.filter(session_id=session_id).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
         #We also need to count the amount of data points for the total
         total = Vote.objects.filter(session_id=session_id).count()
+    elif json_datatype == 'predict':
+        data = Point.objects.filter(session_id=session_id).filter(committee_by_id=int(request.GET.get('committee_id'))).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
+        total = Point.objects.filter(session_id=session_id).filter(committee_by_id=int(request.GET.get('committee_id'))).count()
 
     #Create an empty array to put the contentpoints in
     data_list = []
@@ -629,7 +639,7 @@ def data_latest_api(request, session_id):
             if request.GET.get('data_type') == 'content':
                 thisdata['point_type'] = d.point_type
                 thisdata['content'] = d.point_content
-            elif request.GET.get('data_type') == 'point':
+            elif request.GET.get('data_type') == 'point' or request.GET.get('data_type') == 'predict':
                 thisdata['point_type'] = d.point_type
                 thisdata['round_no'] = d.active_round
                 subtopics_array = []
@@ -674,34 +684,17 @@ def data_pk_api(request):
                 return HttpResponse(response_json, content_type='json')
 
         else:
-            #Get all our valiables according to what kind of data we're dealing with.
-            response_data = {}
-            json_datatype = str(request.POST.get('data-type'))
-            session = int(request.POST.get('session'))
-            pk = int(request.POST.get('pk'))
-            committee = request.POST.get('committee')
-            debate = request.POST.get('debate')
-            if json_datatype == 'point':
-                round_no = int(request.POST.get('round_no'))
-                point_type = request.POST.get('point_type')
+            if str(request.POST.get('data-type')) == 'predict':
+                response_data = {}
+                pk = int(request.POST.get('pk'))
+                form = PredictEditForm({'pk': pk})
                 subtopics = json.loads(request.POST.get('subtopics'))
                 all_subtopics = json.loads(request.POST.get('all_subtopics'))
 
-                #Set up and instance of the Point Edit form.
-                form = PointEditForm({'pk': pk, 'session': session, 'committee': committee, 'debate': debate, 'round_no': round_no, 'point_type': point_type})
-
                 if form.is_valid():
-                    print 'is valid!'
-                    #If the form is valid, get the Point and update it with our values.
                     p = Point.objects.get(pk=form.cleaned_data['pk'])
-
-                    committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(committee_name=form.cleaned_data['committee'])[0]
-                    p.committee_by = committee_by
-                    p.active_debate = form.cleaned_data['debate']
-                    p.active_round = form.cleaned_data['round_no']
-                    p.point_type = form.cleaned_data['point_type']
-                    p.save()
                     p.subtopics.clear()
+
                     subtopics_array = []
                     for s in subtopics:
                         st = SubTopic.objects.get(pk=int(s.get('pk')))
@@ -721,73 +714,121 @@ def data_pk_api(request):
                     content_json = json.dumps(response_data)
 
                     return HttpResponse(content_json, content_type='json')
+            else:
+                #Get all our valiables according to what kind of data we're dealing with.
+                response_data = {}
+                json_datatype = str(request.POST.get('data-type'))
+                session = int(request.POST.get('session'))
+                pk = int(request.POST.get('pk'))
+                committee = request.POST.get('committee')
+                debate = request.POST.get('debate')
+                if json_datatype == 'point':
+                    round_no = int(request.POST.get('round_no'))
+                    point_type = request.POST.get('point_type')
+                    subtopics = json.loads(request.POST.get('subtopics'))
+                    all_subtopics = json.loads(request.POST.get('all_subtopics'))
+
+                    #Set up and instance of the Point Edit form.
+                    form = PointEditForm({'pk': pk, 'session': session, 'committee': committee, 'debate': debate, 'round_no': round_no, 'point_type': point_type})
+
+                    if form.is_valid():
+                        print 'is valid!'
+                        #If the form is valid, get the Point and update it with our values.
+                        p = Point.objects.get(pk=form.cleaned_data['pk'])
+
+                        committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(committee_name=form.cleaned_data['committee'])[0]
+                        p.committee_by = committee_by
+                        p.active_debate = form.cleaned_data['debate']
+                        p.active_round = form.cleaned_data['round_no']
+                        p.point_type = form.cleaned_data['point_type']
+                        p.save()
+                        p.subtopics.clear()
+                        subtopics_array = []
+                        for s in subtopics:
+                            st = SubTopic.objects.get(pk=int(s.get('pk')))
+                            p.subtopics.add(st)
+                            subtopics_array.append(st.subtopic_text)
+
+                        response_data['pk'] = p.pk
+                        response_data['last_changed'] = p.timestamp.strftime("%H:%M")
+                        response_data['by'] = p.committee_by.committee_name
+                        response_data['debate'] = p.active_debate
+                        response_data['round_no'] = p.active_round
+                        response_data['point_type'] = p.point_type
+                        response_data['subtopics'] = ', '.join(subtopics_array)
+                        response_data['committee_color'] = p.committee_by.committee_color()
+                        response_data['committee_text_color'] = p.committee_by.committee_text_color()
+
+                        content_json = json.dumps(response_data)
+
+                        return HttpResponse(content_json, content_type='json')
 
 
-            elif json_datatype == 'content':
-                point_type = request.POST.get('point_type')
-                content = request.POST.get('content')
+                elif json_datatype == 'content':
+                    point_type = request.POST.get('point_type')
+                    content = request.POST.get('content')
 
-                form = ContentEditForm({'pk': pk, 'session': session, 'committee': committee, 'debate': debate, 'point_type': point_type, 'content': content})
+                    form = ContentEditForm({'pk': pk, 'session': session, 'committee': committee, 'debate': debate, 'point_type': point_type, 'content': content})
 
-                if form.is_valid():
-                    c = ContentPoint.objects.get(pk=form.cleaned_data['pk'])
+                    if form.is_valid():
+                        c = ContentPoint.objects.get(pk=form.cleaned_data['pk'])
 
-                    committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(committee_name=form.cleaned_data['committee'])[0]
-                    c.committee_by = committee_by
-                    c.active_debate = form.cleaned_data['debate']
-                    c.point_type = form.cleaned_data['point_type']
-                    c.point_content = form.cleaned_data['content']
-                    c.save()
+                        committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(committee_name=form.cleaned_data['committee'])[0]
+                        c.committee_by = committee_by
+                        c.active_debate = form.cleaned_data['debate']
+                        c.point_type = form.cleaned_data['point_type']
+                        c.point_content = form.cleaned_data['content']
+                        c.save()
 
-                    response_data['pk'] = c.pk
-                    response_data['last_changed'] = c.timestamp.strftime("%H:%M")
-                    response_data['by'] = c.committee_by.committee_name
-                    response_data['debate'] = c.active_debate
-                    response_data['point_type'] = c.point_type
-                    response_data['content'] = c.point_content
-                    response_data['committee_color'] = c.committee_by.committee_color()
-                    response_data['committee_text_color'] = c.committee_by.committee_text_color()
+                        response_data['pk'] = c.pk
+                        response_data['last_changed'] = c.timestamp.strftime("%H:%M")
+                        response_data['by'] = c.committee_by.committee_name
+                        response_data['debate'] = c.active_debate
+                        response_data['point_type'] = c.point_type
+                        response_data['content'] = c.point_content
+                        response_data['committee_color'] = c.committee_by.committee_color()
+                        response_data['committee_text_color'] = c.committee_by.committee_text_color()
 
-                    content_json = json.dumps(response_data)
+                        content_json = json.dumps(response_data)
 
-                    return HttpResponse(content_json, content_type='json')
+                        return HttpResponse(content_json, content_type='json')
 
-            elif json_datatype == 'vote':
-                in_favour = request.POST.get('in_favour')
-                against = request.POST.get('against')
-                abstentions = request.POST.get('abstentions')
-                absent = request.POST.get('absent')
+                elif json_datatype == 'vote':
+                    in_favour = request.POST.get('in_favour')
+                    against = request.POST.get('against')
+                    abstentions = request.POST.get('abstentions')
+                    absent = request.POST.get('absent')
 
-                form = VoteEditForm({'pk': pk, 'session': session, 'committee': committee, 'debate': debate, 'in_favour': in_favour, 'against': against, 'abstentions': abstentions, 'absent': absent})
+                    form = VoteEditForm({'pk': pk, 'session': session, 'committee': committee, 'debate': debate, 'in_favour': in_favour, 'against': against, 'abstentions': abstentions, 'absent': absent})
 
-                if form.is_valid():
+                    if form.is_valid():
 
-                    v = Vote.objects.get(pk=form.cleaned_data['pk'])
+                        v = Vote.objects.get(pk=form.cleaned_data['pk'])
 
-                    committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(committee_name=form.cleaned_data['committee'])[0]
+                        committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(committee_name=form.cleaned_data['committee'])[0]
 
-                    v.committee_by = committee_by
-                    v.active_debate = form.cleaned_data['debate']
-                    v.in_favour = form.cleaned_data['in_favour']
-                    v.against = form.cleaned_data['against']
-                    v.abstentions = form.cleaned_data['abstentions']
-                    v.absent = form.cleaned_data['absent']
-                    v.save()
+                        v.committee_by = committee_by
+                        v.active_debate = form.cleaned_data['debate']
+                        v.in_favour = form.cleaned_data['in_favour']
+                        v.against = form.cleaned_data['against']
+                        v.abstentions = form.cleaned_data['abstentions']
+                        v.absent = form.cleaned_data['absent']
+                        v.save()
 
-                    response_data['pk'] = v.pk
-                    response_data['last_changed'] = v.timestamp.strftime("%H:%M")
-                    response_data['by'] = v.committee_by.committee_name
-                    response_data['debate'] = v.active_debate
-                    response_data['in_favour'] = v.in_favour
-                    response_data['against'] = v.against
-                    response_data['abstentions'] = v.abstentions
-                    response_data['absent'] = v.absent
-                    response_data['committee_color'] = v.committee_by.committee_color()
-                    response_data['committee_text_color'] = v.committee_by.committee_text_color()
+                        response_data['pk'] = v.pk
+                        response_data['last_changed'] = v.timestamp.strftime("%H:%M")
+                        response_data['by'] = v.committee_by.committee_name
+                        response_data['debate'] = v.active_debate
+                        response_data['in_favour'] = v.in_favour
+                        response_data['against'] = v.against
+                        response_data['abstentions'] = v.abstentions
+                        response_data['absent'] = v.absent
+                        response_data['committee_color'] = v.committee_by.committee_color()
+                        response_data['committee_text_color'] = v.committee_by.committee_text_color()
 
-                    content_json = json.dumps(response_data)
+                        content_json = json.dumps(response_data)
 
-                    return HttpResponse(content_json, content_type='json')
+                        return HttpResponse(content_json, content_type='json')
 
         return HttpResponse(
             json.dumps({'opps': 'something went wrong'}),
@@ -825,6 +866,28 @@ def data_pk_api(request):
                 }
                 all_subtopics_array.append(this_subtopic)
             thisdata['all_subtopics'] = all_subtopics_array
+        elif json_datatype == 'predict':
+            data = Point.objects.get(pk=pk)
+            #Getting the subtopics for a point
+            subtopics_array = []
+            for subtopic in data.subtopics.all():
+                this_subtopic = {
+                'pk': subtopic.pk,
+                'subtopic': subtopic.subtopic_text
+                }
+                subtopics_array.append(this_subtopic)
+            thisdata['subtopics'] = subtopics_array
+            #Getting all the subtopics avaliable for a certain point
+            active_committee = Committee.objects.filter(session=data.session).filter(committee_name=data.active_debate)[0]
+            all_subtopics = SubTopic.objects.filter(committee=active_committee)
+            all_subtopics_array = []
+            for subtopic in all_subtopics:
+                this_subtopic = {
+                'pk': subtopic.pk,
+                'subtopic': subtopic.subtopic_text
+                }
+                all_subtopics_array.append(this_subtopic)
+            thisdata['all_subtopics'] = all_subtopics_array
         elif json_datatype == 'vote':
             data = Vote.objects.get(pk=pk)
             thisdata['in_favour'] = data.in_favour
@@ -839,3 +902,184 @@ def data_pk_api(request):
         content_json = json.dumps(thisdata)
 
         return HttpResponse(content_json, content_type='json')
+
+def position(data, session, position=0):
+    order = RunningOrder.objects.filter(session=session).order_by('position')
+    count = order.count()
+    if count == 0:
+        return 1
+    else:
+        if data == 'P':
+            return count + 1;
+        elif data == 'DR':
+            for point in order:
+                point.position += 1
+                point.save()
+            return 1
+        elif data == 'R':
+            for point in order:
+                point.position += -1
+                point.save()
+        elif data == 'up':
+            if position > 1:
+                point = order.get(position=position)
+                above = order.get(position=(position-1))
+                point.position += -1
+                above.position += 1
+                point.save()
+                above.save()
+        elif data == 'down':
+            if position < RunningOrder.objects.filter(session=session).order_by('-position')[0].position:
+                point = order.get(position=position)
+                below = order.get(position=(position+1))
+                point.position += 1
+                below.position += -1
+                point.save()
+                below.save()
+        else:
+            for point in order:
+                if point.position > data:
+                    point.position += -1
+                    point.save()
+
+def runningorder_api(request, session_id):
+    session = Session.objects.get(pk=session_id)
+    active_debate = ActiveDebate.objects.get(session=session).active_debate
+    active_round = ActiveRound.objects.get(session=session).active_round
+    thisdata = {}
+    if request.method == 'POST':
+        if request.POST.get('action') == 'R':
+            dr_subtopics = Point.objects.filter(session=session).order_by('-pk')[0].subtopics.all()
+            point = RunningOrder.objects.filter(session=session).order_by('position')[0]
+            newpoint = Point(session = session,
+                committee_by = point.committee_by,
+                active_debate = active_debate,
+                active_round = active_round,
+                point_type = point.point_type
+                )
+            newpoint.save()
+            if point.point_type == 'P':
+                for s in point.committee_by.next_subtopics.all():
+                    newpoint.subtopics.add(s)
+            else:
+                for s in dr_subtopics:
+                    newpoint.subtopics.add(s)
+            point.delete()
+            position('R', session)
+
+        elif request.POST.get('action') == 'U':
+            point = Point.objects.filter(session=session).order_by('-pk')[0]
+            r = RunningOrder(
+                session = session,
+                position = position('DR', session),
+                committee_by = point.committee_by,
+                point_type = point.point_type
+            )
+            r.save()
+            point.delete()
+        elif request.POST.get('action') == 'C':
+            queue = RunningOrder.objects.filter(session=session)
+            for point in queue:
+                point.delete()
+        elif request.POST.get('action') == 'delete':
+            pos = int(request.POST.get('position'))
+            point = RunningOrder.objects.filter(session=session).filter(position=pos)
+            point.delete()
+            position(pos, session)
+        elif request.POST.get('action') == 'move':
+            position(str(request.POST.get('direction')), session, int(request.POST.get('position')))
+        else:
+            form = RunningOrderForm({'by': int(request.POST.get('by')), 'point_type': str(request.POST.get('type'))})
+            if form.is_valid():
+                r = RunningOrder(session=session,
+                    position=position(form.cleaned_data['point_type'], session),
+                    committee_by=Committee.objects.get(pk=form.cleaned_data['by']),
+                    point_type=form.cleaned_data['point_type']
+                    )
+                r.save()
+    else:
+        committees = Committee.objects.filter(session=session)
+        session_points = Point.objects.filter(session=session)
+        debate_points = session_points.filter(active_debate=active_debate)
+        committees_array = []
+        for committee in committees:
+            committee_session_points = session_points.filter(committee_by=committee).count()
+            committee_debate_points = debate_points.filter(committee_by=committee).count()
+            height = Decimal(75)+(Decimal(15)*(Decimal(committee_debate_points)/Decimal(debate_points.count())))+(Decimal(10)*(Decimal(committee_session_points)/Decimal(session_points.count())))
+            subtopics_next_array = []
+            for subtopic in committee.next_subtopics.all():
+                thissubtopic = {
+                'subtopic': subtopic.subtopic_text,
+                'color': subtopic.subtopic_color(),
+                'text_color': subtopic.subtopic_text_color()
+                }
+                subtopics_next_array.append(thissubtopic)
+            thiscommittee = {
+                'pk': committee.pk,
+                'session_total': committee_session_points,
+                'debate_total': committee_debate_points,
+                'next_subtopics': subtopics_next_array,
+                'height': round(height, 4)
+            }
+            committees_array.append(thiscommittee)
+        thisdata['committees'] = committees_array
+        last_three = session_points.order_by('-pk')[0:3]
+        backlog_array = []
+        backlog_position = -1
+        for point in last_three:
+            point_subtopics = []
+            for subtopic in point.subtopics.all():
+                thissubtopic = {
+                'subtopic': subtopic.subtopic_text,
+                'color': subtopic.subtopic_color(),
+                'text_color': subtopic.subtopic_text_color()
+                }
+                point_subtopics.append(thissubtopic)
+            thispoint = {
+                'position': backlog_position,
+                'by': point.committee_by.committee_name,
+                'on': point.active_debate,
+                'round': point.active_round,
+                'type': point.point_type,
+                'subtopics': point_subtopics
+            }
+            backlog_position += -1
+            backlog_array.append(thispoint)
+        thisdata['backlog'] = backlog_array
+
+        queue = RunningOrder.objects.filter(session=session).order_by('position')
+        queue_array = []
+        for point in queue:
+            point_subtopics = []
+            if point.point_type == 'P':
+                for subtopic in point.committee_by.next_subtopics.all():
+                    thissubtopic = {
+                    'subtopic': subtopic.subtopic_text,
+                    'color': subtopic.subtopic_color(),
+                    'text_color': subtopic.subtopic_text_color()
+                    }
+                    point_subtopics.append(thissubtopic)
+            else:
+                for subtopic in last_three[0].subtopics.all():
+                    thissubtopic = {
+                    'subtopic': subtopic.subtopic_text,
+                    'color': subtopic.subtopic_color(),
+                    'text_color': subtopic.subtopic_text_color()
+                    }
+                    point_subtopics.append(thissubtopic)
+
+            thispoint = {
+                'position': point.position,
+                'by': point.committee_by.committee_name,
+                'on': active_debate,
+                'round': active_round,
+                'type': point.point_type,
+                'subtopics': point_subtopics
+            }
+            queue_array.append(thispoint)
+        thisdata['queue'] = queue_array
+
+
+    content_json = json.dumps(thisdata)
+
+    return HttpResponse(content_json, content_type='json')
