@@ -86,10 +86,10 @@ window.setTimeout(function() {
                   <th>Round No.</th>
                   <th>Point Type</th>
                   <th>Subtopics</th>
-                  <th>Actions</th>
+                  <th class="col-xs-2">Actions</th>
               </tr>
           </thead>
-          <tbody id="sortable" class="sortable">
+          <tbody>
           </tbody>
         </table>
       </div>
@@ -97,8 +97,8 @@ window.setTimeout(function() {
   </div>
   <div class="runningorder-buttons">
       <a href="javascript:void(0)" class="btn runningorder-button btn-material-{{ session.session_color }}" onclick="runningOrderAction('R')"><h1>Recognise</h1></a>
-      <a href="javascript:void(0)" class="btn runningorder-button btn-warning"><h3>Undo last<br>recognition</h3></a>
-      <a href="javascript:void(0)" class="btn runningorder-button btn-danger"><h2>Clear Queue</h2></a>
+      <a href="javascript:void(0)" class="btn runningorder-button btn-warning" onclick="runningOrderAction('U')"><h3>Undo last<br>recognition</h3></a>
+      <a href="javascript:void(0)" class="btn runningorder-button btn-danger" onclick="clearAction('C')"><h2>Clear Queue</h2></a>
   </div>
   <div class="runningorder-committees">
     {% for committee in committees %}
@@ -143,6 +143,5 @@ window.setTimeout(function() {
   }
 </style>
 {% endblock %} {% block footer_scripts %}
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script type="text/javascript" src="{% static 'statistics/js/runningorder.js' %}" charset="utf-8"></script>
 {% endblock %}

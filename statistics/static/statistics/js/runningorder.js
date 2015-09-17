@@ -41,7 +41,7 @@ function getCommittees() {
           if ($('#backlog' + point.position)[0] !== undefined) {
             deleteInput('backlog' + point.position);
           }
-          createPoint('backlog' + point.position, point.position, 0, point.by, point.on, point.round, point.type, point.subtopics);
+          createPoint('backlog', 'backlog' + point.position, point.position, 0, point.by, point.on, point.round, point.type, point.subtopics);
         });
 
         response.queue.forEach(function(point){
@@ -49,7 +49,7 @@ function getCommittees() {
             deleteInput('queue-' + point.position);
           }
           last_postition = point.position;
-          createPoint('queue-' + point.position, point.position, -1, point.by, point.on, point.round, point.type, point.subtopics);
+          createPoint('point', 'queue-' + point.position, point.position, -1, point.by, point.on, point.round, point.type, point.subtopics);
         });
       });
       setTimeout(getCommittees, 1000);
@@ -59,13 +59,6 @@ function getCommittees() {
 }
 
 getCommittees();
-
-$(function() {
-  $(".sortable").sortable({
-   items: "tr:not(.unsortable)"
- });
- $(".sortable").disableSelection();
-});
 
 function addToRunningOrder(by, type) {
   $.ajax({
@@ -95,6 +88,12 @@ function addToRunningOrder(by, type) {
   });
 }
 
+function clearAction(action){
+  if (confirm('Are you sure you want to clear the queue?') === true) {
+    runningOrderAction(action);
+  }
+}
+
 function runningOrderAction(action) {
   $.ajax({
     url: runningorder_url,
@@ -106,6 +105,70 @@ function runningOrderAction(action) {
       if (action === 'R') {
         deleteInput('queue-' + last_postition);
       }
+      if (action === 'C') {
+        var i = 0;
+        while (i < last_postition) {
+          i++;
+          deleteInput('queue-' + i);
+        }
+      }
+    },
+    error: function(xhr, errmsg, err) {
+      $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+      console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+      $('#results').html('<div class="alert alert-dismissable alert-danger">'+
+                          '<button type="button" class="close" data-dismiss="alert">×</button>'+
+                          'There was an error, check your internet and try again!</a>.'+
+                          '</div>');
+      window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove();
+        });
+      }, 5000);
+    }
+  });
+}
+
+function deletePoint(position) {
+  $.ajax({
+    url: runningorder_url,
+    type: "POST",
+    data: {
+      'action': 'delete',
+      'position': position
+    },
+    success: function(response) {
+      deleteInput('queue-' + last_postition);
+    },
+    error: function(xhr, errmsg, err) {
+      $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+      console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+      $('#results').html('<div class="alert alert-dismissable alert-danger">'+
+                          '<button type="button" class="close" data-dismiss="alert">×</button>'+
+                          'There was an error, check your internet and try again!</a>.'+
+                          '</div>');
+      window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove();
+        });
+      }, 5000);
+    }
+  });
+}
+
+function movePoint(direction, position) {
+  $.ajax({
+    url: runningorder_url,
+    type: "POST",
+    data: {
+      'action': 'move',
+      'direction': direction,
+      'position': position
+    },
+    success: function(response) {
+
     },
     error: function(xhr, errmsg, err) {
       $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
@@ -127,7 +190,7 @@ function runningOrderAction(action) {
 var queue_points = 0,
     backlog_points = 0;
 
-function createPoint(id, pos, where, by, on, round, type, subtopics) {
+function createPoint(kind, id, pos, where, by, on, round, type, subtopics) {
   //Setting up the new row in the table
   var table = document.getElementById("runningorder-table").getElementsByTagName('tbody')[0],
     row = table.insertRow(where),
@@ -162,7 +225,11 @@ function createPoint(id, pos, where, by, on, round, type, subtopics) {
     });
   }
   point_subtopics.innerHTML = pointsubtopicHTML;
-  point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-danger btn-fab btn-raised mdi-action-delete" onclick="deleteData(' + "'point', " + "'" + queue_points + "'" + ')" ></a>';
+  if (kind === 'point') {
+    point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-navigation-expand-less" onclick="movePoint('+ "'up'," + pos + ')" ></a><a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-navigation-expand-more" onclick="movePoint('+ "'down'," + pos + ')" ></a><a href="javascript:void(0)" class="btn btn-danger btn-fab btn-raised mdi-action-delete" onclick="deletePoint(' + pos + ')" ></a>';
+  } else {
+    point_action.innerHTML = '';
+  }
 }
 
 
