@@ -1,4 +1,4 @@
-{% extends 'statistics/base.html' %} {% load staticfiles %} {% block page_title %}Predict: {{ committee.committee_name }}{% endblock %} {% block content %}
+{% extends 'statistics/base.html' %} {% load staticfiles %} {% block page_title %}Input: {{ committee.committee_name }}{% endblock %} {% block content %}
 {% if messages %}
 {% for message in messages %}
 <div class="alert alert-dismissable alert-success shadow-z-2">
@@ -15,7 +15,7 @@ window.setTimeout(function() {
 {% endif %}
 <div id="results">
 </div>
-<h1>Predicting {{committee.committee_name}}'s next point on {{active_debate}}</h1>
+<h1>What's {{committee.committee_name}}'s next point on {{active_debate}}?</h1>
 <p>Next Point will be on: {% if next_subtopics %}{% for subtopic in next_subtopics %}  <span class="label label-material-{{ session.session_color }}">{{ subtopic }}</span>{% endfor %}{% else %}<span class="label label-material-{{ session.session_color }}">None</span>{% endif %}</p>
 <form class="form-horizontal" role="form" action="{% url 'statistics:predict' session.id committee.id %}" method="post">
   {% csrf_token %}
