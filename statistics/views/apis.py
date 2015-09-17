@@ -903,7 +903,7 @@ def data_pk_api(request):
 
         return HttpResponse(content_json, content_type='json')
 
-def position(data, session):
+def position(data, session, position=0):
     order = RunningOrder.objects.filter(session=session).order_by('position')
     count = order.count()
     if count == 0:
@@ -920,6 +920,22 @@ def position(data, session):
             for point in order:
                 point.position += -1
                 point.save()
+        elif data == 'up':
+            if position > 1:
+                point = order.get(position=position)
+                above = order.get(position=(position-1))
+                point.position += -1
+                above.position += 1
+                point.save()
+                above.save()
+        elif data == 'down':
+            if position < RunningOrder.objects.filter(session=session).order_by('-position')[0].position:
+                point = order.get(position=position)
+                below = order.get(position=(position+1))
+                point.position += 1
+                below.position += -1
+                point.save()
+                below.save()
         else:
             for point in order:
                 if point.position > data:
@@ -952,9 +968,26 @@ def runningorder_api(request, session_id):
             position('R', session)
 
         elif request.POST.get('action') == 'U':
-            pass
+            point = Point.objects.filter(session=session).order_by('-pk')[0]
+            r = RunningOrder(
+                session = session,
+                position = position('DR', session),
+                committee_by = point.committee_by,
+                point_type = point.point_type
+            )
+            r.save()
+            point.delete()
         elif request.POST.get('action') == 'C':
-            pass
+            queue = RunningOrder.objects.filter(session=session)
+            for point in queue:
+                point.delete()
+        elif request.POST.get('action') == 'delete':
+            pos = int(request.POST.get('position'))
+            point = RunningOrder.objects.filter(session=session).filter(position=pos)
+            point.delete()
+            position(pos, session)
+        elif request.POST.get('action') == 'move':
+            position(str(request.POST.get('direction')), session, int(request.POST.get('position')))
         else:
             form = RunningOrderForm({'by': int(request.POST.get('by')), 'point_type': str(request.POST.get('type'))})
             if form.is_valid():
