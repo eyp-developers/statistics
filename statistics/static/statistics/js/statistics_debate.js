@@ -31,7 +31,19 @@ function requestStatisticsData() {
             }
             $('#latest_on').html(latest_on);
 
-            // call it again after one second
+            if (response.running_order[0] !== undefined) {
+              running_html = '<h2>Next Points:</h2>';
+              var pos = 0;
+              response.running_order.forEach(function(point){
+                pos ++;
+                running_html += '<h3>' + pos + '. ' + point + '</h3>';
+              });
+              $('#next').html(running_html);
+            } else {
+              $('#next').html('');
+            }
+
+            // call it again after two seconds
             setTimeout(requestStatisticsData, 2000);
         },
         cache: false

@@ -216,6 +216,15 @@ def debate_api(request, session_id, committee_id):
         points_made.append(p)
         drs_made.append(d)
 
+    running_order = []
+    if active_debate[0].active_debate == committee[0].committee_name:
+        running = RunningOrder.objects.filter(session=session)
+        if running:
+            next_three = running.order_by('position')[:3]
+            for point in next_three:
+                running_order.append(point.committee_by.committee_name)
+
+
     if not all_points:
         debate_json = json.dumps({
         'committee_name': committee_array_name,
@@ -230,6 +239,7 @@ def debate_api(request, session_id, committee_id):
         'latest_point_subtopics': '',
         'subtopics': [],
         'subtopic_points': [],
+        'running_order': running_order
         })
     else:
         debate_json = json.dumps({
@@ -245,6 +255,7 @@ def debate_api(request, session_id, committee_id):
         'latest_point_subtopics': latest_point_subtopics_array,
         'subtopics': subtopics_array,
         'subtopic_points': subtopic_points_array,
+        'running_order': running_order
         })
     return HttpResponse(debate_json, content_type='json')
 
