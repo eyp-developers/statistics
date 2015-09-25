@@ -115,13 +115,15 @@ class Session(models.Model):
     CONTENT = 'C'
     JOINTFORM = 'JF'
     SPLITFORM = 'SF'
-    NONE = 'N/A'
+    RUNNINGORDER = 'R'
+    RUNNINGCONTENT = 'RC'
     STATISTIC_TYPES = (
         (STATISTICS, 'Statistics Only'),
         (CONTENT, 'Point Content Only'),
         (JOINTFORM, 'Joint Form Statistics'),
         (SPLITFORM, 'Split Form Statistics'),
-        (NONE, 'No Statistics (Only Voting)')
+        (RUNNINGORDER, 'Running Order Statistics'),
+        (RUNNINGCONTENT, 'Running Order Statistics with Point Content')
     )
     #Making the statistics type a selectable option
     session_statistics = models.CharField(max_length=3, choices=STATISTIC_TYPES, default=JOINTFORM)
@@ -140,8 +142,6 @@ class Session(models.Model):
     session_is_visible = models.BooleanField('is visible')
 
     #Enabling/Disabling Session Settings
-    session_rounds_enabled = models.BooleanField('debate rounds enabled', default=True)
-    session_subtopics_enabled = models.BooleanField('committee subtopics enabled', default=True)
     session_voting_enabled = models.BooleanField('session-wide voting enabled', default=True)
     session_max_rounds = models.PositiveSmallIntegerField(default=3)
 
