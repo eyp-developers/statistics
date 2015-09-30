@@ -93,7 +93,6 @@ def debate(request, session_id, committee_id):
     #The rest of the point/voting data comes through the api that can constantly be updated.
     c = Committee.objects.get(pk=committee_id)
     s = Session.objects.get(pk=session_id)
-    a = ActiveDebate.objects.filter(session=s)[0].active_debate
     #The statistics_type will let us render different templates based on the statistics selected by the user.
     statistics_type = s.session_statistics
     print statistics_type
@@ -109,7 +108,7 @@ def debate(request, session_id, committee_id):
 
     #The voting enabled option lets us change the html content and js so that the voting is not displayed.
     voting_enabled = s.session_voting_enabled
-    context = {'committee': c, 'session': s, 'statistics_type': statistics_type, 'voting_enabled': voting_enabled, 'no_stats': no_stats, 'active': a}
+    context = {'committee': c, 'session': s, 'statistics_type': statistics_type, 'voting_enabled': voting_enabled, 'no_stats': no_stats}
 
     if statistics_type == 'JF': # Should use or statement
         return render(request, 'statistics/joint.html', context)
@@ -192,8 +191,6 @@ def create_session(request):
                 session_end_date = end_date,
                 session_statistics = form.cleaned_data['statistics'],
                 session_color = form.cleaned_data['color'],
-                session_rounds_enabled = True,
-                session_subtopics_enabled = True,
                 session_is_visible = False,
                 session_voting_enabled = voting,
                 session_max_rounds = form.cleaned_data['max_rounds'],
