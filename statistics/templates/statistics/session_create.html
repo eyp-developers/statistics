@@ -4,8 +4,8 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Session Creation - GA+</title>
-		<meta name="description" content="Create a session on the GA+ Platform" />
+		<title>Session Creation - GA Statistics</title>
+		<meta name="description" content="Create a session on the GA Statistics Platform" />
 		<meta name="keywords" content="eyp, european, youth, parliament, ga, statistics" />
 		<meta name="author" content="Oliver Stenbom" />
 		<link rel="shortcut icon" href="../favicon.ico">
@@ -23,7 +23,7 @@
 
 			<div class="fs-form-wrap" id="fs-form-wrap">
 				<div class="fs-title">
-					<h1>Session Creation - GA+</h1>
+					<h1>Session Creation - GA Statistics</h1>
 				</div>
 				<form id="myform" class="fs-form fs-form-full" action="{% url 'statistics:create_session' %}" method="post" autocomplete="off">
 					{% csrf_token %}
@@ -97,7 +97,7 @@
 							</div>
 						</li>
 						<li data-input-trigger>
-							<label class="fs-field-label fs-anim-upper" for="{{ form.voting.id_for_label }}" data-info="This defines whether session wide voting is enabled or not.">Would you like to do your voting through GA+?</label>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.voting.id_for_label }}" data-info="This defines whether session wide voting is enabled or not.">Would you like to do your voting through GA Statistics?</label>
 							{{ form.voting.errors }}
 							<div class="fs-radio-group fs-radio-custom clearfix fs-anim-lower" id="{{ form.voting.id_for_label }}">
 								<span><input id="votingyes" name="{{ form.voting.html_name }}" type="radio" value="True"/><label for="votingyes" class="radio-yes">Yes please.</label></span>
