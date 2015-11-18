@@ -51,6 +51,9 @@ def home(request):
 
     return render(request, 'statistics/home.html', context)
 
+def get_started(request):
+    return render(request, 'statistics/get_started.html')
+
 def session(request, session_id):
     #The Session page uses static content and content that is constantly updated, the satic content is loaded with the view
     #and the updating content updates with the session api, defined further down.

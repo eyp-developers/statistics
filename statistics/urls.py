@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^$', public_views.home, name='home'),
     url(r'^login/$', auth.ga_login, name='login'),
     url(r'^logout/$', auth.ga_logout, name='logout'),
+    url(r'^get_started/$', public_views.get_started, name='get_started'),
     url(r'^create_session/$', public_views.create_session, name='create_session'),
     url(r'^overview/(?P<session_id>[0-9]+)/$', protected_views.welcome, name='welcome'),
     url(r'^edit/(?P<session_id>[0-9]+)/$', protected_views.edit, name='edit'),
