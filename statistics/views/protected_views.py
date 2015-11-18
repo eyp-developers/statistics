@@ -15,7 +15,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 #Importing all models for statistics.
-from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
+from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound
 
 #Importing the forms too.
 from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, PointEditForm, PredictForm, PredictEditForm, VoteForm, VoteEditForm, ContentForm, ContentEditForm, JointForm, ActiveDebateForm, ActiveRoundForm
@@ -674,6 +674,8 @@ def runningorder(request, session_id):
                 active_debate.active_debate = active_debate_committee.committee_name
                 #Save the new active debate
                 active_debate.save()
+                for committee in committees:
+                    committee.next_subtopics.clear()
                 #Send the user to the manage page
                 messages.add_message(request, messages.SUCCESS, 'Active Debate Saved')
                 return HttpResponseRedirect(reverse('statistics:runningorder', args=[session_id]))
