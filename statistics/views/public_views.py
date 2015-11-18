@@ -118,6 +118,10 @@ def debate(request, session_id, committee_id):
         return render(request, 'statistics/statistics.html', context)
     elif statistics_type == 'C':
         return render(request, 'statistics/content.html', context)
+    elif statistics_type == 'R':
+        return render(request, 'statistics/statistics.html', context)
+    elif statistics_type == 'RC':
+        return render(request, 'statistics/joint.html', context)
     else:
         pass
 
@@ -187,8 +191,6 @@ def create_session(request):
                 session_end_date = end_date,
                 session_statistics = form.cleaned_data['statistics'],
                 session_color = form.cleaned_data['color'],
-                session_rounds_enabled = True,
-                session_subtopics_enabled = True,
                 session_is_visible = False,
                 session_voting_enabled = voting,
                 session_max_rounds = form.cleaned_data['max_rounds'],

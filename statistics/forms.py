@@ -102,13 +102,15 @@ class SessionForm(forms.Form):
     CONTENT = 'C'
     JOINTFORM = 'JF'
     SPLITFORM = 'SF'
-    NONE = 'N/A'
+    RUNNINGORDER = 'R'
+    RUNNINGCONTENT = 'RC'
     STATISTIC_TYPES = (
         (STATISTICS, 'Statistics Only'),
         (CONTENT, 'Point Content Only'),
         (JOINTFORM, 'Joint Form Statistics'),
         (SPLITFORM, 'Split Form Statistics'),
-        (NONE, 'No Statistics (Only Voting)')
+        (RUNNINGORDER, 'Running Order Statistics'),
+        (RUNNINGCONTENT, 'Running Order Statistics with Point Content')
     )
     #Making the statistics type a selectable option
     statistics = forms.ChoiceField(choices=STATISTIC_TYPES, required=True)
@@ -222,13 +224,15 @@ class SessionEditForm(forms.Form):
         CONTENT = 'C'
         JOINTFORM = 'JF'
         SPLITFORM = 'SF'
-        NONE = 'N/A'
+        RUNNINGORDER = 'R'
+        RUNNINGCONTENT = 'RC'
         STATISTIC_TYPES = (
             (STATISTICS, 'Statistics Only'),
             (CONTENT, 'Point Content Only'),
             (JOINTFORM, 'Joint Form Statistics'),
             (SPLITFORM, 'Split Form Statistics'),
-            (NONE, 'No Statistics (Only Voting)')
+            (RUNNINGORDER, 'Running Order Statistics'),
+            (RUNNINGCONTENT, 'Running Order Statistics with Point Content')
         )
         #Making the statistics type a selectable option
         statistics = forms.ChoiceField(choices=STATISTIC_TYPES, required=True)
