@@ -15,6 +15,11 @@
 
       <ul class="nav navbar-nav navbar-right">
 
+        {% url 'statistics:home' as home_url %} <!-- here we set a variable home_url which we will compare to the current url in the next line -->
+        {% if request.get_full_path = home_url %}
+        <li><a href="{% url 'statistics:get_started' %}">Get Started</a></li>
+        {% endif %}
+
         <li class="dropdown">
           <a href="#" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
           <ul class="dropdown-menu">
@@ -33,6 +38,8 @@
 
 
       <ul class="nav navbar-nav navbar-right">
+
+
 
         {% url 'statistics:session' session.pk as session_url %} <!-- here we set a variable session_url which we will compare to the current url in the next line -->
         {% if not request.get_full_path = session_url %}
