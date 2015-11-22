@@ -18,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound
 
 #Importing the forms too.
-from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, PointEditForm, PredictForm, PredictEditForm, VoteForm, VoteEditForm, ContentForm, ContentEditForm, JointForm, ActiveDebateForm, ActiveRoundForm
+from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, PointEditForm, VoteForm, VoteEditForm, ContentForm, ContentEditForm, JointForm, ActiveDebateForm, ActiveRoundForm
 
 # This is a central function. It replaces 'render' in cases where the user has to be authorized to view the page, not just authenticated.
 def check_authorization_and_render(request, template, context, session, admin_only = True):
