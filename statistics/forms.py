@@ -120,7 +120,8 @@ class SessionForm(forms.Form):
 
     max_rounds = forms.IntegerField(min_value=1, max_value=10)
 
-    color = forms.CharField(max_length=20, required=True)
+    #Was used to chose the session color - no longer used as everything is blue.
+    #color = forms.CharField(max_length=20, required=True)
 
     admin_password = forms.CharField()
     submit_password = forms.CharField()
@@ -242,43 +243,45 @@ class SessionEditForm(forms.Form):
 
         max_rounds = forms.IntegerField(min_value=1, max_value=10)
 
-        RED = 'red'
-        PINK = 'pink'
-        PURPLE = 'purple'
-        DEEP_PURPLE = 'deep-purple'
-        INDIGO = 'indigo'
-        BLUE = 'blue'
-        LIGHT_BLUE = 'light-blue'
-        CYAN = 'cyan'
-        TEAL = 'teal'
-        GREEN = 'green'
-        LIGHT_GREEN = 'light-green'
-        LIME = 'lime'
-        YELLOW = 'yellow'
-        AMBER = 'amber'
-        ORANGE = 'orange'
-        DEEP_ORANGE = 'deep-orange'
-        BLUE_GREY = 'blue-grey'
-        COLOR_TYPES = (
-            (RED, 'Red'),
-            (PINK, 'Pink'),
-            (PURPLE, 'Purple'),
-            (DEEP_PURPLE, 'Deep Purple'),
-            (INDIGO, 'Indigo'),
-            (BLUE, 'Blue'),
-            (LIGHT_BLUE, 'Light Blue'),
-            (CYAN, 'Cyan'),
-            (TEAL, 'Teal'),
-            (GREEN, 'Green'),
-            (LIGHT_GREEN, 'Light Green'),
-            (LIME, 'Lime'),
-            (YELLOW, 'Yellow'),
-            (AMBER, 'Amber'),
-            (ORANGE, 'Orange'),
-            (DEEP_ORANGE, 'Deep Orange'),
-            (BLUE_GREY, 'Blue Grey'),
-        )
-        color = forms.ChoiceField(choices=COLOR_TYPES, required=True)
+        # No longer used session color options
+
+        # RED = 'red'
+        # PINK = 'pink'
+        # PURPLE = 'purple'
+        # DEEP_PURPLE = 'deep-purple'
+        # INDIGO = 'indigo'
+        # BLUE = 'blue'
+        # LIGHT_BLUE = 'light-blue'
+        # CYAN = 'cyan'
+        # TEAL = 'teal'
+        # GREEN = 'green'
+        # LIGHT_GREEN = 'light-green'
+        # LIME = 'lime'
+        # YELLOW = 'yellow'
+        # AMBER = 'amber'
+        # ORANGE = 'orange'
+        # DEEP_ORANGE = 'deep-orange'
+        # BLUE_GREY = 'blue-grey'
+        # COLOR_TYPES = (
+        #     (RED, 'Red'),
+        #     (PINK, 'Pink'),
+        #     (PURPLE, 'Purple'),
+        #     (DEEP_PURPLE, 'Deep Purple'),
+        #     (INDIGO, 'Indigo'),
+        #     (BLUE, 'Blue'),
+        #     (LIGHT_BLUE, 'Light Blue'),
+        #     (CYAN, 'Cyan'),
+        #     (TEAL, 'Teal'),
+        #     (GREEN, 'Green'),
+        #     (LIGHT_GREEN, 'Light Green'),
+        #     (LIME, 'Lime'),
+        #     (YELLOW, 'Yellow'),
+        #     (AMBER, 'Amber'),
+        #     (ORANGE, 'Orange'),
+        #     (DEEP_ORANGE, 'Deep Orange'),
+        #     (BLUE_GREY, 'Blue Grey'),
+        # )
+        # color = forms.ChoiceField(choices=COLOR_TYPES, required=True)
 
         is_visible = forms.BooleanField(required=False)
 
