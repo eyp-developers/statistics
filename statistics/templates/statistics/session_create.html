@@ -45,7 +45,7 @@
 							<input class="fs-anim-lower" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" type="email" placeholder="john@doe.com" required/>
 						</li>
 						<li>
-							<label class="fs-field-label fs-anim-upper" for="{{ form.picture.id_for_label }}" data-info="This makes the website look very pretty. Do not use any images you do not own the copyright to!">Could we get a picture to use for your session? Make sure that you do not infringe copyrights.</label>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.picture.id_for_label }}" data-info="This makes the website look very pretty. Do not use any images you do not own the copyright to!">Could we get a picture to use for your session? <p style="font-size: 24px">Make sure it's a picture you have the right to use.</p></label>
 							{{ form.picture.errors }}
 							<input class="fs-anim-lower" id="{{ form.picture.id_for_label }}" name="{{ form.picture.html_name }}" type="url" placeholder="http://images.google.com/yourface" required/>
 						</li>
