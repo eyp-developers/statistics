@@ -14,34 +14,36 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-#Importing all models for statistics.
+# Importing all models for statistics.
 from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound
 
-#Importing the forms too.
-from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, PointEditForm, VoteForm, VoteEditForm, ContentForm, ContentEditForm, JointForm, ActiveDebateForm, ActiveRoundForm
+# Importing the forms too.
+from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, PointEditForm, VoteForm, VoteEditForm, \
+    ContentForm, ContentEditForm, JointForm, ActiveDebateForm, ActiveRoundForm
+
 
 # This is a central function. It replaces 'render' in cases where the user has to be authorized to view the page, not just authenticated.
-def check_authorization_and_render(request, template, context, session, admin_only = True):
-    if admin_only: # This also refers to the session admin user AND any superuser
+def check_authorization_and_render(request, template, context, session, admin_only=True):
+    if admin_only:  # This also refers to the session admin user AND any superuser
         if request.user == session.session_admin_user or request.user.is_superuser:
             return render(request, template, context)
         else:
-            messages.add_message(request, messages.ERROR, 'You are not authorized to view this page. You need to log in as the ' + session.session_name + 'admin.')
+            messages.add_message(request, messages.ERROR,
+                                 'You are not authorized to view this page. You need to log in as the ' + session.session_name + 'admin.')
             return HttpResponseRedirect('/login/')
     else:
         if request.user == session.session_admin_user or request.user == session.session_submission_user or request.user.is_superuser:
             return render(request, template, context)
         else:
-            messages.add_message(request, messages.ERROR, 'You are not authorized to view this page. You need to log in as the ' + session.session_name + 'admin.')
+            messages.add_message(request, messages.ERROR,
+                                 'You are not authorized to view this page. You need to log in as the ' + session.session_name + 'admin.')
             return HttpResponseRedirect('/login/')
-
-
 
 
 #################
 
 # This view should be renamed to overview in accordance to what the user sees
-@login_required(login_url = '/login/')
+@login_required(login_url='/login/')
 def welcome(request, session_id):
     session = Session.objects.get(pk=session_id)
     committees = Committee.objects.filter(session=session).order_by('committee_name')
@@ -50,22 +52,21 @@ def welcome(request, session_id):
     return check_authorization_and_render(request, 'statistics/welcome.html', context, session)
 
 
-
 #################
 
 
-@login_required(login_url = '/login/')
+@login_required(login_url='/login/')
 def edit(request, session_id):
     s = Session.objects.get(pk=session_id)
     # If the User is trying to edit the session
     if request.method == 'POST':
-        #Fill an instance of the form with the request data.
+        # Fill an instance of the form with the request data.
         form = SessionEditForm(request.POST)
-        #Check if the created form is a valid form.
+        # Check if the created form is a valid form.
         if form.is_valid():
             print 'is valid'
-            #We need to set up time varaibles for the start and end of sessions.
-            #We do this by creating date objects and combining the date objects with time midnight
+            # We need to set up time varaibles for the start and end of sessions.
+            # We do this by creating date objects and combining the date objects with time midnight
             t_start = form.cleaned_data['start_date']
             t_end = form.cleaned_data['end_date']
             start_date = datetime.combine(t_start, datetime.min.time())
@@ -85,41 +86,41 @@ def edit(request, session_id):
             s.session_statistics = form.cleaned_data['statistics']
             s.session_voting_enabled = form.cleaned_data['voting']
             s.session_max_rounds = form.cleaned_data['max_rounds']
-            s.session_color = form.cleaned_data['color']
+            # No longer using session colors.
+            # s.session_color = form.cleaned_data['color']
             s.session_is_visible = form.cleaned_data['is_visible']
             s.session_has_technical_problems = form.cleaned_data['technical_problems']
-            #Save the newly edited session
+            # Save the newly edited session
             s.save()
 
             messages.add_message(request, messages.SUCCESS, 'Session Updated')
 
     else:
         form = SessionEditForm({'name': s.session_name,
-            'description': s.session_description,
-            'email': s.session_email,
-            'country': s.session_country,
-            'picture': s.session_picture,
-            'website': s.session_website_link,
-            'facebook': s.session_facebook_link,
-            'twitter': s.session_twitter_link,
-            'resolution': s.session_resolution_link,
-            'start_date': s.session_start_date.strftime("%Y-%m-%d"),
-            'end_date': s.session_end_date.strftime("%Y-%m-%d"),
-            'statistics': s.session_statistics,
-            'voting': s.session_voting_enabled,
-            'max_rounds': s.session_max_rounds,
-            'color': s.session_color,
-            'is_visible': s.session_is_visible,
-            'technical_problems': s.session_has_technical_problems})
+                                'description': s.session_description,
+                                'email': s.session_email,
+                                'country': s.session_country,
+                                'picture': s.session_picture,
+                                'website': s.session_website_link,
+                                'facebook': s.session_facebook_link,
+                                'twitter': s.session_twitter_link,
+                                'resolution': s.session_resolution_link,
+                                'start_date': s.session_start_date.strftime("%Y-%m-%d"),
+                                'end_date': s.session_end_date.strftime("%Y-%m-%d"),
+                                'statistics': s.session_statistics,
+                                'voting': s.session_voting_enabled,
+                                'max_rounds': s.session_max_rounds,
+                                # 'color': s.session_color,
+                                'is_visible': s.session_is_visible,
+                                'technical_problems': s.session_has_technical_problems})
 
     context = {'session': s, 'form': form}
     return check_authorization_and_render(request, 'statistics/session_edit.html', context, s)
 
 
-
 #################
 
-@login_required(login_url = '/login/')
+@login_required(login_url='/login/')
 def add(request, session_id):
     session = Session.objects.get(pk=session_id)
     committees = Committee.objects.filter(session=session).order_by('committee_name')
@@ -134,8 +135,8 @@ def add(request, session_id):
             response_data['msg'] = 'Committee was deleted.'
 
             return HttpResponse(
-                json.dumps(response_data),
-                content_type="application/json"
+                    json.dumps(response_data),
+                    content_type="application/json"
             )
         else:
             pk = request.POST.get('pk')
@@ -210,8 +211,8 @@ def add(request, session_id):
                 response_data['subtopics'] = ', '.join(subtopics_pretty_array)
 
                 return HttpResponse(
-                    json.dumps(response_data),
-                    content_type="application/json"
+                        json.dumps(response_data),
+                        content_type="application/json"
                 )
 
             else:
@@ -219,8 +220,8 @@ def add(request, session_id):
                 print form.errors
                 response_data['errors'] = form.errors
                 return HttpResponse(
-                    json.dumps(response_data),
-                    content_type="application/json"
+                        json.dumps(response_data),
+                        content_type="application/json"
                 )
     else:
         form = CommitteeForm()
@@ -230,15 +231,14 @@ def add(request, session_id):
     return check_authorization_and_render(request, 'statistics/session_add.html', context, session)
 
 
-
 #################
 
-@login_required(login_url = '/login/')
+@login_required(login_url='/login/')
 def point(request, session_id, committee_id=None):
-    #The Point view handles the submission of points, both creating the form from the data given, validating the form,
-    #and sending the user to the right place if the data submission was successful.
+    # The Point view handles the submission of points, both creating the form from the data given, validating the form,
+    # and sending the user to the right place if the data submission was successful.
     session = Session.objects.get(pk=session_id)
-    #Get the committee and session of the committee that wants to make a point.
+    # Get the committee and session of the committee that wants to make a point.
 
     if committee_id:
         render_committee = Committee.objects.get(pk=committee_id)
@@ -247,29 +247,29 @@ def point(request, session_id, committee_id=None):
         render_committee = ''
         all_form = True
 
-    #Here we get the active debate, get the committee of the active debate and get the active round no.
+    # Here we get the active debate, get the committee of the active debate and get the active round no.
     active = ActiveDebate.objects.get(session_id=session_id).active_debate
     active_committee = Committee.objects.filter(session__pk=session_id).filter(committee_name=active)
     active_round_no = ActiveRound.objects.get(session__pk=session_id).active_round
 
     committees = Committee.objects.filter(session__pk=session_id)
     committees_array = []
-    #Here we make an array of committees that can be passed to the form
+    # Here we make an array of committees that can be passed to the form
     for committee in committees:
-        committees_array.append((committee.pk, committee.committee_name),)
-    #We need to make an array of each round with the round number and the place in the array
-    #So we first make an array with the round numbers (1,2,3)
+        committees_array.append((committee.pk, committee.committee_name), )
+    # We need to make an array of each round with the round number and the place in the array
+    # So we first make an array with the round numbers (1,2,3)
     max_rounds = []
     max_rounds_array = []
     for i in range(session.session_max_rounds):
         n = i + 1
         max_rounds.append(n)
-    #Then we make an array with the value and the position, so the form can accept the data.
+    # Then we make an array with the value and the position, so the form can accept the data.
     for r in max_rounds:
-        max_rounds_array.append((r, r),)
+        max_rounds_array.append((r, r), )
 
     subtopics_array = []
-    #Get the subtopics of the active committee, and the loop through each one to create an array of subtopics.
+    # Get the subtopics of the active committee, and the loop through each one to create an array of subtopics.
     if active_committee:
         if all_form:
             subtopics = SubTopic.objects.filter(session_id=session_id)
@@ -278,52 +278,58 @@ def point(request, session_id, committee_id=None):
     else:
         subtopics = []
     for subtopic in subtopics:
-        subtopics_array.append((subtopic.pk, subtopic.subtopic_text),)
+        subtopics_array.append((subtopic.pk, subtopic.subtopic_text), )
 
-    #If the user is trying to submit data (method=POST), take a look at it
+    # If the user is trying to submit data (method=POST), take a look at it
     if request.method == 'POST':
-        #Print what the user is trying to submit for the sake of server logs.
+        # Print what the user is trying to submit for the sake of server logs.
         print request.POST
 
-        #Create an instance of the form and populate it with data from the request.
+        # Create an instance of the form and populate it with data from the request.
         form = PointForm(subtopics_array, request.POST)
 
-        #Check if the form is valid.
+        # Check if the form is valid.
         if form.is_valid():
-            #Create a point from the data submitted
-            point = Point(session = Session.objects.filter(session_name=form.cleaned_data['session'])[0],
-                committee_by=Committee.objects.filter(session__pk=session_id).filter(committee_name=form.cleaned_data['committee'])[0],
-                active_debate=form.cleaned_data['debate'], active_round=form.cleaned_data['round_no'],
-                point_type=form.cleaned_data['point_type']
-                )
-            #You need to first save the point before being able to add data to the ManyToManyField.
+            # Create a point from the data submitted
+            point = Point(session=Session.objects.filter(session_name=form.cleaned_data['session'])[0],
+                          committee_by=Committee.objects.filter(session__pk=session_id).filter(
+                              committee_name=form.cleaned_data['committee'])[0],
+                          active_debate=form.cleaned_data['debate'], active_round=form.cleaned_data['round_no'],
+                          point_type=form.cleaned_data['point_type']
+                          )
+            # You need to first save the point before being able to add data to the ManyToManyField.
             point.save()
-            #For each subtopic in the selected subtopics, add the subtopic to the saved points list of subtopics.
+            # For each subtopic in the selected subtopics, add the subtopic to the saved points list of subtopics.
             for s in form.cleaned_data['subtopics']:
                 st = SubTopic.objects.get(pk=s)
                 point.subtopics.add(st)
 
-            #Once all that is done, send the user to the thank you page.
+            # Once all that is done, send the user to the thank you page.
             messages.add_message(request, messages.SUCCESS, 'Point Successfully Submitted')
 
     else:
-        #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
+        # Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
         if all_form:
-            form = PointForm(subtopics_array, {'session': session.session_name, 'committee': '', 'debate': active, 'round_no': active_round_no})
+            form = PointForm(subtopics_array, {'session': session.session_name, 'committee': '', 'debate': active,
+                                               'round_no': active_round_no})
         else:
-            form = PointForm(subtopics_array, {'session': session.session_name, 'committee': render_committee.committee_name, 'debate': active, 'round_no': active_round_no})
+            form = PointForm(subtopics_array,
+                             {'session': session.session_name, 'committee': render_committee.committee_name,
+                              'debate': active, 'round_no': active_round_no})
 
     if all_form:
-        context = {'debate': active, 'all_form': all_form, 'session': session, 'subtopics': subtopics, 'form': form, 'committees': committees_array, 'rounds': max_rounds_array}
+        context = {'debate': active, 'all_form': all_form, 'session': session, 'subtopics': subtopics, 'form': form,
+                   'committees': committees_array, 'rounds': max_rounds_array}
     else:
-        context = {'debate': active, 'all_form': all_form, 'committee': render_committee, 'session': session, 'subtopics': subtopics, 'form': form, 'committees': committees_array, 'rounds': max_rounds_array}
+        context = {'debate': active, 'all_form': all_form, 'committee': render_committee, 'session': session,
+                   'subtopics': subtopics, 'form': form, 'committees': committees_array, 'rounds': max_rounds_array}
     return check_authorization_and_render(request, 'statistics/point_form.html', context, session, False)
 
 
 #################
 
 
-@login_required(login_url = '/login/')
+@login_required(login_url='/login/')
 def content(request, session_id, committee_id=None):
     session = Session.objects.get(pk=session_id)
 
@@ -339,40 +345,45 @@ def content(request, session_id, committee_id=None):
 
     committees = Committee.objects.filter(session__pk=session_id)
     committees_array = []
-    #Here we make an array of committees that can be passed to the form
+    # Here we make an array of committees that can be passed to the form
     for committee in committees:
-        committees_array.append((committee.pk, committee.committee_name),)
+        committees_array.append((committee.pk, committee.committee_name), )
 
     if request.method == 'POST':
         print request.POST
 
         form = ContentForm(request.POST)
         if form.is_valid():
-            contentpoint = ContentPoint(session = Session.objects.filter(session_name=form.cleaned_data['session'])[0],
-                committee_by = Committee.objects.filter(session__pk=session_id).filter(committee_name=form.cleaned_data['committee'])[0],
-                active_debate = form.cleaned_data['debate'],
-                point_type = form.cleaned_data['point_type'],
-                point_content = form.cleaned_data['content']
-                )
+            contentpoint = ContentPoint(session=Session.objects.filter(session_name=form.cleaned_data['session'])[0],
+                                        committee_by=Committee.objects.filter(session__pk=session_id).filter(
+                                            committee_name=form.cleaned_data['committee'])[0],
+                                        active_debate=form.cleaned_data['debate'],
+                                        point_type=form.cleaned_data['point_type'],
+                                        point_content=form.cleaned_data['content']
+                                        )
             contentpoint.save()
             messages.add_message(request, messages.SUCCESS, 'Content Point Successfully Submitted')
     else:
         if all_form:
             form = ContentForm({'session': session.session_name, 'committee': '', 'debate': active})
         else:
-            form = ContentForm({'session': session.session_name, 'committee': render_committee.committee_name, 'debate': active})
+            form = ContentForm(
+                    {'session': session.session_name, 'committee': render_committee.committee_name, 'debate': active})
 
     if all_form:
-        context = {'debate': active, 'session': session, 'form': form, 'committees': committees_array, 'all_form': all_form}
+        context = {'debate': active, 'session': session, 'form': form, 'committees': committees_array,
+                   'all_form': all_form}
     else:
-        context = {'debate': active, 'committee': render_committee, 'session': session, 'form': form, 'committees': committees_array, 'all_form': all_form}
+        context = {'debate': active, 'committee': render_committee, 'session': session, 'form': form,
+                   'committees': committees_array, 'all_form': all_form}
 
     return check_authorization_and_render(request, 'statistics/content_form.html', context, session, False)
+
 
 #################
 
 
-@login_required(login_url = '/login/')
+@login_required(login_url='/login/')
 def joint(request, session_id, committee_id=None):
     session = Session.objects.get(pk=session_id)
 
@@ -389,64 +400,72 @@ def joint(request, session_id, committee_id=None):
 
     committees = Committee.objects.filter(session__pk=session_id)
     committees_array = []
-    #Here we make an array of committees that can be passed to the form
+    # Here we make an array of committees that can be passed to the form
     for committee in committees:
-        committees_array.append((committee.pk, committee.committee_name),)
-    #We need to make an array of each round with the round number and the place in the array
-    #So we first make an array with the round numbers (1,2,3)
+        committees_array.append((committee.pk, committee.committee_name), )
+    # We need to make an array of each round with the round number and the place in the array
+    # So we first make an array with the round numbers (1,2,3)
     max_rounds = []
     max_rounds_array = []
     for i in range(session.session_max_rounds):
         n = i + 1
         max_rounds.append(n)
-    #Then we make an array with the value and the position, so the form can accept the data.
+    # Then we make an array with the value and the position, so the form can accept the data.
     for r in max_rounds:
-        max_rounds_array.append((r, r),)
+        max_rounds_array.append((r, r), )
 
     subtopics_array = []
-    #Get the subtopics of the active committee, and the loop through each one to create an array of subtopics.
+    # Get the subtopics of the active committee, and the loop through each one to create an array of subtopics.
     if active_committee:
         subtopics = SubTopic.objects.filter(session_id=session_id).filter(committee=active_committee[0])
     else:
         subtopics = []
     for subtopic in subtopics:
-        subtopics_array.append((subtopic.pk, subtopic.subtopic_text),)
+        subtopics_array.append((subtopic.pk, subtopic.subtopic_text), )
 
     if request.method == 'POST':
         print request.POST
 
         form = JointForm(subtopics_array, request.POST)
         if form.is_valid():
-            contentpoint = ContentPoint(session = Session.objects.filter(session_name=form.cleaned_data['session'])[0],
-                committee_by = Committee.objects.filter(session__pk=session_id).filter(committee_name=form.cleaned_data['committee'])[0],
-                active_debate = form.cleaned_data['debate'],
-                point_type = form.cleaned_data['point_type'],
-                point_content = form.cleaned_data['content']
-                )
+            contentpoint = ContentPoint(session=Session.objects.filter(session_name=form.cleaned_data['session'])[0],
+                                        committee_by=Committee.objects.filter(session__pk=session_id).filter(
+                                            committee_name=form.cleaned_data['committee'])[0],
+                                        active_debate=form.cleaned_data['debate'],
+                                        point_type=form.cleaned_data['point_type'],
+                                        point_content=form.cleaned_data['content']
+                                        )
             contentpoint.save()
-            #Create a point from the data submitted
-            point = Point(session = Session.objects.filter(session_name=form.cleaned_data['session'])[0],
-                committee_by=Committee.objects.filter(session__pk=session_id).filter(committee_name=form.cleaned_data['committee'])[0],
-                active_debate=form.cleaned_data['debate'], active_round=form.cleaned_data['round_no'],
-                point_type=form.cleaned_data['point_type']
-                )
-            #You need to first save the point before being able to add data to the ManyToManyField.
+            # Create a point from the data submitted
+            point = Point(session=Session.objects.filter(session_name=form.cleaned_data['session'])[0],
+                          committee_by=Committee.objects.filter(session__pk=session_id).filter(
+                              committee_name=form.cleaned_data['committee'])[0],
+                          active_debate=form.cleaned_data['debate'], active_round=form.cleaned_data['round_no'],
+                          point_type=form.cleaned_data['point_type']
+                          )
+            # You need to first save the point before being able to add data to the ManyToManyField.
             point.save()
-            #For each subtopic in the selected subtopics, add the subtopic to the saved points list of subtopics.
+            # For each subtopic in the selected subtopics, add the subtopic to the saved points list of subtopics.
             for s in form.cleaned_data['subtopics']:
                 st = SubTopic.objects.filter(pk=s)
                 point.subtopics.add(st[0])
             messages.add_message(request, messages.SUCCESS, 'Joint Point Successfully Submitted')
     else:
         if all_form:
-            form = JointForm(subtopics_array, {'session': session.session_name, 'committee': '', 'debate': active, 'round_no': active_round_no})
+            form = JointForm(subtopics_array, {'session': session.session_name, 'committee': '', 'debate': active,
+                                               'round_no': active_round_no})
         else:
-            form = JointForm(subtopics_array, {'session': session.session_name, 'committee': render_committee.committee_name, 'debate': active, 'round_no': active_round_no})
+            form = JointForm(subtopics_array,
+                             {'session': session.session_name, 'committee': render_committee.committee_name,
+                              'debate': active, 'round_no': active_round_no})
 
     if all_form:
-        context = {'debate': active, 'session': session, 'subtopics': subtopics, 'form': form, 'all_form': all_form, 'committees': committees_array, 'rounds': max_rounds_array, 'round_no': active_round_no}
+        context = {'debate': active, 'session': session, 'subtopics': subtopics, 'form': form, 'all_form': all_form,
+                   'committees': committees_array, 'rounds': max_rounds_array, 'round_no': active_round_no}
     else:
-        context = {'debate': active, 'committee': render_committee, 'session': session, 'subtopics': subtopics, 'form': form, 'all_form': all_form, 'committees': committees_array, 'rounds': max_rounds_array, 'round_no': active_round_no}
+        context = {'debate': active, 'committee': render_committee, 'session': session, 'subtopics': subtopics,
+                   'form': form, 'all_form': all_form, 'committees': committees_array, 'rounds': max_rounds_array,
+                   'round_no': active_round_no}
 
     return check_authorization_and_render(request, 'statistics/joint_form.html', context, session, False)
 
@@ -454,11 +473,11 @@ def joint(request, session_id, committee_id=None):
 #################
 
 
-@login_required(login_url = '/login/')
+@login_required(login_url='/login/')
 def vote(request, session_id, committee_id=None):
-    #The Vote form is just as complex as the Point form, and is made in a very similar manner.
+    # The Vote form is just as complex as the Point form, and is made in a very similar manner.
 
-    #We get the current session and debate of the user, then get the active committee from the active debate.
+    # We get the current session and debate of the user, then get the active committee from the active debate.
     session = Session.objects.get(pk=session_id)
     if committee_id:
         render_committee = Committee.objects.get(pk=committee_id)
@@ -471,42 +490,49 @@ def vote(request, session_id, committee_id=None):
 
     committees = Committee.objects.filter(session__pk=session_id)
     committees_array = []
-    #Here we make an array of committees that can be passed to the form
+    # Here we make an array of committees that can be passed to the form
     for committee in committees:
-        committees_array.append((committee.pk, committee.committee_name),)
+        committees_array.append((committee.pk, committee.committee_name), )
 
-    #If the user is trying to submit something:
+    # If the user is trying to submit something:
     if request.method == 'POST':
-        #Create an instance of the form and populate it with data from the request.
+        # Create an instance of the form and populate it with data from the request.
         form = VoteForm(request.POST)
 
-        #If the data in the form is valid
+        # If the data in the form is valid
         if form.is_valid():
-            #Then make a vote from the data in the form.
-            vote = Vote(session = Session.objects.filter(
-                session_name=form.cleaned_data['session'])[0],
-                committee_by=Committee.objects.filter(session__pk=session_id).filter(committee_name=form.cleaned_data['committee'])[0],
-                active_debate=form.cleaned_data['debate'],
-                in_favour=form.cleaned_data['in_favour'],
-                against=form.cleaned_data['against'],
-                abstentions=form.cleaned_data['abstentions'],
-                absent=form.cleaned_data['absent']
-                )
-            #Save the vote to the database.
+            # Then make a vote from the data in the form.
+            vote = Vote(session=Session.objects.filter(
+                    session_name=form.cleaned_data['session'])[0],
+                        committee_by=Committee.objects.filter(session__pk=session_id).filter(
+                            committee_name=form.cleaned_data['committee'])[0],
+                        active_debate=form.cleaned_data['debate'],
+                        in_favour=form.cleaned_data['in_favour'],
+                        against=form.cleaned_data['against'],
+                        abstentions=form.cleaned_data['abstentions'],
+                        absent=form.cleaned_data['absent']
+                        )
+            # Save the vote to the database.
             vote.save()
-            #Then send the user a success message.
+            # Then send the user a success message.
             messages.add_message(request, messages.SUCCESS, 'Point Successfully Submitted')
 
     else:
-        #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
+        # Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
         if all_form:
-            form = VoteForm({'session': session.session_name, 'committee': '', 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
+            form = VoteForm(
+                    {'session': session.session_name, 'committee': '', 'debate': active, 'in_favour': 0, 'against': 0,
+                     'abstentions': 0, 'absent': 0})
         else:
-            form = VoteForm({'session': session.session_name, 'committee': render_committee.committee_name, 'debate': active, 'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
+            form = VoteForm(
+                    {'session': session.session_name, 'committee': render_committee.committee_name, 'debate': active,
+                     'in_favour': 0, 'against': 0, 'abstentions': 0, 'absent': 0})
     if all_form:
-        context = {'session': session, 'debate': active, 'form': form, 'all_form': all_form, 'committees': committees_array}
+        context = {'session': session, 'debate': active, 'form': form, 'all_form': all_form,
+                   'committees': committees_array}
     else:
-        context = {'session': session, 'committee': render_committee, 'debate': active, 'form': form, 'all_form': all_form, 'committees': committees_array}
+        context = {'session': session, 'committee': render_committee, 'debate': active, 'form': form,
+                   'all_form': all_form, 'committees': committees_array}
 
     return check_authorization_and_render(request, 'statistics/vote_form.html', context, session, False)
 
@@ -514,11 +540,11 @@ def vote(request, session_id, committee_id=None):
 #################
 
 
-@login_required(login_url = '/login/')
+@login_required(login_url='/login/')
 def manage(request, session_id):
-    #The manage page contains 2 forms, one form for changing the active debate and one form for changing the active round.
+    # The manage page contains 2 forms, one form for changing the active debate and one form for changing the active round.
 
-    #First we set up our variables, we need the session, the active debate, the active round, the max rounds and a list of committees
+    # First we set up our variables, we need the session, the active debate, the active round, the max rounds and a list of committees
     session = Session.objects.get(pk=session_id)
     active_debate = ActiveDebate.objects.filter(session_id=session_id)[0]
     active = ActiveDebate.objects.filter(session_id=session_id)[0].active_debate
@@ -526,58 +552,58 @@ def manage(request, session_id):
     active_round_entry = ActiveRound.objects.filter(session__pk=session_id)[0]
     committees = Committee.objects.filter(session__pk=session_id)
     committees_array = []
-    #Here we make an array of committees that can be passed to the form
+    # Here we make an array of committees that can be passed to the form
     for committee in committees:
-        committees_array.append((committee.pk, committee.committee_name),)
-    #We need to make an array of each round with the round number and the place in the array
-    #So we first make an array with the round numbers (1,2,3)
+        committees_array.append((committee.pk, committee.committee_name), )
+    # We need to make an array of each round with the round number and the place in the array
+    # So we first make an array with the round numbers (1,2,3)
     max_rounds = []
     max_rounds_array = []
     for i in range(session.session_max_rounds):
         n = i + 1
         max_rounds.append(n)
-    #Then we make an array with the value and the position, so the form can accept the data.
+    # Then we make an array with the value and the position, so the form can accept the data.
     for r in max_rounds:
-        max_rounds_array.append((r, r),)
+        max_rounds_array.append((r, r), )
 
-    #If the user is trying to submit data
+    # If the user is trying to submit data
     if request.method == 'POST':
-        #For server log purposes, print response
+        # For server log purposes, print response
         print request.POST
-        #if it's an active debate submission
+        # if it's an active debate submission
         if 'active_debate' in request.POST:
-            #Create an instance of the form and populate it with data from the request.
+            # Create an instance of the form and populate it with data from the request.
             debate_form = ActiveDebateForm(committees_array, request.POST)
-            #If it's valid
+            # If it's valid
             if debate_form.is_valid():
-                #Get the committee that you want to change the active debate to and then set the active debate to be the new committees committee name.
+                # Get the committee that you want to change the active debate to and then set the active debate to be the new committees committee name.
                 active_debate_committee = Committee.objects.get(pk=debate_form.cleaned_data['active_debate'])
                 active_debate.active_debate = active_debate_committee.committee_name
-                #Save the new active debate
+                # Save the new active debate
                 active_debate.save()
-                #Send the user to the manage page
+                # Send the user to the manage page
                 messages.add_message(request, messages.SUCCESS, 'Active Debate Saved')
                 return HttpResponseRedirect(reverse('statistics:manage', args=[session_id]))
             else:
                 print debate_form
-            #You also have to create an empty/default instance of the "opposite" form, since we've got two on this page.
+            # You also have to create an empty/default instance of the "opposite" form, since we've got two on this page.
             round_form = ActiveRoundForm(max_rounds_array, {'session': session.session_name})
-        #otherwise if it's an active round submission
+        # otherwise if it's an active round submission
         elif 'active_round' in request.POST:
-            #Create an instance of the form and populate it with data from the request.
+            # Create an instance of the form and populate it with data from the request.
             round_form = ActiveRoundForm(max_rounds_array, request.POST)
-            #If the submission is valid
+            # If the submission is valid
             if round_form.is_valid():
-                #Change the active round entry to be the new round
+                # Change the active round entry to be the new round
                 active_round_entry.active_round = round_form.cleaned_data['active_round']
-                #Save the active round.
+                # Save the active round.
                 active_round_entry.save()
-                #Send the user back to the manage page
+                # Send the user back to the manage page
                 messages.add_message(request, messages.SUCCESS, 'Active Round Saved')
                 return HttpResponseRedirect(reverse('statistics:manage', args=[session_id]))
             debate_form = ActiveDebateForm(committees_array, {'session': session.session_name})
 
-    #Otherwise, give the User some nice new forms.
+    # Otherwise, give the User some nice new forms.
     else:
         debate_form = ActiveDebateForm(committees_array, {'session': session.session_name})
         round_form = ActiveRoundForm(max_rounds_array, {'session': session.session_name})
@@ -585,13 +611,16 @@ def manage(request, session_id):
         content_form = ContentEditForm({'session': session.session_name})
         vote_form = VoteEditForm({'session': session.session_name})
 
-    context = {'session': session, 'committees': committees, 'active': active, 'active_round': active_round, 'debate_form': debate_form, 'round_form': round_form, 'point_form': point_form, 'content_form': content_form, 'vote_form': vote_form}
+    context = {'session': session, 'committees': committees, 'active': active, 'active_round': active_round,
+               'debate_form': debate_form, 'round_form': round_form, 'point_form': point_form,
+               'content_form': content_form, 'vote_form': vote_form}
     return check_authorization_and_render(request, 'statistics/manage.html', context, session)
+
 
 #################
 
 
-@login_required(login_url = '/login/')
+@login_required(login_url='/login/')
 def predict(request, session_id, committee_id):
     session = Session.objects.get(pk=session_id)
     committee = Committee.objects.get(pk=committee_id)
@@ -601,43 +630,44 @@ def predict(request, session_id, committee_id):
     subtopics_next_array = []
     subtopics_array = []
     for subtopic in active_subtopics:
-        subtopics_array.append((subtopic.pk, subtopic.subtopic_text),)
-    #If the user is trying to submit data (method=POST), take a look at it
+        subtopics_array.append((subtopic.pk, subtopic.subtopic_text), )
+    # If the user is trying to submit data (method=POST), take a look at it
     if request.method == 'POST':
-        #Print what the user is trying to submit for the sake of server logs.
+        # Print what the user is trying to submit for the sake of server logs.
         print request.POST
 
-        #Create an instance of the form and populate it with data from the request.
+        # Create an instance of the form and populate it with data from the request.
         form = PredictForm(subtopics_array, request.POST)
 
-        #Check if the form is valid.
+        # Check if the form is valid.
         if form.is_valid():
-            #For each subtopic in the selected subtopics, add the subtopic to the committees next_subtopics list.
+            # For each subtopic in the selected subtopics, add the subtopic to the committees next_subtopics list.
             committee.next_subtopics.clear()
             for s in form.cleaned_data['next_subtopics']:
                 st = SubTopic.objects.get(pk=s)
                 committee.next_subtopics.add(st)
 
-            #Once all that is done, send the user to the thank you page.
+            # Once all that is done, send the user to the thank you page.
             messages.add_message(request, messages.SUCCESS, 'Point Successfully Predicted')
 
     else:
-        #Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
+        # Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
         form = PredictForm(subtopics_array, {'session': session, 'committee': committee})
 
     for subtopic in committee.next_subtopics.all():
         subtopics_next_array.append(subtopic.subtopic_text)
     edit_form = PredictEditForm()
-    context = {'session': session, 'committee': committee, 'active_debate': active_debate, 'form': form, 'edit_form': edit_form, 'next_subtopics': subtopics_next_array}
+    context = {'session': session, 'committee': committee, 'active_debate': active_debate, 'form': form,
+               'edit_form': edit_form, 'next_subtopics': subtopics_next_array}
     return check_authorization_and_render(request, 'statistics/predict_form.html', context, session)
 
 
 #################
 
 
-@login_required(login_url = '/login/')
+@login_required(login_url='/login/')
 def runningorder(request, session_id):
-    #First we set up our variables, we need the session, the active debate, the active round, the max rounds and a list of committees
+    # First we set up our variables, we need the session, the active debate, the active round, the max rounds and a list of committees
     session = Session.objects.get(pk=session_id)
     active_debate = ActiveDebate.objects.filter(session_id=session_id)[0]
     active = ActiveDebate.objects.filter(session_id=session_id)[0].active_debate
@@ -645,63 +675,64 @@ def runningorder(request, session_id):
     active_round_entry = ActiveRound.objects.filter(session__pk=session_id)[0]
     committees = Committee.objects.filter(session__pk=session_id)
     committees_array = []
-    #Here we make an array of committees that can be passed to the form
+    # Here we make an array of committees that can be passed to the form
     for committee in committees:
-        committees_array.append((committee.pk, committee.committee_name),)
-    #We need to make an array of each round with the round number and the place in the array
-    #So we first make an array with the round numbers (1,2,3)
+        committees_array.append((committee.pk, committee.committee_name), )
+    # We need to make an array of each round with the round number and the place in the array
+    # So we first make an array with the round numbers (1,2,3)
     max_rounds = []
     max_rounds_array = []
     for i in range(session.session_max_rounds):
         n = i + 1
         max_rounds.append(n)
-    #Then we make an array with the value and the position, so the form can accept the data.
+    # Then we make an array with the value and the position, so the form can accept the data.
     for r in max_rounds:
-        max_rounds_array.append((r, r),)
+        max_rounds_array.append((r, r), )
 
-    #If the user is trying to submit data
+    # If the user is trying to submit data
     if request.method == 'POST':
-        #For server log purposes, print response
+        # For server log purposes, print response
         print request.POST
-        #if it's an active debate submission
+        # if it's an active debate submission
         if 'active_debate' in request.POST:
-            #Create an instance of the form and populate it with data from the request.
+            # Create an instance of the form and populate it with data from the request.
             debate_form = ActiveDebateForm(committees_array, request.POST)
-            #If it's valid
+            # If it's valid
             if debate_form.is_valid():
-                #Get the committee that you want to change the active debate to and then set the active debate to be the new committees committee name.
+                # Get the committee that you want to change the active debate to and then set the active debate to be the new committees committee name.
                 active_debate_committee = Committee.objects.get(pk=debate_form.cleaned_data['active_debate'])
                 active_debate.active_debate = active_debate_committee.committee_name
-                #Save the new active debate
+                # Save the new active debate
                 active_debate.save()
                 for committee in committees:
                     committee.next_subtopics.clear()
-                #Send the user to the manage page
+                # Send the user to the manage page
                 messages.add_message(request, messages.SUCCESS, 'Active Debate Saved')
                 return HttpResponseRedirect(reverse('statistics:runningorder', args=[session_id]))
             else:
                 print debate_form
-            #You also have to create an empty/default instance of the "opposite" form, since we've got two on this page.
+            # You also have to create an empty/default instance of the "opposite" form, since we've got two on this page.
             round_form = ActiveRoundForm(max_rounds_array, {'session': session.session_name})
-        #otherwise if it's an active round submission
+        # otherwise if it's an active round submission
         elif 'active_round' in request.POST:
-            #Create an instance of the form and populate it with data from the request.
+            # Create an instance of the form and populate it with data from the request.
             round_form = ActiveRoundForm(max_rounds_array, request.POST)
-            #If the submission is valid
+            # If the submission is valid
             if round_form.is_valid():
-                #Change the active round entry to be the new round
+                # Change the active round entry to be the new round
                 active_round_entry.active_round = round_form.cleaned_data['active_round']
-                #Save the active round.
+                # Save the active round.
                 active_round_entry.save()
-                #Send the user back to the manage page
+                # Send the user back to the manage page
                 messages.add_message(request, messages.SUCCESS, 'Active Round Saved')
                 return HttpResponseRedirect(reverse('statistics:runningorder', args=[session_id]))
             debate_form = ActiveDebateForm(committees_array, {'session': session.session_name})
 
-    #Otherwise, give the User some nice new forms.
+    # Otherwise, give the User some nice new forms.
     else:
         debate_form = ActiveDebateForm(committees_array, {'session': session.session_name})
         round_form = ActiveRoundForm(max_rounds_array, {'session': session.session_name})
 
-    context = {'session': session, 'committees': committees, 'active': active, 'active_round': active_round, 'debate_form': debate_form, 'round_form': round_form, 'no_footer': True}
+    context = {'session': session, 'committees': committees, 'active': active, 'active_round': active_round,
+               'debate_form': debate_form, 'round_form': round_form, 'no_footer': True}
     return check_authorization_and_render(request, 'statistics/runningorder.html', context, session)

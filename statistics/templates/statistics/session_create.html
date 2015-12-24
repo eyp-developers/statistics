@@ -107,16 +107,17 @@
 							{{ form.max_rounds.errors }}
 							<input class="fs-anim-lower" id="{{ form.max_rounds.id_for_label }}" name="{{ form.max_rounds.html_name }}" type="number" placeholder="3" required/>
 						</li>
+                        <!--
 						<li data-input-trigger>
 							<label class="fs-field-label fs-anim-upper" for="{{ form.color.id_for_label }}" data-info="This will change things like buttons and the header of your session.">Choose a color for your session.</label>
 							{{ form.color.errors }}
 							<select class="cs-select cs-select-color cs-skin-boxes fs-anim-lower" name="{{ form.color.html_name }}" id="{{ form.color.id_for_label }}">
-								<option value="" disabled selected>Pick a color</option>
+								<option value="" disabled >Pick a color</option>
 								<option value="red" data-class="color-F44336">Red</option>
 								<option value="pink" data-class="color-E91E63">Pink</option>
 								<option value="purple" data-class="color-9C27B0">Purple</option>
 								<option value="deep-purple" data-class="color-673AB7">Deep Purple</option>
-								<option value="indigo" data-class="color-3F51B5">Indigo</option>
+								<option value="indigo" selected data-class="color-3F51B5">Indigo</option>
 								<option value="blue" data-class="color-2196F3">Blue</option>
 								<option value="light-blue" data-class="color-03A9F4">Light Blue</option>
 								<option value="cyan" data-class="color-00BCD4">Cyan</option>
@@ -131,6 +132,7 @@
 								<option value="blue-grey" data-class="color-607D8B">Blue Grey</option>
 							</select>
 						</li>
+						-->
 						<li>
 							<label class="fs-field-label fs-anim-upper" for="{{ form.admin_password.id_for_label }}" data-info="This is the password you will use to delete points, add committees etc.">Enter a password to use for the administration of your session:</label>
 							{{ form.admin_password.errors }}
