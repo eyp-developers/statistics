@@ -242,7 +242,7 @@ class Committee(models.Model):
 
     #Defining how the committee will be displayed in a list.
     def __str__(self):
-        return str(self.committee_name)
+        return self.committee_name.encode()
 
 #Defining subtopics of a committee, there should ideally be between 3 and 7 of these, plus a "general" subtopic.
 class SubTopic(models.Model):
@@ -410,7 +410,7 @@ class Vote(models.Model):
 
     #Definition of the vote in admin lists should be the committee who voted
     def __str__(self):
-        return str(self.committee_by)
+        return self.committee_by.encode()
 
     #The definition of the total votes, which is the sum of all the vote types.
     def total_votes(self):
