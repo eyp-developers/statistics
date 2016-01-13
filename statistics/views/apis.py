@@ -960,7 +960,10 @@ def runningorder_api(request, session_id):
     thisdata = {}
     if request.method == 'POST':
         if request.POST.get('action') == 'R':
-            dr_subtopics = Point.objects.filter(session=session).order_by('-pk')[0].subtopics.all()
+            if Point.objects.filter(session=session).count() < 0:
+                dr_subtopics = Point.objects.filter(session=session).order_by('-pk')[0].subtopics.all()
+            else:
+                dr_subtopics = []
             point = RunningOrder.objects.filter(session=session).order_by('position')[0]
             newpoint = Point(session = session,
                 committee_by = point.committee_by,
@@ -1016,7 +1019,10 @@ def runningorder_api(request, session_id):
         for committee in committees:
             committee_session_points = session_points.filter(committee_by=committee).count()
             committee_debate_points = debate_points.filter(committee_by=committee).count()
-            height = Decimal(75)+(Decimal(25)-(Decimal(15)*(Decimal(committee_debate_points)/Decimal(debate_points.count())))+(Decimal(10)*(Decimal(committee_session_points)/Decimal(session_points.count()))))
+            if (debate_points.count() != 0) & (session_points.count() != 0):
+                height = Decimal(75)+(Decimal(25)-(Decimal(15)*(Decimal(committee_debate_points)/Decimal(debate_points.count())))+(Decimal(10)*(Decimal(committee_session_points)/Decimal(session_points.count()))))
+            else:
+                height = 75
             subtopics_next_array = []
             for subtopic in committee.next_subtopics.all():
                 thissubtopic = {
