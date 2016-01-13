@@ -67,7 +67,7 @@ window.setTimeout(function() {
     {% endif %}
   </div>
 </div>
-{% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'S' %}
+{% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'S' or session.session_statistics == 'R' or session.session_statistics == 'RC' %}
 <div class="panel panel-material-{{ session.session_color }}-300">
   <div class="panel-heading">
     <h3 class="panel-title">Edit Points</h3>
@@ -159,7 +159,7 @@ window.setTimeout(function() {
     </div>
   </div>
 </div>
-{% endif %} {% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'C' %}
+{% endif %} {% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'C' or session.session_statistics == 'RC' %}
 <div class="panel panel-material-{{ session.session_color }}-300">
   <div class="panel-heading">
     <h3 class="panel-title">Edit Content Points</h3>
@@ -354,9 +354,9 @@ window.setTimeout(function() {
 {% endblock %} {% block footer_scripts %}
 <script type="text/javascript" src="{% static 'statistics/js/manage.js' %}" charset="utf-8"></script>
 <script>
-{% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'S' %}
+{% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'S' or session.session_statistics == 'R' or session.session_statistics == 'RC' %}
 requestData('point', 0, 20);
-{% endif %} {% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'C' %}
+{% endif %} {% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'C' or session.session_statistics == 'RC' %}
 requestData('content', 0, 20);
 {% endif %} {% if session.session_voting_enabled %}
 requestData('vote', 0, 20);
