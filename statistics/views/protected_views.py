@@ -658,7 +658,7 @@ def predict(request, session_id, committee_id):
     edit_form = PredictEditForm()
     context = {'session': session, 'committee': committee, 'active_debate': active_debate, 'form': form,
                'edit_form': edit_form, 'next_subtopics': subtopics_next_array}
-    return check_authorization_and_render(request, 'statistics/predict_form.html', context, session)
+    return check_authorization_and_render(request, 'statistics/predict_form.html', context, session, False)
 
 
 #################
