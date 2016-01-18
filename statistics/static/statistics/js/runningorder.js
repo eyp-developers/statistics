@@ -22,10 +22,10 @@ function getCommittees() {
       response.committees.forEach(function(committee) {
         var subtopicHTML = "";
         if (committee.next_subtopics[0] === undefined) {
-          subtopicHTML += '<span class="label label-material-' + session_color + '">None</span>';
+          subtopicHTML += '<span class="label label-primary">None</span>';
         } else {
           committee.next_subtopics.forEach(function(subtopic) {
-            subtopicHTML += '<span class="label label-material-' + subtopic.color + '" style="color: ' + subtopic.text_color + '">' + subtopic.subtopic + '</span> ';
+            subtopicHTML += '<span class="label ' + subtopic.color + '" style="color: ' + subtopic.text_color + '">' + subtopic.subtopic + '</span> ';
           });
         }
         document.getElementById("subtopics-" + committee.pk).innerHTML = subtopicHTML;
@@ -218,15 +218,15 @@ function createPoint(kind, id, pos, where, by, on, round, type, subtopics) {
 
   var pointsubtopicHTML = "";
   if (subtopics[0] === undefined) {
-    pointsubtopicHTML += '<span class="label label-material-' + session_color + '">None</span>';
+    pointsubtopicHTML += '<span class="label label-primary">None</span>';
   } else {
     subtopics.forEach(function(subtopic) {
-      pointsubtopicHTML += '<span class="label label-material-' + subtopic.color + '" style="color: ' + subtopic.text_color + '">' + subtopic.subtopic + '</span> ';
+      pointsubtopicHTML += '<span class="label ' + subtopic.color + '" style="color: ' + subtopic.text_color + '">' + subtopic.subtopic + '</span> ';
     });
   }
   point_subtopics.innerHTML = pointsubtopicHTML;
   if (kind === 'point') {
-    point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-navigation-expand-less" onclick="movePoint('+ "'up'," + pos + ')" ></a><a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-navigation-expand-more" onclick="movePoint('+ "'down'," + pos + ')" ></a><a href="javascript:void(0)" class="btn btn-danger btn-fab btn-raised mdi-action-delete" onclick="deletePoint(' + pos + ')" ></a>';
+    point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-info btn-xs btn-raised" onclick="movePoint('+ "'up'," + pos + ')" ><i class="material-icons" style="font-size: 18px">up</i><a href="javascript:void(0)" class="btn btn-info btn-xs btn-raised" onclick="movePoint('+ "'down'," + pos + ')" ><i class="material-icons" style="font-size: 18px">less</i></a><a href="javascript:void(0)" class="btn btn-danger btn-xs btn-raised" onclick="deletePoint(' + pos + ')" ><i class="material-icons" style="font-size: 18px">delete</i></a>';
   } else {
     point_action.innerHTML = '';
   }
