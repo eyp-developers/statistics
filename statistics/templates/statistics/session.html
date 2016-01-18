@@ -16,19 +16,19 @@
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-1">
 
     {% if session.session_website_link %}
-    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_website_link }}" target="_blank">{{ session.session_name }}'s Website</a>
+    <a class="btn btn-sm btn-primary btn-raised" href="{{ session.session_website_link }}" target="_blank">{{ session.session_name }}'s Website</a>
     {% endif %}
 
     {% if session.session_resolution_link %}
-    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_resolution_link }}" target="_blank">View Resolutions</a>
+    <a class="btn btn-sm btn-primary btn-raised" href="{{ session.session_resolution_link }}" target="_blank">View Resolutions</a>
     {% endif %}
 
     {% if session.session_facebook_link %}
-    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_facebook_link }}" target="_blank">{{ session.session_name }} on Facebook</a>
+    <a class="btn btn-sm btn-primary btn-raised" href="{{ session.session_facebook_link }}" target="_blank">{{ session.session_name }} on Facebook</a>
     {% endif %}
 
     {% if session.session_twitter_link %}
-    <a class="btn btn-sm btn-material-{{ session.session_color }}-400" href="{{ session.session_twitter_link }}" target="_blank">{{ session.session_name }} on Twitter</a>
+    <a class="btn btn-sm btn-primary btn-raised" href="{{ session.session_twitter_link }}" target="_blank">{{ session.session_name }} on Twitter</a>
     {% endif %}
   </div>
 </div>
@@ -38,7 +38,7 @@
 </div>
 
 {% if session.session_has_technical_problems %}
-  <div class="alert alert-material-{{ session.session_color }}-500 text-center">
+  <div class="alert alert-primary text-center">
     <p>
       Please note that this session experienced technical difficulties during the GA. As a result some data might be incomplete.
     </p>
@@ -46,7 +46,7 @@
 {% endif %}
 
 {% if no_stats %}
-  <div class="alert alert-material-{{ session.session_color }}-500 text-center">
+  <div class="alert alert-primary text-center">
     <p>
       GA hasn't started yet at {{ session.session_name }}!
     </p>
@@ -62,7 +62,7 @@
       </div>
   {% endif %}
 
-  <div class="panel panel-material-{{ session.session_color }}">
+  <div class="panel panel-primary">
 
     <div class="panel-heading">
       <h4>Debates</h4>
@@ -73,7 +73,7 @@
             <div class="row">
               {% for committee in session_committee_list %}
                 <div class="debate-box col-md-4">
-                    <a href="{% url 'statistics:debate' committee.session.id committee.id %}" class="btn btn-primary btn-material-{{ session.session_color }}-800">{{ committee.committee_name }}</a>
+                    <a href="{% url 'statistics:debate' committee.session.id committee.id %}" class="btn btn-raised btn-primary">{{ committee.committee_name }}</a>
                   <p>
                     {{ committee.committee_topic }}
                   </p>
@@ -91,7 +91,7 @@
 
 
 
-<div class="panel panel-material-{{ session.session_color }}">
+<div class="panel panel-primary }}">
   <div class="panel-heading">
     <h4>Points Made Summary</h4>
   </div>
@@ -110,7 +110,7 @@ var voting_url = '{% url 'statistics:session_vote_api' session_id %}';
 
 </script>
 
-<div class="panel panel-material-{{ session.session_color }}">
+<div class="panel panel-primary">
   <div class="panel-heading">
     <h4>Voting Summary</h4>
   </div>
@@ -125,7 +125,7 @@ var voting_url = '{% url 'statistics:session_vote_api' session_id %}';
 <script> var voting_enabled = false; </script>
 {% endif %}
 
-<div class="panel panel-material-{{ session.session_color }}">
+<div class="panel panel-primary">
   <div class="panel-heading">
     <h4>Totals</h4>
   </div>

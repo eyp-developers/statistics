@@ -139,7 +139,7 @@ window.setTimeout(function() {
           <label class="control-label col-sm-2" for="{{ form.voting.id_for_label }}"></label>
           <div class="col-sm-10">
             {{ form.voting.errors }}
-            <div class="togglebutton togglebutton-material-{{ session.session_color }}">
+            <div class="togglebutton togglebutton-primary">
                 <label>
                     <input type="checkbox" name="{{ form.voting.html_name }}" id="{{ form.voting.id_for_label }}" value="True" {% if session.session_voting_enabled == True %}checked{% endif %}>Voting Enabled
                 </label>
@@ -150,7 +150,7 @@ window.setTimeout(function() {
           <label class="control-label col-sm-2" for="{{ form.is_visible.id_for_label }}"></label>
           <div class="col-sm-10">
             {{ form.is_visible.errors }}
-            <div class="togglebutton togglebutton-material-{{ session.session_color }}">
+            <div class="togglebutton togglebutton-primary">
                 <label>
                     <input type="checkbox" name="{{ form.is_visible.html_name }}" id="{{ form.is_visible.id_for_label }}" value="True" {% if session.session_is_visible == True %}checked{% endif %}>Publicly Visible
                 </label>
@@ -161,7 +161,7 @@ window.setTimeout(function() {
           <label class="control-label col-sm-2" for="{{ form.technical_problems.id_for_label }}"></label>
           <div class="col-sm-10">
             {{ form.technical_problems.errors }}
-            <div class="togglebutton togglebutton-material-{{ session.session_color }}">
+            <div class="togglebutton togglebutton-primary">
                 <label>
                     <input type="checkbox" name="{{ form.technical_problems.html_name }}" id="{{ form.technical_problems.id_for_label }}" value="True" {% if session.session_has_technical_problems == True %}checked{% endif %}>Technical Problems
                 </label>
@@ -170,7 +170,7 @@ window.setTimeout(function() {
         </div>
         <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
-                <button type="submit" class="btn btn-primary btn-material-{{ session.session_color }}-800">Save</button>
+                <button type="submit" class="btn btn-primary btn-raised">Save</button>
             </div>
         </div>
     </fieldset>

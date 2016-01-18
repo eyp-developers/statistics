@@ -8,10 +8,10 @@
   </div>
   <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.session_picture }}') no-repeat center/cover;">
     <h1 class="session-name">Debate: {{ committee.committee_name }}</h1>
-    <h3><a class="btn btn-material-{{ session.session_color }}-200 btn-lg" href="{% url 'statistics:session' session.pk %}">Back to {{ session.session_name }}</a></h3>
+    <h3><a class="btn btn-raised btn-primary btn-lg" href="{% url 'statistics:session' session.pk %}">Back to {{ session.session_name }}</a></h3>
   </div>
   {% if no_stats %}
-      <div class="alert alert-material-{{ session.session_color }}-500 text-center">
+      <div class="alert alert-primary text-center">
         <p>
           GA Statistics hasn't started yet for {{ session.session_name }}!
         </p>
@@ -28,7 +28,7 @@
   {% endblock %}
 
 {% if voting_enabled %}
-  <div class="panel panel-material-{{ session.session_color }}">
+  <div class="panel panel-primary">
 
     <div class="panel-heading">
       <h4>Voting Summary</h4>

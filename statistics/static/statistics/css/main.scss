@@ -9,16 +9,19 @@ body {
 h1, h2, h3, h4, h5, h6, p, a, li, ul {
   font-family: 'Source Sans Pro', sans-serif;
 }
-.panel-material-eyp-blue > .panel-heading {
-    background-color: #1e4e8a;
-}
 
-.navbar-inverse {
-  background-color: #1e4e8a !important;
-}
 .navbar {
   border-radius: 0px;
   margin-bottom: 0px;
+}
+
+.welcome-jumbo {
+  background-color: #2E4496;
+  color: #fff;
+}
+
+.no-padding {
+  padding: 0px;
 }
 
 .no-decoration:hover {

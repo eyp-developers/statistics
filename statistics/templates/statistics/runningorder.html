@@ -18,7 +18,7 @@ window.setTimeout(function() {
 </div>
 <div class="container-fluid runningorder-flex">
   <div class="runningorder-manage">
-    <div class="panel panel-material-{{ session.session_color }}-300 runningorder-panel">
+    <div class="panel panel-primary runningorder-panel">
       <div class="panel-heading">
         <h3 class="panel-title">Active Debate: {{ active }}</h3>
       </div>
@@ -38,13 +38,13 @@ window.setTimeout(function() {
           </div>
           <div class="form-group" style="margin-bottom: 0px;">
             <div class="col-sm-offset-2 col-sm-4">
-              <button type="submit" class="btn btn-flat btn-material-{{ session.session_color }}">Update Active Debate</button>
+              <button type="submit" class="btn btn-flat btn-primary">Update Active Debate</button>
             </div>
           </div>
         </form>
       </div>
     </div>
-    <div class="panel panel-material-{{ session.session_color }}-300 runningorder-panel">
+    <div class="panel panel-primary runningorder-panel">
       <div class="panel-heading">
         <h3 class="panel-title">Active Round: {{ active_round }}</h3>
       </div>
@@ -64,7 +64,7 @@ window.setTimeout(function() {
           </div>
           <div class="form-group" style="margin-bottom: 0px;">
             <div class="col-sm-offset-2 col-sm-4">
-              <button type="submit" class="btn btn-flat btn-material-{{ session.session_color }}">Update Active Round</button>
+              <button type="submit" class="btn btn-flat btn-primary">Update Active Round</button>
             </div>
           </div>
         </form>
@@ -72,7 +72,7 @@ window.setTimeout(function() {
     </div>
   </div>
   <div class="runningorder-order">
-    <div class="panel panel-material-{{ session.session_color }}">
+    <div class="panel panel-primary">
       <div class="panel-heading">
         <h4>Running Order</h4>
       </div>
@@ -96,13 +96,13 @@ window.setTimeout(function() {
     </div>
   </div>
   <div class="runningorder-buttons">
-      <a href="javascript:void(0)" class="btn runningorder-button btn-material-{{ session.session_color }}" onclick="runningOrderAction('R')"><h1>Recognise</h1></a>
-      <a href="javascript:void(0)" class="btn runningorder-button btn-warning" onclick="runningOrderAction('U')"><h3>Undo last<br>recognition</h3></a>
-      <a href="javascript:void(0)" class="btn runningorder-button btn-danger" onclick="clearAction('C')"><h2>Clear Queue</h2></a>
+      <a href="javascript:void(0)" class="btn runningorder-button btn-primary btn-raised" onclick="runningOrderAction('R')"><h1>Recognise</h1></a>
+      <a href="javascript:void(0)" class="btn runningorder-button btn-warning btn-raised" onclick="runningOrderAction('U')"><h3>Undo last<br>recognition</h3></a>
+      <a href="javascript:void(0)" class="btn runningorder-button btn-danger btn-raised" onclick="clearAction('C')"><h2>Clear Queue</h2></a>
   </div>
   <div class="runningorder-committees">
     {% for committee in committees %}
-    <div class="runningorder-committee panel panel-material-{{ session.session_color }}-300" id="committee-{{committee.pk}}" style="margin-bottom: 0px; height: 75%;">
+    <div class="runningorder-committee panel panel-primary" id="committee-{{committee.pk}}" style="margin-bottom: 0px; height: 75%;">
       <div class="runningorder-committeename panel-heading">
         <h1>{{committee.committee_name}}</h1>
       </div>
@@ -117,10 +117,10 @@ window.setTimeout(function() {
             <a href="javascript:void(0)" class="btn btn-default btn-xs" style="margin: 6px 1px;"><span class="badge" id="session-{{committee.pk}}">0</span></a>
           </div>
           <div class="runningorder-committeebutton">
-            <a href="javascript:void(0)" class="btn btn-info btn-xs" onclick="addToRunningOrder('{{ committee.pk }}', 'P')" style="margin: 6px 1px;">Point</a>
+            <a href="javascript:void(0)" class="btn btn-info btn-raised btn-xs" onclick="addToRunningOrder('{{ committee.pk }}', 'P')" style="margin: 6px 1px;">Point</a>
           </div>
           <div class="runningorder-committeebutton">
-            <a href="javascript:void(0)" class="btn btn-danger btn-xs" onclick="addToRunningOrder('{{ committee.pk }}', 'DR')" style="margin: 6px 1px;">DR</a>
+            <a href="javascript:void(0)" class="btn btn-danger btn-raised btn-xs" onclick="addToRunningOrder('{{ committee.pk }}', 'DR')" style="margin: 6px 1px;">DR</a>
           </div>
       </div>
     </div>
