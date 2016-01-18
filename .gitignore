@@ -8,5 +8,6 @@ pip-selfcheck.json
 .Python
 .DS_Store
 
+.idea/*
 config.codekit
 **/.sass-cache/*
