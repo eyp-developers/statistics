@@ -176,9 +176,9 @@ function createPoint(where, pk, last_changed, by, on, round, type, subtopics, co
     point_type.innerHTML = '<img src="' + dr_img + '" height="30" >';
   }
   point_subtopics.innerHTML = subtopics;
-  point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-material-' + session_color + '-800 btn-fab btn-raised mdi-content-create" data-toggle="modal" data-target="#edit-point" onclick="editPoint(' + "'" + pk + "'" + ')" ></a><a href="javascript:void(0)" class="btn btn-danger btn-fab btn-raised mdi-action-delete" onclick="deleteData(' + "'point', " + "'" + pk + "'" + ')" ></a>';
+  point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-primary btn-raised" data-toggle="modal" data-target="#edit-point" onclick="editPoint(' + "'" + pk + "'" + ')" ><i class="material-icons" style="font-size: 18px">mode_edit</i></a><a href="javascript:void(0)" class="btn btn-danger btn-xs btn-raised" onclick="deleteData(' + "'point', " + "'" + pk + "'" + ')" ><i class="material-icons" style="font-size: 18px">delete</i></a>';
   //Adding pretty color classes
-  $(point_by).addClass('label-material-' + color + '-400');
+  $(point_by).addClass(color);
   $(point_by).css('color', text_color);
   $(row).fadeIn("slow");
 }
@@ -209,9 +209,9 @@ function createContent(where, pk, last_changed, by, on, content, type, color, te
   } else {
     content_type.innerHTML = '<img src="' + dr_img + '" height="30" >';
   }
-  content_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-material-' + session_color + '-800 btn-fab btn-raised mdi-content-create" data-toggle="modal" data-target="#edit-content" onclick="editContent(' + "'" + pk + "'" + ')" ></a><a href="javascript:void(0)" class="btn btn-danger btn-fab btn-raised mdi-action-delete" onclick="deleteData(' + "'content', " + "'" + pk + "'" + ')" ></a>';
+  content_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-primary btn-raised" data-toggle="modal" data-target="#edit-content" onclick="editContent(' + "'" + pk + "'" + ')" ><i class="material-icons" style="font-size: 18px">mode_edit</i></a><a href="javascript:void(0)" class="btn btn-danger btn-xs btn-raised" onclick="deleteData(' + "'content', " + "'" + pk + "'" + ')" ><i class="material-icons" style="font-size: 18px">delete</i></a>';
   //Adding pretty color classes and fading in
-  $(content_by).addClass('label-material-' + color + '-400');
+  $(content_by).addClass(color);
   $(content_by).css('color', text_color);
   $(row).fadeIn("slow");
 }
@@ -242,9 +242,9 @@ function createVote(where, pk, last_changed, by, on, in_favour, against, abstent
   vote_against.innerHTML = against;
   vote_abstentions.innerHTML = abstentions;
   vote_absent.innerHTML = absent;
-  vote_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-material-' + session_color + '-800 btn-fab btn-raised mdi-content-create" data-toggle="modal" data-target="#edit-vote" onclick="editVote(' + "'" + pk + "'" + ')" ></a><a href="javascript:void(0)" class="btn btn-danger btn-fab btn-raised mdi-action-delete" onclick="deleteData(' + "'vote', " + "'" + pk + "'" + ')" ></a>';
+  vote_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-primary btn-raised" data-toggle="modal" data-target="#edit-vote" onclick="editVote(' + "'" + pk + "'" + ')" ><i class="material-icons" style="font-size: 18px">mode_edit</i></a><a href="javascript:void(0)" class="btn btn-danger btn-xs btn-raised" onclick="deleteData(' + "'vote', " + "'" + pk + "'" + ')" ><i class="material-icons" style="font-size: 18px">delete</i></a>';
   //Adding pretty color classes and fading in
-  $(vote_by).addClass('label-material-' + color + '-400');
+  $(vote_by).addClass(color);
   $(vote_by).css('color', text_color);
   $(row).fadeIn("slow");
 }

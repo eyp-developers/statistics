@@ -16,7 +16,7 @@ window.setTimeout(function() {
 <div id="results">
 </div>
 <h1>What's {{committee.committee_name}}'s next point on {{active_debate}}?</h1>
-<p>Next Point will be on: {% if next_subtopics %}{% for subtopic in next_subtopics %}  <span class="label label-material-{{ session.session_color }}">{{ subtopic }}</span>{% endfor %}{% else %}<span class="label label-material-{{ session.session_color }}">None</span>{% endif %}</p>
+<p>Next Point will be on: {% if next_subtopics %}{% for subtopic in next_subtopics %}  <span class="label label-primary">{{ subtopic }}</span>{% endfor %}{% else %}<span class="label label-primary">None</span>{% endif %}</p>
 <form class="form-horizontal" role="form" action="{% url 'statistics:predict' session.id committee.id %}" method="post">
   {% csrf_token %}
   <div class="form-group">
@@ -37,7 +37,7 @@ window.setTimeout(function() {
   </div>
 </form>
 
-<div class="panel panel-material-{{ session.session_color }}-300">
+<div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">{{committee.committee_name}}'s Points</h3>
   </div>
@@ -78,7 +78,7 @@ window.setTimeout(function() {
           </div>
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-              <button type="submit" class="btn btn-material-{{ session.session_color }}-400">Save Point</button>
+              <button type="submit" class="btn btn-primary btn-raised">Save Point</button>
             </div>
           </div>
         </form>

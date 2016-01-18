@@ -17,7 +17,7 @@ window.setTimeout(function() {
 {% endif %}
 <div id="results">
 </div>
-<div class="panel panel-material-{{ session.session_color }}-300">
+<div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">Change Active Debate/Round</h3>
   </div>
@@ -38,7 +38,7 @@ window.setTimeout(function() {
       </div>
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-flat btn-material-{{ session.session_color }}">Update Active Debate</button>
+          <button type="submit" class="btn btn-flat btn-primary">Update Active Debate</button>
         </div>
       </div>
     </form>
@@ -60,7 +60,7 @@ window.setTimeout(function() {
       </div>
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-flat btn-material-{{ session.session_color }}">Update Active Round</button>
+          <button type="submit" class="btn btn-flat btn-primary">Update Active Round</button>
         </div>
       </div>
     </form>
@@ -68,7 +68,7 @@ window.setTimeout(function() {
   </div>
 </div>
 {% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'S' or session.session_statistics == 'R' or session.session_statistics == 'RC' %}
-<div class="panel panel-material-{{ session.session_color }}-300">
+<div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">Edit Points</h3>
   </div>
@@ -151,7 +151,7 @@ window.setTimeout(function() {
           </div>
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-              <button type="submit" class="btn btn-material-{{ session.session_color }}-400">Save Point</button>
+              <button type="submit" class="btn btn-primary btn-raised">Save Point</button>
             </div>
           </div>
         </form>
@@ -160,7 +160,7 @@ window.setTimeout(function() {
   </div>
 </div>
 {% endif %} {% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'C' or session.session_statistics == 'RC' %}
-<div class="panel panel-material-{{ session.session_color }}-300">
+<div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">Edit Content Points</h3>
   </div>
@@ -232,7 +232,7 @@ window.setTimeout(function() {
           </div>
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-              <button type="submit" class="btn btn-material-{{ session.session_color }}-400">Save Content Point</button>
+              <button type="submit" class="btn btn-primary">Save Content Point</button>
             </div>
           </div>
         </form>
@@ -241,7 +241,7 @@ window.setTimeout(function() {
   </div>
 </div>
 {% endif %} {% if session.session_voting_enabled %}
-<div class="panel panel-material-{{ session.session_color }}-300">
+<div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">Edit Votes</h3>
   </div>
@@ -329,7 +329,7 @@ window.setTimeout(function() {
             </div>
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-material-{{ session.session_color }}-400">Save Vote</button>
+                <button type="submit" class="btn btn-primary btn-raised">Save Vote</button>
               </div>
             </div>
           </form>
