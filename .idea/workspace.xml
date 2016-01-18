@@ -3,25 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="57dd8c0a-961f-4d1b-b9bb-e4ac83279381" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/static/statistics/css/main.css" afterPath="$PROJECT_DIR$/statistics/static/statistics/css/main.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/static/statistics/css/main.scss" afterPath="$PROJECT_DIR$/statistics/static/statistics/css/main.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/static/statistics/js/manage.js" afterPath="$PROJECT_DIR$/statistics/static/statistics/js/manage.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/static/statistics/js/min/manage-min.js" afterPath="$PROJECT_DIR$/statistics/static/statistics/js/min/manage-min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/base.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/debate.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/debate.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/debate_elements/point_summaries.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/debate_elements/point_summaries.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/debate_elements/points_made.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/debate_elements/points_made.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/debate_elements/subtopics.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/debate_elements/subtopics.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/home.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/home.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/manage.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/manage.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/navbar.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/navbar.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/predict_form.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/predict_form.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/runningorder.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/runningorder.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/session.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/session.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/session_add.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/session_add.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/session_edit.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/session_edit.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/vote_form.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/vote_form.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/welcome.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/welcome.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistics/templates/statistics/get_started.html" afterPath="$PROJECT_DIR$/statistics/templates/statistics/get_started.html" />
     </list>
     <ignored path="statistics.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,43 +25,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="manage.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistics/static/statistics/js/manage.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="178" column="253" selection-start-line="178" selection-start-column="190" selection-end-line="178" selection-end-column="253" />
-              <folding>
-                <marker date="1453135945000" expanded="true" signature="6886:6901" placeholder="..." />
-                <marker date="1453135945000" expanded="true" signature="7083:7098" placeholder="..." />
-                <marker date="1453135945000" expanded="true" signature="8514:8529" placeholder="..." />
-                <marker date="1453135945000" expanded="true" signature="8713:8728" placeholder="..." />
-                <marker date="1453135945000" expanded="true" signature="10150:10165" placeholder="..." />
-                <marker date="1453135945000" expanded="true" signature="10346:10361" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="predict_form.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistics/templates/statistics/predict_form.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-17.0">
-              <caret line="95" column="26" selection-start-line="95" selection-start-column="26" selection-end-line="95" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="runningorder.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistics/templates/statistics/runningorder.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-12.541667">
-              <caret line="122" column="73" selection-start-line="122" selection-start-column="73" selection-end-line="122" selection-end-column="73" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="main.scss" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/static/statistics/css/main.scss">
           <provider selected="true" editor-type-id="text-editor">
@@ -103,11 +48,41 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="home.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="home.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/templates/statistics/home.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.22959183">
+            <state vertical-scroll-proportion="-5.625">
               <caret line="9" column="42" selection-start-line="9" selection-start-column="42" selection-end-line="9" selection-end-column="42" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="session.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/statistics/static/statistics/js/session.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-19.444445">
+              <caret line="35" column="27" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="content_debate.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/statistics/static/statistics/js/content_debate.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-7.2222223">
+              <caret line="103" column="62" selection-start-line="103" selection-start-column="57" selection-end-line="103" selection-end-column="62" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="get_started.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/statistics/templates/statistics/get_started.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.21390374">
+              <caret line="8" column="26" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -183,6 +158,8 @@
         <option value="$PROJECT_DIR$/statistics/templates/statistics/welcome.html" />
         <option value="$PROJECT_DIR$/statistics/static/statistics/css/main.scss" />
         <option value="$PROJECT_DIR$/statistics/templates/statistics/home.html" />
+        <option value="$PROJECT_DIR$/statistics/static/statistics/js/content_debate.js" />
+        <option value="$PROJECT_DIR$/statistics/templates/statistics/get_started.html" />
       </list>
     </option>
   </component>
@@ -702,24 +679,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/statistics/templates/statistics/session_create.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="109" column="24" selection-start-line="109" selection-start-column="24" selection-end-line="109" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/views/protected_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="88" column="45" selection-start-line="88" selection-start-column="45" selection-end-line="88" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#11#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/statistics/static/statistics/css/main.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -956,14 +915,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/templates/statistics/get_started.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5294118">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/statistics/templates/statistics/joint.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1073,12 +1024,12 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="178" column="253" selection-start-line="178" selection-start-column="190" selection-end-line="178" selection-end-column="253" />
           <folding>
-            <marker date="1453135945000" expanded="true" signature="6886:6901" placeholder="..." />
-            <marker date="1453135945000" expanded="true" signature="7083:7098" placeholder="..." />
-            <marker date="1453135945000" expanded="true" signature="8514:8529" placeholder="..." />
-            <marker date="1453135945000" expanded="true" signature="8713:8728" placeholder="..." />
-            <marker date="1453135945000" expanded="true" signature="10150:10165" placeholder="..." />
-            <marker date="1453135945000" expanded="true" signature="10346:10361" placeholder="..." />
+            <marker date="1453140114000" expanded="true" signature="6886:6901" placeholder="..." />
+            <marker date="1453140114000" expanded="true" signature="7083:7098" placeholder="..." />
+            <marker date="1453140114000" expanded="true" signature="8514:8529" placeholder="..." />
+            <marker date="1453140114000" expanded="true" signature="8713:8728" placeholder="..." />
+            <marker date="1453140114000" expanded="true" signature="10150:10165" placeholder="..." />
+            <marker date="1453140114000" expanded="true" signature="10346:10361" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -1136,8 +1087,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/statistics/templates/statistics/home.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.22959183">
+        <state vertical-scroll-proportion="-5.625">
           <caret line="9" column="42" selection-start-line="9" selection-start-column="42" selection-end-line="9" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/static/statistics/js/session.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-19.444445">
+          <caret line="35" column="27" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/static/statistics/js/content_debate.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.2222223">
+          <caret line="103" column="62" selection-start-line="103" selection-start-column="57" selection-end-line="103" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/templates/statistics/get_started.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.21390374">
+          <caret line="8" column="26" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
           <folding />
         </state>
       </provider>
