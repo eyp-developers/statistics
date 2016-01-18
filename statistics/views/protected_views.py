@@ -18,8 +18,7 @@ from django.contrib.auth.decorators import login_required
 from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound
 
 # Importing the forms too.
-from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, PointEditForm, VoteForm, VoteEditForm, \
-    ContentForm, ContentEditForm, JointForm, ActiveDebateForm, ActiveRoundForm
+from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, PointEditForm, VoteForm, VoteEditForm, ContentForm, ContentEditForm, JointForm, ActiveDebateForm, ActiveRoundForm, PredictForm, PredictEditForm
 
 
 # This is a central function. It replaces 'render' in cases where the user has to be authorized to view the page, not just authenticated.
@@ -659,7 +658,11 @@ def predict(request, session_id, committee_id):
     edit_form = PredictEditForm()
     context = {'session': session, 'committee': committee, 'active_debate': active_debate, 'form': form,
                'edit_form': edit_form, 'next_subtopics': subtopics_next_array}
+<<<<<<< HEAD
     return check_authorization_and_render(request, 'statistics/predict_form.html', context, session)
+=======
+    return check_authorization_and_render(request, 'statistics/predict_form.html', context, session, False)
+>>>>>>> master
 
 
 #################
