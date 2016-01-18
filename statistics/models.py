@@ -154,8 +154,8 @@ class Session(models.Model):
     session_submission_user = models.ForeignKey(User, related_name = 'session_submit', blank = True, null = True)
 
     #Definition of the session for admin lists
-    def __str__(self):
-        return self.session_name
+    def __unicode__(self):
+        return unicode(self.session_name)
 
     #Definition of the session being ongoing or not at the moment, simply checks if the current time is in between the start time and the end time.
     def session_ongoing(self):
@@ -170,8 +170,8 @@ class ActiveDebate(models.Model):
     session = models.ForeignKey(Session)
     active_debate = models.CharField(max_length=8, blank=True, null=True)
 
-    def __str__(self):
-        return self.active_debate
+    def __unicode__(self):
+        return unicode(self.active_debate)
 
 #Defining the Active Round which tells a session which round is currently active.
 class ActiveRound(models.Model):
@@ -179,7 +179,7 @@ class ActiveRound(models.Model):
     active_round = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __int__(self):
-        return self.active_round
+        return unicode(self.active_round)
 
 
 #Defining a committee, there should be several of these connected with each session.
@@ -241,8 +241,8 @@ class Committee(models.Model):
             return('white')
 
     #Defining how the committee will be displayed in a list.
-    def __str__(self):
-        return str(self.committee_name)
+    def __unicode__(self):
+        return unicode(self.committee_name)
 
 #Defining subtopics of a committee, there should ideally be between 3 and 7 of these, plus a "general" subtopic.
 class SubTopic(models.Model):
@@ -301,8 +301,8 @@ class SubTopic(models.Model):
             return('white')
 
     #Defining what should be displayed in the admin list, it should be the suptopic text.
-    def __str__(self):
-        return self.subtopic_text
+    def __unicode__(self):
+        return unicode(self.subtopic_text)
 
 
 #Defining a Point, which is one peice of data that is submitted for every point of debate.
@@ -335,8 +335,8 @@ class Point(models.Model):
     subtopics = models.ManyToManyField(SubTopic, blank=True)
 
     #Definition of the point in an admin list will be the point type, "P" or "DR"
-    def __str__(self):
-        return self.point_type
+    def __unicode__(self):
+        return unicode(self.point_type)
 
 #For the running order, we need to set up a queueing system we can access at any point.
 class RunningOrder(models.Model):
@@ -380,7 +380,7 @@ class ContentPoint(models.Model):
 
     #We can also add a definition for showing in admin panels etc.
     def __unicode__(self):
-        return self.point_content
+        return unicode(self.point_content)
 
 #Defining the voting class, one "vote" is filled in for each voting committee on each topic.
 class Vote(models.Model):
@@ -409,8 +409,8 @@ class Vote(models.Model):
     absent = models.PositiveSmallIntegerField()
 
     #Definition of the vote in admin lists should be the committee who voted
-    def __str__(self):
-        return str(self.committee_by)
+    def __unicode__(self):
+        return unicode(self.committee_by)
 
     #The definition of the total votes, which is the sum of all the vote types.
     def total_votes(self):
