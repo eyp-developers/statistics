@@ -6,7 +6,7 @@
 
 {% block content %}
 </div>
-<div class="jumbotron">
+<div class="welcome-jumbo jumbotron">
   <div class="container">
     <h1>Welcome to GA Statistics, {{ session.session_name }}</h1>
     <p>Congratulations on creating your GA Statistics Session, there are a few more things you need to do before you're ready to go.</p>
@@ -26,7 +26,7 @@
     This is really important stuff to know, but don't worry, you can always come back here with this url: <a href="{% url 'statistics:welcome' session.pk %}">{% url 'statistics:welcome' session.pk %}</a>
 </div>
 
-<div class="panel panel-material-{{ session.session_color }}-300">
+<div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title">Usernames</h3>
     </div>
@@ -38,7 +38,7 @@
       <h5>The Submission Password that you entered when you made the session.</h5>
     </div>
 </div>
-<div class="panel panel-material-{{ session.session_color }}-300">
+<div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title">{{ session.session_name }} Links</h3>
     </div>
@@ -57,7 +57,7 @@
         <p>It's also where you can edit recent points, contentpoints and votes</p>
     </div>
 </div>
-<div class="panel panel-material-{{ session.session_color }}-300">
+<div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">Committees</h3>
   </div>
