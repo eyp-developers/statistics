@@ -226,7 +226,7 @@ function createPoint(kind, id, pos, where, by, on, round, type, subtopics) {
   }
   point_subtopics.innerHTML = pointsubtopicHTML;
   if (kind === 'point') {
-    point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-info btn-xs btn-raised" onclick="movePoint('+ "'up'," + pos + ')" ><i class="material-icons" style="font-size: 18px">expand_more</i><a href="javascript:void(0)" class="btn btn-info btn-xs btn-raised" onclick="movePoint('+ "'down'," + pos + ')" ><i class="material-icons" style="font-size: 18px">expand_less</i></a><a href="javascript:void(0)" class="btn btn-danger btn-xs btn-raised" onclick="deletePoint(' + pos + ')" ><i class="material-icons" style="font-size: 18px">delete</i></a>';
+    point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-info btn-xs btn-raised" onclick="movePoint('+ "'up'," + pos + ')" ><i class="material-icons" style="font-size: 18px">expand_less</i><a href="javascript:void(0)" class="btn btn-info btn-xs btn-raised" onclick="movePoint('+ "'down'," + pos + ')" ><i class="material-icons" style="font-size: 18px">expand_more</i></a><a href="javascript:void(0)" class="btn btn-danger btn-xs btn-raised" onclick="deletePoint(' + pos + ')" ><i class="material-icons" style="font-size: 18px">delete</i></a>';
   } else {
     point_action.innerHTML = '';
   }
