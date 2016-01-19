@@ -4,7 +4,8 @@ from views import auth, apis, public_views, protected_views
 
 #The URLs are quite important to the GA Stats system, as there's a custom API and system for accessing various forms
 #Sessions, Debates, Point Submit and Vote Submit pages are accessed using the id's of the session/committee.
-#The six special ones are the api urls that the debate and session pages use for the live reloading to function, they're linked to custom views that output some pretty JSON output.
+#The special ones are the api urls that the debate and session pages use for the live reloading to function,
+#they're linked to custom views that output some pretty JSON output.
 
 urlpatterns = [
     url(r'^$', public_views.home, name='home'),
