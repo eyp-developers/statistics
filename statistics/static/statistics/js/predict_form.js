@@ -93,7 +93,7 @@ function createPoint(where, pk, last_changed, on, round, type, subtopics) {
     point_type.innerHTML = '<img src="' + dr_img + '" height="30" >';
   }
   point_subtopics.innerHTML = subtopics;
-  point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-material-' + session_color + '-800 btn-fab btn-raised mdi-content-create" data-toggle="modal" data-target="#edit-subtopics" onclick="editPoint(' + "'" + pk + "'" + ')" ></a>';
+  point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-primary btn-raised mdi-content-create" data-toggle="modal" data-target="#edit-subtopics" onclick="editPoint(' + "'" + pk + "'" + ')" ><i class="material-icons" style="font-size: 18px">mode_edit</i></a>';
   $(row).fadeIn("slow");
 }
 
