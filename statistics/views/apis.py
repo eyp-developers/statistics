@@ -6,7 +6,7 @@ from time import strftime
 from decimal import *
 
 #Importing all models for statistics.
-from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound
+from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound, Gender
 
 from ..forms import PointEditForm, ContentEditForm, VoteEditForm, PredictEditForm, RunningOrderForm, DeleteDataForm
 
@@ -531,23 +531,21 @@ def data_api(request, session_id):
     json_datatype = str(request.GET.get('data_type'))
     print json_datatype
     if json_datatype == 'content':
-        print 'yup, content'
         data = ContentPoint.objects.filter(session_id=session_id).order_by('-pk')[point_from:point_to]
         #We also need to count the amount of data points for the total
         total = ContentPoint.objects.filter(session_id=session_id).count()
     elif json_datatype == 'point':
-        print 'yup, point'
         data = Point.objects.filter(session_id=session_id).order_by('-pk')[point_from:point_to]
-        #We also need to count the amount of data points for the total
         total = Point.objects.filter(session_id=session_id).count()
     elif json_datatype == 'vote':
-        print 'yup, vote'
         data = Vote.objects.filter(session_id=session_id).order_by('-pk')[point_from:point_to]
-        #We also need to count the amount of data points for the total
         total = Vote.objects.filter(session_id=session_id).count()
     elif json_datatype == 'predict':
         data = Point.objects.filter(session_id=session_id).filter(committee_by_id=int(request.GET.get('committee_id'))).order_by('-pk')[point_from:point_to]
         total = Point.objects.filter(session_id=session_id).filter(committee_by_id=int(request.GET.get('committee_id'))).count()
+    elif json_datatype == 'gender':
+        data = Gender.objects.filter(committee__session__pk=session_id).order_by('-pk')[point_from:point_to]
+        total = Gender.objects.filter(committee__session__pk=session_id).count()
 
 
     #If there is no data, do nothing.
@@ -566,27 +564,32 @@ def data_api(request, session_id):
             thisdata = {}
             thisdata['pk'] = d.pk
             thisdata['last_changed'] = d.timestamp.strftime("%H:%M")
-            thisdata['committee_by'] = d.committee_by.committee_name
-            thisdata['active_debate'] = d.active_debate
-            thisdata['committee_color'] = d.committee_by.committee_color()
-            thisdata['committee_text_color'] = d.committee_by.committee_text_color()
+
+            if json_datatype != 'gender':
+                thisdata['committee_by'] = d.committee_by.committee_name
+                thisdata['active_debate'] = d.active_debate
+                thisdata['committee_color'] = d.committee_by.committee_color()
+                thisdata['committee_text_color'] = d.committee_by.committee_text_color()
 
             #For the different kinds of data points, we need to get different types of data.
-            if request.GET.get('data_type') == 'content':
+            if json_datatype == 'content':
                 thisdata['point_type'] = d.point_type
                 thisdata['content'] = d.point_content
-            elif request.GET.get('data_type') == 'point' or request.GET.get('data_type') == 'predict':
+            elif json_datatype == 'point' or json_datatype == 'predict':
                 thisdata['point_type'] = d.point_type
                 thisdata['round_no'] = d.active_round
                 subtopics_array = []
                 for subtopic in d.subtopics.all():
                     subtopics_array.append(subtopic.subtopic_text)
                 thisdata['subtopics'] = ', '.join(subtopics_array)
-            elif request.GET.get('data_type') == 'vote':
+            elif json_datatype == 'vote':
                 thisdata['in_favour'] = d.in_favour
                 thisdata['against'] = d.against
                 thisdata['abstentions'] = d.abstentions
                 thisdata['absent'] = d.absent
+            elif json_datatype == 'gender':
+                thisdata['gender'] = d.gender
+                thisdata['committee'] = d.committee.committee_name
 
             data_list.append(thisdata)
         #Then we need to turn the list into JSON.
@@ -607,15 +610,16 @@ def data_latest_api(request, session_id):
         total = ContentPoint.objects.filter(session_id=session_id).count()
     elif json_datatype == 'point':
         data = Point.objects.filter(session_id=session_id).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
-        #We also need to count the amount of data points for the total
         total = Point.objects.filter(session_id=session_id).count()
     elif json_datatype == 'vote':
         data = Vote.objects.filter(session_id=session_id).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
-        #We also need to count the amount of data points for the total
         total = Vote.objects.filter(session_id=session_id).count()
     elif json_datatype == 'predict':
         data = Point.objects.filter(session_id=session_id).filter(committee_by_id=int(request.GET.get('committee_id'))).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
         total = Point.objects.filter(session_id=session_id).filter(committee_by_id=int(request.GET.get('committee_id'))).count()
+    elif json_datatype == 'gender':
+        data = Gender.objects.filter(committee__session__pk=session_id).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
+        total = Gender.objects.filter(committee__session__pk=session_id).count()
 
     #Create an empty array to put the contentpoints in
     data_list = []
@@ -641,27 +645,32 @@ def data_latest_api(request, session_id):
             thisdata = {}
             thisdata['pk'] = d.pk
             thisdata['last_changed'] = d.timestamp.strftime("%H:%M")
-            thisdata['committee_by'] = d.committee_by.committee_name
-            thisdata['active_debate'] = d.active_debate
-            thisdata['committee_color'] = d.committee_by.committee_color()
-            thisdata['committee_text_color'] = d.committee_by.committee_text_color()
+
+            if json_datatype != 'gender':
+                thisdata['committee_by'] = d.committee_by.committee_name
+                thisdata['active_debate'] = d.active_debate
+                thisdata['committee_color'] = d.committee_by.committee_color()
+                thisdata['committee_text_color'] = d.committee_by.committee_text_color()
 
             #For the different kinds of data points, we need to get different types of data.
-            if request.GET.get('data_type') == 'content':
+            if json_datatype == 'content':
                 thisdata['point_type'] = d.point_type
                 thisdata['content'] = d.point_content
-            elif request.GET.get('data_type') == 'point' or request.GET.get('data_type') == 'predict':
+            elif json_datatype == 'point' or json_datatype == 'predict':
                 thisdata['point_type'] = d.point_type
                 thisdata['round_no'] = d.active_round
                 subtopics_array = []
                 for subtopic in d.subtopics.all():
                     subtopics_array.append(subtopic.subtopic_text)
                 thisdata['subtopics'] = ', '.join(subtopics_array)
-            elif request.GET.get('data_type') == 'vote':
+            elif json_datatype == 'vote':
                 thisdata['in_favour'] = d.in_favour
                 thisdata['against'] = d.against
                 thisdata['abstentions'] = d.abstentions
                 thisdata['absent'] = d.absent
+            elif json_datatype == 'gender':
+                thisdata['gender'] = d.gender
+                thisdata['committee'] = d.committee.committee_name
 
             data_list.append(thisdata)
         #Then we need to turn the list into JSON.
@@ -686,6 +695,8 @@ def data_pk_api(request):
                     d = ContentPoint.objects.get(pk=form.cleaned_data['pk'])
                 if json_datatype == 'vote':
                     d = Vote.objects.get(pk=form.cleaned_data['pk'])
+                if json_datatype == 'gender':
+                    d = Gender.objects.get(pk=form.cleaned_data['pk'])
                 d.delete()
                 response_data = {}
                 response_data['msg'] = 'Data deleted'
