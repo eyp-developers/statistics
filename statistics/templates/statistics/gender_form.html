@@ -62,6 +62,16 @@
 
     <div class="panel panel-primary">
         <div class="panel-heading">
+            <h4>Gender Statistics</h4>
+        </div>
+
+        <div class="panel-body">
+            <div id="gender" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+        </div>
+</div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
             <h3 class="panel-title">Edit Gender Points</h3>
         </div>
         <div class="panel-body content-div" id="gender-div">
@@ -88,12 +98,17 @@
         var data_url = '{% url 'statistics:data_api' session.pk %}',
                 data_latest_url = '{% url 'statistics:data_latest_api' session.pk %}',
                 data_pk_url = '{% url 'statistics:data_pk_api' %}';
+
+        var gender_statistics_url = '{% url 'statistics:gender_api' session.pk %}';
     </script>
 {% endblock %}
 
 {% block footer_scripts %}
 <script type="text/javascript" src="{% static 'statistics/js/gender.js' %}" charset="utf-8"></script>
+<script type="text/javascript" src="{% static 'statistics/js/gender_statistics.js' %}" charset="utf-8"></script>
 <script>
 requestData(0, 20);
 </script>
 {% endblock %}
+
+

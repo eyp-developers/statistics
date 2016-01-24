@@ -121,6 +121,45 @@ def committees_api(request, session_id):
 
     return HttpResponse(thiscommittee, content_type='json')
 
+def gender_api(request, session_id):
+    session = Session.objects.get(pk=session_id)
+
+    gender_points = Gender.objects.filter(committee__session__pk=session_id)
+
+    committees = []
+
+    categories = []
+    male = []
+    female = []
+    other = []
+
+    if gender_points:
+        categories.append('Total')
+        male.append(gender_points.filter(gender='M').count())
+        female.append(gender_points.filter(gender='F').count())
+        other.append(gender_points.filter(gender='O').count())
+
+        for point in gender_points:
+            if point.committee not in committees:
+                committees.append(point.committee)
+
+        for committee in committees:
+            categories.append(committee.committee_name)
+            male.append(gender_points.filter(committee=committee).filter(gender='M').count())
+            female.append(gender_points.filter(committee=committee).filter(gender='F').count())
+            other.append(gender_points.filter(committee=committee).filter(gender='O').count())
+
+    gender_json = json.dumps({
+        'categories': categories,
+        'male': male,
+        'female': female,
+        'other': other
+
+    })
+
+    return HttpResponse(gender_json, content_type='json')
+
+
 def debate_api(request, session_id, committee_id):
     #The Debate API is very similar to the session API, but more complex due to more graphs and subtopics.
 
