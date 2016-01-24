@@ -102,6 +102,14 @@
 								<span><input id="votingno" name="{{ form.voting.html_name }}" type="radio" value="False"/><label for="votingno" class="radio-no">No thanks.</label></span>
 							</div>
 						</li>
+                        <li data-input-trigger>
+							<label class="fs-field-label fs-anim-upper" for="{{ form.gender.id_for_label }}" data-info="This defines whether or not 'Gender Points' become available.">Would you like to track gender equality during your GA?</label>
+							{{ form.gender.errors }}
+							<div class="fs-radio-group fs-radio-custom clearfix fs-anim-lower" id="{{ form.gender.id_for_label }}">
+								<span><input id="genderyes" name="{{ form.gender.html_name }}" type="radio" value="True"/><label for="genderyes" class="radio-yes">Yes please.</label></span>
+								<span><input id="genderno" name="{{ form.gender.html_name }}" type="radio" value="False"/><label for="genderno" class="radio-no">No thanks.</label></span>
+							</div>
+						</li>
 						<li>
 							<label class="fs-field-label fs-anim-upper" for="{{ form.max_rounds.id_for_label }}" data-info="Don't worry, you can change this later.">What's the maximum amount of rounds you'll have in a debate?</label>
 							{{ form.max_rounds.errors }}

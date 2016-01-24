@@ -55,6 +55,13 @@
       <h3>You can manage your session:</h3>
       <h4><a href="{% url 'statistics:manage' session.pk %}">{% url 'statistics:manage' session.pk %}</a> - This is where you let the system know which debate and round is going on at the moment.</h3>
         <p>It's also where you can edit recent points, contentpoints and votes</p>
+
+      {% if session.session_gender_enabled %}
+      <h3>You can track the equality of your session here:</h3>
+      <h4><a href="{% url 'statistics:gender' session.pk %}">{% url 'statistics:gender' session.pk %}</a> - This is where you add "Gender Points" which only show up in the admin.</h3>
+        <p>It's also where you remove accedental gender points</p>
+      {% endif %}
+
     </div>
 </div>
 <div class="panel panel-primary">

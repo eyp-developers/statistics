@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Session, Committee, SubTopic, ActiveDebate, ActiveRound, Point, ContentPoint, RunningOrder, Vote
+from .models import Session, Committee, SubTopic, ActiveDebate, ActiveRound, Point, ContentPoint, RunningOrder, Vote, Gender
 
 #Setting up admin inlines for Committees and Suptopics, allows easy adding of committees in the "Session creation" page,
 #and Subtopics in the "Comiitee creation" page
@@ -18,7 +18,7 @@ class SessionAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,                  {'fields': ['session_name', 'session_description', 'session_country', 'session_picture', 'session_admin_user', 'session_submission_user', 'session_email', 'session_website_link', 'session_resolution_link', 'session_facebook_link', 'session_twitter_link']}),
         ('Date information',    {'fields': ['session_start_date', 'session_end_date']}),
-        ('Session Settings',    {'fields': ['session_is_visible', 'session_statistics', 'session_max_rounds', 'session_voting_enabled', 'session_color', 'session_has_technical_problems']})
+        ('Session Settings',    {'fields': ['session_is_visible', 'session_statistics', 'session_max_rounds', 'session_voting_enabled', 'session_gender_enabled', 'session_color', 'session_has_technical_problems']})
     ]
 
     #The inline should be the CommitteeInline to make it easy to make committees straight away.
@@ -70,6 +70,10 @@ class VoteAdmin(admin.ModelAdmin):
     list_display = ('timestamp', 'session', 'committee_by', 'active_debate', 'in_favour', 'against', 'abstentions', 'absent', 'total_votes')
     list_filter = ['timestamp']
 
+class GenderAdmin(admin.ModelAdmin):
+    list_display = ('timestamp', 'gender', 'session', 'committee')
+    list_filter = ['timestamp']
+
 #Registering all the admin pages and the model for each admin page.
 admin.site.register(Session, SessionAdmin)
 admin.site.register(Committee, CommitteeAdmin)
@@ -80,3 +84,4 @@ admin.site.register(Point, PointAdmin)
 admin.site.register(ContentPoint, ContentPointAdmin)
 admin.site.register(RunningOrder, RunningOrderAdmin)
 admin.site.register(Vote, VoteAdmin)
+admin.site.register(Gender, GenderAdmin)

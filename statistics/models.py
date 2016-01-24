@@ -143,6 +143,7 @@ class Session(models.Model):
 
     #Enabling/Disabling Session Settings
     session_voting_enabled = models.BooleanField('session-wide voting enabled', default=True)
+    session_gender_enabled = models.BooleanField('gender statistics enabled', default=False)
     session_max_rounds = models.PositiveSmallIntegerField(default=3)
 
     # If the session has had technical problems some data is probably missing. If this is activated a message will be shown to indidate this.
@@ -405,7 +406,8 @@ class Vote(models.Model):
     #How many abstentions there were
     abstentions = models.PositiveSmallIntegerField()
 
-    #How many delegates were absent, very important so that the total amount of votes in the end always displays the same number
+    #How many delegates were absent, very important so that the total amount of votes in the end
+    #always displays the same number
     absent = models.PositiveSmallIntegerField()
 
     #Definition of the vote in admin lists should be the committee who voted
@@ -417,3 +419,28 @@ class Vote(models.Model):
         return (self.in_favour + self.against + self.abstentions + self.absent)
     total_votes.integer = True
     total_votes.short_description = 'Total Votes'
+
+#Defining the gender class, which is an optional tracking aspect of GA stats shown on each sessions admin page
+class Gender(models.Model):
+    #The gender needs to be connected to a session, the committee that was active at the time and the gender
+
+    committee = models.ForeignKey(Committee)
+
+    def session(self):
+        return self.committee.session
+
+    timestamp = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    FEMALE = 'F'
+    MALE = 'M'
+    OTHER = 'O'
+    GENDERS = (
+        (FEMALE, 'Female'),
+        (MALE, 'Male'),
+        (OTHER, 'Other')
+    )
+    gender = models.CharField(max_length=1, choices=GENDERS, default=FEMALE)
+
+    #Finally we can add an admin definition
+    def __unicode__(self):
+        return unicode(self.gender)
