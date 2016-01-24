@@ -1,0 +1,62 @@
+{% extends 'statistics/base.html' %}
+
+{% load staticfiles %}
+
+{% block page_title %}Gender: {% if session %}{{ session.session_name }}{% else %}N/A{% endif %}{% endblock %}
+
+{% block content %}
+    <br>
+    <br>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-dismissable alert-success shadow-z-2">
+                <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            </div>
+        {% endfor %}
+        <script type="text/javascript">
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 5000);
+        </script>
+    {% endif %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h1 style="text-align: center">Track Gender: {{ session.session_name }}</h1>
+        </div>
+        <div class="panel-body ">
+            <form class="form-horizontal" role="form" action="{% url 'statistics:gender' session.id %}"
+                  method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="{{ form.committee.id_for_label }}">Committee:</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="{{ form.committee.html_name }}" id="{{ form.committee.id_for_label }}">
+                            {% for id,text in form.fields.committee.choices %}
+                                <option value="{{ id }}" {% if text == active.active_debate %} selected {% endif %}>{{ text }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="{{ form.gender.id_for_label }}">Gender:</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="{{ form.gender.html_name }}" id="{{ form.gender.id_for_label }}">
+                            {% for id,text in form.fields.gender.choices %}
+                                <option value="{{ id }}">{{ text }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary btn-raised">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
