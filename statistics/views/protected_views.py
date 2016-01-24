@@ -84,6 +84,7 @@ def edit(request, session_id):
             s.session_end_date = end_date
             s.session_statistics = form.cleaned_data['statistics']
             s.session_voting_enabled = form.cleaned_data['voting']
+            s.session_gender_enabled = form.cleaned_data['gender']
             s.session_max_rounds = form.cleaned_data['max_rounds']
             # No longer using session colors.
             # s.session_color = form.cleaned_data['color']
@@ -108,6 +109,7 @@ def edit(request, session_id):
                                 'end_date': s.session_end_date.strftime("%Y-%m-%d"),
                                 'statistics': s.session_statistics,
                                 'voting': s.session_voting_enabled,
+                                'gender': s.session_gender_enabled,
                                 'max_rounds': s.session_max_rounds,
                                 # 'color': s.session_color,
                                 'is_visible': s.session_is_visible,
