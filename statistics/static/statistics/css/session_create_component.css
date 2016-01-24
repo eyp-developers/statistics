@@ -53,14 +53,14 @@
 	width: 100%;
 	height: 100%;
 	background: #ffd326;
-	color: #1e4e8a;
+	color: #2E4496;
 	font-size: 1.2em;
 }
 
 .fs-form-overview .fs-fields::before {
 	display: block;
 	margin-bottom: 2.5em;
-	color: #1e4e8a;
+	color: #2E4496;
 	content: 'Review & Submit';
 	font-weight: 300;
 	font-size: 1.85em;
@@ -269,7 +269,7 @@ button.fs-continue,
 }
 
 .fs-fields input:focus {
-	background-color: #1e4e8a; /* Fixes chrome bug with placeholder */
+	background-color: #2E4496; /* Fixes chrome bug with placeholder */
 }
 
 .fs-form-overview .fs-fields input:focus {

@@ -9,7 +9,7 @@ div.cs-select {
 	vertical-align: middle;
 	position: relative;
 	text-align: left;
-	background: #1e4e8a;
+	background: #2E4496;
 	z-index: 100;
 	width: 100%;
 	max-width: 500px;
@@ -79,7 +79,7 @@ div.cs-select:focus {
 	position: absolute;
 	overflow: hidden;
 	width: 100%;
-	background: #1e4e8a;
+	background: #2E4496;
 	visibility: hidden;
 	z-index: 10000;
 }
