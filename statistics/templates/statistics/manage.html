@@ -49,7 +49,7 @@ window.setTimeout(function() {
       {% csrf_token %}
       <input type="hidden" class="form-control" name="{{ round_form.session.html_name }}" id="{{ round_form.session.id_for_label }}" maxlength=100 value="{{ round_form.session.value }}">
       <div class="form-group">
-        <label class="control-label col-sm-2" for="{{ round_form.active_round.id_for_label }}">Set Active Debate:</label>
+        <label class="control-label col-sm-2" for="{{ round_form.active_round.id_for_label }}">Set Active Round:</label>
         <div class="col-sm-10">
           <select class="form-control" name="{{ round_form.active_round.html_name }}" id="{{ round_form.active_round.id_for_label }}">
             {% for id,text in round_form.fields.active_round.choices %}

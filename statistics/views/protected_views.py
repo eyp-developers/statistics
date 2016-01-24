@@ -15,10 +15,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 # Importing all models for statistics.
-from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound
+from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound, Gender
 
 # Importing the forms too.
-from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, PointEditForm, VoteForm, VoteEditForm, ContentForm, ContentEditForm, JointForm, ActiveDebateForm, ActiveRoundForm, PredictForm, PredictEditForm
+from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, PointEditForm, VoteForm, VoteEditForm,\
+    ContentForm, ContentEditForm, JointForm, ActiveDebateForm, ActiveRoundForm, PredictForm, PredictEditForm, GenderForm
 
 
 # This is a central function. It replaces 'render' in cases where the user has to be authorized to view the page, not just authenticated.
@@ -84,6 +85,7 @@ def edit(request, session_id):
             s.session_end_date = end_date
             s.session_statistics = form.cleaned_data['statistics']
             s.session_voting_enabled = form.cleaned_data['voting']
+            s.session_gender_enabled = form.cleaned_data['gender']
             s.session_max_rounds = form.cleaned_data['max_rounds']
             # No longer using session colors.
             # s.session_color = form.cleaned_data['color']
@@ -108,6 +110,7 @@ def edit(request, session_id):
                                 'end_date': s.session_end_date.strftime("%Y-%m-%d"),
                                 'statistics': s.session_statistics,
                                 'voting': s.session_voting_enabled,
+                                'gender': s.session_gender_enabled,
                                 'max_rounds': s.session_max_rounds,
                                 # 'color': s.session_color,
                                 'is_visible': s.session_is_visible,
@@ -736,3 +739,34 @@ def runningorder(request, session_id):
     context = {'session': session, 'committees': committees, 'active': active, 'active_round': active_round,
                'debate_form': debate_form, 'round_form': round_form, 'no_footer': True}
     return check_authorization_and_render(request, 'statistics/runningorder.html', context, session)
+
+
+def gender(request, session_id):
+    session = Session.objects.get(pk=session_id)
+    active_debate = ActiveDebate.objects.filter(session_id=session_id)[0]
+    committees = Committee.objects.filter(session__pk=session_id)
+    committees_array = []
+    for committee in committees:
+        committees_array.append((committee.pk, committee.committee_name),)
+
+    if request.method == 'POST':
+
+        print(request.POST)
+
+        gender_form = GenderForm(committees_array, request.POST)
+
+        if gender_form.is_valid():
+            committee = Committee.objects.get(pk=gender_form.cleaned_data['committee'])
+            gender_point = Gender(committee=committee, gender=gender_form.cleaned_data['gender'])
+
+            gender_point.save()
+
+            # Then send the user a success message.
+            messages.add_message(request, messages.SUCCESS, 'Gender Successfully Submitted')
+            return HttpResponseRedirect(reverse('statistics:gender', args=[session_id]))
+    else:
+        gender_form = GenderForm(committees_array)
+
+    content = {'session': session, 'committees': committees, 'active': active_debate, 'form': gender_form}
+
+    return check_authorization_and_render(request, 'statistics/gender_form.html', content, session, False)

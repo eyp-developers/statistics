@@ -117,6 +117,7 @@ class SessionForm(forms.Form):
 
     #Since the voting choice is not a checkbox per se, the input type will be a CharField instead
     voting = forms.CharField(max_length=5, required=True)
+    gender = forms.CharField(max_length=5, required=True)
 
     max_rounds = forms.IntegerField(min_value=1, max_value=10)
 
@@ -240,6 +241,7 @@ class SessionEditForm(forms.Form):
 
         #Since the voting choice is not a checkbox per se, the input type will be a CharField instead
         voting = forms.BooleanField(required=False)
+        gender = forms.BooleanField(required=False)
 
         max_rounds = forms.IntegerField(min_value=1, max_value=10)
 
@@ -435,6 +437,24 @@ class VoteEditForm(forms.Form):
     against = forms.IntegerField(min_value=0, required=True)
     abstentions = forms.IntegerField(min_value=0, required=True)
     absent = forms.IntegerField(min_value=0, required=True)
+
+class GenderForm(forms.Form):
+    def __init__(self, committee_choices, *args, **kwargs):
+        super(GenderForm, self).__init__(*args, **kwargs)
+        self.fields['committee'].choices = committee_choices
+
+    committee = forms.ChoiceField(choices=(), required=True)
+
+    FEMALE = 'F'
+    MALE = 'M'
+    OTHER = 'O'
+    GENDERS = (
+        (FEMALE, 'Female'),
+        (MALE, 'Male'),
+        (OTHER, 'Other')
+    )
+
+    gender = forms.ChoiceField(choices=GENDERS, required=True)
 
 class ActiveDebateForm(forms.Form):
     #The Active Debate form is another more complex one, as it requires an array of the avaliable debates to chose from.
