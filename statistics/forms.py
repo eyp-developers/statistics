@@ -117,6 +117,7 @@ class SessionForm(forms.Form):
 
     #Since the voting choice is not a checkbox per se, the input type will be a CharField instead
     voting = forms.CharField(max_length=5, required=True)
+    gender = forms.CharField(max_length=5, required=True)
 
     max_rounds = forms.IntegerField(min_value=1, max_value=10)
 
