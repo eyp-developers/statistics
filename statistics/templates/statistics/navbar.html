@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 <nav class="navbar navbar-inverse shadow-z-1" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -8,6 +10,7 @@
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="{% url 'statistics:home'%}">GA Statistics</a>
+      <a class="navbar-brand" href="http://eyp.org" target="_blank" ><img src="{% static 'statistics/images/eyplogo.svg' %}" alt="eyp.org" class="eyp-logo" /></a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
     <!-- /.navbar-header -->
