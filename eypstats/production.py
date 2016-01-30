@@ -71,7 +71,18 @@ WSGI_APPLICATION = 'eypstats.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 with open('/etc/databases.txt') as f:
-    DATABASES = f.read().strip()
+    DB_PASSWORD = f.read().strip()
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'statistics',
+        'USER': 'django',
+        'PASSWORD': DB_PASSWORD,
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
