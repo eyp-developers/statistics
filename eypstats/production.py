@@ -22,6 +22,10 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["stats.eyp.org"]
 
+CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_SECURE = True
+
 
 # Application definition
 
