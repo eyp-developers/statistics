@@ -1,6 +1,7 @@
 {% extends 'statistics/base.html' %}
 
 {% load staticfiles %}
+{% load form_extras %}
 
 {% block page_title %}Create Session{% endblock %}
 
@@ -35,17 +36,39 @@
         <legend>Create Session:</legend>
         <form id="create-session" class="form-horizontal" role="form" action="{% url 'statistics:create_session' %}" method="post">
             <fieldset>
-                <div class="form-group {% if form.name.errors %}has-error{% endif %}">
-                    <label class="control-label col-sm-2" for="{{ form.name.id_for_label }}">Session Name: {{ form.name.errors }}</label>
-                    <div class="col-sm-10">
-                        <input class="form-control" id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" type="text" placeholder="Izmir 2015" required/>
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group {% if field.errors %}has-error{% endif %}">
+                        <label class="control-label col-sm-2" for="{{ field.id_for_label }}">{{ field.label }} {{ field.errors }}</label>
+                        <div class="col-sm-10">
+                            {% if field.field.widget|klass == "CheckboxInput" %}
+                                <div class="togglebutton">
+                                    <label>
+                                        {{ field }} {{ field.label }}
+                                    </label>
+                                </div>
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                        <button type="submit" class="btn btn-primary btn-raised">Create Session</button>
                     </div>
                 </div>
             </fieldset>
         </form>
     </div>
-
 {% endblock %}
 
 {% block footer_scripts %}
+    <script>
+
+        $('#id_start_date').bootstrapMaterialDatePicker({ weekStart : 0, time: false });
+        $('#id_end_date').bootstrapMaterialDatePicker({ weekStart : 0, time: false });
+
+    </script>
 {% endblock %}
