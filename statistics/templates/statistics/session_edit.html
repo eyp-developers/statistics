@@ -1,13 +1,15 @@
 {% extends 'statistics/base.html' %}
 
 {% load staticfiles %}
+{% load form_extras %}
 
 {% block page_title %}Edit - {{ session.session_name }}{% endblock %}
 
 {% block content %}
-<h1>Edit Session: {{ session.session_name }}</h1>
 {% if messages %}
 {% for message in messages %}
+    <br>
+    <br>
 <div class="alert alert-dismissable alert-success shadow-z-2">
   <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
 </div>
@@ -20,170 +22,39 @@ window.setTimeout(function() {
 }, 5000);
 </script>
 {% endif %}
-<form class="form-horizontal" role="form" action="{% url 'statistics:edit' session.pk %}" method="post">
-    <fieldset>
-        {% csrf_token %}
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.name.id_for_label }}">Session:</label>
-          <div class="col-sm-10">
-            {{ form.name.errors }}
-            <input type="text" class="form-control" name="{{ form.name.html_name }}" id="{{ form.name.id_for_label }}" maxlength=100 value="{{ form.name.value }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.description.id_for_label }}">Description:</label>
-          <div class="col-sm-10">
-            {{ form.description.errors }}
-            <input type="text" class="form-control" name="{{ form.description.html_name }}" id="{{ form.description.id_for_label }}" maxlength=100 value="{{ form.description.value }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.email.id_for_label }}">Email:</label>
-          <div class="col-sm-10">
-            {{ form.email.errors }}
-            <input type="email" class="form-control" name="{{ form.email.html_name }}" id="{{ form.email.id_for_label }}" maxlength=100 value="{{ form.email.value }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.country.id_for_label }}">Country:</label>
-          <div class="col-sm-10">
-            {{ form.country.errors }}
-            <select class="form-control" name="{{ form.country.html_name }}" id="{{ form.country.id_for_label }}">
-              {% for id,text in form.fields.country.choices  %}
-              <option value="{{ id }}" {% if id == session.session_country %} selected {% endif %}>{{ text }}</option>
-              {% endfor %}
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.picture.id_for_label }}">Picture:</label>
-          <div class="col-sm-10">
-            {{ form.picture.errors }}
-            <input type="url" class="form-control" name="{{ form.picture.html_name }}" id="{{ form.picture.id_for_label }}" maxlength=100 value="{{ form.picture.value }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.website.id_for_label }}">Website:</label>
-          <div class="col-sm-10">
-            {{ form.website.errors }}
-            <input type="url" class="form-control" name="{{ form.website.html_name }}" id="{{ form.website.id_for_label }}" maxlength=100 value="{{ form.website.value }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.facebook.id_for_label }}">Facebook:</label>
-          <div class="col-sm-10">
-            {{ form.facebook.errors }}
-            <input type="url" class="form-control" name="{{ form.facebook.html_name }}" id="{{ form.facebook.id_for_label }}" maxlength=100 value="{{ form.facebook.value }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.twitter.id_for_label }}">Twitter:</label>
-          <div class="col-sm-10">
-            {{ form.twitter.errors }}
-            <input type="url" class="form-control" name="{{ form.twitter.html_name }}" id="{{ form.twitter.id_for_label }}" maxlength=100 value="{{ form.twitter.value }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.resolution.id_for_label }}">Link to Resolution Booklet:</label>
-          <div class="col-sm-10">
-            {{ form.resolution.errors }}
-            <input type="url" class="form-control" name="{{ form.resolution.html_name }}" id="{{ form.resolution.id_for_label }}" maxlength=100 value="{{ form.resolution.value }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.start_date.id_for_label }}">Start Date:</label>
-          <div class="col-sm-10">
-            {{ form.start_date.errors }}
-            <input type="date" class="form-control" name="{{ form.start_date.html_name }}" id="{{ form.start_date.id_for_label }}" maxlength=100 value="{{ form.start_date.value }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.end_date.id_for_label }}">End Date:</label>
-          <div class="col-sm-10">
-            {{ form.end_date.errors }}
-            <input type="date" class="form-control" name="{{ form.end_date.html_name }}" id="{{ form.end_date.id_for_label }}" maxlength=100 value="{{ form.end_date.value }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.statistics.id_for_label }}">Statistics Type:</label>
-          <div class="col-sm-10">
-            {{ form.statistics.errors }}
-            <select class="form-control" name="{{ form.statistics.html_name }}" id="{{ form.statistics.id_for_label }}">
-              {% for id,text in form.fields.statistics.choices  %}
-              <option value="{{ id }}" {% if id == session.session_statistics %} selected {% endif %}>{{ text }}</option>
-              {% endfor %}
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.max_rounds.id_for_label }}">Maximum Rounds:</label>
-          <div class="col-sm-10">
-            {{ form.max_rounds.errors }}
-            <input type="number" class="form-control" name="{{ form.max_rounds.html_name }}" id="{{ form.max_rounds.id_for_label }}" min=0 max=10 value="{{ form.max_rounds.value }}">
-          </div>
-        </div>
-    <!-- Was used for session color, now depreciated
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.color.id_for_label }}">Session Color:</label>
-          <div class="col-sm-10">
-            {{ form.color.errors }}
-            <select class="form-control" name="{{ form.color.html_name }}" id="{{ form.color.id_for_label }}">
-              {% for id,text in form.fields.color.choices  %}
-              <option value="{{ id }}" {% if id == session.session_color %} selected {% endif %}>{{ text }}</option>
-              {% endfor %}
-            </select>
-          </div>
-        </div>
-    -->
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.voting.id_for_label }}"></label>
-          <div class="col-sm-10">
-            {{ form.voting.errors }}
-            <div class="togglebutton togglebutton-primary">
-                <label>
-                    <input type="checkbox" name="{{ form.voting.html_name }}" id="{{ form.voting.id_for_label }}" value="True" {% if session.session_voting_enabled == True %}checked{% endif %}>Voting Enabled
-                </label>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.gender.id_for_label }}"></label>
-          <div class="col-sm-10">
-            {{ form.gender.errors }}
-            <div class="togglebutton togglebutton-primary">
-                <label>
-                    <input type="checkbox" name="{{ form.gender.html_name }}" id="{{ form.gender.id_for_label }}" value="True" {% if session.session_gender_enabled == True %}checked{% endif %}>Gender Statistics Enabled
-                </label>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.is_visible.id_for_label }}"></label>
-          <div class="col-sm-10">
-            {{ form.is_visible.errors }}
-            <div class="togglebutton togglebutton-primary">
-                <label>
-                    <input type="checkbox" name="{{ form.is_visible.html_name }}" id="{{ form.is_visible.id_for_label }}" value="True" {% if session.session_is_visible == True %}checked{% endif %}>Publicly Visible
-                </label>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="{{ form.technical_problems.id_for_label }}"></label>
-          <div class="col-sm-10">
-            {{ form.technical_problems.errors }}
-            <div class="togglebutton togglebutton-primary">
-                <label>
-                    <input type="checkbox" name="{{ form.technical_problems.html_name }}" id="{{ form.technical_problems.id_for_label }}" value="True" {% if session.session_has_technical_problems == True %}checked{% endif %}>Technical Problems
-                </label>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-            <div class="col-lg-10 col-lg-offset-2">
-                <button type="submit" class="btn btn-primary btn-raised">Save</button>
-            </div>
-        </div>
-    </fieldset>
-</form>
+    <br>
+    <br>
+    <div class="well well-lg">
+        <legend>Edit Session: {{ session.session_name }}</legend>
+        <form class="form-horizontal" role="form" enctype="multipart/form-data" action="{% url 'statistics:edit' session.pk %}" method="post">
+            <fieldset>
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group {% if field.errors %}has-error{% endif %}">
+                        <label class="control-label col-sm-2" for="{{ field.id_for_label }}">{{ field.label }} {{ field.errors }}</label>
+                        <div class="col-sm-10">
+                            {% if field.field.widget|klass == "CheckboxInput" %}
+                                <div class="togglebutton">
+                                    <label>
+                                        {{ field }} {{ field.label }}
+                                    </label>
+                                </div>
+                            {% else %}
+                                {% if field.field.widget|klass == "FileInput" %}
+                                    <input type="text" readonly="" class="form-control" placeholder="Browse...">
+                                {% endif %}
+                                {{ field }}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                        <button type="submit" class="btn btn-primary btn-raised">Save</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
 {% endblock %} {% block footer_scripts %} {% endblock %}
