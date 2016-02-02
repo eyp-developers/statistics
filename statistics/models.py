@@ -11,7 +11,7 @@ class Session(models.Model):
     session_description = models.CharField(max_length=200)
 
     #Session Picture, currently a URL that links to a picture, can be taken from facebook, imgur etc. Should be changed to a file upload in future.
-    session_picture = models.URLField()
+    session_picture = models.ImageField(upload_to='session_pictures/')
 
     #We want a contact email so we can send friendly emails to people.
     session_email = models.EmailField()
@@ -129,6 +129,7 @@ class Session(models.Model):
     session_statistics = models.CharField(max_length=3, choices=STATISTIC_TYPES, default=JOINTFORM)
 
     #We want to define a color for the session that can be used when styling pages.
+    #Depricated
     session_color = models.CharField(max_length=20)
 
     #Then we need a text color depending on if the committee color is light or dark.

@@ -167,8 +167,7 @@ def create_session(request):
     # If the user is trying to create a session
     if request.method == 'POST':
         # Fill an instance of a SessionForm with the request data.
-        form = SessionForm(request.POST)
-
+        form = SessionForm(request.POST, request.FILES)
         if form.is_valid():
             # We need to set up time variables for the start and end of sessions.
             # We do this by creating date objects and combining the date objects with time midnight
@@ -178,10 +177,15 @@ def create_session(request):
             end_date = datetime.combine(t_end, datetime.min.time())
 
             # We need to turn the voting 'True' and 'False' strings into actual booleans.
-            if form.cleaned_data['voting'] == 'True':
+            if form.cleaned_data['voting_enabled'] == 'True':
                 voting = True
             else:
                 voting = False
+
+            if form.cleaned_data['gender_statistics'] == 'True':
+                gender = True
+            else:
+                gender = False
 
             # Creating a lowercase string with no spaces from the session name to use for usernames
             name = ''.join(form.cleaned_data['name'].split()).lower()
@@ -200,7 +204,7 @@ def create_session(request):
             # Creating the Submit user
             submit_user = User.objects.create_user(username=name,
                                                    email=form.cleaned_data['email'],
-                                                   password=form.cleaned_data['submit_password'])
+                                                   password=form.cleaned_data['submission_password'])
 
             # Adding the Submit user to the submit group.
             submit_group = Group.objects.get(name='SessionSubmit')
@@ -211,7 +215,6 @@ def create_session(request):
             session = Session(session_name=form.cleaned_data['name'],
                               session_description=form.cleaned_data['description'],
                               session_email=form.cleaned_data['email'],
-                              session_picture=form.cleaned_data['picture'],
                               session_website_link=form.cleaned_data['website'],
                               session_facebook_link=form.cleaned_data['facebook'],
                               session_twitter_link=form.cleaned_data['twitter'],
@@ -222,10 +225,12 @@ def create_session(request):
                               session_color="indigo",
                               session_is_visible=False,
                               session_voting_enabled=voting,
+                              session_gender_enabled=gender,
                               session_max_rounds=form.cleaned_data['max_rounds'],
                               session_admin_user=admin_user,
                               session_submission_user=submit_user,
                               )
+            session.session_picture = form.cleaned_data['picture']
             session.save()
             active_debate = ActiveDebate(session=session, active_debate='')
             active_debate.save()

@@ -61,7 +61,7 @@ def edit(request, session_id):
     # If the User is trying to edit the session
     if request.method == 'POST':
         # Fill an instance of the form with the request data.
-        form = SessionEditForm(request.POST)
+        form = SessionEditForm(request.POST, request.FILES)
         # Check if the created form is a valid form.
         if form.is_valid():
             print 'is valid'
@@ -74,7 +74,8 @@ def edit(request, session_id):
 
             s.session_name = form.cleaned_data['name']
             s.session_description = form.cleaned_data['description']
-            s.session_picture = form.cleaned_data['picture']
+            if form.cleaned_data['picture'] is not None:
+                s.session_picture = form.cleaned_data['picture']
             s.session_resolution_link = form.cleaned_data['resolution']
             s.session_website_link = form.cleaned_data['website']
             s.session_facebook_link = form.cleaned_data['facebook']
@@ -84,11 +85,9 @@ def edit(request, session_id):
             s.session_start_date = start_date
             s.session_end_date = end_date
             s.session_statistics = form.cleaned_data['statistics']
-            s.session_voting_enabled = form.cleaned_data['voting']
-            s.session_gender_enabled = form.cleaned_data['gender']
+            s.session_voting_enabled = form.cleaned_data['voting_enabled']
+            s.session_gender_enabled = form.cleaned_data['gender_statistics']
             s.session_max_rounds = form.cleaned_data['max_rounds']
-            # No longer using session colors.
-            # s.session_color = form.cleaned_data['color']
             s.session_is_visible = form.cleaned_data['is_visible']
             s.session_has_technical_problems = form.cleaned_data['technical_problems']
             # Save the newly edited session
@@ -101,7 +100,7 @@ def edit(request, session_id):
                                 'description': s.session_description,
                                 'email': s.session_email,
                                 'country': s.session_country,
-                                'picture': s.session_picture,
+                                'picture': s.session_picture.url,
                                 'website': s.session_website_link,
                                 'facebook': s.session_facebook_link,
                                 'twitter': s.session_twitter_link,
@@ -109,10 +108,9 @@ def edit(request, session_id):
                                 'start_date': s.session_start_date.strftime("%Y-%m-%d"),
                                 'end_date': s.session_end_date.strftime("%Y-%m-%d"),
                                 'statistics': s.session_statistics,
-                                'voting': s.session_voting_enabled,
-                                'gender': s.session_gender_enabled,
+                                'voting_enabled': s.session_voting_enabled,
+                                'gender_statistics': s.session_gender_enabled,
                                 'max_rounds': s.session_max_rounds,
-                                # 'color': s.session_color,
                                 'is_visible': s.session_is_visible,
                                 'technical_problems': s.session_has_technical_problems})
 
