@@ -199,7 +199,10 @@ def create_session(request):
             admin_group = Group.objects.get(name='SessionAdmin')
             admin_group.user_set.add(admin_user)
 
-            authenticate(username=admin_user.username, password=admin_user.password)
+            user = authenticate(username=admin_user.username, password=form.cleaned_data['admin_password'])
+
+            if user is not None:
+                login(request, user)
 
             # Creating the Submit user
             submit_user = User.objects.create_user(username=name,
