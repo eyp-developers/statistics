@@ -88,7 +88,7 @@ class SessionForm(forms.Form):
     description = forms.CharField(max_length=200, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '78th International Session of the EYP'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'john.smith@eyp.org'}))
     country = forms.ChoiceField(choices=SESSION_COUNTRIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
-    picture = forms.URLField(required=True, widget=forms.URLInput(attrs={'class': 'form-control'}))
+    picture = forms.ImageField(required=True, widget=forms.FileInput(attrs={'class': 'form-control'}))
     start_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-17'}))
     end_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-26'}))
 

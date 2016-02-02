@@ -167,8 +167,7 @@ def create_session(request):
     # If the user is trying to create a session
     if request.method == 'POST':
         # Fill an instance of a SessionForm with the request data.
-        form = SessionForm(request.POST)
-
+        form = SessionForm(request.POST, request.FILES)
         if form.is_valid():
             # We need to set up time variables for the start and end of sessions.
             # We do this by creating date objects and combining the date objects with time midnight
@@ -216,7 +215,6 @@ def create_session(request):
             session = Session(session_name=form.cleaned_data['name'],
                               session_description=form.cleaned_data['description'],
                               session_email=form.cleaned_data['email'],
-                              session_picture=form.cleaned_data['picture'],
                               session_website_link=form.cleaned_data['website'],
                               session_facebook_link=form.cleaned_data['facebook'],
                               session_twitter_link=form.cleaned_data['twitter'],
@@ -232,6 +230,7 @@ def create_session(request):
                               session_admin_user=admin_user,
                               session_submission_user=submit_user,
                               )
+            session.session_picture = form.cleaned_data['picture']
             session.save()
             active_debate = ActiveDebate(session=session, active_debate='')
             active_debate.save()

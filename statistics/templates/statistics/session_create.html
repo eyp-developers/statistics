@@ -34,7 +34,7 @@
 
     <div class="well well-lg">
         <legend>Create Session:</legend>
-        <form id="create-session" class="form-horizontal" role="form" action="{% url 'statistics:create_session' %}" method="post">
+        <form id="create-session" class="form-horizontal" enctype="multipart/form-data" role="form" action="{% url 'statistics:create_session' %}" method="post">
             <fieldset>
                 {% csrf_token %}
                 {% for field in form %}
@@ -48,6 +48,9 @@
                                     </label>
                                 </div>
                             {% else %}
+                                 {% if field.field.widget|klass == "FileInput" %}
+                                     <input type="text" readonly="" class="form-control" placeholder="Browse...">
+                                 {% endif %}
                                 {{ field }}
                             {% endif %}
 
