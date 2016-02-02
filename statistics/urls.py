@@ -1,4 +1,6 @@
 from django.conf.urls import url
+from django.conf.urls.static import static
+from django.conf import settings
 
 from views import auth, apis, public_views, protected_views
 
@@ -45,3 +47,6 @@ urlpatterns = [
     url(r'^api/session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/since/$', apis.content_latest_api, name='content_latest_api'),
     url(r'^api/gender/(?P<session_id>[0-9]+)/$', apis.gender_api, name='gender_api'),
 ]
+
+if settings.DEBUG is True:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

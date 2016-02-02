@@ -11,7 +11,7 @@ class Session(models.Model):
     session_description = models.CharField(max_length=200)
 
     #Session Picture, currently a URL that links to a picture, can be taken from facebook, imgur etc. Should be changed to a file upload in future.
-    session_picture = models.URLField()
+    session_picture = models.ImageField(upload_to='session_pictures/')
 
     #We want a contact email so we can send friendly emails to people.
     session_email = models.EmailField()
