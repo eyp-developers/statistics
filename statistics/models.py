@@ -129,6 +129,7 @@ class Session(models.Model):
     session_statistics = models.CharField(max_length=3, choices=STATISTIC_TYPES, default=JOINTFORM)
 
     #We want to define a color for the session that can be used when styling pages.
+    #Depricated
     session_color = models.CharField(max_length=20)
 
     #Then we need a text color depending on if the committee color is light or dark.

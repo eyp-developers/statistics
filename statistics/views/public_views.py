@@ -165,6 +165,11 @@ def create_session(request):
             else:
                 voting = False
 
+            if form.cleaned_data['gender_statistics'] == 'True':
+                gender = True
+            else:
+                gender = False
+
             # Creating a lowercase string with no spaces from the session name to use for usernames
             name = ''.join(form.cleaned_data['name'].split()).lower()
 
@@ -204,6 +209,7 @@ def create_session(request):
                               session_color="indigo",
                               session_is_visible=False,
                               session_voting_enabled=voting,
+                              session_gender_enabled=gender,
                               session_max_rounds=form.cleaned_data['max_rounds'],
                               session_admin_user=admin_user,
                               session_submission_user=submit_user,
