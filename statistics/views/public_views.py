@@ -160,7 +160,7 @@ def create_session(request):
             end_date = datetime.combine(t_end, datetime.min.time())
 
             # We need to turn the voting 'True' and 'False' strings into actual booleans.
-            if form.cleaned_data['voting'] == 'True':
+            if form.cleaned_data['voting_enabled'] == 'True':
                 voting = True
             else:
                 voting = False
@@ -182,7 +182,7 @@ def create_session(request):
             # Creating the Submit user
             submit_user = User.objects.create_user(username=name,
                                                    email=form.cleaned_data['email'],
-                                                   password=form.cleaned_data['submit_password'])
+                                                   password=form.cleaned_data['submission_password'])
 
             # Adding the Submit user to the submit group.
             submit_group = Group.objects.get(name='SessionSubmit')
