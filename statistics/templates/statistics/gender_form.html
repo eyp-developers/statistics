@@ -30,7 +30,7 @@
                   method="post">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label class="control-label col-sm-2" for="{{ form.committee.id_for_label }}">Committee:</label>
+                    <label class="control-label col-sm-2" for="{{ form.committee.id_for_label }}">Proposing Committee:</label>
                     <div class="col-sm-10">
                         <select class="form-control" name="{{ form.committee.html_name }}" id="{{ form.committee.id_for_label }}">
                             {% for id,text in form.fields.committee.choices %}
