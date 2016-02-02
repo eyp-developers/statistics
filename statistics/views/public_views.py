@@ -5,6 +5,7 @@ from datetime import date
 from datetime import datetime
 from time import strftime
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -22,8 +23,25 @@ from ..forms import SessionForm, SessionEditForm, PointForm, VoteForm, ContentFo
 
 
 def home(request):
-    # All the home page needs is a list of all sessions ordered by the start date. We create the list, then the context and finally render the template.
-    latest_sessions_list = Session.objects.filter(session_is_visible=True).order_by('-session_start_date')[:20]
+    # All the home page needs is a list of the first few sessions ordered by the start date, then more pages with the rest of the sessions. We create the list, then the context and finally render the template.
+    latest_sessions_list = Session.objects.filter(session_is_visible=True).order_by('-session_start_date')
+
+    # class Paginator(object_list, per_page, orphans=0, allow_empty_first_page=True)
+    paginator = Paginator(latest_sessions_list, 7)
+
+    # The next line gets arguments from URLs like this https://stats.eyp.org/?page=2
+    page = request.GET.get("page")
+    try:
+        latest_sessions_list = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        latest_sessions_list = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        latest_sessions_list = paginator.page(paginator.num_pages)
+
+
+
     active_sessions = []
     for session in Session.objects.all():
         if Point.objects.filter(session=session):
