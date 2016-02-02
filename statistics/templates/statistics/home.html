@@ -38,6 +38,21 @@
         <br>
     {% endfor %}
 
+    <nav class="pager">
+      <ul class="step-links">
+        {% if latest_sessions_list.has_previous %}
+          <a href="?page={{ latest_sessions_list.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ latest_sessions_list.number }} of {{ latest_sessions_list.paginator.num_pages }}
+        </span>
+        {% if latest_sessions_list.has_next %}
+          <a href="?page={{ latest_sessions_list.next_page_number }}">next</a>
+        {% endif %}
+      </span>
+    </div>
+
     {% else %}
       <p>No sessions are available.</p>
     {% endif %}
