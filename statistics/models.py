@@ -147,6 +147,10 @@ class Session(models.Model):
     session_gender_enabled = models.BooleanField('gender statistics enabled', default=False)
     session_max_rounds = models.PositiveSmallIntegerField(default=3)
 
+    gender_number_female = models.IntegerField(blank=True, null=True)
+    gender_number_male = models.IntegerField(blank=True, null=True)
+    gender_number_other = models.IntegerField(blank=True, null=True)
+
     # If the session has had technical problems some data is probably missing. If this is activated a message will be shown to indidate this.
     session_has_technical_problems = models.BooleanField('session has technical problems', default=False)
 

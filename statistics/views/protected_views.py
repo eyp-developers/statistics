@@ -90,6 +90,12 @@ def edit(request, session_id):
             s.session_max_rounds = form.cleaned_data['max_rounds']
             s.session_is_visible = form.cleaned_data['is_visible']
             s.session_has_technical_problems = form.cleaned_data['technical_problems']
+            if form.cleaned_data['number_female_participants'] is not None:
+                s.gender_number_female = form.cleaned_data['number_female_participants']
+            if form.cleaned_data['number_male_participants'] is not None:
+                s.gender_number_male = form.cleaned_data['number_male_participants']
+            if form.cleaned_data['number_other_participants'] is not None:
+                s.gender_number_other = form.cleaned_data['number_other_participants']
             # Save the newly edited session
             s.save()
 
