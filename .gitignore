@@ -13,3 +13,5 @@ pip-selfcheck.json
 .idea/workspace.xml
 config.codekit
 **/.sass-cache/*
+
+media/*

@@ -2,7 +2,6 @@ from django import forms
 
 from django.contrib.auth import get_user_model
 
-
 class SessionForm(forms.Form):
 
     #The countries of the session need to be set up in the same way as the model.
@@ -85,17 +84,17 @@ class SessionForm(forms.Form):
         (UNITED_KINGDOM, 'The United Kingdom'),
     )
 
-    name = forms.CharField(max_length=100, required=True)
-    description = forms.CharField(max_length=200, required=True)
-    email = forms.EmailField()
-    country = forms.ChoiceField(choices=SESSION_COUNTRIES, required=True)
-    picture = forms.URLField(required=True)
-    start_date = forms.DateField(required=True)
-    end_date = forms.DateField(required=True)
+    name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Izmir 2015'}))
+    description = forms.CharField(max_length=200, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '78th International Session of the EYP'}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'john.smith@eyp.org'}))
+    country = forms.ChoiceField(choices=SESSION_COUNTRIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
+    picture = forms.ImageField(required=True, widget=forms.FileInput(attrs={'class': 'form-control'}))
+    start_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-17'}))
+    end_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-26'}))
 
-    website = forms.URLField(required=False)
-    facebook = forms.URLField(required=False)
-    twitter = forms.URLField(required=False)
+    website = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional..'}))
+    facebook = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional..'}))
+    twitter = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional..'}))
 
     #Setting up statistic types
     STATISTICS = 'S'
@@ -113,19 +112,19 @@ class SessionForm(forms.Form):
         (RUNNINGCONTENT, 'Running Order Statistics with Point Content')
     )
     #Making the statistics type a selectable option
-    statistics = forms.ChoiceField(choices=STATISTIC_TYPES, required=True)
+    statistics = forms.ChoiceField(choices=STATISTIC_TYPES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
 
     #Since the voting choice is not a checkbox per se, the input type will be a CharField instead
-    voting = forms.CharField(max_length=5, required=True)
-    gender = forms.CharField(max_length=5, required=True)
+    voting_enabled = forms.CharField(max_length=5, required=True, widget=forms.CheckboxInput(attrs={'checked': ''}))
+    gender_statistics = forms.CharField(max_length=5, required=True, widget=forms.CheckboxInput(attrs={'checked': ''}))
 
-    max_rounds = forms.IntegerField(min_value=1, max_value=10)
+    max_rounds = forms.IntegerField(min_value=1, max_value=10, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '4'}))
 
     #Was used to chose the session color - no longer used as everything is blue.
     #color = forms.CharField(max_length=20, required=True)
 
-    admin_password = forms.CharField()
-    submit_password = forms.CharField()
+    admin_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    submission_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 class SessionEditForm(forms.Form):
         #The countries of the session need to be set up in the same way as the model.
@@ -208,18 +207,18 @@ class SessionEditForm(forms.Form):
             (UNITED_KINGDOM, 'The United Kingdom'),
         )
 
-        name = forms.CharField(max_length=100, required=True)
-        description = forms.CharField(max_length=200, required=True)
-        email = forms.EmailField()
-        country = forms.ChoiceField(choices=SESSION_COUNTRIES, required=True)
-        picture = forms.URLField(required=True)
-        start_date = forms.DateField(required=True)
-        end_date = forms.DateField(required=True)
+        name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+        description = forms.CharField(max_length=200, required=True, widget=forms.TextInput(attrs=({'class': 'form-control'})))
+        email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
+        country = forms.ChoiceField(choices=SESSION_COUNTRIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
+        picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
+        start_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control'}))
+        end_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control'}))
 
-        website = forms.URLField(required=False)
-        facebook = forms.URLField(required=False)
-        twitter = forms.URLField(required=False)
-        resolution = forms.URLField(required=False)
+        website = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional..'}))
+        facebook = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional..'}))
+        twitter = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional..'}))
+        resolution = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional..'}))
 
         #Setting up statistic types
         STATISTICS = 'S'
@@ -237,57 +236,18 @@ class SessionEditForm(forms.Form):
             (RUNNINGCONTENT, 'Running Order Statistics with Point Content')
         )
         #Making the statistics type a selectable option
-        statistics = forms.ChoiceField(choices=STATISTIC_TYPES, required=True)
+        statistics = forms.ChoiceField(choices=STATISTIC_TYPES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
 
         #Since the voting choice is not a checkbox per se, the input type will be a CharField instead
-        voting = forms.BooleanField(required=False)
-        gender = forms.BooleanField(required=False)
+        voting_enabled = forms.CharField(max_length=5, required=False, widget=forms.CheckboxInput())
+        gender_statistics = forms.CharField(max_length=5, required=False, widget=forms.CheckboxInput())
 
-        max_rounds = forms.IntegerField(min_value=1, max_value=10)
 
-        # No longer used session color options
+        max_rounds = forms.IntegerField(min_value=1, max_value=10, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '4'}))
 
-        # RED = 'red'
-        # PINK = 'pink'
-        # PURPLE = 'purple'
-        # DEEP_PURPLE = 'deep-purple'
-        # INDIGO = 'indigo'
-        # BLUE = 'blue'
-        # LIGHT_BLUE = 'light-blue'
-        # CYAN = 'cyan'
-        # TEAL = 'teal'
-        # GREEN = 'green'
-        # LIGHT_GREEN = 'light-green'
-        # LIME = 'lime'
-        # YELLOW = 'yellow'
-        # AMBER = 'amber'
-        # ORANGE = 'orange'
-        # DEEP_ORANGE = 'deep-orange'
-        # BLUE_GREY = 'blue-grey'
-        # COLOR_TYPES = (
-        #     (RED, 'Red'),
-        #     (PINK, 'Pink'),
-        #     (PURPLE, 'Purple'),
-        #     (DEEP_PURPLE, 'Deep Purple'),
-        #     (INDIGO, 'Indigo'),
-        #     (BLUE, 'Blue'),
-        #     (LIGHT_BLUE, 'Light Blue'),
-        #     (CYAN, 'Cyan'),
-        #     (TEAL, 'Teal'),
-        #     (GREEN, 'Green'),
-        #     (LIGHT_GREEN, 'Light Green'),
-        #     (LIME, 'Lime'),
-        #     (YELLOW, 'Yellow'),
-        #     (AMBER, 'Amber'),
-        #     (ORANGE, 'Orange'),
-        #     (DEEP_ORANGE, 'Deep Orange'),
-        #     (BLUE_GREY, 'Blue Grey'),
-        # )
-        # color = forms.ChoiceField(choices=COLOR_TYPES, required=True)
+        is_visible = forms.BooleanField(required=False, widget=forms.CheckboxInput())
 
-        is_visible = forms.BooleanField(required=False)
-
-        technical_problems = forms.BooleanField(required=False)
+        technical_problems = forms.BooleanField(required=False, widget=forms.CheckboxInput())
 
 class CommitteeForm(forms.Form):
 
