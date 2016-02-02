@@ -29,6 +29,7 @@ def home(request):
     # class Paginator(object_list, per_page, orphans=0, allow_empty_first_page=True)
     paginator = Paginator(latest_sessions_list, 7)
 
+    # The next line gets arguments from URLs like this https://stats.eyp.org/?page=2
     page = request.GET.get("page")
     try:
         latest_sessions_list = paginator.page(page)
