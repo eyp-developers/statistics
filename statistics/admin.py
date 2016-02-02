@@ -18,7 +18,9 @@ class SessionAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,                  {'fields': ['session_name', 'session_description', 'session_country', 'session_picture', 'session_admin_user', 'session_submission_user', 'session_email', 'session_website_link', 'session_resolution_link', 'session_facebook_link', 'session_twitter_link']}),
         ('Date information',    {'fields': ['session_start_date', 'session_end_date']}),
-        ('Session Settings',    {'fields': ['session_is_visible', 'session_statistics', 'session_max_rounds', 'session_voting_enabled', 'session_gender_enabled', 'session_color', 'session_has_technical_problems']})
+        ('Session Settings',    {'fields': ['session_is_visible', 'session_statistics', 'session_max_rounds', 'session_voting_enabled', 'session_color', 'session_has_technical_problems']}),
+        ('Gender Settings',     {'fields': ['session_gender_enabled', 'gender_number_female', 'gender_number_male', 'gender_number_other']})
+        
     ]
 
     #The inline should be the CommitteeInline to make it easy to make committees straight away.

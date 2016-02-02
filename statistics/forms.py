@@ -242,6 +242,10 @@ class SessionEditForm(forms.Form):
         voting_enabled = forms.CharField(max_length=5, required=False, widget=forms.CheckboxInput())
         gender_statistics = forms.CharField(max_length=5, required=False, widget=forms.CheckboxInput())
 
+        number_female_participants = forms.IntegerField(min_value=0, required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+        number_male_participants = forms.IntegerField(min_value=0, required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+        number_other_participants = forms.IntegerField(min_value=0, required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+
 
         max_rounds = forms.IntegerField(min_value=1, max_value=10, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '4'}))
 
