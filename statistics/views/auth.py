@@ -48,4 +48,4 @@ def ga_logout(request):
     # If the user visits /logout/ he will be logged out.
 
     logout(request)
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect(reverse('statistics:home'))
