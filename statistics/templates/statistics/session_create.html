@@ -53,9 +53,32 @@
                                  {% endif %}
                                 {{ field }}
                             {% endif %}
+                            <p class="help-block">
+                                {{ field.help_text }}
+                            </p>
 
                         </div>
                     </div>
+                    {% if field.id_for_label == "id_picture" %}
+                        <div class="col-sm-10 col-sm-offset-2">
+                            <p>
+                                Please be careful which picture you upload here so that it does not violate copyright law.
+                                When you want to use pictures found through Google or other search engines, you have to make sure that you are allowed to use them freely.
+                                Usually pictures found online are not in the public domain and cannot be used.
+                                In order not to violate international copyright law, try to use either pictures taken by EYP members or use the websites that allow a free use of their resources.
+                                As for the latter ones, you can check such websites as:
+                            </p>
+                                <ul>
+                                    <li>http://www.freeimages.com</li>
+                                    <li>http://www.morguefile.com/archive</li>
+                                    <li>https://www.flickr.com</li>
+                                    <li>http://search.creativecommons.org/</li>
+                                </ul>
+                            <p>
+                                You need to make sure that the picture you use entails the respective (Creative Commons) license for free use without the need to mention the creator.
+                            </p>
+                        </div>
+                    {% endif %}
                 {% endfor %}
                 <div class="form-group">
                     <div class="col-md-10 col-md-offset-2">
