@@ -60,9 +60,8 @@
             <li><a href="{% url 'statistics:debate' session.pk committee.pk %}">Back to {{ committee.committee_name }}</a></li>
             {% endif %}
 
-
-            {% if session.session_voting_enabled %}
-            <li><a href="{% url 'statistics:vote' session.pk committee.pk %}">Vote as  {{ committee.committee_name }}</a></li>
+            {% if session.session_statistics == "R" or sesssion.session_statistics == "RC" %}
+                <li><a href="{% url 'statistics:predict' session.pk committee.pk %}">Manage {{ committee.committee_name }}</a></li>
             {% endif %}
 
             {% if session.session_statistics = "C" or session.session_statistics = "SF" %}
@@ -77,6 +76,9 @@
             <li><a href="{% url 'statistics:joint' session.pk committee.pk %}">Submit as {{ committee.committee_name }}</a></li>
             {% endif %}
 
+            {% if session.session_voting_enabled %}
+            <li><a href="{% url 'statistics:vote' session.pk committee.pk %}">Vote as  {{ committee.committee_name }}</a></li>
+            {% endif %}
 
           </ul>
         </li>
@@ -90,6 +92,9 @@
 
             <li><a href="{% url 'statistics:welcome' session.pk %}">Management Overview</a></li>
 
+                {% if session.session_statistics == "R" or sesssion.session_statistics == "RC" %}
+                    <li><a href="{% url 'statistics:runningorder' session.pk %}">Running Order</a></li>
+                {% endif %}
 
             <li><a href="{% url 'statistics:manage' session.pk %}">Debate Management</a></li>
 
