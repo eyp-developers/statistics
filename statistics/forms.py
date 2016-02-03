@@ -84,8 +84,8 @@ class SessionForm(forms.Form):
         (UNITED_KINGDOM, 'The United Kingdom'),
     )
 
-    name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Izmir 2015'}))
-    description = forms.CharField(max_length=200, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '78th International Session of the EYP'}))
+    name = forms.CharField(max_length=100, required=True, help_text='Short Session Name - Preferably Place/Year', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Izmir 2015'}))
+    description = forms.CharField(max_length=200, required=True, help_text='Full Session Name', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '78th International Session of the EYP'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'john.smith@eyp.org'}))
     country = forms.ChoiceField(choices=SESSION_COUNTRIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
     picture = forms.ImageField(required=True, widget=forms.FileInput(attrs={'class': 'form-control'}))
@@ -112,19 +112,19 @@ class SessionForm(forms.Form):
         (RUNNINGCONTENT, 'Running Order Statistics with Point Content')
     )
     #Making the statistics type a selectable option
-    statistics = forms.ChoiceField(choices=STATISTIC_TYPES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
+    statistics = forms.ChoiceField(choices=STATISTIC_TYPES, help_text='What kind of statistics you want to run at your session', required=True, widget=forms.Select(attrs={'class': 'form-control'}))
 
     #Since the voting choice is not a checkbox per se, the input type will be a CharField instead
-    voting_enabled = forms.CharField(max_length=5, required=True, widget=forms.CheckboxInput(attrs={'checked': ''}))
-    gender_statistics = forms.CharField(max_length=5, required=True, widget=forms.CheckboxInput(attrs={'checked': ''}))
+    voting_enabled = forms.CharField(max_length=5, required=True, help_text='Enables digital voting for your session', widget=forms.CheckboxInput(attrs={'checked': ''}))
+    gender_statistics = forms.CharField(max_length=5, required=True, help_text='Lets you track the gender equality of your GA', widget=forms.CheckboxInput(attrs={'checked': ''}))
 
-    max_rounds = forms.IntegerField(min_value=1, max_value=10, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '4'}))
+    max_rounds = forms.IntegerField(min_value=1, max_value=10, help_text='The maximum number of rounds of open debate during your GA', widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '4'}))
 
     #Was used to chose the session color - no longer used as everything is blue.
     #color = forms.CharField(max_length=20, required=True)
 
-    admin_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    submission_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    admin_password = forms.CharField(help_text='The password used to alter session settings and manage GA Stats', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    submission_password = forms.CharField(help_text='The password used by chairs/journos/orgas to submit statistics', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 class SessionEditForm(forms.Form):
         #The countries of the session need to be set up in the same way as the model.
