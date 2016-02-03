@@ -24,13 +24,18 @@ def ga_login(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
+
                 # The next line gets arguments from URLs like this http://stats.eyp.org/login/?next=/overview/9/
                 next = request.GET.get("next")
 
                 if next:
                     # Here we will redirect them to the page they came from when they were sent to the login page
                     return HttpResponseRedirect(next)
-                else:
+
+                elif Session.objects.filter(session_admin_user=request.user):
+                    # If the user is an admin of a session, send them to their session's page
+                    session = Session.objects.get(session_admin_user=request.user)
+                    return HttpResponseRedirect(reverse('statistics:session', args = [session.pk]))
                     return HttpResponseRedirect(reverse('statistics:home'))
             else:
                 messages.add_message(request, messages.ERROR, 'Your user account is not active. Please contact an administrator.')
