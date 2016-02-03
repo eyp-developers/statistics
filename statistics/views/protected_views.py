@@ -6,7 +6,7 @@ from datetime import datetime
 from time import strftime
 
 from django.core.urlresolvers import reverse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
@@ -100,6 +100,7 @@ def edit(request, session_id):
             s.save()
 
             messages.add_message(request, messages.SUCCESS, 'Session Updated')
+            return HttpResponseRedirect(reverse('statistics:edit', args=[session_id]))
 
     else:
         form = SessionEditForm({'name': s.session_name,
@@ -312,6 +313,7 @@ def point(request, session_id, committee_id=None):
 
             # Once all that is done, send the user to the thank you page.
             messages.add_message(request, messages.SUCCESS, 'Point Successfully Submitted')
+            return HttpResponseRedirect(reverse('statistics:point', args=[session_id, committee_id]))
 
     else:
         # Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
@@ -369,6 +371,7 @@ def content(request, session_id, committee_id=None):
                                         )
             contentpoint.save()
             messages.add_message(request, messages.SUCCESS, 'Content Point Successfully Submitted')
+            return HttpResponseRedirect(reverse('statistics:content', args=[session_id, committee_id]))
     else:
         if all_form:
             form = ContentForm({'session': session.session_name, 'committee': '', 'debate': active})
@@ -456,6 +459,7 @@ def joint(request, session_id, committee_id=None):
                 st = SubTopic.objects.filter(pk=s)
                 point.subtopics.add(st[0])
             messages.add_message(request, messages.SUCCESS, 'Joint Point Successfully Submitted')
+            return HttpResponseRedirect(reverse('statistics:joint', args=[session_id, committee_id]))
     else:
         if all_form:
             form = JointForm(subtopics_array, {'session': session.session_name, 'committee': '', 'debate': active,
@@ -522,6 +526,7 @@ def vote(request, session_id, committee_id=None):
             vote.save()
             # Then send the user a success message.
             messages.add_message(request, messages.SUCCESS, 'Point Successfully Submitted')
+            return HttpResponseRedirect(reverse('statistics:vote', args=[session_id, committee_id]))
 
     else:
         # Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
@@ -655,6 +660,7 @@ def predict(request, session_id, committee_id):
 
             # Once all that is done, send the user to the thank you page.
             messages.add_message(request, messages.SUCCESS, 'Point Successfully Predicted')
+            return HttpResponseRedirect(reverse('statistics:predict', args=[session_id, committee_id]))
 
     else:
         # Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
