@@ -27,7 +27,11 @@ def ga_login(request):
                 # The next line gets arguments from URLs like this http://stats.eyp.org/login/?next=/overview/9/
                 next = request.GET.get("next")
 
-                return HttpResponseRedirect(next)
+                if next:
+                    # Here we will redirect them to the page they came from when they were sent to the login page
+                    return HttpResponseRedirect(next)
+                else:
+                    return HttpResponseRedirect(reverse('statistics:home'))
             else:
                 messages.add_message(request, messages.ERROR, 'Your user account is not active. Please contact an administrator.')
                 return HttpResponseRedirect(reverse('statistics:login'))
