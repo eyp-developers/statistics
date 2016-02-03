@@ -1,11 +1,11 @@
 
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model, authenticate, login, logout
-
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 
 from ..forms import LoginForm
 
@@ -24,13 +24,16 @@ def ga_login(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect('/')
+                # The next line gets arguments from URLs like this http://stats.eyp.org/login/?next=/overview/9/
+                next = request.GET.get("next")
+
+                return HttpResponseRedirect(next)
             else:
                 messages.add_message(request, messages.ERROR, 'Your user account is not active. Please contact an administrator.')
-                return HttpResponseRedirect('/login')
+                return HttpResponseRedirect(reverse('statistics:login'))
         else:
             messages.add_message(request, messages.ERROR, 'This username password combination does not exist.')
-            return HttpResponseRedirect('/login')
+            return HttpResponseRedirect(reverse('statistics:login'))
 
     template = 'statistics/login.html'
     context = {'form': form}
