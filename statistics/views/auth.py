@@ -36,6 +36,11 @@ def ga_login(request):
                     # If the user is an admin of a session, send them to their session's page
                     session = Session.objects.get(session_admin_user=request.user)
                     return HttpResponseRedirect(reverse('statistics:session', args = [session.pk]))
+
+                elif Session.objects.filter(session_submission_user=request.user):
+                    # If the user is a submission user for a session, send them to their session's page
+                    session = Session.objects.get(session_submission_user=request.user)
+                    return HttpResponseRedirect(reverse('statistics:session', args = [session.pk]))
                     return HttpResponseRedirect(reverse('statistics:home'))
             else:
                 messages.add_message(request, messages.ERROR, 'Your user account is not active. Please contact an administrator.')
