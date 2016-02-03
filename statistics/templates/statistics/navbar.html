@@ -37,7 +37,8 @@
         </ul>
       </ul>
 
-      {% if session and user.is_authenticated or admin_session%}
+      {% if session %}
+      {% if user.is_superuser or user == session.session_admin_user or user == session.session_submission_user or admin_session %}
 
 
       <ul class="nav navbar-nav navbar-right">
@@ -47,7 +48,7 @@
         {% url 'statistics:session' session.pk as session_url %} <!-- here we set a variable session_url which we will compare to the current url in the next line -->
         {% if not request.get_full_path = session_url %}
         <li><a href="{% url 'statistics:session' session.pk %}">Go to {{ session.session_name }}</a></li>
-        {% endif %}
+        {% endif %} <!-- if not request.get_full_path = session_url -->
 
         {% if committee %}
 
@@ -58,32 +59,35 @@
             {% url 'statistics:debate' session.pk committee.pk as committee_url %} <!-- here we set a variable session_url which we will compare to the current url in the next line -->
             {% if not request.get_full_path = committee_url %}
             <li><a href="{% url 'statistics:debate' session.pk committee.pk %}">Back to {{ committee.committee_name }}</a></li>
-            {% endif %}
+            {% endif %} <!-- if not request.get_full_path = committee_url -->
 
             {% if session.session_statistics == "R" or sesssion.session_statistics == "RC" %}
                 <li><a href="{% url 'statistics:predict' session.pk committee.pk %}">Manage {{ committee.committee_name }}</a></li>
-            {% endif %}
+            {% endif %} <!-- if session.session_statistics == "R" or sesssion.session_statistics == "RC" -->
 
             {% if session.session_statistics = "C" or session.session_statistics = "SF" %}
             <li><a href="{% url 'statistics:content' session.pk committee.pk %}">Submit Point Content as {{ committee.committee_name }}</a></li>
-            {% endif %}
+            {% endif %} <!-- if session.session_statistics = "C" or session.session_statistics = "SF" -->
 
             {% if session.session_statistics = "S" or session.session_statistics = "SF" %}
             <li><a href="{% url 'statistics:point' session.pk committee.pk %}">Submit Statistics as {{ committee.committee_name }}</a></li>
-            {% endif %}
+            {% endif %} <!-- if session.session_statistics = "S" or session.session_statistics = "SF" -->
 
             {% if session.session_statistics = "JF" %}
             <li><a href="{% url 'statistics:joint' session.pk committee.pk %}">Submit as {{ committee.committee_name }}</a></li>
-            {% endif %}
+            {% endif %} <!-- if session.session_statistics = "JF" -->
 
             {% if session.session_voting_enabled %}
             <li><a href="{% url 'statistics:vote' session.pk committee.pk %}">Vote as  {{ committee.committee_name }}</a></li>
-            {% endif %}
+            {% endif %} <!-- session.session_voting_enabled -->
 
           </ul>
         </li>
 
-        {% endif %}
+        {% endif %} <!-- if committee -->
+
+
+        {% if user.is_superuser or user == session.session_admin_user or admin_session %} <!-- The following part should only be visible to the admins of a specific session or superusers-->
 
 
         <li class="dropdown">
@@ -94,7 +98,7 @@
 
                 {% if session.session_statistics == "R" or sesssion.session_statistics == "RC" %}
                     <li><a href="{% url 'statistics:runningorder' session.pk %}">Running Order</a></li>
-                {% endif %}
+                {% endif %} <!-- if session.session_statistics == "R" or sesssion.session_statistics == "RC"  -->
 
             <li><a href="{% url 'statistics:manage' session.pk %}">Debate Management</a></li>
 
@@ -102,7 +106,7 @@
 
               {% if session.session_gender_enabled %}
                   <li><a href="{% url 'statistics:gender' session.pk %}">Track Gender</a></li>
-              {% endif %}
+              {% endif %} <!-- if session.session_gender_enabled -->
 
             <li><a href="{% url 'statistics:edit' session.pk %}">Session Settings</a></li>
 
@@ -114,7 +118,9 @@
 
       </ul>
 
-      {% endif %}
+      {% endif %} <!-- if user.is_superuser or user == session.session_admin_user or admin_session -->
+      {% endif %} <!-- if user.is_superuser or user == session.session_admin_user or user == session.session_submission_user or admin_session -->
+      {% endif %} <!-- if session -->
 
     </div>
     <!--/.navbar-collapse -->
