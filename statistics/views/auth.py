@@ -11,7 +11,7 @@ from ..forms import LoginForm
 from ..models import Session
 
 def ga_login(request):
-# This view is shown, when a user tries to view the submit form, but isn't logged in. After they log in, they'll be taken to /submit/.
+# This view is shown, when a user tries to view any protected page, but isn't logged in. After they log in, they'll be taken to the appropriate place.
     form = LoginForm(request.POST or None)
 
     if form.is_valid():
@@ -41,11 +41,15 @@ def ga_login(request):
                     # If the user is a submission user for a session, send them to their session's page
                     session = Session.objects.get(session_submission_user=request.user)
                     return HttpResponseRedirect(reverse('statistics:session', args = [session.pk]))
+
+                else: # If they didn't have a destionation in the URL and if they have no associated session, then send them to the home page
                     return HttpResponseRedirect(reverse('statistics:home'))
-            else:
+
+            else: # If their account is not active, tell them and let them try to log in using a different account
                 messages.add_message(request, messages.ERROR, 'Your user account is not active. Please contact an administrator.')
                 return HttpResponseRedirect(reverse('statistics:login'))
-        else:
+
+        else: # If the account / password combination does not exist, tell tham and let them try again
             messages.add_message(request, messages.ERROR, 'This username password combination does not exist.')
             return HttpResponseRedirect(reverse('statistics:login'))
 
