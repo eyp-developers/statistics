@@ -458,7 +458,7 @@ def joint(request, session_id, committee_id=None):
             for s in form.cleaned_data['subtopics']:
                 st = SubTopic.objects.filter(pk=s)
                 point.subtopics.add(st[0])
-            messages.add_message(request, messages.SUCCESS, 'Joint Point Successfully Submitted')
+            messages.add_message(request, messages.SUCCESS, 'Point Successfully Submitted')
             return HttpResponseRedirect(reverse('statistics:joint', args=[session_id, committee_id]))
     else:
         if all_form:
@@ -525,7 +525,7 @@ def vote(request, session_id, committee_id=None):
             # Save the vote to the database.
             vote.save()
             # Then send the user a success message.
-            messages.add_message(request, messages.SUCCESS, 'Point Successfully Submitted')
+            messages.add_message(request, messages.SUCCESS, "Your Committee's Votes were successfully submitted")
             return HttpResponseRedirect(reverse('statistics:vote', args=[session_id, committee_id]))
 
     else:
@@ -659,7 +659,7 @@ def predict(request, session_id, committee_id):
                 committee.next_subtopics.add(st)
 
             # Once all that is done, send the user to the thank you page.
-            messages.add_message(request, messages.SUCCESS, 'Point Successfully Predicted')
+            messages.add_message(request, messages.SUCCESS, 'Your Point was successfully sent to the board')
             return HttpResponseRedirect(reverse('statistics:predict', args=[session_id, committee_id]))
 
     else:
