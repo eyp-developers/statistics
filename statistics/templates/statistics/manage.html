@@ -1,7 +1,7 @@
 {% extends 'statistics/base.html' %} {% load staticfiles %} {% block page_title %}Manage: {{ session.session_name }}{% endblock %} {% block content %}
 <h1>Manage {{ session.session_name }}</h1>
 <br>
-<div id="results">
+<div id="results"> <!-- This div is used to inject new information using AJAX -->
 </div>
 <div class="panel panel-primary">
   <div class="panel-heading">
