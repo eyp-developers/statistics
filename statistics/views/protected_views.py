@@ -64,7 +64,6 @@ def edit(request, session_id):
         form = SessionEditForm(request.POST, request.FILES)
         # Check if the created form is a valid form.
         if form.is_valid():
-            print 'is valid'
             # We need to set up time varaibles for the start and end of sessions.
             # We do this by creating date objects and combining the date objects with time midnight
             t_start = form.cleaned_data['start_date']
@@ -154,7 +153,6 @@ def add(request, session_id):
             response_data = {}
             form = CommitteeForm({'pk': pk, 'name': name, 'topic': topic})
             if form.is_valid():
-                print 'Form is valid'
                 committee_exists = False
                 for committee in committees:
                     if committee.pk == form.cleaned_data['pk']:
@@ -179,19 +177,14 @@ def add(request, session_id):
                     else:
                         subtopic_pk = ''
                     for committee_subtopic in committee_subtopics:
-                        print committee_subtopic.pk
-                        print subtopic['pk']
                         if committee_subtopic.pk == subtopic_pk:
-                            print 'subtopic exists'
                             subtopic_exists = True
                             break
                     else:
                         if subtopic['subtopic'] == 'General' and committee_subtopics.filter(subtopic_text='General'):
                             subtopic_exists = True
-                            print 'subtopic exists'
                         else:
                             subtopic_exists = False
-                            print 'subtopic was not there'
 
                     if subtopic_exists:
                         if subtopic['subtopic'] == 'General':
@@ -208,8 +201,6 @@ def add(request, session_id):
                     committee_new_subtopics.append(s)
                     subtopics_pretty_array.append(s.subtopic_text)
 
-                print committee_subtopics
-                print committee_new_subtopics
                 for subtopic in committee_subtopics:
                     if subtopic not in committee_new_subtopics:
                         subtopic.delete()
@@ -223,8 +214,6 @@ def add(request, session_id):
                 )
 
             else:
-                print 'Form not valid'
-                print form.errors
                 response_data['errors'] = form.errors
                 return HttpResponse(
                         json.dumps(response_data),
@@ -289,8 +278,6 @@ def point(request, session_id, committee_id=None):
 
     # If the user is trying to submit data (method=POST), take a look at it
     if request.method == 'POST':
-        # Print what the user is trying to submit for the sake of server logs.
-        print request.POST
 
         # Create an instance of the form and populate it with data from the request.
         form = PointForm(subtopics_array, request.POST)
@@ -358,7 +345,6 @@ def content(request, session_id, committee_id=None):
         committees_array.append((committee.pk, committee.committee_name), )
 
     if request.method == 'POST':
-        print request.POST
 
         form = ContentForm(request.POST)
         if form.is_valid():
@@ -433,7 +419,6 @@ def joint(request, session_id, committee_id=None):
         subtopics_array.append((subtopic.pk, subtopic.subtopic_text), )
 
     if request.method == 'POST':
-        print request.POST
 
         form = JointForm(subtopics_array, request.POST)
         if form.is_valid():
@@ -579,8 +564,6 @@ def manage(request, session_id):
 
     # If the user is trying to submit data
     if request.method == 'POST':
-        # For server log purposes, print response
-        print request.POST
         # if it's an active debate submission
         if 'active_debate' in request.POST:
             # Create an instance of the form and populate it with data from the request.
@@ -595,8 +578,6 @@ def manage(request, session_id):
                 # Send the user to the manage page
                 messages.add_message(request, messages.SUCCESS, 'Active Debate Saved')
                 return HttpResponseRedirect(reverse('statistics:manage', args=[session_id]))
-            else:
-                print debate_form
             # You also have to create an empty/default instance of the "opposite" form, since we've got two on this page.
             round_form = ActiveRoundForm(max_rounds_array, {'session': session.session_name})
         # otherwise if it's an active round submission
@@ -644,8 +625,6 @@ def predict(request, session_id, committee_id):
         subtopics_array.append((subtopic.pk, subtopic.subtopic_text), )
     # If the user is trying to submit data (method=POST), take a look at it
     if request.method == 'POST':
-        # Print what the user is trying to submit for the sake of server logs.
-        print request.POST
 
         # Create an instance of the form and populate it with data from the request.
         form = PredictForm(subtopics_array, request.POST)
@@ -704,8 +683,6 @@ def runningorder(request, session_id):
 
     # If the user is trying to submit data
     if request.method == 'POST':
-        # For server log purposes, print response
-        print request.POST
         # if it's an active debate submission
         if 'active_debate' in request.POST:
             # Create an instance of the form and populate it with data from the request.
@@ -722,8 +699,6 @@ def runningorder(request, session_id):
                 # Send the user to the manage page
                 messages.add_message(request, messages.SUCCESS, 'Active Debate Saved')
                 return HttpResponseRedirect(reverse('statistics:runningorder', args=[session_id]))
-            else:
-                print debate_form
             # You also have to create an empty/default instance of the "opposite" form, since we've got two on this page.
             round_form = ActiveRoundForm(max_rounds_array, {'session': session.session_name})
         # otherwise if it's an active round submission
@@ -760,8 +735,6 @@ def gender(request, session_id):
         committees_array.append((committee.pk, committee.committee_name),)
 
     if request.method == 'POST':
-
-        print(request.POST)
 
         gender_form = GenderForm(committees_array, request.POST)
 
