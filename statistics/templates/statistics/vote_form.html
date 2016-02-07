@@ -7,20 +7,6 @@
 {% block content %}
     <br>
     <br>
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-dismissable alert-success shadow-z-2">
-                <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
-            </div>
-        {% endfor %}
-        <script type="text/javascript">
-            window.setTimeout(function () {
-                $(".alert").fadeTo(500, 0).slideUp(500, function () {
-                    $(this).remove();
-                });
-            }, 5000);
-        </script>
-    {% endif %}
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h1 style="text-align: center">{% if all_form %}Submit Votes{% else %}Voting as
