@@ -449,5 +449,5 @@ User = get_user_model()
 
 class LoginForm(forms.Form):
     # This is the form a user fills out to log in
-    username = forms.CharField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
