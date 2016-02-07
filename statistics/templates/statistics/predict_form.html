@@ -1,20 +1,5 @@
 {% extends 'statistics/base.html' %} {% load staticfiles %} {% block page_title %}Input:
     {{ committee.committee_name }}{% endblock %} {% block content %}
-    {% if messages %}
-        {% for message in messages %}
-            <br>
-            <div class="alert alert-dismissable alert-success shadow-z-2">
-                <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
-            </div>
-        {% endfor %}
-        <script type="text/javascript">
-            window.setTimeout(function () {
-                $(".alert").fadeTo(500, 0).slideUp(500, function () {
-                    $(this).remove();
-                });
-            }, 5000);
-        </script>
-    {% endif %}
     <div id="results">
     </div>
     <h1>What's {{ committee.committee_name }}'s next point on {{ active_debate }} about?</h1>
