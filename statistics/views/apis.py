@@ -1,9 +1,10 @@
 import json
 
+from decimal import Decimal
+
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from time import strftime
-from decimal import *
 
 #Importing all models for statistics.
 from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound, Gender
