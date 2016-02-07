@@ -25,6 +25,8 @@ def ga_login(request):
             if user.is_active:
                 login(request, user)
 
+                messages.add_message(request, messages.SUCCESS, 'You are now logged in successfully.')
+
                 # The next line gets arguments from URLs like this http://stats.eyp.org/login/?next=/overview/9/
                 next = request.GET.get("next")
 
@@ -62,4 +64,5 @@ def ga_logout(request):
     # If the user visits /logout/ he will be logged out.
 
     logout(request)
+    messages.add_message(request, messages.SUCCESS, 'You are now logged out.')
     return HttpResponseRedirect(reverse('statistics:home'))
