@@ -123,7 +123,6 @@ def debate(request, session_id, committee_id):
     s = Session.objects.get(pk=session_id)
     # The statistics_type will let us render different templates based on the statistics selected by the user.
     statistics_type = s.session_statistics
-    print statistics_type
 
     no_stats = True
     # Getting the latest of everything to check if the date of them was today.
@@ -242,9 +241,6 @@ def create_session(request):
 
             # Once we've done all that, lets say thanks for all that hard work.
             return HttpResponseRedirect(reverse('statistics:welcome', args=[session.pk]))
-        else:
-            print 'Wasnt valid'
-            print form.errors
     else:
         # Otherwise, create a nice new form for the user.
         form = SessionForm()
