@@ -94,7 +94,7 @@
           <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Manage {{ session.session_name }} <b class="caret"></b></a>
           <ul class="dropdown-menu">
 
-            <li><a href="{% url 'statistics:welcome' session.pk %}">Management Overview</a></li>
+            <li><a href="{% url 'statistics:overview' session.pk %}">Management Overview</a></li>
 
                 {% if session.session_statistics == "R" or sesssion.session_statistics == "RC" %}
                     <li><a href="{% url 'statistics:runningorder' session.pk %}">Running Order</a></li>
