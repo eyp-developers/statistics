@@ -38,8 +38,6 @@
       </ul>
 
       {% if session %}
-      {% if user.is_superuser or user == session.session_admin_user or user == session.session_submission_user or admin_session %}
-
 
       <ul class="nav navbar-nav navbar-right">
 
@@ -49,6 +47,11 @@
         {% if not request.get_full_path = session_url %}
         <li><a href="{% url 'statistics:session' session.pk %}">Go to {{ session.session_name }}</a></li>
         {% endif %} <!-- if not request.get_full_path = session_url -->
+
+
+      {% if user.is_superuser or user == session.session_admin_user or user == session.session_submission_user or admin_session %}
+
+
 
         {% if committee %}
 
