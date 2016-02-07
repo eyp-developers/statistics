@@ -64,11 +64,11 @@
             <li><a href="{% url 'statistics:debate' session.pk committee.pk %}">Back to {{ committee.committee_name }}</a></li>
             {% endif %} <!-- if not request.get_full_path = committee_url -->
 
-            {% if session.session_statistics == "R" or sesssion.session_statistics == "RC" %}
+            {% if session.session_statistics == "R" or session.session_statistics = "RC" %}
                 <li><a href="{% url 'statistics:predict' session.pk committee.pk %}">Manage {{ committee.committee_name }}</a></li>
             {% endif %} <!-- if session.session_statistics == "R" or sesssion.session_statistics == "RC" -->
 
-            {% if session.session_statistics = "C" or session.session_statistics = "SF" %}
+            {% if session.session_statistics = "C" or session.session_statistics = "SF" or session.session_statistics = "RC" %}
             <li><a href="{% url 'statistics:content' session.pk committee.pk %}">Submit Point Content as {{ committee.committee_name }}</a></li>
             {% endif %} <!-- if session.session_statistics = "C" or session.session_statistics = "SF" -->
 
@@ -99,7 +99,7 @@
 
             <li><a href="{% url 'statistics:welcome' session.pk %}">Management Overview</a></li>
 
-                {% if session.session_statistics == "R" or sesssion.session_statistics == "RC" %}
+                {% if session.session_statistics == "R" or session.session_statistics == "RC" %}
                     <li><a href="{% url 'statistics:runningorder' session.pk %}">Running Order</a></li>
                 {% endif %} <!-- if session.session_statistics == "R" or sesssion.session_statistics == "RC"  -->
 
