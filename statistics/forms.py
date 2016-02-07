@@ -1,93 +1,14 @@
 from django import forms
 
 from django.contrib.auth import get_user_model
+from statistics import countries
 
 class SessionForm(forms.Form):
-
-    #The countries of the session need to be set up in the same way as the model.
-    ALBANIA = 'AL'
-    ARMENIA = 'AM'
-    AUSTRIA = 'AT'
-    AZERBAIJAN = 'AZ'
-    BELARUS = 'BY'
-    BELGIUM = 'BE'
-    BOSNIA_AND_HERZEGOVINA = 'BA'
-    CROATIA = 'HR'
-    CYPRUS = 'CY'
-    CZECH_REPUBLIC = 'CZ'
-    DENMARK = 'DK'
-    ESTONIA = 'EE'
-    FINLAND = 'FI'
-    FRANCE = 'FR'
-    GEORGIA = 'GE'
-    GERMANY = 'DE'
-    GREECE = 'GR'
-    HUNGARY = 'HU'
-    IRELAND = 'IE'
-    ITALY = 'IT'
-    KOSOVO = 'XK'
-    LATVIA = 'LV'
-    LITHUANIA = 'LT'
-    LUXEMBOURG = 'LU'
-    NETHERLANDS = 'NL'
-    NORWAY = 'NO'
-    POLAND = 'PL'
-    PORTUGAL = 'PT'
-    ROMANIA = 'RO'
-    RUSSIA = 'RU'
-    SERBIA = 'RS'
-    SLOVENIA = 'SI'
-    SPAIN = 'ES'
-    SWEDEN = 'SE'
-    SWITZERLAND = 'CH'
-    TURKEY = 'TR'
-    UKRAINE = 'UA'
-    UNITED_KINGDOM = 'GB'
-    SESSION_COUNTRIES = (
-        (ALBANIA, 'Albania'),
-        (ARMENIA, 'Armenia'),
-        (AUSTRIA, 'Austria'),
-        (AZERBAIJAN, 'Azerbaijan'),
-        (BELARUS, 'Belarus'),
-        (BELGIUM, 'Belgium'),
-        (BOSNIA_AND_HERZEGOVINA, 'Bosnia and Herzegovina'),
-        (CROATIA, 'Croatia'),
-        (CYPRUS, 'Cyprus'),
-        (CZECH_REPUBLIC, 'Czech Republic'),
-        (DENMARK, 'Denmark'),
-        (ESTONIA, 'Estonia'),
-        (FINLAND, 'Finland'),
-        (FRANCE, 'France'),
-        (GEORGIA, 'Georgia'),
-        (GERMANY, 'Germany'),
-        (GREECE, 'Greece'),
-        (HUNGARY, 'Hungary'),
-        (IRELAND, 'Ireland'),
-        (ITALY, 'Italy'),
-        (KOSOVO, 'Kosovo'),
-        (LATVIA, 'Latvia'),
-        (LITHUANIA, 'Lithuania'),
-        (LUXEMBOURG, 'Luxembourg'),
-        (NETHERLANDS, 'The Netherlands'),
-        (NORWAY, 'Norway'),
-        (POLAND, 'Poland'),
-        (PORTUGAL, 'Portugal'),
-        (ROMANIA, 'Romania'),
-        (RUSSIA, 'Russia'),
-        (SERBIA, 'Serbia'),
-        (SLOVENIA, 'Slovenia'),
-        (SPAIN, 'Spain'),
-        (SWEDEN, 'Sweden'),
-        (SWITZERLAND, 'Swizerland'),
-        (TURKEY, 'Turkey'),
-        (UKRAINE, 'Ukraine'),
-        (UNITED_KINGDOM, 'The United Kingdom'),
-    )
 
     name = forms.CharField(max_length=100, required=True, help_text='Short Session Name - Preferably Place/Year', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Izmir 2015'}))
     description = forms.CharField(max_length=200, required=True, help_text='Full Session Name', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '78th International Session of the EYP'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'john.smith@eyp.org'}))
-    country = forms.ChoiceField(choices=SESSION_COUNTRIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
+    country = forms.ChoiceField(choices=countries.SESSION_COUNTRIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
     picture = forms.ImageField(required=True, widget=forms.FileInput(attrs={'class': 'form-control'}))
     start_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-17'}))
     end_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-26'}))
@@ -127,90 +48,11 @@ class SessionForm(forms.Form):
     submission_password = forms.CharField(help_text='The password used by chairs/journos/orgas to submit statistics', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 class SessionEditForm(forms.Form):
-        #The countries of the session need to be set up in the same way as the model.
-        ALBANIA = 'AL'
-        ARMENIA = 'AM'
-        AUSTRIA = 'AT'
-        AZERBAIJAN = 'AZ'
-        BELARUS = 'BY'
-        BELGIUM = 'BE'
-        BOSNIA_AND_HERZEGOVINA = 'BA'
-        CROATIA = 'HR'
-        CYPRUS = 'CY'
-        CZECH_REPUBLIC = 'CZ'
-        DENMARK = 'DK'
-        ESTONIA = 'EE'
-        FINLAND = 'FI'
-        FRANCE = 'FR'
-        GEORGIA = 'GE'
-        GERMANY = 'DE'
-        GREECE = 'GR'
-        HUNGARY = 'HU'
-        IRELAND = 'IE'
-        ITALY = 'IT'
-        KOSOVO = 'XK'
-        LATVIA = 'LV'
-        LITHUANIA = 'LT'
-        LUXEMBOURG = 'LU'
-        NETHERLANDS = 'NL'
-        NORWAY = 'NO'
-        POLAND = 'PL'
-        PORTUGAL = 'PT'
-        ROMANIA = 'RO'
-        RUSSIA = 'RU'
-        SERBIA = 'RS'
-        SLOVENIA = 'SI'
-        SPAIN = 'ES'
-        SWEDEN = 'SE'
-        SWITZERLAND = 'CH'
-        TURKEY = 'TR'
-        UKRAINE = 'UA'
-        UNITED_KINGDOM = 'GB'
-        SESSION_COUNTRIES = (
-            (ALBANIA, 'Albania'),
-            (ARMENIA, 'Armenia'),
-            (AUSTRIA, 'Austria'),
-            (AZERBAIJAN, 'Azerbaijan'),
-            (BELARUS, 'Belarus'),
-            (BELGIUM, 'Belgium'),
-            (BOSNIA_AND_HERZEGOVINA, 'Bosnia and Herzegovina'),
-            (CROATIA, 'Croatia'),
-            (CYPRUS, 'Cyprus'),
-            (CZECH_REPUBLIC, 'Czech Republic'),
-            (DENMARK, 'Denmark'),
-            (ESTONIA, 'Estonia'),
-            (FINLAND, 'Finland'),
-            (FRANCE, 'France'),
-            (GEORGIA, 'Georgia'),
-            (GERMANY, 'Germany'),
-            (GREECE, 'Greece'),
-            (HUNGARY, 'Hungary'),
-            (IRELAND, 'Ireland'),
-            (ITALY, 'Italy'),
-            (KOSOVO, 'Kosovo'),
-            (LATVIA, 'Latvia'),
-            (LITHUANIA, 'Lithuania'),
-            (LUXEMBOURG, 'Luxembourg'),
-            (NETHERLANDS, 'The Netherlands'),
-            (NORWAY, 'Norway'),
-            (POLAND, 'Poland'),
-            (PORTUGAL, 'Portugal'),
-            (ROMANIA, 'Romania'),
-            (RUSSIA, 'Russia'),
-            (SERBIA, 'Serbia'),
-            (SLOVENIA, 'Slovenia'),
-            (SPAIN, 'Spain'),
-            (SWEDEN, 'Sweden'),
-            (SWITZERLAND, 'Swizerland'),
-            (TURKEY, 'Turkey'),
-            (UKRAINE, 'Ukraine'),
-            (UNITED_KINGDOM, 'The United Kingdom'),
-        )
 
         name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
         description = forms.CharField(max_length=200, required=True, widget=forms.TextInput(attrs=({'class': 'form-control'})))
         email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
-        country = forms.ChoiceField(choices=SESSION_COUNTRIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
+        country = forms.ChoiceField(choices=countries.SESSION_COUNTRIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
         picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
         start_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control'}))
         end_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control'}))
