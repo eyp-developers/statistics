@@ -241,7 +241,7 @@ def create_session(request):
             active_round.save()
 
             # Once we've done all that, lets say thanks for all that hard work.
-            return HttpResponseRedirect(reverse('statistics:welcome', args=[session.pk]))
+            return HttpResponseRedirect(reverse('statistics:overview', args=[session.pk]))
         else:
             print 'Wasnt valid'
             print form.errors
