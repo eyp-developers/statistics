@@ -52,8 +52,8 @@ def session_api(request, session_id):
         total_points = all_points.count()
         type_point = points.count()
         type_dr = drs.count()
-        first_point = all_points[0].timestamp
-        latest_point = all_points.reverse()[0].timestamp
+        first_point = all_points.first().timestamp
+        latest_point = all_points.last().timestamp
         time_diff = latest_point - first_point
         minutes = (time_diff.days * 1440) + (time_diff.seconds / 60)
         if total_points > 0:
@@ -568,7 +568,6 @@ def data_api(request, session_id):
     point_to = int(request.GET.get('offset')) + int(request.GET.get('count'))
     #First we need all datapoints from that session
     json_datatype = str(request.GET.get('data_type'))
-    print json_datatype
     if json_datatype == 'content':
         data = ContentPoint.objects.filter(session_id=session_id).order_by('-pk')[point_from:point_to]
         #We also need to count the amount of data points for the total
@@ -723,7 +722,7 @@ def data_latest_api(request, session_id):
 
 def data_pk_api(request):
     if request.method == 'POST':
-        #If the user is trying to save/delete a peice of data.
+        #If the user is trying to save/delete a piece of data.
         if request.POST.get('delete') == 'true':
             json_datatype = str(request.POST.get('data-type'))
             form = DeleteDataForm({'pk': int(request.POST.get('pk'))})
@@ -793,7 +792,6 @@ def data_pk_api(request):
                     form = PointEditForm({'pk': pk, 'session': session, 'committee': committee, 'debate': debate, 'round_no': round_no, 'point_type': point_type})
 
                     if form.is_valid():
-                        print 'is valid!'
                         #If the form is valid, get the Point and update it with our values.
                         p = Point.objects.get(pk=form.cleaned_data['pk'])
 
