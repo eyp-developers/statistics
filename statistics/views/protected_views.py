@@ -49,7 +49,7 @@ def welcome(request, session_id):
     committees = Committee.objects.filter(session=session).order_by('committee_name')
     context = {'session': session, 'committees': committees}
 
-    return check_authorization_and_render(request, 'statistics/welcome.html', context, session)
+    return check_authorization_and_render(request, 'statistics/overview.html', context, session)
 
 
 #################
