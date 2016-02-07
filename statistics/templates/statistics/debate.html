@@ -7,8 +7,8 @@
 {% block content %}
   </div>
   <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.session_picture.url }}') no-repeat center/cover;">
-    <h1 class="session-name">Debate: {{ committee.committee_name }}</h1>
-    <h3><a class="btn btn-raised btn-primary btn-lg" href="{% url 'statistics:session' session.pk %}">Back to {{ session.session_name }}</a></h3>
+    <h1 style="text-align: center; font-size: 60px; color: white;">{{ committee.committee_name }}</h1>
+    <h3 style="text-align: center; color: white;">{{ committee.committee_topic }}</h3>
   </div>
   {% if no_stats %}
       <div class="alert alert-primary text-center">
@@ -17,12 +17,7 @@
         </p>
       </div>
   {% endif %}
-  <div class="container">
-    <h1 style="text-align: center; font-size: 60px;">{{ committee.committee_name }}</h1>
-    <h3 style="text-align: center;">{{ committee.committee_topic }}</h3>
-    <br>
-  </div>
-
+  <br>
   {% block statistics %}
 
   {% endblock %}
