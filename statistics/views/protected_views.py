@@ -42,9 +42,8 @@ def check_authorization_and_render(request, template, context, session, admin_on
 
 #################
 
-# This view should be renamed to overview in accordance to what the user sees
 @login_required(login_url='/login/')
-def welcome(request, session_id):
+def overview(request, session_id):
     session = Session.objects.get(pk=session_id)
     committees = Committee.objects.filter(session=session).order_by('committee_name')
     context = {'session': session, 'committees': committees}
