@@ -34,19 +34,21 @@
     <div class="container">
 
       {% if messages %}
-        <br>
-        {% for message in messages %}
-          <div class="alert alert-dismissable alert-success shadow-z-2">
-            <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
-          </div>
-        {% endfor %}
-        <script type="text/javascript">
-            window.setTimeout(function () {
-                $(".alert").fadeTo(500, 0).slideUp(500, function () {
-                    $(this).remove();
-                });
-            }, 5000);
-        </script>
+        <div class="message">
+          <br>
+          {% for message in messages %}
+            <div class="alert alert-dismissable alert-success shadow-z-2">
+              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            </div>
+          {% endfor %}
+          <script type="text/javascript">
+              window.setTimeout(function () {
+                  $(".message").fadeTo(500, 0).slideUp(500, function () {
+                      $(this).remove();
+                  });
+              }, 5000);
+          </script>
+        </div> <!-- /message -->
       {% endif %}
 
 
