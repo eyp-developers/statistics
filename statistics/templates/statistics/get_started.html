@@ -97,6 +97,37 @@
                         <br>
                         <b>TLDR; Short summaries of each point</b>
                     </p>
+                    <h3>Running Order Statistics (with or without point content)</h3>
+                    <div style="text-align: center">
+                        <img src="{% static "statistics/images/runningorder.png"%}" alt="Statistics Types" style="max-width: 600px;">
+                        <br>
+                        <i>Running Order Statistics</i>
+                    </div>
+                    <p>
+                        Different to normal Statistics, where chairs notify GA Statistics once they have made a point, telling the platform which
+                        subtopics the point was on and what the point was about, Running Order Statistics gets chairs to <i>tell the board</i> what
+                        their next point will be about <i>in advance</i>. The board uses this information to decide the running order of the GA. Perhaps three points
+                        should be taken regarding asylum seekers before returning to the proposing committee? The running order is publicly
+                        displayed on the committee page, notifying the GA which committees will be speaking next. Once the board recognises a committee,
+                        the point is saved using the subtopic the chair predicted.
+                    </p>
+                    <p>
+                        All <i>Direct Responses</i> are automatically placed first in the queue, and the subtopic is automatically
+                        assigned to that of the last recognised point.
+
+                        If a chair at any point in time predicts the wrong subtopic - or the delegate changes his mind and speaks
+                        about something different, each chair can edit the subtopics of all points they submitted on the
+                        same page they use to <i>predict</i> the next subtopic.
+                    </p>
+                    <p>
+
+                        <b>A note on Running Order Statistics</b><br>
+                        We think that running order statistics are the most efficient use of GA statistics as it can significantly
+                        increase the quality of GA, however, at the time of writing — Running Order Statistics are fairly new
+                        and as such have not been tested as much as the other statistics types — there may be small bugs
+                        particularly concerning the running order page itself. These are usually fixed by refreshing the browser window,
+                        but errors can crop up. Please <i>report</i> bugs if you should find any!
+                    </p>
                     <h3>Voting</h3>
                     <p>
                         The voting module does exactly what it says on the tin - it allows digital voting. Digital voting is good for a few reasons, the maths is never wrong, voting is more
@@ -141,37 +172,6 @@
                     <p>Allows whoever is submitting data to GA Statistics to submit both Statistics and Point Content from one form.</p>
                     <h5>Split Form Statistics</h5>
                     <p>Both the Statistics and Point Content module will be activated - but each statistics type will be submitted from different forms.</p>
-                    <h3>Running Order Statistics (with or without point content)</h3>
-                    <div style="text-align: center">
-                        <img src="{% static "statistics/images/runningorder.png"%}" alt="Statistics Types" style="max-width: 600px;">
-                        <br>
-                        <i>Running Order Statistics</i>
-                    </div>
-                    <p>
-                        Different to normal Statistics, where chairs notify GA Statistics once they have made a point, telling the platform which
-                        subtopics the point was on and what the point was about, Running Order Statistics gets chairs to <i>tell the board</i> what
-                        their next point will be about <i>in advance</i>. The board uses this information to decide the running order of the GA. Perhaps three points
-                        should be taken regarding asylum seekers before returning to the proposing committee? The running order is publicly
-                        displayed on the committee page, notifying the GA which committees will be speaking next. Once the board recognises a committee,
-                        the point is saved using the subtopic the chair predicted.
-                    </p>
-                    <p>
-                        All <i>Direct Responses</i> are automatically placed first in the queue, and the subtopic is automatically
-                        assigned to that of the last recognised point.
-
-                        If a chair at any point in time predicts the wrong subtopic - or the delegate changes his mind and speaks
-                        about something different, each chair can edit the subtopics of all points they submitted on the
-                        same page they use to <i>predict</i> the next subtopic.
-                    </p>
-                    <p>
-
-                        <b>A note on Running Order Statistics</b><br>
-                        We think that running order statistics are the most efficient use of GA statistics as it can significantly
-                        increase the quality of GA, however, at the time of writing — Running Order Statistics are fairly new
-                        and as such have not been tested as much as the other statistics types — there may be small bugs
-                        particularly concerning the running order page itself. These are usually fixed by refreshing the browser window,
-                        but errors can crop up. Please <i>report</i> bugs if you should find any!
-                    </p>
 
 
                 </div>
