@@ -229,9 +229,9 @@ def create_session(request):
                               session_is_visible=False, # When created, all sessions are initially hidden from the front page.
                               session_voting_enabled=voting,
                               session_gender_enabled=gender,
-                              #gender_number_female=form.cleaned_data['number_female_participants'],
-                              #gender_number_male=form.cleaned_data['number_male_participants'],
-                              #gender_number_other=form.cleaned_data['number_other_participants'],
+                              gender_number_female=form.cleaned_data['number_female_participants'],
+                              gender_number_male=form.cleaned_data['number_male_participants'],
+                              gender_number_other=form.cleaned_data['number_other_participants'],
                               session_max_rounds=form.cleaned_data['max_rounds'],
                               session_admin_user=admin_user,
                               session_submission_user=submit_user,
