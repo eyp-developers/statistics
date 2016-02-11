@@ -9,7 +9,6 @@ BOSNIA_AND_HERZEGOVINA = 'BA'
 CROATIA = 'HR'
 CYPRUS = 'CY'
 CZECH_REPUBLIC = 'CZ'
-DENMARK = 'DK'
 ESTONIA = 'EE'
 FINLAND = 'FI'
 FRANCE = 'FR'
@@ -31,6 +30,7 @@ ROMANIA = 'RO'
 RUSSIA = 'RU'
 SERBIA = 'RS'
 SLOVENIA = 'SI'
+SLOVAKIA = 'SK'
 SPAIN = 'ES'
 SWEDEN = 'SE'
 SWITZERLAND = 'CH'
@@ -48,7 +48,6 @@ SESSION_COUNTRIES = (
     (CROATIA, 'Croatia'),
     (CYPRUS, 'Cyprus'),
     (CZECH_REPUBLIC, 'Czech Republic'),
-    (DENMARK, 'Denmark'),
     (ESTONIA, 'Estonia'),
     (FINLAND, 'Finland'),
     (FRANCE, 'France'),
@@ -70,6 +69,7 @@ SESSION_COUNTRIES = (
     (RUSSIA, 'Russia'),
     (SERBIA, 'Serbia'),
     (SLOVENIA, 'Slovenia'),
+    (SLOVAKIA, 'Slovakia'),
     (SPAIN, 'Spain'),
     (SWEDEN, 'Sweden'),
     (SWITZERLAND, 'Switzerland'),
