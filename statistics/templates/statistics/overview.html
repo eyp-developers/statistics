@@ -18,7 +18,7 @@
     {% if not session.session_is_visible %}
         <div class="alert alert-dismissable alert-warning">
             <button type="button" class="close" data-dismiss="alert">×</button>
-            Your session isn't visible to the public yet, when you're ready to activate it, do so here: <a href="{% url 'statistics:edit' session.pk %}">{% url 'statistics:edit' session.pk %}</a>
+            Your session isn't visible to the public yet. After you have added all your committees, change the visibility setting here: <a href="{% url 'statistics:edit' session.pk %}">{% url 'statistics:edit' session.pk %}</a>
         </div>
     {% endif %}
     <div class="alert alert-dismissable alert-info">
