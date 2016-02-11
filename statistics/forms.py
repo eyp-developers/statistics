@@ -40,9 +40,9 @@ class SessionForm(forms.Form):
     voting_enabled = forms.CharField(max_length=5, required=True, help_text='Enables digital voting for your session', widget=forms.CheckboxInput(attrs={'checked': ''}))
     gender_statistics = forms.CharField(max_length=5, required=True, help_text='Lets you track the gender equality of your GA', widget=forms.CheckboxInput(attrs={'checked': ''}))
 
-    #number_female_participants = forms.IntegerField(min_value=0, required=False, help_text='If you are tracking the gender equality of your session, please add this value. You can also do this later. Only count Delegates.', widget=forms.NumberInput(attrs={'class': 'form-control'}))
-    #number_male_participants = forms.IntegerField(min_value=0, required=False, help_text='If you are tracking the gender equality of your session, please add this value. You can also do this later. Only count Delegates.', widget=forms.NumberInput(attrs={'class': 'form-control'}))
-    #number_other_participants = forms.IntegerField(min_value=0, required=False, help_text='If you are tracking the gender equality of your session, please add this value. You can also do this later. Only count Delegates.', widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    number_female_participants = forms.IntegerField(min_value=0, required=False, help_text='If you are tracking the gender equality of your session, please add this value. You can also do this later. Only count Delegates.', widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    number_male_participants = forms.IntegerField(min_value=0, required=False, help_text='If you are tracking the gender equality of your session, please add this value. You can also do this later. Only count Delegates.', widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    number_other_participants = forms.IntegerField(min_value=0, required=False, help_text='If you are tracking the gender equality of your session, please add this value. You can also do this later. Only count Delegates.', widget=forms.NumberInput(attrs={'class': 'form-control'}))
 
     max_rounds = forms.IntegerField(min_value=1, max_value=10, help_text='The maximum number of rounds of open debate during your GA', widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '4'}))
 
