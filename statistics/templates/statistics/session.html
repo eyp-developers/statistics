@@ -6,8 +6,9 @@
 
 {% block jumbotron %}
     <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.session_picture.url }}') no-repeat center/cover;">
-        <h1 class="session-name">{{ session.session_name }}</h1>
-        <h3 class="session-description">{{ session.session_description }}</h3>
+        <h1 class="session-name white">{{ session.session_name }}</h1>
+        <h3 class="session-description white">{{ session.session_description }}</h3>
+        <h3 class="session-date white">{{ session.session_start_date|date:"D, j N Y" }} – {{ session.session_end_date|date:"D, j N Y" }}</h3>
 
         {% if session.session_website_link or session.session_resolution_link or session.session_facebook_link or session.session_twitter_link %}
 
