@@ -13,9 +13,9 @@ class SessionForm(forms.Form):
     start_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-17'}))
     end_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-26'}))
 
-    website = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional..'}))
-    facebook = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional..'}))
-    twitter = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional..'}))
+    website = forms.URLField(required=False, help_text="Please add your NC's website if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
+    facebook = forms.URLField(required=False, help_text="Please add your NC's Facebook page if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
+    twitter = forms.URLField(required=False, help_text="Please add your NC's Twitter account if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
 
     #Setting up statistic types
     STATISTICS = 'S'
@@ -57,10 +57,10 @@ class SessionEditForm(forms.Form):
         start_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control'}))
         end_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control'}))
 
-        website = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional..'}))
-        facebook = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional..'}))
-        twitter = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional..'}))
-        resolution = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional..'}))
+        website = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
+        facebook = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
+        twitter = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
+        resolution = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
 
         #Setting up statistic types
         STATISTICS = 'S'
@@ -287,7 +287,7 @@ class ActiveRoundForm(forms.Form):
 class DeleteDataForm(forms.Form):
     pk = forms.IntegerField(min_value=0, required=True)
 
-User = get_user_model()
+User = get_user_model() # This belongs to the Login Form
 
 class LoginForm(forms.Form):
     # This is the form a user fills out to log in
