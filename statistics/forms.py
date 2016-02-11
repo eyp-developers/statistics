@@ -10,8 +10,8 @@ class SessionForm(forms.Form):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'john.smith@eyp.org'}))
     country = forms.ChoiceField(choices=countries.SESSION_COUNTRIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
     picture = forms.ImageField(required=True, widget=forms.FileInput(attrs={'class': 'form-control'}))
-    start_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-17'}))
-    end_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-26'}))
+    start_date = forms.DateField(required=True, help_text="This is the first day for Delegates.", widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-17'}))
+    end_date = forms.DateField(required=True, help_text="This is the last day for Delegates.", widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-26'}))
 
     website = forms.URLField(required=False, help_text="Please add your NC's website if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
     facebook = forms.URLField(required=False, help_text="Please add your NC's Facebook page if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
@@ -45,7 +45,7 @@ class SessionForm(forms.Form):
     #color = forms.CharField(max_length=20, required=True)
 
     admin_password = forms.CharField(help_text='The password used to alter session settings and manage GA Stats', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    submission_password = forms.CharField(help_text='The password used by chairs/journos/orgas to submit statistics', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    submission_password = forms.CharField(help_text='The password used by Chairs, Journalists or Organisers to submit statistics', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 class SessionEditForm(forms.Form):
 
