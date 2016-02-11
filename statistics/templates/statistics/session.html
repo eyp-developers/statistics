@@ -32,7 +32,7 @@
                 </div>
             </div>
 
-        {% endif %}
+        {% endif %} <!-- if session.session_website_link or session.session_resolution_link or session.session_facebook_link or session.session_twitter_link -->
 
     </div>
 
@@ -42,7 +42,7 @@
                 Please note that this session experienced technical difficulties during the GA. As a result some data might be incomplete.
             </p>
         </div>
-    {% endif %}
+    {% endif %} <!-- if technical problems  -->
 
     {% if no_stats %}
         <div class="alert alert-primary text-center">
