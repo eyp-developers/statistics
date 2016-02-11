@@ -16,6 +16,7 @@ class SessionForm(forms.Form):
     website = forms.URLField(required=False, help_text="Please add your NC's website if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
     facebook = forms.URLField(required=False, help_text="Please add your NC's Facebook page if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
     twitter = forms.URLField(required=False, help_text="Please add your NC's Twitter account if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
+    resolution = forms.URLField(required=False, help_text="Please add a link to an online version of your resolution booklet as soon as you can.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
 
     #Setting up statistic types
     STATISTICS = 'S'
@@ -39,6 +40,10 @@ class SessionForm(forms.Form):
     voting_enabled = forms.CharField(max_length=5, required=True, help_text='Enables digital voting for your session', widget=forms.CheckboxInput(attrs={'checked': ''}))
     gender_statistics = forms.CharField(max_length=5, required=True, help_text='Lets you track the gender equality of your GA', widget=forms.CheckboxInput(attrs={'checked': ''}))
 
+    number_female_participants = forms.IntegerField(min_value=0, required=False, help_text='If you are tracking the gender equality of your session, please add this value. You can also do this later. Only count Delegates.', widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    number_male_participants = forms.IntegerField(min_value=0, required=False, help_text='If you are tracking the gender equality of your session, please add this value. You can also do this later. Only count Delegates.', widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    number_other_participants = forms.IntegerField(min_value=0, required=False, help_text='If you are tracking the gender equality of your session, please add this value. You can also do this later. Only count Delegates.', widget=forms.NumberInput(attrs={'class': 'form-control'}))
+
     max_rounds = forms.IntegerField(min_value=1, max_value=10, help_text='The maximum number of rounds of open debate during your GA', widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '4'}))
 
     #Was used to chose the session color - no longer used as everything is blue.
@@ -54,13 +59,13 @@ class SessionEditForm(forms.Form):
         email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
         country = forms.ChoiceField(choices=countries.SESSION_COUNTRIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
         picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
-        start_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control'}))
-        end_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control'}))
+        start_date = forms.DateField(required=True, help_text="This is the first day for Delegates.", widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-17'}))
+        end_date = forms.DateField(required=True, help_text="This is the last day for Delegates.", widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-26'}))
 
-        website = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
-        facebook = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
-        twitter = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
-        resolution = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
+        website = forms.URLField(required=False, help_text="Please add your NC's website if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
+        facebook = forms.URLField(required=False, help_text="Please add your NC's Facebook page if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
+        twitter = forms.URLField(required=False, help_text="Please add your NC's Twitter account if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
+        resolution = forms.URLField(required=False, help_text="Please add a link to an online version of your resolution booklet as soon as you can.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
 
         #Setting up statistic types
         STATISTICS = 'S'
@@ -84,9 +89,9 @@ class SessionEditForm(forms.Form):
         voting_enabled = forms.CharField(max_length=5, required=False, widget=forms.CheckboxInput())
         gender_statistics = forms.CharField(max_length=5, required=False, widget=forms.CheckboxInput())
 
-        number_female_participants = forms.IntegerField(min_value=0, required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
-        number_male_participants = forms.IntegerField(min_value=0, required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
-        number_other_participants = forms.IntegerField(min_value=0, required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+        number_female_participants = forms.IntegerField(min_value=0, required=False, help_text='If you are tracking the gender equality of your session, please add this value. You can also do this later. Only count Delegates.', widget=forms.NumberInput(attrs={'class': 'form-control'}))
+        number_male_participants = forms.IntegerField(min_value=0, required=False, help_text='If you are tracking the gender equality of your session, please add this value. You can also do this later. Only count Delegates.', widget=forms.NumberInput(attrs={'class': 'form-control'}))
+        number_other_participants = forms.IntegerField(min_value=0, required=False, help_text='If you are tracking the gender equality of your session, please add this value. You can also do this later. Only count Delegates.', widget=forms.NumberInput(attrs={'class': 'form-control'}))
 
 
         max_rounds = forms.IntegerField(min_value=1, max_value=10, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '4'}))
