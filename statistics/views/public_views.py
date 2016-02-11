@@ -226,7 +226,7 @@ def create_session(request):
                               session_end_date=end_date,
                               session_statistics=form.cleaned_data['statistics'],
                               session_color="indigo",
-                              session_is_visible=False,
+                              session_is_visible=False, # When created, all sessions are initially hidden from the front page.
                               session_voting_enabled=voting,
                               session_gender_enabled=gender,
                               #gender_number_female=form.cleaned_data['number_female_participants'],
