@@ -239,7 +239,7 @@ def create_session(request):
             active_round = ActiveRound(session=session, active_round=1)
             active_round.save()
 
-            # Once we've done all that, lets say thanks for all that hard work.
+            # Once we've done all that, lets say thanks for all that hard work and redirect the user to the new session.
             return HttpResponseRedirect(reverse('statistics:overview', args=[session.pk]))
     else:
         # Otherwise, create a nice new form for the user.
