@@ -26,14 +26,21 @@
 
     </head>
     <body>
-        <!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+
 
         {% include "statistics/navbar.html" %}
 
         {% block jumbotron %}
         {% endblock %}
+
+        <!--[if lt IE 8]>
+          <div class="container">
+            <div class="alert alert-dismissable alert-danger shadow-z-2">
+              <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+            </div>
+          </div>
+        <![endif]-->
+
 
     <div class="container">
 
