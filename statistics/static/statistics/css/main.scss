@@ -59,12 +59,15 @@ h1, h2, h3, h4, h5, h6, p, a, li, ul {
 
 .session-name {
   font-size: 60px;
-  color: white;
   text-decoration: none;
 }
 
-.session-description {
+.white {
   color: white;
+}
+
+.session-date {
+  margin-top: 0px;
 }
 
 .content-div {
