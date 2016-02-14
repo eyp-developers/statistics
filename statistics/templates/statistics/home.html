@@ -41,12 +41,10 @@
 
     <div class="container row">
         {% if latest_sessions_list.has_previous %}
-          <a class="btn btn-primary btn-raised col-sm-4" href="?page={{ latest_sessions_list.previous_page_number }}">Previous Page</a>
-        {% else %}
-        <a class="btn btn-primary btn-raised col-sm-4 disabled" href="#">Previous Page</a>
+          <a class="btn btn-primary btn-raised col-sm-4" href="?page={{ latest_sessions_list.previous_page_number }}">More recent events</a>
         {% endif %}
         {% if latest_sessions_list.has_next %}
-          <a class="btn btn-primary btn-raised col-sm-4 pull-right" href="?page={{ latest_sessions_list.next_page_number }}">Next Page</a>
+          <a class="btn btn-primary btn-raised col-sm-4 pull-right" href="?page={{ latest_sessions_list.next_page_number }}">Older events</a>
         {% endif %}
     </div>
 

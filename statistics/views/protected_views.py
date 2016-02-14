@@ -115,6 +115,9 @@ def edit(request, session_id):
                                 'statistics': s.session_statistics,
                                 'voting_enabled': s.session_voting_enabled,
                                 'gender_statistics': s.session_gender_enabled,
+                                'number_female_participants': s.gender_number_female,
+                                'number_male_participants': s.gender_number_male,
+                                'number_other_participants': s.gender_number_other,
                                 'max_rounds': s.session_max_rounds,
                                 'is_visible': s.session_is_visible,
                                 'technical_problems': s.session_has_technical_problems})
