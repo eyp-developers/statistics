@@ -6,7 +6,7 @@ Welcome! We aim to provide a GA Statistics platform, which can be used on any gi
 
 ***
 ### [View all screenshots here](http://imgur.com/a/uPiFy#0)
-![example image ga_statistics](http://i.imgur.com/JvM1uju.jpg "Example Image ga_statistics")
+![example image ga_statistics](http://i.imgur.com/miZNlu5.jpg "Example Image ga_statistics")
 
 ***
 

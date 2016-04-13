@@ -25,7 +25,7 @@ def ga_login(request):
             if user.is_active:
                 login(request, user)
 
-                messages.add_message(request, messages.SUCCESS, 'You are now logged in successfully.')
+                messages.add_message(request, messages.SUCCESS, 'Welcome ' + user.username + ', you have been logged in.')
 
                 # The next line gets arguments from URLs like this http://stats.eyp.org/login/?next=/overview/9/
                 next = request.GET.get("next")
