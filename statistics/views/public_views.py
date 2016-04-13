@@ -13,6 +13,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib import messages
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 # Importing all models for statistics.
 from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
@@ -251,3 +253,11 @@ def create_session(request):
 
     context = {'form': form}
     return render(request, 'statistics/session_create.html', context)
+
+
+def handler404(request):
+    return render(request, 'statistics/404.html')
+
+
+def handler500(request):
+    return render(request, 'statistics/404.html')

@@ -20,3 +20,6 @@ urlpatterns = [
     url(r'^', include('statistics.urls', namespace="statistics")),
     url(r'^admin/', include(admin.site.urls)),
 ]
+
+handler404 = 'statistics.views.public_views.handler404'
+handler500 = 'statistics.views.public_views.handler500'
