@@ -27,7 +27,7 @@ class SessionAdmin(admin.ModelAdmin):
     inlines = [CommitteeInline]
 
     #What fields should be shown when the sessinons are displayed in a list
-    list_display = ('session_name', 'session_country', 'session_start_date', 'session_end_date', 'session_ongoing', 'session_statistics', 'session_admin_user', 'session_submission_user')
+    list_display = ('session_name', 'session_country', 'session_start_date', 'session_end_date', 'session_is_visible', 'session_ongoing', 'session_statistics', 'session_admin_user', 'session_submission_user')
 
     #How the list should be sorted, here by session start date
     list_filter = ['session_start_date']
