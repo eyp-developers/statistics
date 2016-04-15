@@ -85,6 +85,8 @@
                             <th>Content Form URL</th>
                         {% elif session.session_statistics == 'S' %}
                             <th>Statistics Form URL</th>
+                        {% elif session.session_statistics == 'R' or session.session_statistics == 'RC' %}
+                            <th>Running Order URL</th>
                         {% endif %}
                         {% if session.session_voting_enabled %}
                             <th>Voting URL<th>
@@ -106,6 +108,8 @@
                                 <td><a href="{% url 'statistics:content' session.pk committee.pk %}">{% url 'statistics:content' session.pk committee.pk %}</a></td>
                             {% elif session.session_statistics == 'S' %}
                                 <td><a href="{% url 'statistics:point' session.pk committee.pk %}">{% url 'statistics:point' session.pk committee.pk %}</a></td>
+                            {% elif session.session_statistics == 'R' or session.session_statistics == 'RC' %}
+                                <td><a href="{% url 'statistics:predict' session.pk committee.pk %}">{% url 'statistics:predict' session.pk committee.pk %}</a></td>
                             {% endif %}
                             {% if session.session_voting_enabled %}
                                 <td><a href="{% url 'statistics:vote' session.pk committee.pk %}">{% url 'statistics:vote' session.pk committee.pk %}</a><td>
