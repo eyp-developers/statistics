@@ -218,6 +218,7 @@ def create_session(request):
             # We also need to create 2 new users for the session.
             session = Session(session_name=form.cleaned_data['name'],
                               session_description=form.cleaned_data['description'],
+                              session_type=form.cleaned_data['type'],
                               session_email=form.cleaned_data['email'],
                               session_website_link=form.cleaned_data['website'],
                               session_facebook_link=form.cleaned_data['facebook'],
@@ -253,6 +254,13 @@ def create_session(request):
 
     context = {'form': form}
     return render(request, 'statistics/session_create.html', context)
+
+def high_scores(request):
+
+    for session in Session.objects.all():
+        pass
+
+    return render(request, 'statistics/high_scores.html')
 
 
 def handler404(request):

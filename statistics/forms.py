@@ -1,12 +1,13 @@
 from django import forms
 
 from django.contrib.auth import get_user_model
-from statistics import countries
+from statistics import countries, session_types
 
 class SessionForm(forms.Form):
 
     name = forms.CharField(max_length=100, required=True, help_text='Short Session Name - Preferably Place/Year', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Izmir 2015'}))
     description = forms.CharField(max_length=200, required=True, help_text='Full Session Name', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '78th International Session of the EYP'}))
+    type = forms.ChoiceField(choices=session_types.SESSION_TYPES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'john.smith@eyp.org'}))
     country = forms.ChoiceField(choices=countries.SESSION_COUNTRIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
     picture = forms.ImageField(required=True, widget=forms.FileInput(attrs={'class': 'form-control'}))
@@ -56,6 +57,7 @@ class SessionEditForm(forms.Form):
 
         name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
         description = forms.CharField(max_length=200, required=True, widget=forms.TextInput(attrs=({'class': 'form-control'})))
+        type = forms.ChoiceField(choices=session_types.SESSION_TYPES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
         email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
         country = forms.ChoiceField(choices=countries.SESSION_COUNTRIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
         picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))

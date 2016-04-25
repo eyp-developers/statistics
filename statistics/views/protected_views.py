@@ -72,6 +72,7 @@ def edit(request, session_id):
 
             s.session_name = form.cleaned_data['name']
             s.session_description = form.cleaned_data['description']
+            s.session_type = form.cleaned_data['type']
             if form.cleaned_data['picture'] is not None:
                 s.session_picture = form.cleaned_data['picture']
             s.session_resolution_link = form.cleaned_data['resolution']
@@ -103,6 +104,7 @@ def edit(request, session_id):
     else:
         form = SessionEditForm({'name': s.session_name,
                                 'description': s.session_description,
+                                'type': s.session_type,
                                 'email': s.session_email,
                                 'country': s.session_country,
                                 'picture': s.session_picture.url,
