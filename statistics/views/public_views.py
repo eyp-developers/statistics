@@ -326,7 +326,7 @@ def high_scores(request):
     five_most_drs_in_debate = sorted(most_drs_in_debate.items(), key=operator.itemgetter(1), reverse=True)[:5]
     five_most_successful = sorted(most_successful.items(), key=operator.itemgetter(1), reverse=True)[:5]
     five_most_unsuccessful = sorted(most_unsuccessful.items(), key=operator.itemgetter(1), reverse=True)[:5]
-    five_best_mpp = sorted(best_mpp.items(), key=operator.itemgetter(1), reverse=True)[:5]
+    five_best_mpp = sorted(best_mpp.items(), key=operator.itemgetter(1))[:5]
 
     context = {'top_voters': five_most_votes,
                'top_in_favour': five_most_in_favour,
