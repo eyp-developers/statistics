@@ -2,7 +2,7 @@ import datetime
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-from statistics import countries
+from statistics import countries, session_types
 
 class Session(models.Model):
     #Name of the session, eg. Izmir 2015
@@ -11,7 +11,10 @@ class Session(models.Model):
     #Description of the session, eg. The 78th International Session of the European Youth Parliament
     session_description = models.CharField(max_length=200)
 
-    #Session Picture, currently a URL that links to a picture, can be taken from facebook, imgur etc. Should be changed to a file upload in future.
+    #Session size
+    session_type = models.CharField(max_length=3, choices=session_types.SESSION_TYPES, default=session_types.REGIONAL_SESSION)
+
+    #Session Picture, uploading an image to the stats platform.
     session_picture = models.ImageField(upload_to='session_pictures/')
 
     #We want a contact email so we can send friendly emails to people.

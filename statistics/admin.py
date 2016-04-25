@@ -16,7 +16,7 @@ class SubTopicInline(admin.TabularInline):
 class SessionAdmin(admin.ModelAdmin):
     #The feild set groups for the "Create Session" page, shows groups of data for easy session creation
     fieldsets = [
-        (None,                  {'fields': ['session_name', 'session_description', 'session_country', 'session_picture', 'session_admin_user', 'session_submission_user', 'session_email', 'session_website_link', 'session_resolution_link', 'session_facebook_link', 'session_twitter_link']}),
+        (None,                  {'fields': ['session_name', 'session_description', 'session_type', 'session_country', 'session_picture', 'session_admin_user', 'session_submission_user', 'session_email', 'session_website_link', 'session_resolution_link', 'session_facebook_link', 'session_twitter_link']}),
         ('Date information',    {'fields': ['session_start_date', 'session_end_date']}),
         ('Session Settings',    {'fields': ['session_is_visible', 'session_statistics', 'session_max_rounds', 'session_voting_enabled', 'session_color', 'session_has_technical_problems']}),
         ('Gender Settings',     {'fields': ['session_gender_enabled', 'gender_number_female', 'gender_number_male', 'gender_number_other']})
@@ -27,7 +27,7 @@ class SessionAdmin(admin.ModelAdmin):
     inlines = [CommitteeInline]
 
     #What fields should be shown when the sessinons are displayed in a list
-    list_display = ('session_name', 'session_country', 'session_start_date', 'session_end_date', 'session_is_visible', 'session_ongoing', 'session_statistics', 'session_admin_user', 'session_submission_user')
+    list_display = ('session_name', 'session_country', 'session_type', 'session_start_date', 'session_end_date', 'session_is_visible', 'session_ongoing', 'session_statistics', 'session_admin_user', 'session_submission_user')
 
     #How the list should be sorted, here by session start date
     list_filter = ['session_start_date']
