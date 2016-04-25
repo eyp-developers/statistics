@@ -1,4 +1,7 @@
 import datetime
+
+from decimal import Decimal
+
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -95,6 +98,22 @@ class Session(models.Model):
     session_ongoing.boolean = True
     session_ongoing.short_description = 'Session Ongoing'
 
+    def minutes_per_point(self):
+        if self.session_statistics != 'C':
+            all_points = Point.objects.filter(session=self).order_by('timestamp')
+        else:
+            all_points = ContentPoint.objects.filter(session=self).order_by('timestamp')
+
+        if all_points.count() == 0:
+            return 0
+
+        total_points = all_points.count()
+        first_point = all_points.first().timestamp
+        latest_point = all_points.last().timestamp
+        time_diff = latest_point - first_point
+        minutes = (time_diff.days * 1440) + (time_diff.seconds / 60)
+
+        return Decimal(minutes) / Decimal(total_points)
 
 #Defining the Active Debate Class that tells a session which debate is ongoing.
 class ActiveDebate(models.Model):
@@ -170,6 +189,37 @@ class Committee(models.Model):
             return('black')
         else:
             return('white')
+
+    def voting_successful(self):
+        votes = Vote.objects.filter(session=self.session).filter(active_debate=self.committee_name)
+        total = 0
+        in_favour = 0
+        absent = 0
+
+        if len(votes) == 0:
+            return False
+
+        for vote in votes:
+            total += vote.total_votes()
+            in_favour += vote.in_favour
+            absent += vote.absent
+
+        return in_favour >= (total - absent) / 2
+
+    def num_drs(self):
+        points = Point.objects.filter(session=self.session).filter(active_debate=self.committee_name)
+        drs = 0
+
+        for point in points:
+            if point.point_type == 'DR':
+                drs += 1
+
+        return drs
+
+    def num_points(self):
+        points = Point.objects.filter(session=self.session).filter(active_debate=self.committee_name)
+        return len(points)
+
 
     #Defining how the committee will be displayed in a list.
     def __unicode__(self):
