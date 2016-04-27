@@ -272,9 +272,13 @@ def high_scores(request):
     most_successful = dict()
     most_unsuccessful = dict()
     best_mpp = dict()
+    no_stats = True
 
     for s in Session.objects.all():
-        if s.session_is_visible and not s.session_has_technical_problems:
+        if Point.objects.filter(session=s):
+            no_stats = False
+
+        if s.session_is_visible and not s.session_has_technical_problems and not no_stats:
             total_votes = 0
             in_favour = 0
             against = 0
