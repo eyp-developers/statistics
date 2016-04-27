@@ -274,48 +274,50 @@ def high_scores(request):
     best_mpp = dict()
 
     for s in Session.objects.all():
-        total_votes = 0
-        in_favour = 0
-        against = 0
-        abstentions = 0
-        votes = Vote.objects.filter(session__id=s.pk)
-        for vote in votes:
-            in_favour += vote.in_favour
-            against += vote.against
-            abstentions += vote.abstentions
-            total_votes += vote.total_votes()
-            if in_favour != 0 and total_votes != 0 and against != 0:
-                percent_in_favour = (Decimal(in_favour) / Decimal(total_votes)) * 100
-                percent_against = (Decimal(against) / Decimal(total_votes)) * 100
-                most_in_favour[s.session_name] = percent_in_favour
-                most_against[s.session_name] = percent_against
+        if s.session_is_visible and not s.session_has_technical_problems:
+            total_votes = 0
+            in_favour = 0
+            against = 0
+            abstentions = 0
+            votes = Vote.objects.filter(session__id=s.pk)
+            for vote in votes:
+                in_favour += vote.in_favour
+                against += vote.against
+                abstentions += vote.abstentions
+                total_votes += vote.total_votes()
+                if in_favour != 0 and total_votes != 0 and against != 0:
+                    percent_in_favour = (Decimal(in_favour) / Decimal(total_votes)) * 100
+                    percent_against = (Decimal(against) / Decimal(total_votes)) * 100
+                    most_in_favour[s.session_name] = percent_in_favour
+                    most_against[s.session_name] = percent_against
 
-        most_votes[s.session_name] = total_votes
+            most_votes[s.session_name] = total_votes
 
-        total_points = 0
-        total_drs = 0
-        total_successful = 0
-        total_unsuccessful = 0
-        committees = Committee.objects.filter(session=s)
-        for c in committees:
-            if c.voting_successful():
-                total_successful += 1
-            else:
-                total_unsuccessful += 1
+            total_points = 0
+            total_drs = 0
+            total_successful = 0
+            total_unsuccessful = 0
+            committees = Committee.objects.filter(session=s)
+            for c in committees:
+                if c.voting_successful():
+                    total_successful += 1
+                else:
+                    total_unsuccessful += 1
 
-            points = c.num_points()
-            drs = c.num_drs()
+                points = c.num_points()
+                drs = c.num_drs()
 
-            total_points += points
-            total_drs += drs
-            most_points_in_debate[c.committee_name + ', ' + s.session_name] = points
-            most_drs_in_debate[c.committee_name + ', ' + s.session_name] = drs
+                total_points += points
+                total_drs += drs
+                most_points_in_debate[c.committee_name + ', ' + s.session_name] = points
+                most_drs_in_debate[c.committee_name + ', ' + s.session_name] = drs
 
-        most_points[s.session_name] = total_points
-        most_drs[s.session_name] = total_drs
-        most_successful[s.session_name] = total_successful
-        most_unsuccessful[s.session_name] = total_unsuccessful
-        best_mpp[s.session_name] = s.minutes_per_point()
+            most_points[s.session_name] = total_points
+            most_drs[s.session_name] = total_drs
+            most_successful[s.session_name] = total_successful
+            most_unsuccessful[s.session_name] = total_unsuccessful
+            if s.minutes_per_point() != 0:
+                best_mpp[s.session_name] = s.minutes_per_point()
 
     five_most_votes = sorted(most_votes.items(), key=operator.itemgetter(1), reverse=True)[:5]
     five_most_in_favour = sorted(most_in_favour.items(), key=operator.itemgetter(1), reverse=True)[:5]
