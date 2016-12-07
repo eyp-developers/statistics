@@ -38,17 +38,18 @@ function getMarkers(callback) {
                             country: countryName,
                             description: description
                         });
-                        if(coords.length == (localNames.length - errors)) {
-                            if( typeof callback == 'function' ) {
-                                callback(coords);
-                            }
-                        }
                     }
                     else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
                        checkMarkerFurther(countryName, fullName, description, coords, callback, errors);
                     } else {
                         errors++;
                         console.log("An error occured: " + localAddress);
+                    }
+
+                    if(coords.length == (localNames.length - errors)) {
+                        if( typeof callback == 'function' ) {
+                            callback(coords);
+                        }
                     }
                 });
             }
@@ -67,15 +68,16 @@ function checkMarkerFurther(countryName, fullName, description, coords, callback
                             country: countryName,
                             description: description
                         });
-                if(coords.length == (localNames.length - errors)) {
-                    if( typeof callback == 'function' ) {
-                        callback(coords);
-                    }
-                }
             }
             else {
                 errors++;
                 console.log("Not found for: " + countryName);
+            }
+            
+            if(coords.length == (localNames.length - errors)) {
+                if( typeof callback == 'function' ) {
+                    callback(coords);
+                }
             }
         });
     }
