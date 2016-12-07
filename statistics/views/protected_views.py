@@ -13,6 +13,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 # Importing all models for statistics.
 from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound, Gender
@@ -102,6 +103,7 @@ def edit(request, session_id):
             return HttpResponseRedirect(reverse('statistics:edit', args=[session_id]))
 
     else:
+        session = s
         form = SessionEditForm({'name': s.session_name,
                                 'description': s.session_description,
                                 'type': s.session_type,
@@ -112,8 +114,8 @@ def edit(request, session_id):
                                 'facebook': s.session_facebook_link,
                                 'twitter': s.session_twitter_link,
                                 'resolution': s.session_resolution_link,
-                                'start_date': s.session_start_date.strftime("%Y-%m-%d"),
-                                'end_date': s.session_end_date.strftime("%Y-%m-%d"),
+                                'start_date': timezone.make_naive(s.session_start_date).strftime("%Y-%m-%d"),
+                                'end_date': timezone.make_naive(s.session_end_date).strftime("%Y-%m-%d"),
                                 'statistics': s.session_statistics,
                                 'voting_enabled': s.session_voting_enabled,
                                 'gender_statistics': s.session_gender_enabled,
@@ -278,7 +280,11 @@ def point(request, session_id, committee_id=None):
     else:
         subtopics = []
     for subtopic in subtopics:
-        subtopics_array.append((subtopic.pk, subtopic.subtopic_text), )
+        if all_form:
+            subtopic_committee = subtopic.committee.committee_name
+            subtopics_array.append((subtopic.pk, subtopic.subtopic_text + " - " + subtopic_committee))
+        else:
+            subtopics_array.append((subtopic.pk, subtopic.subtopic_text), )
 
     # If the user is trying to submit data (method=POST), take a look at it
     if request.method == 'POST':
@@ -304,7 +310,10 @@ def point(request, session_id, committee_id=None):
 
             # Once all that is done, send the user to the thank you page.
             messages.add_message(request, messages.SUCCESS, 'Point Successfully Submitted')
-            return HttpResponseRedirect(reverse('statistics:point', args=[session_id, committee_id]))
+            if all_form:
+                return HttpResponseRedirect(reverse('statistics:point_all', args=[session_id]))
+            else:
+                return HttpResponseRedirect(reverse('statistics:point', args=[session_id, committee_id]))
 
     else:
         # Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
@@ -416,11 +425,18 @@ def joint(request, session_id, committee_id=None):
     subtopics_array = []
     # Get the subtopics of the active committee, and the loop through each one to create an array of subtopics.
     if active_committee:
-        subtopics = SubTopic.objects.filter(session_id=session_id).filter(committee=active_committee[0])
+        if all_form:
+            subtopics = SubTopic.objects.filter(session_id=session_id)
+        else:
+            subtopics = SubTopic.objects.filter(session_id=session_id).filter(committee=active_committee[0])
     else:
         subtopics = []
     for subtopic in subtopics:
-        subtopics_array.append((subtopic.pk, subtopic.subtopic_text), )
+        if all_form:
+            subtopic_committee = subtopic.committee.committee_name
+            subtopics_array.append((subtopic.pk, subtopic.subtopic_text + " - " + subtopic_committee))
+        else:
+            subtopics_array.append((subtopic.pk, subtopic.subtopic_text), )
 
     if request.method == 'POST':
 
@@ -441,6 +457,7 @@ def joint(request, session_id, committee_id=None):
                           active_debate=form.cleaned_data['debate'], active_round=form.cleaned_data['round_no'],
                           point_type=form.cleaned_data['point_type']
                           )
+
             # You need to first save the point before being able to add data to the ManyToManyField.
             point.save()
             # For each subtopic in the selected subtopics, add the subtopic to the saved points list of subtopics.
@@ -448,7 +465,10 @@ def joint(request, session_id, committee_id=None):
                 st = SubTopic.objects.filter(pk=s)
                 point.subtopics.add(st[0])
             messages.add_message(request, messages.SUCCESS, 'Point Successfully Submitted')
-            return HttpResponseRedirect(reverse('statistics:joint', args=[session_id, committee_id]))
+            if all_form:
+                return HttpResponseRedirect(reverse('statistics:joint_all', args=[session_id]))
+            else:
+                return HttpResponseRedirect(reverse('statistics:joint', args=[session_id, committee_id]))
     else:
         if all_form:
             form = JointForm(subtopics_array, {'session': session.session_name, 'committee': '', 'debate': active,
