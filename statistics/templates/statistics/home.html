@@ -68,7 +68,7 @@
         {% endfor %}
         var sessionDescriptions = [];
         {% for session in marker_sessions %}
-            sessionDescriptions.push('<a href{% url 'statistics:session' session.pk %}>{{ session.session_start_date|date:"D, j N Y" }} – {{ session.session_end_date|date:"D, j N Y" }}</a>');
+            sessionDescriptions.push('<a href="{% url 'statistics:session' session.pk %}">{{ session.session_start_date|date:"D, j N Y" }} – {{ session.session_end_date|date:"D, j N Y" }}</a>');
         {% endfor %}
     </script>
     <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyAqeZX0P0RQThTyQdh9EyJsT34tdPV1ago&extension=.js'></script>
