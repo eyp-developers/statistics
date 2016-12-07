@@ -51,7 +51,7 @@ class HomeViewTests(TestCase):
         """
         response = self.client.get(reverse("statistics:home"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "What's going on in GA?")
+        self.assertContains(response, "GA Statistics is a project of the European Youth Parliament that gathers statistics about General Assemblies all across Europe.")
         self.assertContains(response, "No sessions are available.")
         self.assertContains(response, "Account")
         self.assertContains(response, "Login")
@@ -93,7 +93,7 @@ class HomeViewTests(TestCase):
         create_session(is_visible=False) #Creating Session 1
         response = self.client.get(reverse("statistics:home"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "What's going on in GA?")
+        self.assertContains(response, "GA Statistics is a project of the European Youth Parliament that gathers statistics about General Assemblies all across Europe.")
         self.assertContains(response, "No sessions are available.")
         self.assertContains(response, "Account")
         self.assertContains(response, "Login")
@@ -107,7 +107,7 @@ class HomeViewTests(TestCase):
         create_session() # Creating public Session 1
         response = self.client.get(reverse("statistics:home"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "What's going on in GA?")
+        self.assertContains(response, "GA Statistics is a project of the European Youth Parliament that gathers statistics about General Assemblies all across Europe.")
         self.assertContains(response, "Leipzig 2015")
         self.assertContains(response, "80th International Session of the European Youth Parliament")
         self.assertContains(response, "Account")
