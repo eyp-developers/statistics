@@ -278,7 +278,11 @@ def point(request, session_id, committee_id=None):
     else:
         subtopics = []
     for subtopic in subtopics:
-        subtopics_array.append((subtopic.pk, subtopic.subtopic_text), )
+        if all_form:
+            subtopic_committee = subtopic.committee.committee_name
+            subtopics_array.append((subtopic.pk, subtopic.subtopic_text + " - " + subtopic_committee))
+        else:
+            subtopics_array.append((subtopic.pk, subtopic.subtopic_text), )
 
     # If the user is trying to submit data (method=POST), take a look at it
     if request.method == 'POST':
@@ -304,7 +308,10 @@ def point(request, session_id, committee_id=None):
 
             # Once all that is done, send the user to the thank you page.
             messages.add_message(request, messages.SUCCESS, 'Point Successfully Submitted')
-            return HttpResponseRedirect(reverse('statistics:point', args=[session_id, committee_id]))
+            if all_form:
+                return HttpResponseRedirect(reverse('statistics:point_all', args=[session_id]))
+            else:
+                return HttpResponseRedirect(reverse('statistics:point', args=[session_id, committee_id]))
 
     else:
         # Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.
