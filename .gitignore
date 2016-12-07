@@ -15,3 +15,5 @@ config.codekit
 **/.sass-cache/*
 
 media/*
+
+.coveragerc
