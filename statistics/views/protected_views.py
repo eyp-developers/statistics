@@ -13,6 +13,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 # Importing all models for statistics.
 from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound, Gender
@@ -102,6 +103,7 @@ def edit(request, session_id):
             return HttpResponseRedirect(reverse('statistics:edit', args=[session_id]))
 
     else:
+        session = s
         form = SessionEditForm({'name': s.session_name,
                                 'description': s.session_description,
                                 'type': s.session_type,
@@ -112,8 +114,8 @@ def edit(request, session_id):
                                 'facebook': s.session_facebook_link,
                                 'twitter': s.session_twitter_link,
                                 'resolution': s.session_resolution_link,
-                                'start_date': s.session_start_date.strftime("%Y-%m-%d"),
-                                'end_date': s.session_end_date.strftime("%Y-%m-%d"),
+                                'start_date': timezone.make_naive(s.session_start_date).strftime("%Y-%m-%d"),
+                                'end_date': timezone.make_naive(s.session_end_date).strftime("%Y-%m-%d"),
                                 'statistics': s.session_statistics,
                                 'voting_enabled': s.session_voting_enabled,
                                 'gender_statistics': s.session_gender_enabled,
