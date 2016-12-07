@@ -7,8 +7,6 @@ function init() {
     var map = new google.maps.Map(mapElement, mapOptions);
 
     getMarkers(function(coords) {
-        console.log("Done!");
-        console.log(coords);
         for (i = 0; i < coords.length; i++) {
             session = coords[i];
             infoWindowContent = '<div id="content">'+
@@ -31,9 +29,7 @@ function getMarkers(callback) {
         (function(localAddress, countryName, fullName, description){
             geocoder = new google.maps.Geocoder();
             if (geocoder) {
-                console.log("2: " + localAddress);
                 geocoder.geocode({'address': localAddress}, function (results, status) {
-                    console.log("3: " + localAddress);
                     if (status == google.maps.GeocoderStatus.OK) {
                         coords.push({
                             position: results[0],

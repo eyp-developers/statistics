@@ -37,7 +37,7 @@ def home(request):
     country_names = []
     full_names = []
     marker_sessions = []
-    for session in latest_sessions_list[:10]:
+    for session in latest_sessions_list[:20]:
         if session.session_name[-4:] == str(session.session_start_date.year):
             locationName = session.session_name[:-4]
         else:
