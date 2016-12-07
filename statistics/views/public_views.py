@@ -36,6 +36,7 @@ def home(request):
     local_names = []
     country_names = []
     full_names = []
+    marker_sessions = []
     for session in latest_sessions_list[:10]:
         if session.session_name[-4:] == str(session.session_start_date.year):
             locationName = session.session_name[:-4]
@@ -45,6 +46,7 @@ def home(request):
         local_names.append(locationName)
         country_names.append(session.get_session_country_display())
         full_names.append(session.session_name)
+        marker_sessions.append(session)
 
 
     # class Paginator(object_list, per_page, orphans=0, allow_empty_first_page=True)
@@ -85,7 +87,8 @@ def home(request):
         'active_sessions': active_sessions,
         'local_names': local_names,
         'country_names': country_names,
-        'full_names': full_names}
+        'full_names': full_names,
+        'marker_sessions': marker_sessions}
     user = request.user
     if user.get_username() and not user.is_superuser:
         for session in Session.objects.all():
@@ -93,7 +96,7 @@ def home(request):
                 admin_session = session
                 context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions,
                            'admin_session': True, 'session': session, 'local_names': local_names,
-                           'country_names': country_names, 'full_names': full_names}
+                           'country_names': country_names, 'full_names': full_names, 'marker_sessions': marker_sessions}
 
     return render(request, 'statistics/home.html', context)
 
