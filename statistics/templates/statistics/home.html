@@ -7,12 +7,7 @@
 {% block jumbotron %}
 
     <div class="container-fluid no-padding">
-        <div class="jumbotron">
-            <div class="container">
-                <h1>What's going on in GA?</h1>
-                <p>GA Statistics is a project of the European Youth Parliament that gathers statistics about General Assemblies around Europe.</p>
-            </div><!--/.container -->
-        </div><!--/.jumbotron -->
+        <div id='stats-home-map'></div>
     </div><!--/.container-fluid -->
 
 {% endblock %}
@@ -52,4 +47,40 @@
       <p>No sessions are available.</p>
     {% endif %}
 
-{% endblock %} {% block footer_scripts %} {% endblock %}
+{% endblock %} {% block footer_scripts %}
+    <script type="text/javascript">
+        var localNames = [];
+        {% for local in local_names %}
+            localNames.push('{{ local }}');
+        {% endfor %}
+        var countryNames = [];
+        {% for country in country_names %}
+            countryNames.push('{{ country }}');
+        {% endfor %}
+        var fullNames = [];
+        {% for name in full_names %}
+            fullNames.push('{{ name }}');
+        {% endfor %}
+    </script>
+    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyAqeZX0P0RQThTyQdh9EyJsT34tdPV1ago&sensor=false&extension=.js'></script>
+    <script  type="text/javascript" src="{% static 'statistics/js/home.js' %}"></script>
+<style>
+    #stats-home-map {
+        height:350px;
+        width:100%;
+        margin-bottom: 15px;
+    }
+    .gm-style-iw * {
+        display: block;
+        width: 100%;
+    }
+    .gm-style-iw h4, .gm-style-iw p {
+        margin: 0;
+        padding: 0;
+    }
+    .gm-style-iw a {
+        color: #4272db;
+    }
+</style>
+
+ {% endblock %}
