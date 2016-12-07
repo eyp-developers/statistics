@@ -423,11 +423,18 @@ def joint(request, session_id, committee_id=None):
     subtopics_array = []
     # Get the subtopics of the active committee, and the loop through each one to create an array of subtopics.
     if active_committee:
-        subtopics = SubTopic.objects.filter(session_id=session_id).filter(committee=active_committee[0])
+        if all_form:
+            subtopics = SubTopic.objects.filter(session_id=session_id)
+        else:
+            subtopics = SubTopic.objects.filter(session_id=session_id).filter(committee=active_committee[0])
     else:
         subtopics = []
     for subtopic in subtopics:
-        subtopics_array.append((subtopic.pk, subtopic.subtopic_text), )
+        if all_form:
+            subtopic_committee = subtopic.committee.committee_name
+            subtopics_array.append((subtopic.pk, subtopic.subtopic_text + " - " + subtopic_committee))
+        else:
+            subtopics_array.append((subtopic.pk, subtopic.subtopic_text), )
 
     if request.method == 'POST':
 
@@ -448,6 +455,7 @@ def joint(request, session_id, committee_id=None):
                           active_debate=form.cleaned_data['debate'], active_round=form.cleaned_data['round_no'],
                           point_type=form.cleaned_data['point_type']
                           )
+
             # You need to first save the point before being able to add data to the ManyToManyField.
             point.save()
             # For each subtopic in the selected subtopics, add the subtopic to the saved points list of subtopics.
@@ -455,7 +463,10 @@ def joint(request, session_id, committee_id=None):
                 st = SubTopic.objects.filter(pk=s)
                 point.subtopics.add(st[0])
             messages.add_message(request, messages.SUCCESS, 'Point Successfully Submitted')
-            return HttpResponseRedirect(reverse('statistics:joint', args=[session_id, committee_id]))
+            if all_form:
+                return HttpResponseRedirect(reverse('statistics:joint_all', args=[session_id]))
+            else:
+                return HttpResponseRedirect(reverse('statistics:joint', args=[session_id, committee_id]))
     else:
         if all_form:
             form = JointForm(subtopics_array, {'session': session.session_name, 'committee': '', 'debate': active,
