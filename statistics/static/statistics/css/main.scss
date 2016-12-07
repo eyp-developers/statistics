@@ -1,4 +1,3 @@
-// out: ../css/main.css
 html, body {
   height: 100%;
 }
@@ -33,6 +32,10 @@ h1, h2, h3, h4, h5, h6, p, a, li, ul {
 .no-decoration:hover {
   text-decoration: none;
 }
+
+.white-on-hover:hover {
+  color: #fff;
+}
 .navbar-brand {
   font-size: 24px;
 }
@@ -48,18 +51,68 @@ h1, h2, h3, h4, h5, h6, p, a, li, ul {
 }
 
 .home-header {
-  display: table;
-  width: 100%;
-  height: 150px;
-  padding: 30px 100px 50px 100px;
+  display: inline-flex;
+  position: relative;
+  width: 33%;
+  height: 250px;
+  margin-bottom: 3px;
+  padding-top: 15px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 15px;
+  @media (max-width: 999px) {
+      width: 49%;
+  }
   @media (max-width: 768px) {
-      padding: 30px 30px 40px 30px;
+      width: 100%;
+      height: 150px;
   }
 }
+
+.session-name-btn {
+  color: rgba(255,255,255, 0.90);
+  font-size: 30px;
+  background-color: #2E4496;
+  text-transform: uppercase;
+  font-weight: 300;
+  text-decoration: none;
+  padding: 8px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  border: none;
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: lighten(#2E4496, 5%);
+  }
+}
+
+.session-description-btn {
+  font-size: 10px
+}
+
+.session-description {
+  font-size: 24px
+}
+
 
 .session-name {
   font-size: 60px;
   text-decoration: none;
+}
+
+.session-type {
+  color: rgba(255,255,255, 0.90);
+  background-color: #2E4496;
+  text-transform: uppercase;
+  font-weight: 300;
+  text-decoration: none;
+  border: none;
+  border-top-left-radius: 2px;
+  font-size: 14px;
+  padding: 4px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 
 .white {
