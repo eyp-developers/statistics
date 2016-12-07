@@ -34,7 +34,7 @@ def home(request):
     latest_sessions_list = Session.objects.filter(session_is_visible=True).order_by('-session_start_date')
 
     # class Paginator(object_list, per_page, orphans=0, allow_empty_first_page=True)
-    paginator = Paginator(latest_sessions_list, 7)
+    paginator = Paginator(latest_sessions_list, 12)
 
     # The next line gets arguments from URLs like this https://stats.eyp.org/?page=2
     page = request.GET.get("page")
