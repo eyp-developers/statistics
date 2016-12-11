@@ -1,8 +1,3 @@
-# GA Statistics Changelog
-If you are wondering what is new and which bugs have been fixed, you have come to the right place.
-
-***
-
 ### 2016-12-11
 * The `Get started` link now shows up on any page when the user is not logged in
 * A public and easy to understand changelog has been introduced, you are looking at it right now
