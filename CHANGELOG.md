@@ -1,5 +1,6 @@
 # GA Statistics Changelog
 If you are wondering what is new and which bugs have been fixed, you have come to the right place.
+
 ***
 
 ### 2016-12-11
@@ -9,6 +10,7 @@ If you are wondering what is new and which bugs have been fixed, you have come t
 
 ### 2016-12-06
 Oliver and Tom met in London to work on GA Statistics for a night. These are the results.
+
 * Added a completely new front-page design
 * Fixed a bug, which caused session dates to change when saving something on the settings page
 * When using a view which allows the board to add statistical points on behalf of any committee, the subtopics now indicate which committee they are about
