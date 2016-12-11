@@ -18,8 +18,7 @@
 
       <ul class="nav navbar-nav navbar-right">
 
-        {% url 'statistics:home' as home_url %} <!-- here we set a variable home_url which we will compare to the current url in the next line -->
-        {% if request.get_full_path = home_url %}
+        {% if user.is_authenticated = False %} <!-- if the user is not logged in, we will show the get started link on every page -->
         <li><a href="{% url 'statistics:get_started' %}">Get Started</a></li>
         {% endif %}
 
