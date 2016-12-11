@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^login/$', auth.ga_login, name='login'),
     url(r'^logout/$', auth.ga_logout, name='logout'),
     url(r'^get_started/$', public_views.get_started, name='get_started'),
+    url(r'^changelog/$', public_views.changelog, name='changelog'),
     url(r'^create_session/$', public_views.create_session, name='create_session'),
     url(r'^highscores/$', public_views.high_scores, name='high_scores'),
     url(r'^overview/(?P<session_id>[0-9]+)/$', protected_views.overview, name='overview'),
