@@ -1,93 +1,63 @@
 google.maps.event.addDomListener(window, 'load', init);
 var map;
-var currAddress;
 function init() {
     var mapOptions = allMapOptions;
     var mapElement = document.getElementById('stats-home-map');
     var map = new google.maps.Map(mapElement, mapOptions);
+    var locations = [
 
-    getMarkers(function(coords) {
-        console.log("Done!");
-        console.log(coords);
-        for (i = 0; i < coords.length; i++) {
-            session = coords[i];
-            infoWindowContent = '<div id="content">'+
-            '<div id="siteNotice">'+
-            '</div>'+
-            '<h1 id="firstHeading" class="firstHeading">' + session.fullName + '</h1>'+
-            '<div id="bodyContent">' +
-            '<p><b>' + session.country + '</b></p>' +
-            '<p>' + session.description + '</p>' +
-            '</div>'+
-            '</div>';
-            addMarker(session.position, map, infoWindowContent);
-        }
-    });
-}
-
-function getMarkers(callback) {
-    var coords = [];
-    for (i = 0; i < localNames.length; i++) {
-        (function(localAddress, countryName, fullName, description){
-            geocoder = new google.maps.Geocoder();
-            if (geocoder) {
-                console.log("2: " + localAddress);
-                geocoder.geocode({'address': localAddress}, function (results, status) {
-                    console.log("3: " + localAddress);
-                    if (status == google.maps.GeocoderStatus.OK) {
-                        coords.push({
-                            position: results[0],
-                            fullName: fullName,
-                            country: countryName,
-                            description: description
-                        });
-                        if(coords.length == localNames.length) {
-                            if( typeof callback == 'function' ) {
-                                callback(coords);
-                            }
-                        }
-                    }
-                    else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
-                       checkMarkerFurther(countryName, fullName, description, coords, callback);
-                    } else {
-                        console.log("An error occured: " + localAddress);
-                    }
-                });
-            }
-        })(localNames[i], countryNames[i], fullNames[i], sessionDescriptions[i]);
+    ];
+    for (i = 0; i < locations.length; i++) {
+        if (locations[i][1] =='undefined'){ description ='';} else { description = locations[i][1];}
+        if (locations[i][2] =='undefined'){ telephone ='';} else { telephone = locations[i][2];}
+        if (locations[i][3] =='undefined'){ email ='';} else { email = locations[i][3];}
+       if (locations[i][4] =='undefined'){ web ='';} else { web = locations[i][4];}
+       if (locations[i][7] =='undefined'){ markericon ='';} else { markericon = locations[i][7];}
+        marker = new google.maps.Marker({
+            icon: markericon,
+            position: new google.maps.LatLng(locations[i][5], locations[i][6]),
+            map: map,
+            title: locations[i][0],
+            desc: description,
+            tel: telephone,
+            email: email,
+            web: web
+        });
+        link = '';
     }
-}
 
-function checkMarkerFurther(countryName, fullName, description, coords, callback) {
     geocoder = new google.maps.Geocoder();
-    if (geocoder) {
-        console.log("2: " + countryName);
-        geocoder.geocode({'address': countryName}, function (results, status) {
-            console.log("3: " + countryName);
-            if (status == google.maps.GeocoderStatus.OK) {
-                coords.push({
-                            position: results[0],
-                            fullName: fullName,
-                            country: countryName,
-                            description: description
-                        });
-                if(coords.length == localNames.length) {
-                    if( typeof callback == 'function' ) {
-                        callback(coords);
-                    }
-                }
+
+    for (i = 0; i < localNames.length - 1; i++) {
+        console.log(i);
+        geocoder.geocode( { 'address': localNames[i]}, function(results, status)
+        {
+            if (status == google.maps.GeocoderStatus.OK)
+            {
+                addMarker(results[0], map);
+            } else if (status = google.maps.GeocoderStatus.ZERO_RESULTS) {
+                geocoder.geocode( { 'address': countryNames[i]}, function(results, status)
+                    {
+                        if (status == google.maps.GeocoderStatus.OK)
+                        {
+                            addMarker(results[0], map);
+                        } else {
+                            console.log("Geocode was not successful for the following reason: " + status);
+                        }
+                    });
             }
-            else {
-               console.log("Not found for: " + countryName);
+            else
+            {
+                console.log("Geocode was not successful for the following reason: " + status);
             }
         });
     }
+
 }
 
-function addMarker(result, map, infoWindowContent) {
+function addMarker(result, map) {
     var infowindow = new google.maps.InfoWindow({
-        content: infoWindowContent,
-        maxWidth: 200
+      content: "Hello there!"
     });
     var marker = new google.maps.Marker(
     {
@@ -100,7 +70,7 @@ function addMarker(result, map, infoWindowContent) {
 }
 
 var allMapOptions = {
-        center: new google.maps.LatLng(55.474628,12.01538),
+        center: new google.maps.LatLng(50.861444,11.136474),
         zoom: 3,
         zoomControl: true,
         zoomControlOptions: {

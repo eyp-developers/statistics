@@ -9,13 +9,6 @@
     <div class="container-fluid no-padding">
         <div id='stats-home-map'></div>
     </div><!--/.container-fluid -->
-    <div class="container-fluid no-padding">
-        <div class="jumbotron">
-            <div class="container">
-                <p class="home-jumbo-p">GA Statistics is a project of the European Youth Parliament that gathers statistics about General Assemblies all across Europe.</p>
-            </div><!--/.container -->
-        </div><!--/.jumbotron -->
-     </div><!--/.container-fluid -->
 
 {% endblock %}
 
@@ -66,11 +59,26 @@
         {% for name in full_names %}
             fullNames.push('{{ name }}');
         {% endfor %}
-        var sessionDescriptions = [];
-        {% for session in marker_sessions %}
-            sessionDescriptions.push('<a href{% url 'statistics:session' session.pk %}>{{ session.session_start_date|date:"D, j N Y" }} – {{ session.session_end_date|date:"D, j N Y" }}</a>');
-        {% endfor %}
     </script>
-    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyAqeZX0P0RQThTyQdh9EyJsT34tdPV1ago&extension=.js'></script>
+    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyAqeZX0P0RQThTyQdh9EyJsT34tdPV1ago&sensor=false&extension=.js'></script>
     <script  type="text/javascript" src="{% static 'statistics/js/home.js' %}"></script>
+<style>
+    #stats-home-map {
+        height:350px;
+        width:100%;
+        margin-bottom: 15px;
+    }
+    .gm-style-iw * {
+        display: block;
+        width: 100%;
+    }
+    .gm-style-iw h4, .gm-style-iw p {
+        margin: 0;
+        padding: 0;
+    }
+    .gm-style-iw a {
+        color: #4272db;
+    }
+</style>
+
  {% endblock %}
