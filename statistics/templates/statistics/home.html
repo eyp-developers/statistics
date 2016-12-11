@@ -7,15 +7,13 @@
 {% block jumbotron %}
 
     <div class="container-fluid no-padding">
-        <div id='stats-home-map'></div>
-    </div><!--/.container-fluid -->
-    <div class="container-fluid no-padding">
         <div class="jumbotron">
             <div class="container">
-                <p class="home-jumbo-p">GA Statistics is a project of the European Youth Parliament that gathers statistics about General Assemblies all across Europe.</p>
+                <h1>What's going on in GA?</h1>
+                <p>GA Statistics is a project of the European Youth Parliament that gathers statistics about General Assemblies around Europe.</p>
             </div><!--/.container -->
         </div><!--/.jumbotron -->
-     </div><!--/.container-fluid -->
+    </div><!--/.container-fluid -->
 
 {% endblock %}
 
@@ -52,25 +50,4 @@
       <p>No sessions are available.</p>
     {% endif %}
 
-{% endblock %} {% block footer_scripts %}
-    <script type="text/javascript">
-        var localNames = [];
-        {% for local in local_names %}
-            localNames.push('{{ local }}');
-        {% endfor %}
-        var countryNames = [];
-        {% for country in country_names %}
-            countryNames.push('{{ country }}');
-        {% endfor %}
-        var fullNames = [];
-        {% for name in full_names %}
-            fullNames.push('{{ name }}');
-        {% endfor %}
-        var sessionDescriptions = [];
-        {% for session in marker_sessions %}
-            sessionDescriptions.push('<a href="{% url 'statistics:session' session.pk %}">{{ session.session_start_date|date:"D, j N Y" }} – {{ session.session_end_date|date:"D, j N Y" }}</a>');
-        {% endfor %}
-    </script>
-    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyAqeZX0P0RQThTyQdh9EyJsT34tdPV1ago&extension=.js'></script>
-    <script  type="text/javascript" src="{% static 'statistics/js/home.js' %}"></script>
- {% endblock %}
+{% endblock %} {% block footer_scripts %} {% endblock %}
