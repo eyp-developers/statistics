@@ -90,15 +90,16 @@ def get_started(request):
 
 def changelog(request):
 
+    # Get the raw markdown from GitHub
     url = "https://raw.githubusercontent.com/eyp-developers/statistics/master/CHANGELOG.md"
 
     raw_markdown = urllib2.urlopen(url).read()
 
+    # Render the markdown
     rendered_markdown = mistune.markdown(raw_markdown)
 
+    # Pass the rendered markdown on to the template, where it will be inserted
     context = {'changelog': rendered_markdown}
-
-    print context
 
     return render(request, 'statistics/changelog.html', context)
 
