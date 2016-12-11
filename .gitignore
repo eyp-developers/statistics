@@ -17,3 +17,5 @@ config.codekit
 media/*
 
 .coveragerc
+
+.coverage
