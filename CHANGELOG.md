@@ -1,9 +1,10 @@
 ### 2016-12-11
-* The `Get started` link now shows up on any page when the user is not logged in
 * Introduced a public and easy to understand changelog, you are looking at it right now
-* Added a link to the changelog to the footer
 * Introduced a new bug-reporting and feature request system, we encourage you to use it
+* Added a link to the changelog to the footer
 * Added a link to the new bug-reporting and feature request system to the footer
+* The `Get started` link now shows up on any page when the user is not logged in
+
 
 
 ### 2016-12-06
