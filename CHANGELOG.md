@@ -1,6 +1,7 @@
 ### 2016-12-11
 * The `Get started` link now shows up on any page when the user is not logged in
 * A public and easy to understand changelog has been introduced, you are looking at it right now
+* Add a link to the changelog to the footer
 
 ### 2016-12-06
 Oliver and Tom met in London to work on GA Statistics for a night. These are the results.
