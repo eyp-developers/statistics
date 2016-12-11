@@ -25,7 +25,6 @@ function init() {
 
 function getMarkers(callback) {
     var coords = [];
-    var errors = 0;
     for (i = 0; i < localNames.length; i++) {
         (function(localAddress, countryName, fullName, description){
             geocoder = new google.maps.Geocoder();
@@ -38,16 +37,15 @@ function getMarkers(callback) {
                             country: countryName,
                             description: description
                         });
-                        if(coords.length == (localNames.length - errors)) {
+                        if(coords.length == localNames.length) {
                             if( typeof callback == 'function' ) {
                                 callback(coords);
                             }
                         }
                     }
                     else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
-                       checkMarkerFurther(countryName, fullName, description, coords, callback, errors);
+                       checkMarkerFurther(countryName, fullName, description, coords, callback);
                     } else {
-                        errors++;
                         console.log("An error occured: " + localAddress);
                     }
                 });
@@ -56,10 +54,12 @@ function getMarkers(callback) {
     }
 }
 
-function checkMarkerFurther(countryName, fullName, description, coords, callback, errors) {
+function checkMarkerFurther(countryName, fullName, description, coords, callback) {
     geocoder = new google.maps.Geocoder();
     if (geocoder) {
+        console.log("2: " + countryName);
         geocoder.geocode({'address': countryName}, function (results, status) {
+            console.log("3: " + countryName);
             if (status == google.maps.GeocoderStatus.OK) {
                 coords.push({
                             position: results[0],
@@ -67,15 +67,14 @@ function checkMarkerFurther(countryName, fullName, description, coords, callback
                             country: countryName,
                             description: description
                         });
-                if(coords.length == (localNames.length - errors)) {
+                if(coords.length == localNames.length) {
                     if( typeof callback == 'function' ) {
                         callback(coords);
                     }
                 }
             }
             else {
-                errors++;
-                console.log("Not found for: " + countryName);
+               console.log("Not found for: " + countryName);
             }
         });
     }
