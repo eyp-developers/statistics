@@ -11,6 +11,6 @@
 Oliver and Tom met in London to work on GA Statistics for a night. These are the results.
 
 * Added a completely new front-page design
-* Fixed a bug, which caused session dates to change when saving something on the settings page
-* When using a view which allows the board to add statistical points on behalf of any committee, the subtopics now indicate which committee they are about
+* Fixed a bug, which caused session dates to drift backwards when saving something on the settings page
+* When using a page which allows the board to add statistical points on behalf of any committee, the subtopics now indicate which committee they are about
 * Work has been started on introducing a very cool looking feature related to maps and the front-page — stay tuned to see it in action
