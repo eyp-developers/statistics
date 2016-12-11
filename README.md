@@ -2,25 +2,24 @@
 Catering all the statistics lovers of the European Youth Parliament
 
 ***
-Welcome! We aim to provide a GA Statistics platform, which can be used on any given session with any set of committees or statistics requirements. It's completely open source and uses [Python](http://python.org) in conjunction with the [Django Web Framework](https://www.djangoproject.com/).
+Welcome! We aim to provide a GA Statistics platform, which can be used on any given session with any set of committees or statistics requirements. It's completely open source and is built using [Python](http://python.org) in conjunction with the [Django Web Framework](https://www.djangoproject.com/).
 
 ***
-### [View all screenshots here](http://imgur.com/a/uPiFy#0)
-![example image ga_statistics](http://i.imgur.com/miZNlu5.jpg "Example Image ga_statistics")
+![example image ga statistics](http://i.imgur.com/DM6zeJS.jpg)
 
 ***
 
 ## Is `statistics` ready to be used?
 
-Yes, but we consider it to be beta software. However, you can help to improve it if you like! Submit ideas as issues or contact us for cooperation opportunities. We also consider well coded, documented, tested and meaningful pull requests.
+Yes, you can now use it for your own session. Alternatively, you can help to improve it if you like! Submit ideas as issues or contact us for cooperation opportunities. We also consider well coded, documented, tested and meaningful pull requests.
 
 ## What does it look like at the moment?
 
-At the moment, this project is hosted at [stats.eyp.org](https://stats.eyp.org). It is still beta software however, so keep that in mind when using it.
+You can have a look yourself. At the moment, the project is available at [stats.eyp.org](https://stats.eyp.org).
 
 ## How can I use `statistics` during my session?
 
-At the moment, you are able to add your session by visiting [stats.eyp.org/create_session](https://stats.eyp.org/create_session).
+At the moment, you are able to add your session by visiting [stats.eyp.org/create_session/](https://stats.eyp.org/create_session/).
 
 ## How can I run a local copy of `statistics`?
 
