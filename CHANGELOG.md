@@ -7,7 +7,6 @@ If you are wondering what is new and which bugs have been fixed, you have come t
 * The `Get started` link now shows up on any page when the user is not logged in
 * A public and easy to understand changelog has been introduced, you are looking at it right now
 
-<br>
 ### 2016-12-06
 Oliver and Tom met in London to work on GA Statistics for a night. These are the results.
 
