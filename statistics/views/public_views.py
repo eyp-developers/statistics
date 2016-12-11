@@ -21,6 +21,12 @@ from django.contrib import messages
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
+# Import the markdown parser used to display the changelog nicely
+import mistune
+
+# Import urllib2 to make a request to GitHub to get the latest changelog
+import urllib2
+
 # Importing all models for statistics.
 from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
 
@@ -81,6 +87,21 @@ def home(request):
 
 def get_started(request):
     return render(request, 'statistics/get_started.html')
+
+def changelog(request):
+
+    # Get the raw markdown from GitHub
+    url = "https://raw.githubusercontent.com/eyp-developers/statistics/master/CHANGELOG.md"
+
+    raw_markdown = urllib2.urlopen(url).read()
+
+    # Render the markdown
+    rendered_markdown = mistune.markdown(raw_markdown)
+
+    # Pass the rendered markdown on to the template, where it will be inserted
+    context = {'changelog': rendered_markdown}
+
+    return render(request, 'statistics/changelog.html', context)
 
 
 def session(request, session_id):

@@ -1,3 +1,4 @@
+coverage==4.2
 Django==1.9.2
+mistune==0.7.3
 Pillow==3.1.0
-wheel==0.24.0
