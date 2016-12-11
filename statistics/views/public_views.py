@@ -33,7 +33,6 @@ def home(request):
     # All the home page needs is a list of the first few sessions ordered by the start date, then more pages with the rest of the sessions. We create the list, then the context and finally render the template.
     latest_sessions_list = Session.objects.filter(session_is_visible=True).order_by('-session_start_date')
 
-
     # class Paginator(object_list, per_page, orphans=0, allow_empty_first_page=True)
     paginator = Paginator(latest_sessions_list, 12)
 
@@ -48,20 +47,6 @@ def home(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         latest_sessions_list = paginator.page(paginator.num_pages)
 
-    local_names = []
-    country_names = []
-    full_names = []
-    marker_sessions = []
-    for session in latest_sessions_list:
-        if session.session_name[-4:] == str(session.session_start_date.year):
-            locationName = session.session_name[:-4]
-        else:
-            locationName = session.session_name
-
-        local_names.append(locationName)
-        country_names.append(session.get_session_country_display())
-        full_names.append(session.session_name)
-        marker_sessions.append(session)
 
 
     active_sessions = []
@@ -82,21 +67,14 @@ def home(request):
         if (latest_point == today) or (latest_content == today) or (latest_vote == today):
             active_sessions.append(session)
 
-    context = {
-        'latest_sessions_list': latest_sessions_list,
-        'active_sessions': active_sessions,
-        'local_names': local_names,
-        'country_names': country_names,
-        'full_names': full_names,
-        'marker_sessions': marker_sessions}
+    context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions}
     user = request.user
     if user.get_username() and not user.is_superuser:
         for session in Session.objects.all():
             if user == session.session_admin_user:
                 admin_session = session
                 context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions,
-                           'admin_session': True, 'session': session, 'local_names': local_names,
-                           'country_names': country_names, 'full_names': full_names, 'marker_sessions': marker_sessions}
+                           'admin_session': True, 'session': session}
 
     return render(request, 'statistics/home.html', context)
 
