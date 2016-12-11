@@ -1,4 +1,5 @@
-# statistics [![Build Status](https://travis-ci.org/eyp-developers/statistics.svg?branch=master)](https://travis-ci.org/eyp-developers/statistics) [![Code Issues](https://www.quantifiedcode.com/api/v1/project/7825905562154948a00906e36e202efd/badge.svg)](https://www.quantifiedcode.com/app/project/7825905562154948a00906e36e202efd)
+# statistics [![Build Status](https://travis-ci.org/eyp-developers/statistics.svg?branch=master)](https://travis-ci.org/eyp-developers/statistics) [![Selected for development](https://badge.waffle.io/eyp-developers/statistics.svg?label=selected&title=Selected for Development)](http://waffle.io/eyp-developers/statistics) [![Code Issues](https://www.quantifiedcode.com/api/v1/project/7825905562154948a00906e36e202efd/badge.svg)](https://www.quantifiedcode.com/app/project/7825905562154948a00906e36e202efd)
+
 Catering all the statistics lovers of the European Youth Parliament
 
 ***
