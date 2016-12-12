@@ -10,6 +10,14 @@
     <div class="alert alert-primary text-center">
         <p>
             {{ session.session_name }}'s GA hasn't started yet!
+
+            <!-- if the user is authenticated for this session, add an additional sentence explaining when this notice will go away -->
+
+            {% if user.is_superuser or user == session.session_admin_user or user == session.session_submission_user or admin_session %}
+
+            To hide this notice, simply submit your first point or vote.
+
+            {% endif %}
         </p>
     </div>
 {% endif %}
