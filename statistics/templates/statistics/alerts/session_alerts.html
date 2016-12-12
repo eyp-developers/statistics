@@ -1,0 +1,23 @@
+{% if session.session_has_technical_problems %}
+    <div class="alert alert-primary text-center">
+        <p>
+            Please note that this session experienced technical difficulties during the GA. As a result some data might be incomplete.
+        </p>
+    </div>
+{% endif %} <!-- if technical problems  -->
+
+{% if no_stats %}
+    <div class="alert alert-primary text-center">
+        <p>
+            {{ session.session_name }}'s GA hasn't started yet!
+
+            <!-- if the user is authenticated for this session, add an additional sentence explaining when this notice will go away -->
+
+            {% if user.is_superuser or user == session.session_admin_user or user == session.session_submission_user or admin_session %}
+
+            To hide this notice, simply submit your first point or vote.
+
+            {% endif %}
+        </p>
+    </div>
+{% endif %}
