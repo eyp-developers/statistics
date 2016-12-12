@@ -1,0 +1,15 @@
+{% if session.session_has_technical_problems %}
+    <div class="alert alert-primary text-center">
+        <p>
+            Please note that this session experienced technical difficulties during the GA. As a result some data might be incomplete.
+        </p>
+    </div>
+{% endif %} <!-- if technical problems  -->
+
+{% if no_stats %}
+    <div class="alert alert-primary text-center">
+        <p>
+            {{ session.session_name }}'s GA hasn't started yet!
+        </p>
+    </div>
+{% endif %}
