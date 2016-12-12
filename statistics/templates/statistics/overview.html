@@ -8,7 +8,7 @@
     <div class="welcome-jumbo jumbotron">
         <div class="container">
             <h1>Welcome to GA Statistics, {{ session.session_name }}</h1>
-            <p>Congratulations on creating your GA Statistics Session, there are a few more things you need to do before you're ready to go.</p>
+            <p>Congratulations on creating your GA Statistics Session! There are a few more things you need to do before you're ready to go.</p>
         </div><!--/.container -->
     </div><!--/.jumbotron -->
 {% endblock %}
@@ -32,10 +32,10 @@
         </div>
         <div class="panel-body">
             <h4>Your Admin Username is <b>{{ session.session_admin_user }}</b><h4>
-                <h5>The Admin Password that you entered when you made the session.</h5>
+                <h5>The Admin Password that you entered when you signed up.</h5>
                 <br>
                 <h4>Your Submission Username is <b>{{ session.session_submission_user }}</b></h4>
-                <h5>The Submission Password that you entered when you made the session.</h5>
+                <h5>The Submission Password that you entered when you signed up.</h5>
         </div>
     </div>
     <div class="panel panel-primary">
@@ -57,9 +57,8 @@
                         <p>It's also where you can edit recent points, contentpoints and votes</p>
 
                         {% if session.session_gender_enabled %}
-                            <h3>You can track the equality of your session here:</h3>
+                            <h3>You can track the equality of your session:</h3>
                             <h4><a href="{% url 'statistics:gender' session.pk %}">{% url 'statistics:gender' session.pk %}</a> - This is where you add "Gender Points" which only show up in the admin.</h3>
-                            <p>It's also where you remove accedental gender points</p>
                         {% endif %}
 
         </div>
