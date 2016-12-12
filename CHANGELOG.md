@@ -1,3 +1,7 @@
+### 2016-12-12
+* Clarify when the label `[Session]'s GA hasn't started yet` appears and how to hide it
+* This additional information will only be shown to logged in users
+
 ### 2016-12-11
 * Introduced a public and easy to understand changelog, you are looking at it right now
 * Introduced a new bug-reporting and feature request system, we encourage you to use it
