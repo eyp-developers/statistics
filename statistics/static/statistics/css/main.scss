@@ -134,7 +134,7 @@ h1, h2, h3, h4, h5, h6, p, a, li, ul {
   color: rgba(100, 100, 100, 60);
   text-decoration: none;
   transition: all 0.5s ease-out;
-  &:hover, &focus {
+  &:hover, &:focus, &:active {
     color: #fff;
     text-decoration: none;
   }
