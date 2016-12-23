@@ -7,9 +7,9 @@ Therefore, we'd like to ask you to stick to the new guidelines described below a
 
 See for yourself. Which one would you prefer?
 
-![back in the days](http://i.imgur.com/DM6zeJS.jpg)
+![back in the days](http://i.imgur.com/oCcrc18.jpg?1)
 
-![currently](http://i.imgur.com/vmA9UvB.jpg)
+![currently](http://i.imgur.com/kb1Fah8.jpg?1)
 
 * Clarify which kinds of images should be uploaded for sessions
   * Images should not contain text
