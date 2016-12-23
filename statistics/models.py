@@ -20,6 +20,18 @@ class Session(models.Model):
     #Session Picture, uploading an image to the stats platform.
     session_picture = models.ImageField(upload_to='session_pictures/')
 
+    # Session picture author link allows users to credit photographers e.g. for Creative Commons content
+    session_picture_author = models.CharField(max_length=30, blank=True)
+
+    # Session picture author link allows users to link to photographers e.g. for Creative Commons content
+    session_picture_author_link = models.URLField(blank=True)
+
+    # Session picture author link allows users to credit photographers e.g. for Creative Commons content
+    session_picture_license = models.CharField(max_length=30, blank=True)
+
+    # Session picture author link allows users to link to photographers e.g. for Creative Commons content
+    session_picture_license_link = models.URLField(blank=True)
+
     #We want a contact email so we can send friendly emails to people.
     session_email = models.EmailField()
 
