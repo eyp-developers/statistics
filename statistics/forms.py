@@ -10,9 +10,16 @@ class SessionForm(forms.Form):
     type = forms.ChoiceField(choices=session_types.SESSION_TYPES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'john.smith@eyp.org'}))
     country = forms.ChoiceField(choices=countries.SESSION_COUNTRIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
+
     picture = forms.ImageField(required=True, widget=forms.FileInput(attrs={'class': 'form-control'}))
-    start_date = forms.DateField(required=True, help_text="This is the first day for Delegates.", widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-17'}))
-    end_date = forms.DateField(required=True, help_text="This is the last day for Delegates.", widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-26'}))
+    picture_author = forms.CharField(required=False, help_text="Please credit your picture's author appropriately.", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'John Doe'}))
+    picture_author_link = forms.URLField(required=False, help_text="Please link to your picture's author.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://example.com'}))
+    picture_license = forms.CharField(required=False, help_text="If you are allowed to use the picture because of a license like e.g. CC-BY-X.0 you must provide it's name here.", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. CC-BY-4.0'}))
+    picture_license_link = forms.URLField(required=False, help_text="If you are allowed to use the picture because of a license like e.g. CC-BY-X.0 you must provide a link to it here.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'e.g. https://creativecommons.org/licenses/by/4.0/'}))
+
+
+    start_date = forms.DateField(required=True, help_text="This is the first day for Delegates.", widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2017-07-17'}))
+    end_date = forms.DateField(required=True, help_text="This is the last day for Delegates.", widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2017-07-26'}))
 
     website = forms.URLField(required=False, help_text="Please add your NC's website if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
     facebook = forms.URLField(required=False, help_text="Please add your NC's Facebook page if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
@@ -60,9 +67,15 @@ class SessionEditForm(forms.Form):
         type = forms.ChoiceField(choices=session_types.SESSION_TYPES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
         email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
         country = forms.ChoiceField(choices=countries.SESSION_COUNTRIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
+
         picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
-        start_date = forms.DateField(required=True, help_text="This is the first day for Delegates.", widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-17'}))
-        end_date = forms.DateField(required=True, help_text="This is the last day for Delegates.", widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2015-04-26'}))
+        picture_author = forms.CharField(required=False, help_text="Please credit your picture's author appropriately.", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'John Doe'}))
+        picture_author_link = forms.URLField(required=False, help_text="Please link to your picture's author.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://example.com'}))
+        picture_license = forms.CharField(required=False, help_text="If you are allowed to use the picture because of a license like e.g. CC-BY-X.0 you must provide it's name here.", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. CC-BY-4.0'}))
+        picture_license_link = forms.URLField(required=False, help_text="If you are allowed to use the picture because of a license like e.g. CC-BY-X.0 you must provide a link to it here.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'e.g. https://creativecommons.org/licenses/by/4.0/'}))
+
+        start_date = forms.DateField(required=True, help_text="This is the first day for Delegates.", widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2017-07-17'}))
+        end_date = forms.DateField(required=True, help_text="This is the last day for Delegates.", widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': '2017-07-26'}))
 
         website = forms.URLField(required=False, help_text="Please add your NC's website if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
         facebook = forms.URLField(required=False, help_text="Please add your NC's Facebook page if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))

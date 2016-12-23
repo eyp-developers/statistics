@@ -76,6 +76,10 @@ def edit(request, session_id):
             s.session_type = form.cleaned_data['type']
             if form.cleaned_data['picture'] is not None:
                 s.session_picture = form.cleaned_data['picture']
+            s.session_picture_author = form.cleaned_data['picture_author']
+            s.session_picture_author_link = form.cleaned_data['picture_author_link']
+            s.session_picture_license = form.cleaned_data['picture_license']
+            s.session_picture_license_link = form.cleaned_data['picture_license_link']
             s.session_resolution_link = form.cleaned_data['resolution']
             s.session_website_link = form.cleaned_data['website']
             s.session_facebook_link = form.cleaned_data['facebook']
@@ -110,6 +114,10 @@ def edit(request, session_id):
                                 'email': s.session_email,
                                 'country': s.session_country,
                                 'picture': s.session_picture.url,
+                                'picture_author': s.session_picture_author,
+                                'picture_author_link': s.session_picture_author_link,
+                                'picture_license': s.session_picture_license,
+                                'picture_license_link': s.session_picture_license_link,
                                 'website': s.session_website_link,
                                 'facebook': s.session_facebook_link,
                                 'twitter': s.session_twitter_link,
