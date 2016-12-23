@@ -10,7 +10,7 @@
         <h3 class="session-description white">{{ session.session_description }}</h3>
         <h3 class="session-date white">{{ session.session_start_date|date:"D, j N Y" }} – {{ session.session_end_date|date:"D, j N Y" }}</h3>
 
-        {% if session.session_website_link or session.session_resolution_link or session.session_facebook_link or session.session_twitter_link or session.session_picture_author %}
+        {% if session.session_website_link or session.session_resolution_link or session.session_facebook_link or session.session_twitter_link %}
 
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-1">
@@ -31,23 +31,26 @@
                         <a class="btn btn-sm btn-primary btn-raised" href="{{ session.session_twitter_link }}" target="_blank">{{ session.session_name }} on Twitter</a>
                     {% endif %}
 
-
-                    {% if session.session_picture_author %}
-                    <div class="picture-credit-link-container hidden-sm hidden-xs hidden-sm">
-                      <br>
-                      <a href="{{ session.session_picture_author_link }}" target="_blank" class="picture-credit-link">Image by {{ session.session_picture_author }} </a>
-                      {% if session.session_picture_license %}
-                          <a href="{{ session.session_picture_license_link }}" target="_blank" class="picture-credit-link">licensed under {{ session.session_picture_license }}</a>
-                      {% endif %}
-                  {% endif %}
-                    </div> <!-- picture-credit-link-container -->
-
-
-
                 </div>
-            </div>
+              </div>
 
         {% endif %} <!-- if session.session_website_link or session.session_resolution_link or session.session_facebook_link or session.session_twitter_link -->
+
+
+
+        {% if session.session_picture_author %}
+          <div class="picture-credit-link-container">
+            <br>
+            <a href="{{ session.session_picture_author_link }}" target="_blank" class="picture-credit-link">Image by {{ session.session_picture_author }} </a>
+            {% if session.session_picture_license %}
+                <a href="{{ session.session_picture_license_link }}" target="_blank" class="picture-credit-link">licensed under {{ session.session_picture_license }}</a>
+            {% endif %}
+          </div> <!-- picture-credit-link-container -->
+        {% endif %}
+
+
+
+
 
 
     </div>
