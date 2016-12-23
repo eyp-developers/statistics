@@ -30,10 +30,28 @@
                     {% if session.session_twitter_link %}
                         <a class="btn btn-sm btn-primary btn-raised" href="{{ session.session_twitter_link }}" target="_blank">{{ session.session_name }} on Twitter</a>
                     {% endif %}
+
                 </div>
-            </div>
+              </div>
 
         {% endif %} <!-- if session.session_website_link or session.session_resolution_link or session.session_facebook_link or session.session_twitter_link -->
+
+
+
+        {% if session.session_picture_author %}
+          <div class="picture-credit-link-container">
+            <br>
+            <a href="{{ session.session_picture_author_link }}" target="_blank" class="picture-credit-link">Image by {{ session.session_picture_author }} </a>
+            {% if session.session_picture_license %}
+                <a href="{{ session.session_picture_license_link }}" target="_blank" class="picture-credit-link">licensed under {{ session.session_picture_license }}</a>
+            {% endif %}
+          </div> <!-- picture-credit-link-container -->
+        {% endif %} <!-- if session.session_picture_author -->
+
+
+
+
+
 
     </div>
 
