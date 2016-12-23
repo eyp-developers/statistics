@@ -8,6 +8,18 @@
     <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.session_picture.url }}') no-repeat center/cover;">
         <h1 style="text-align: center; font-size: 60px; color: white;">{{ committee.committee_name }}</h1>
         <h3 style="text-align: center; color: white;">{{ committee.committee_topic }}</h3>
+
+        {% if session.session_picture_author %}
+        <div class="picture-credit-link-container hidden-sm hidden-xs hidden-sm text-center">
+          <br>
+          <a href="{{ session.session_picture_author_link }}" target="_blank" class="picture-credit-link">Image by {{ session.session_picture_author }} </a>
+          {% if session.session_picture_license %}
+              <a href="{{ session.session_picture_license_link }}" target="_blank" class="picture-credit-link">licensed under {{ session.session_picture_license }}</a>
+          {% endif %}
+        </div> <!-- picture-credit-link-container -->
+      {% endif %}
+
+
     </div>
 {% endblock %}
 
