@@ -18,6 +18,7 @@ See for yourself. Which one would you prefer?
 * A new option has been added to allow you to credit the photographer
 * A new option has been added to allow you to specify under which license the image has published
 * We strongly recommend, that you use those new options, as it will ensure you will not get into legal trouble
+* Add a background colour to the session-tiles on the front-page, which is shown before the images load
 
 ### 2016-12-12
 * Clarify when the label `[Session]'s GA hasn't started yet` appears and how to hide it
