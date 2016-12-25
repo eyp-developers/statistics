@@ -1,5 +1,16 @@
 #!/bin/bash
-python manage.py migrate                  # Apply database migrations
+
+# wait-for-postgres
+
+until psql -h "stats-db" -U "postgres" -c '\l'; do
+  echo "Postgres is unavailable - sleeping"
+  sleep 1
+done
+
+echo "Postgres is up - executing command"
+
+# Apply database migrations
+python manage.py migrate
 
 # Prepare log files and start outputting logs to stdout
 touch /srv/logs/gunicorn.log
