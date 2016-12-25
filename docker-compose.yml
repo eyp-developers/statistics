@@ -1,0 +1,10 @@
+version: "2"
+services:
+  stats-db:
+    image: postgres
+  stats-web:
+    image: wolfskaempf/statistics
+    ports:
+      - "80:8000"
+    volumes:
+      - .:/srv/statistics/media/
