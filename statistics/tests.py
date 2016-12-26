@@ -8,6 +8,10 @@ from django.contrib.auth.models import AnonymousUser, User
 from views.public_views import home
 from .models import Session, Committee
 
+# Used for the image generation in create_test_image()
+from io import BytesIO
+from PIL import Image
+
 # Create your tests here.
 
 # Here we define some placeholder text we can use throughout the tests.
@@ -16,14 +20,27 @@ from .models import Session, Committee
 ips_1_p = "Emerging economies: The EUs joint free trade deal with multiple African countries has received both criticism and acclaim. How should the EU benefit from mutual trade and political cooperation whilst ensuring the development of human rights and enhancing environmental protection in the region?"
 lor_1_p = "No mans land: Technologies with the potential to revolutionise transport, such as driverless cars and drone deliveries, will soon be ready to enter the commercial market. Balancing both the risks of introducing these technologies too early with their possible economic benefits, how should the EU position itself when legislating the introduction of these innovations?"
 
+def create_test_image():
+    """
+    We need to generate an image to use for creating a session. This will generate such images.
+    Code from: http://wildfish.com/blog/2014/02/27/generating-in-memory-image-for-tests-python/
+    """
+    file = BytesIO()
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(file, 'png')
+    file.name = 'test.png'
+    file.seek(0)
+    return file
 
-
-def create_session(name="Leipzig 2015", description="80th International Session of the European Youth Parliament", picture="https://upload.wikimedia.org/wikipedia/commons/c/c4/PM5544_with_non-PAL_signals.png", email="test@example.com", country="DE", color="deep-orange", admin_user=None, submission_user=None, timedelta=0, duration=10, statistics_type="JF", is_visible=True):
+def create_session(name="Leipzig 2015", description="80th International Session of the European Youth Parliament", email="test@example.com", country="DE", color="deep-orange", admin_user=None, submission_user=None, timedelta=0, duration=10, statistics_type="JF", is_visible=True):
     """
     This will create a session with the above specified data and defaults.
     """
     start_date = timezone.now() + datetime.timedelta(days=timedelta)
     end_date = timezone.now() + datetime.timedelta(days=timedelta + duration)
+
+    # Here, we use create_test_image() to generate an image to use in our testing procedure
+    picture = unicode(create_test_image().read(), errors='ignore')
 
     return Session.objects.create(session_name=name, session_description=description, session_picture=picture, session_email=email, session_country=country, session_start_date=start_date, session_end_date=end_date, session_statistics=statistics_type, session_color=color, session_is_visible=is_visible, session_admin_user=None, session_submission_user=None)
 
