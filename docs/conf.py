@@ -47,8 +47,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'statistics'
-copyright = '2016, Tom Wolfskämpf and Oliver Stenbom'
-author = 'Tom Wolfskämpf and Oliver Stenbom'
+copyright = '2016, Tom Wolfskaempf and Oliver Stenbom'
+author = 'Tom Wolfskaempf and Oliver Stenbom'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -133,7 +133,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'statistics.tex', 'statistics Documentation',
-     'Tom Wolfskämpf and Oliver Stenbom', 'manual'),
+     'Tom Wolfskaempf and Oliver Stenbom', 'manual'),
 ]
 
 
