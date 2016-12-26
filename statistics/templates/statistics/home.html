@@ -28,7 +28,7 @@
     {% endif %}
     {% if latest_sessions_list %}
       {% for session in latest_sessions_list %}
-        <div class="home-header" style="background: #253746 url('{{ session.session_picture.url }}') no-repeat center/cover;">
+        <div class="home-header" style="background: #253746 url('{{ session.session_picture_thumbnail.url }}') no-repeat center/cover;">
           <a href="{% url 'statistics:session' session.pk %}" class="no-decoration white white-on-hover">
             <h1 class="session-name-btn heavy-font-weight">{{ session.session_name }}</h1>
             <h3 class="session-name-btn session-description-btn hidden-sm hidden-xs">{{ session.session_description }}</h3>

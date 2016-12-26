@@ -1,3 +1,15 @@
+### 2016-12-26
+In the past, loading the front-page of GA Statistics for the first time took quite some time — especially using mobile networks. A front-page took an average 12MB to load with each session's picture weighing in at a little less than a MB.
+
+This is now a thing of the past. 🎉
+
+* The front-page now loads thumbnail versions of the session pictures
+* The individual session and debate pages now load a high quality version of the session picture with reduced file-size
+
+**Facts for nerds**
+* Overall, the load time of the front-page on a 3G connection was reduced from 1.2 minutes to 9.75s
+* Using a modern home WiFi connection, the front-page now loads in under three seconds at 2.17 seconds instead of the previous 12.82 seconds
+
 ### 2016-12-23
 Since the beginning of GA Statistics, it was possible to upload images to give your session's page a personal touch and a connection to the city the session takes place in.
 
