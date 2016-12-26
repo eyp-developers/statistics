@@ -19,3 +19,7 @@ postgresql/*
 media/*
 
 .coveragerc
+
+logs/access.log
+
+logs/gunicorn.log

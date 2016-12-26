@@ -4,11 +4,14 @@ services:
     image: postgres
     volumes:
       - ./postgresql/data/:/var/lib/postgresql/data/
+    restart: always
   stats-web:
     image: wolfskaempf/statistics
     ports:
       - "80:8000"
     volumes:
       - ./media/:/srv/statistics/media/
+      - ./logs/:/srv/logs/
     depends_on:
       - "stats-db"
+    restart: always
