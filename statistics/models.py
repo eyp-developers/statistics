@@ -7,6 +7,10 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from statistics import countries, session_types
 
+# The following imports are used to process images for faster loading times
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
+
 class Session(models.Model):
     #Name of the session, eg. Izmir 2015
     session_name = models.CharField(max_length=100)
@@ -19,6 +23,19 @@ class Session(models.Model):
 
     #Session Picture, uploading an image to the stats platform.
     session_picture = models.ImageField(upload_to='session_pictures/')
+
+    # Session picture used on front-page to help loading times
+    session_picture_thumbnail = ImageSpecField(source='session_picture',
+                                               processors=[ResizeToFill(400, 400)],
+                                               format='JPEG',
+                                               options={'quality': 80})
+
+    # Session picture used on session page to help loading times and still acceptable image quality
+    session_picture_large_fast = ImageSpecField(source='session_picture',
+                                               processors=[ResizeToFill(1280, 400)],
+                                               format='JPEG',
+                                               options={'quality': 100})
+
 
     # Session picture author link allows users to credit photographers e.g. for Creative Commons content
     session_picture_author = models.CharField(max_length=30, blank=True)
