@@ -222,9 +222,6 @@ def create_session(request):
                                                   email=form.cleaned_data['email'],
                                                   password=form.cleaned_data['admin_password'])
 
-            # Adding the admin user to the admin group.
-            admin_group = Group.objects.get(name='SessionAdmin')
-            admin_group.user_set.add(admin_user)
 
             user = authenticate(username=admin_user.username, password=form.cleaned_data['admin_password'])
 
@@ -236,9 +233,6 @@ def create_session(request):
                                                    email=form.cleaned_data['email'],
                                                    password=form.cleaned_data['submission_password'])
 
-            # Adding the Submit user to the submit group.
-            submit_group = Group.objects.get(name='SessionSubmit')
-            submit_group.user_set.add(submit_user)
 
             # We need to create a session, active debate and active round.
             # We also need to create 2 new users for the session.

@@ -3,6 +3,7 @@
 *.codekit
 bin/*
 include/*
+
 lib/*
 pip-selfcheck.json
 .Python
@@ -14,6 +15,7 @@ pip-selfcheck.json
 config.codekit
 **/.sass-cache/*
 
+postgresql/*
 media/*
 
 .coveragerc
