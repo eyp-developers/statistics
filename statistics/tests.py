@@ -25,12 +25,12 @@ def create_test_image():
     We need to generate an image to use for creating a session. This will generate such images.
     Code from: http://wildfish.com/blog/2014/02/27/generating-in-memory-image-for-tests-python/
     """
-        file = BytesIO()
-        image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
-        image.save(file, 'png')
-        file.name = 'test.png'
-        file.seek(0)
-        return file
+    file = BytesIO()
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(file, 'png')
+    file.name = 'test.png'
+    file.seek(0)
+    return file
 
 def create_session(name="Leipzig 2015", description="80th International Session of the European Youth Parliament", email="test@example.com", country="DE", color="deep-orange", admin_user=None, submission_user=None, timedelta=0, duration=10, statistics_type="JF", is_visible=True):
     """
