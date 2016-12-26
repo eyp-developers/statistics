@@ -9,7 +9,7 @@ from statistics import countries, session_types
 
 # The following imports are used to process images for faster loading times
 from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill
+from imagekit.processors import ResizeToCover
 
 class Session(models.Model):
     #Name of the session, eg. Izmir 2015
@@ -26,13 +26,13 @@ class Session(models.Model):
 
     # Session picture used on front-page to help loading times
     session_picture_thumbnail = ImageSpecField(source='session_picture',
-                                               processors=[ResizeToFill(400, 400)],
+                                               processors=[ResizeToCover(400, 400)],
                                                format='JPEG',
                                                options={'quality': 80})
 
     # Session picture used on session page to help loading times and still acceptable image quality
     session_picture_large_fast = ImageSpecField(source='session_picture',
-                                               processors=[ResizeToFill(1280, 400)],
+                                               processors=[ResizeToCover(1280, 400)],
                                                format='JPEG',
                                                options={'quality': 100})
 
