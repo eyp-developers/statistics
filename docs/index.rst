@@ -14,6 +14,21 @@ So here we are. I hope you find some useful pages in in this documentation, whic
 Yours, Tom and Oliver
 
 
+.. _introduction:
+
+.. toctree::
+   :maxdepth: 2
+   :caption: An introduction to GA Statistics
+
+   introduction/what-is-it
+   introduction/modules
+   introduction/possible-combinations
+   introduction/sign-up
+   introduction/managing
+
+
+.. _selfhosting:
+
 .. toctree::
    :maxdepth: 2
    :caption: GA Statistics on your own computer
