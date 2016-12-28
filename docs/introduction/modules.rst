@@ -6,6 +6,11 @@ There is also a module which activates a smarter GA, called Running Order
 
 Statistics
 ----------
+
+.. figure:: statistics_only.png
+
+  The Statistics module as found on the debate page.
+
 Usually in the statistics module, chairs will submit a point every time their committee speaks in open debate,
 stating the subtopic of the point - what it was about.
 As the points accumulate, GA Statistics provides some really cool insight into what is really happening in GA.
@@ -16,6 +21,11 @@ Which subtopics have been addressed? All this data is shown live in front of the
 
 Point Content
 -------------
+
+.. figure:: point_content.png
+
+  The Point Content module as found on the debate page
+
 As opposed to statistics only stating which topics have addressed during the GA, point content states what was actually said in each point.
 Imagine it like a tweet for each point, shortly describing what the point was about.
 This provides a timeline of what has happened during the debates and is very helpful in understanding what has already been said in a debate.
@@ -32,6 +42,11 @@ Trust us, it is worth the effort.
 
 Voting
 ------
+
+.. figure:: voting.png
+
+  The Voting module as found on the debate page
+
 The voting module does exactly what it says on the tin - it allows digital voting.
 Digital voting is good for a few reasons, the maths is never wrong, voting is more transparent since you can see how each committee has voted, and - our personal favourite - if it is a close vote, there is an incredibly tense atmosphere as everyone watches the votes come in.
 Again, the chairs submit this data from their phones.
@@ -41,6 +56,10 @@ Again, the chairs submit this data from their phones.
 
 Gender Statistics
 -----------------
+
+.. note::
+  These statistics are not publicly visible. While you are free to show them, they will stay internal by default.
+
 Gender statistics allow you to track the gender equality of your General Assembly.
 A single person tracks gender statistics during GA, and the results are shown only to the session admin.
 Gender statistics are not only useful for you to keep track of the equality of your GA, but it also helps the organisation as a whole, as it allows the International Office to view and analyse gender statistics for the whole EYP.
@@ -57,6 +76,10 @@ Perhaps three points should be taken regarding asylum seekers before returning t
 The running order is publicly displayed on the committee page, notifying the GA which committees will be speaking next.
 Once the board recognises a committee, the point is saved using the subtopic the chair predicted.
 
+.. figure:: runningorder.png
+
+  The interface the board of the session uses to manage GA when the Running Order module is enabled.
+
 
 All Direct Responses are automatically placed first in the queue, and the subtopic is automatically assigned to that of the last recognised point.
 If a chair at any point in time predicts the wrong subtopic - or the delegate changes his mind and speaks about something different,
@@ -72,4 +95,4 @@ each chair can edit the subtopics of all points they submitted on the same page 
 
 What should I pick?
 -------------------
-You need to pick at least the Statistics or Point Content module — the voting and gender statistics are optional but recommended!
+You can combine all of the modules together in a way that suits the needs of your session. You need to pick at least the Statistics or Point Content module — the voting and gender statistics are optional but recommended!

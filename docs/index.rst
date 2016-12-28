@@ -34,5 +34,5 @@ Yours, Tom and Oliver
    :caption: GA Statistics on your own computer
 
    selfhosting/introduction
-   selfhosting/development-server
    selfhosting/docker
+   selfhosting/development-server
