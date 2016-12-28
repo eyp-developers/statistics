@@ -1,3 +1,7 @@
+### 2016-12-28
+* We have introduced a new [documentation](http://ga-statistics.readthedocs.io/) in which you will find all sorts of handy knowledge about GA Statistics already now and even more in the future
+* We added a link to the documentation to the navigation bar on all pages except debate-pages
+
 ### 2016-12-26
 In the past, loading the front-page of GA Statistics for the first time took quite some time — especially using mobile networks. A front-page took an average 12MB to load with each session's picture weighing in at a little less than a MB.
 
