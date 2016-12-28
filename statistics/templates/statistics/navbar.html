@@ -19,7 +19,7 @@
       <ul class="nav navbar-nav navbar-right">
 
         {% if not committee or user.is_authenticated == False %} <!-- on every page which does not have a session context or if the user isn't logged in, we would like to show the link to the documentation -->
-        <li><a href="http://ga-statistics.readthedocs.io/" target="_blank">Documentation</a></li>
+        <li><a href="https://ga-statistics.readthedocs.io/" target="_blank">Documentation</a></li>
         {% endif %}
 
         {% if user.is_authenticated == False %} <!-- if the user is not logged in, we will show the get started link on every page -->
