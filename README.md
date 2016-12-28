@@ -23,7 +23,7 @@ You can have a look yourself. At the moment, the project is available at [stats.
 #### How can I use `statistics` during my session?
 
 At the moment, you are able to add your session by visiting [stats.eyp.org/create_session](https://stats.eyp.org/create_session/).
-If you'd like more information fist, please have a look at [our documentation](http://ga-statistics.readthedocs.io).
+If you'd like more information fist, please have a look at [our documentation](https://ga-statistics.readthedocs.io).
 
 ## Features
 
@@ -45,7 +45,7 @@ Please feel free to share your ideas! We'd love to hear them! Just add them to t
 ## Stuff for nerds
 #### How can I run a local copy of `statistics`?
 
-To run `statistics` locally, please check out [our documentation](http://ga-statistics.readthedocs.io/en/latest/selfhosting/introduction.html).
+To run `statistics` locally, please check out [our documentation](https://ga-statistics.readthedocs.io/en/latest/selfhosting/introduction.html).
 
 #### How can I help to help make `statistics` better?
 You can of course send pull requests which contain features. Please make sure to contact us first to make sure that we can accept your feature into the master repository.
@@ -53,6 +53,6 @@ You can of course send pull requests which contain features. Please make sure to
 ## Stuff for newcomers
 #### I don't know how I got here, what is all of this?
 
-If you don't know what the `EYP` (European Youth Parliament) is, read through our [Wikipedia Article](http://en.wikipedia.org/wiki/European_Youth_Parliament) or visit our [website](http://eyp.org).
+If you don't know what the `EYP` (European Youth Parliament) is, read through our [Wikipedia Article](https://en.wikipedia.org/wiki/European_Youth_Parliament) or visit our [website](http://eyp.org).
 
-Every time the people who are part of this organisation gather for a large event, a part of this event is called the `GA`. It stands for [General Assembly](http://en.wikipedia.org/wiki/General_assembly) and it's exactly that. During the `GA` the participants will discuss different topics in various manners. We designed `statistics` to keep track of all of this data and make it nice and easy to collect and display it.
+Every time the people who are part of this organisation gather for a large event, a part of this event is called the `GA`. It stands for [General Assembly](https://en.wikipedia.org/wiki/General_assembly) and it's exactly that. During the `GA` the participants will discuss different topics in various manners. We designed `statistics` to keep track of all of this data and make it nice and easy to collect and display it.
