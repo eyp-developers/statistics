@@ -9,55 +9,49 @@ Welcome! We aim to provide a GA Statistics platform, which can be used on any gi
 ![example image ga statistics](http://i.imgur.com/DM6zeJS.jpg)
 
 ***
+## Basics
+#### Is `statistics` ready to be used?
 
-## Is `statistics` ready to be used?
+Yes, you can now use it for your own session.
 
-Yes, you can now use it for your own session. Alternatively, you can help to improve it if you like! Submit ideas as issues or contact us for cooperation opportunities. We also consider well coded, documented, tested and meaningful pull requests.
+Alternatively, you can help to improve it if you like! Submit ideas as issues, [via our web-form without an account](https://gitreports.com/issue/eyp-developers/statistics) or contact us for cooperation opportunities.
 
-## What does it look like at the moment?
+#### What does it look like?
 
 You can have a look yourself. At the moment, the project is available at [stats.eyp.org](https://stats.eyp.org).
 
-## How can I use `statistics` during my session?
+#### How can I use `statistics` during my session?
 
-At the moment, you are able to add your session by visiting [stats.eyp.org/create_session/](https://stats.eyp.org/create_session/).
+At the moment, you are able to add your session by visiting [stats.eyp.org/create_session](https://stats.eyp.org/create_session/).
+If you'd like more information fist, please have a look at [our documentation](http://ga-statistics.readthedocs.io).
 
-## How can I run a local copy of `statistics`?
+## Features
 
-To run this web app locally, clone the repository, cd into it and execute the following commands.
+* Live statistics for your GA
+* Instant, exact vote counts (forget show of hands)
+* More beautiful than a last-minute PowerPoint presentation
+* More valuable than any PowerPoint presentation
+* Completely mobile-optimised
+* Friendly developers who take your feedback seriously
 
-`pip install virtualenv`
+#### What new features are already planned?
 
-`virtualenv .`
+You can check out our planned features on our [kanban board](http://waffle.io/eyp-developers/statistics).
 
-`source bin/activate`
+#### I would like to have a new feature!
 
-`pip install -r requirements.txt`
+Please feel free to share your ideas! We'd love to hear them! Just add them to the issues of the project. If you don't have a GitHub account, you can submit ideas [here](https://gitreports.com/issue/eyp-developers/statistics).
 
-`python manage.py migrate`
+## Stuff for nerds
+#### How can I run a local copy of `statistics`?
 
-`python manage.py createsuperuser`
+To run `statistics` locally, please check out [our documentation](http://ga-statistics.readthedocs.io/en/latest/selfhosting/introduction.html).
 
-`python manage.py runserver`
-
-Please note that this is only a development server which should never be used for production scenarios.
-
-You can now login to the [admin area of your local development server](http://localhost:8000/admin/) and start creating sample content.
-
-### Troubleshooting
-
-If you run into problems try installing the dependencies from `requirements.txt` using `pip install -r requirements.txt` but be aware whether you're in a virtual environment or not. We do not want to alter the system's actual environment.
-
-
-## I would like to have a new feature!
-
-Please feel free to share your ideas! We'd love to hear them! Just add them to the issues of the project. You can also inquire about becoming a member of EYP Developers by contacting any of the projects maintainers.
-
-
-## How can I help to help make `statistics` better?
+#### How can I help to help make `statistics` better?
 You can of course send pull requests which contain features. Please make sure to contact us first to make sure that we can accept your feature into the master repository.
 
-## I don't know how I got here, what is all of this?
+## Stuff for newcomers
+#### I don't know how I got here, what is all of this?
 
 If you don't know what the `EYP` (European Youth Parliament) is, read through our [Wikipedia Article](http://en.wikipedia.org/wiki/European_Youth_Parliament) or visit our [website](http://eyp.org).
 

@@ -49,4 +49,3 @@ Becoming a contributor
 ----------------------
 Another humble, but of course less common, reason to run GA Statistics locally would be to become a contributor.
 You will most likely want to run a :doc:`development server <development-server>`.
-Currently, the details can be found in the projects `README on GitHub <https://github.com/eyp-developers/statistics/>`_.
