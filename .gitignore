@@ -18,6 +18,9 @@ config.codekit
 postgresql/*
 media/*
 
+docs/_build_html/*
+docs/_build/*
+
 .coveragerc
 
 logs/access.log
