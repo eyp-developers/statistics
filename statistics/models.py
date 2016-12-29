@@ -249,6 +249,12 @@ class Committee(models.Model):
         points = Point.objects.filter(session=self.session).filter(active_debate=self.committee_name)
         return len(points)
 
+    def cleaned_name(self):
+        """
+        This returns the name of the committee without its enumeration to make it easier to use for categorisation
+        """
+        return self.committee_name[:4]
+
 
     #Defining how the committee will be displayed in a list.
     def __unicode__(self):
