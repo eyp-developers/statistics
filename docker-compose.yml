@@ -1,12 +1,12 @@
 version: "2"
 services:
   stats-db:
-    image: postgres
+    image: wolfskaempf/rpi-postgres
     volumes:
       - ./postgresql/data/:/var/lib/postgresql/data/
     restart: always
   stats-web:
-    image: wolfskaempf/statistics
+    image: wolfskaempf/statistics:arm
     ports:
       - "80:8000"
     volumes:

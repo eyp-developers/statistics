@@ -4,7 +4,7 @@
 ############################################################
 
 # Set the base image to use to Ubuntu
-FROM ubuntu:14.04
+FROM armhf/ubuntu:14.04
 
 # Set the file maintainer (your name - the file's author)
 MAINTAINER eyp-developers
