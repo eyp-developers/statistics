@@ -1,3 +1,6 @@
+### 2017-02-03
+* We fixed a bug which resulted in non-visible sessions showing up on the front-page as *currently going on* when points or votes were submitted to it.
+
 ### 2016-12-28
 * We have introduced a new [documentation](http://ga-statistics.readthedocs.io/) in which you will find all sorts of handy knowledge about GA Statistics already now and even more in the future
 * We added a link to the documentation to the navigation bar on all pages except debate-pages
