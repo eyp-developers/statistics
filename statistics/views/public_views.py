@@ -56,7 +56,7 @@ def home(request):
 
 
     active_sessions = []
-    for session in Session.objects.all():
+    for session in Session.objects.filter(session_is_visible=True):
         if Point.objects.filter(session=session):
             latest_point = Point.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
         else:
