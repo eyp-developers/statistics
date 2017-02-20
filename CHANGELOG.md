@@ -1,3 +1,7 @@
+### 2017-02-20
+* We improved the [error page](https://stats.eyp.org/error), which now gives instructions on how to get help and generally looks nicer.
+
+
 ### 2017-02-03
 * We fixed a bug which resulted in non-visible sessions showing up on the front-page as *currently going on* when points or votes were submitted to it.
 
