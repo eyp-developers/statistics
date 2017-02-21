@@ -1,4 +1,5 @@
 import datetime
+import time
 
 from decimal import Decimal
 
@@ -126,6 +127,24 @@ class Session(models.Model):
     session_ongoing.admin_order_field = 'session_start_date'
     session_ongoing.boolean = True
     session_ongoing.short_description = 'Session Ongoing'
+
+    def session_latest_activity(self):
+        initialising_date = timezone.make_aware(datetime.datetime(1972, 1, 1), timezone.get_default_timezone())
+        latest_point = initialising_date
+        latest_content = initialising_date
+        latest_vote = initialising_date
+
+        if Point.objects.filter(session=self):
+            latest_point = Point.objects.filter(session=self).order_by('-timestamp')[0].timestamp
+        if ContentPoint.objects.filter(session=self):
+            latest_content = ContentPoint.objects.filter(session=self).order_by('-timestamp')[0].timestamp
+        if Vote.objects.filter(session=self):
+            latest_vote = Vote.objects.filter(session=self).order_by('-timestamp')[0].timestamp
+
+        # This sorts the list of datetimes and the latest datetime is the third element of the list, which is saved to latest_activity
+        latest_activity = sorted([latest_vote, latest_point, latest_content])[2]
+
+        return latest_activity
 
     def minutes_per_point(self):
         if self.session_statistics != 'C':
