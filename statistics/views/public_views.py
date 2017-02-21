@@ -54,8 +54,8 @@ def home(request):
         latest_sessions_list = paginator.page(paginator.num_pages)
 
 
-
-    active_sessions = []
+    # The following code block creates too many requests to the database and should be refactored
+    active_sessions = [] # In this array we store all the sessions which seem to have a GA happening right now
     for session in Session.objects.filter(session_is_visible=True):
         if Point.objects.filter(session=session):
             latest_point = Point.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
