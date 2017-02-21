@@ -180,6 +180,28 @@ class ActiveRound(models.Model):
         return unicode(self.active_round)
 
 
+class Announcement(models.Model):
+    announcement_content = models.TextField()
+    announcement_timestamp = models.DateTimeField(auto_now=True)
+    announcement_valid_until = models.DateTimeField()
+
+    SUCCESS = 'alert-success'
+    INFO = 'alert-info'
+    WARNING = 'alert-warning'
+    DANGER = 'alert-danger'
+    ANNOUNCEMENT_TYPES = (
+        (SUCCESS, 'Success'),
+        (INFO, 'Info'),
+        (WARNING, 'Warning'),
+        (DANGER, 'Danger'),
+    )
+    announcement_type = models.CharField(max_length=15, choices=ANNOUNCEMENT_TYPES, default=INFO)
+
+    def __unicode__(self):
+        return unicode(self.announcement_type + self.announcement_content)
+
+
+
 #Defining a committee, there should be several of these connected with each session.
 class Committee(models.Model):
     #Which session the committee should be connected to
