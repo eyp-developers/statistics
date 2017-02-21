@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Session, Committee, SubTopic, ActiveDebate, ActiveRound, Point, ContentPoint, RunningOrder, Vote, Gender
+from .models import Session, Committee, SubTopic, ActiveDebate, ActiveRound, Announcement, Point, ContentPoint, RunningOrder, Vote, Gender
 
 #Setting up admin inlines for Committees and Suptopics, allows easy adding of committees in the "Session creation" page,
 #and Subtopics in the "Comiitee creation" page
@@ -52,6 +52,10 @@ class ActiveDebateAdmin(admin.ModelAdmin):
     #Which things should be displayed in the active debate list
     list_display = ('active_debate', 'session')
 
+class AnnouncementAdmin(admin.ModelAdmin):
+    #Defines how an announcement should look like in the admin
+    list_display = ('announcement_valid_until', 'announcement_type', 'announcement_content')
+
 class ActiveRoundAdmin(admin.ModelAdmin):
     #Which things should be displayed in the active round list
     list_display =('active_round', 'session')
@@ -84,6 +88,7 @@ admin.site.register(Session, SessionAdmin)
 admin.site.register(Committee, CommitteeAdmin)
 admin.site.register(SubTopic, SubTopicAdmin)
 admin.site.register(ActiveDebate, ActiveDebateAdmin)
+admin.site.register(Announcement, AnnouncementAdmin)
 admin.site.register(ActiveRound, ActiveRoundAdmin)
 admin.site.register(Point, PointAdmin)
 admin.site.register(ContentPoint, ContentPointAdmin)
