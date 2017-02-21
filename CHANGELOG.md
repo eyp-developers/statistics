@@ -1,3 +1,7 @@
+### 2017-02-21
+* The home page now shows when exactly the last activity in an active session took place to reduce confusion as to whether the GA is actually happening in this instant or whether it was just active today at some earlier point
+
+
 ### 2017-02-20
 * We improved the [error page](https://stats.eyp.org/error), which now gives instructions on how to get help and generally looks nicer.
 
