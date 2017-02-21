@@ -16,6 +16,15 @@
     <br>
     <div class="container">
 
+    {% if announcements %}
+      {% for announcement in announcements %}
+        <div class="alert {{ announcement.announcement_type }}">
+          <h4 style="margin-top: 6px;">{{ announcement.announcement_content|safe }}</h4>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+
     <div class="well well-lg">
         <legend>Create Session:</legend>
         <form id="create-session" class="form-horizontal" enctype="multipart/form-data" role="form" action="{% url 'statistics:create_session' %}" method="post">

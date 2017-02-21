@@ -278,7 +278,10 @@ def create_session(request):
         # Otherwise, create a nice new form for the user.
         form = SessionForm()
 
-    context = {'form': form}
+    announcements = Announcement.objects.filter(announcement_valid_until__gte=datetime.now())
+
+
+    context = {'form': form, 'announcements': announcements}
     return render(request, 'statistics/session_create.html', context)
 
 def high_scores(request):
