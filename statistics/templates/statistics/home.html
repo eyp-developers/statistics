@@ -20,6 +20,13 @@
 {% endblock %}
 
 {% block content %}
+    {% if announcements %}
+      {% for announcement in announcements %}
+        <div class="alert {{ announcement.announcement_type }}">
+          <h4 style="margin-top: 6px;">{{ announcement.announcement_content|safe }}</h4>
+        </div>
+      {% endfor %}
+    {% endif %}
     {% if active_sessions %}
       {% for session in active_sessions %}
         <div class="alert alert-info">

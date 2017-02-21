@@ -28,7 +28,7 @@ import mistune
 import urllib2
 
 # Importing all models for statistics.
-from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound
+from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound, Announcement
 
 # Importing the forms too.
 from ..forms import SessionForm, SessionEditForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, \
@@ -73,7 +73,9 @@ def home(request):
         if (latest_point == today) or (latest_content == today) or (latest_vote == today):
             active_sessions.append(session)
 
-    context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions}
+    announcements = Announcement.objects.filter(announcement_valid_until__gte=datetime.now())
+
+    context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions, 'announcements': announcements}
     user = request.user
     if user.get_username() and not user.is_superuser:
         for session in Session.objects.all():
