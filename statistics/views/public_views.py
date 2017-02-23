@@ -20,6 +20,7 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.text import slugify
 
 # Import the markdown parser used to display the changelog nicely
 import mistune
@@ -217,7 +218,7 @@ def create_session(request):
                 gender = False
 
             # Creating a lowercase string with no spaces from the session name to use for usernames
-            name = ''.join(form.cleaned_data['name'].split()).lower()
+            name = slugify(''.join(form.cleaned_data['name'].split()).lower())
 
             # Creating the Admin user
             admin_user = User.objects.create_user(username=name + '_admin',
