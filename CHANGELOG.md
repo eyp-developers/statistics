@@ -3,6 +3,7 @@
   * If you create a session named [Hódmezővásárhely](https://en.wikipedia.org/wiki/H%C3%B3dmez%C5%91v%C3%A1s%C3%A1rhely) the session's usernames will become hodmezovasarhely2017 and hodmezovasarhely2017_admin
   * This change makes it a lot easier for everyone on the team to log in, even if they lack the keyboard needed for these characters
   * Thanks to [@klarasch](https://github.com/eyp-developers/statistics/issues/137) for suggesting this [enhancement](https://github.com/eyp-developers/statistics/issues/137) on our project page on GitHub
+  * If your session was created before this change, your session is not affected by this change and will keep its username including possible special characters.
 
 ### 2017-02-21
 * The home page now shows when exactly the last activity in an active session took place to reduce confusion as to whether the GA is actually happening in this instant or whether it was just active today at some earlier point
