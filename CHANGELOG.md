@@ -1,9 +1,13 @@
 ### 2017-02-25
-* We *drastically* reduced the amount of database queries which were caused by loading the home page
-  * This should make it a little faster to load the home page, especially if there are more sessions in the database
-* We added a nicer message which explains where to add a new session in case the database contains no sessions at all
+* We *drastically* reduced the amount of database queries which were caused by loading the home page.
+  * This should make it a little faster to load the home page, especially if there are more sessions in the database.
+  * Facts for nerds
+    * With the currently 122 sessions in our database, the amount of queries caused by loading the homepage was reduced from
+    over 366 queries to a maximim of only a little more than 36 queries.
+    * Without this optimisation, in the future, where more sessions are in the database, one query to the home page could have easily caused over a thousand queries to the database.
+* We added a nicer message which explains where to add a new session in case the database contains no sessions at all.
   * This helps users who would like to [self-host](https://ga-statistics.readthedocs.io/en/latest/selfhosting/introduction.html) get started quicker
-  * Self-hosting can be useful if you'd like to use GA Statistics at a venue without internet access
+  * Self-hosting can be useful if you'd like to use GA Statistics at a venue without internet access.
 
 
 ### 2017-02-23
