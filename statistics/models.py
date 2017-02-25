@@ -147,7 +147,10 @@ class Session(models.Model):
         # This sorts the list of datetimes and the latest datetime is the third element of the list, which is saved to latest_activity
         latest_activity = sorted([latest_vote, latest_point, latest_content])[2]
 
-        return latest_activity
+        if latest_activity > initialising_datetime:
+            return latest_activity
+        else:
+            return False
 
     def minutes_per_point(self):
         if self.session_statistics != 'C':
