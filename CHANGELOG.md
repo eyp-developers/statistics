@@ -1,3 +1,11 @@
+### 2017-02-25
+* We *drastically* reduced the amount of database queries which were caused by loading the home page
+  * This should make it a little faster to load the home page, especially if there are more sessions in the database
+* We added a nicer message which explains where to add a new session in case the database contains no sessions at all
+  * This helps users who would like to [self-host](https://ga-statistics.readthedocs.io/en/latest/selfhosting/introduction.html) get started quicker
+  * Self-hosting can be useful if you'd like to use GA Statistics at a venue without internet access
+
+
 ### 2017-02-23
 * Special characters will now be replaced by their non-special equivalents.
   * If you create a session named [Hódmezővásárhely](https://en.wikipedia.org/wiki/H%C3%B3dmez%C5%91v%C3%A1s%C3%A1rhely) the session's usernames will become hodmezovasarhely2017 and hodmezovasarhely2017_admin
