@@ -4,6 +4,7 @@ from collections import deque
 
 from datetime import date
 from datetime import datetime
+from django.utils import timezone
 from time import strftime
 
 from decimal import Decimal
@@ -37,7 +38,7 @@ from ..forms import SessionForm, SessionEditForm, PointForm, VoteForm, ContentFo
 
 
 def home(request):
-    # All the home page needs is a list of the first few sessions ordered by the start date, then more pages with the rest of the sessions. We create the list, then the context and finally render the template.
+    # The home page needs a list of the first few sessions ordered by the start date, then more pages with the rest of the sessions.
     latest_sessions_list = Session.objects.filter(session_is_visible=True).order_by('-session_start_date')
 
     # class Paginator(object_list, per_page, orphans=0, allow_empty_first_page=True)
@@ -54,29 +55,28 @@ def home(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         latest_sessions_list = paginator.page(paginator.num_pages)
 
+    # In this array we will store all the sessions which had activity today
+    active_sessions = []
+    today = timezone.now().date()
+    # We could check all sessions, but if a session is so old it's not on the front-page anymore, we won't show it's activity.
+    # Therefore, using latest_sessions_list saves a lot of database queries
+    # latest_sessions_list only contains the sessions which show on the current page, due to how it's modified through the paginator.
+    # This also means, that if a user visits later pages, they won't see the current activity anymore, which makes sense, since they are probably not interested if they're looking for an older session
+    # Since this check is still quite expensive on the database (minimum 36 queries per 12 sessions per page) we will skip this completely, if the user is not on the first page.
+    if (not page) or (int(page) == 1):
+        for session in latest_sessions_list:
+            if session.session_latest_activity().date() == today:
+                active_sessions.append(session)
 
-    # The following code block creates too many requests to the database and should be refactored
-    active_sessions = [] # In this array we store all the sessions which seem to have a GA happening right now
-    for session in Session.objects.filter(session_is_visible=True):
-        if Point.objects.filter(session=session):
-            latest_point = Point.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
-        else:
-            latest_point = time.strptime("23/05/1996", "%d/%m/%Y")
-        if ContentPoint.objects.filter(session=session):
-            latest_content = ContentPoint.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
-        else:
-            latest_content = time.strptime("23/05/1996", "%d/%m/%Y")
-        if Vote.objects.filter(session=session):
-            latest_vote = Vote.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
-        else:
-            latest_vote = time.strptime("23/05/1996", "%d/%m/%Y")
-        today = datetime.now().date()
-        if (latest_point == today) or (latest_content == today) or (latest_vote == today):
-            active_sessions.append(session)
+    # We want to show all announcements on the hompage which have not expired yet
+    announcements = Announcement.objects.filter(announcement_valid_until__gte=timezone.now())
 
-    announcements = Announcement.objects.filter(announcement_valid_until__gte=datetime.now())
+    context = {
+        'latest_sessions_list': latest_sessions_list,
+        'active_sessions': active_sessions,
+        'announcements': announcements
+    }
 
-    context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions, 'announcements': announcements}
     user = request.user
     if user.get_username() and not user.is_superuser:
         for session in Session.objects.all():
@@ -108,8 +108,8 @@ def changelog(request):
 
 
 def session(request, session_id):
-    # The Session page uses static content and content that is constantly updated, the satic content is loaded with the view
-    # and the updating content updates with the session api, defined further down.
+    # The Session page uses static content and content that is constantly updated, the static content is loaded with the view
+    # and the updating content updates with the session api, defined in its own file.
 
     # The static data here is simply a list of the available committees (we can assume those don't change during live statistics)
     # and the name and data of the session itself.
