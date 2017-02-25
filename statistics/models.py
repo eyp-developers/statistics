@@ -129,10 +129,13 @@ class Session(models.Model):
     session_ongoing.short_description = 'Session Ongoing'
 
     def session_latest_activity(self):
-        initialising_date = timezone.make_aware(datetime.datetime(1972, 1, 1), timezone.get_default_timezone())
-        latest_point = initialising_date
-        latest_content = initialising_date
-        latest_vote = initialising_date
+        """
+        Returns date and time of the latest activity of the session. If there was never any activity, return 1972 as latest activity.
+        """
+        initialising_datetime = timezone.make_aware(datetime.datetime(1972, 1, 1, 2), timezone.get_default_timezone())
+        latest_point = initialising_datetime
+        latest_content = initialising_datetime
+        latest_vote = initialising_datetime
 
         if Point.objects.filter(session=self):
             latest_point = Point.objects.filter(session=self).order_by('-timestamp')[0].timestamp
@@ -445,7 +448,7 @@ class Vote(models.Model):
     session = models.ForeignKey(Session)
 
     #Timestamp of when the vote was last updated
-    timestamp = models.DateTimeField(auto_now=True, blank=True, null=True)
+    timestamp = models.DateTimeField(auto_now=True)
 
     #Which debate was active when the vote was submitted
     active_debate = models.CharField(max_length=8)
