@@ -65,7 +65,8 @@ def home(request):
     # Since this check is still quite expensive on the database (minimum 36 queries per 12 sessions per page) we will skip this completely, if the user is not on the first page.
     if (not page) or (int(page) == 1):
         for session in latest_sessions_list:
-            if session.session_latest_activity().date() == today:
+            iteration_latest_activity = session.session_latest_activity()
+            if (iteration_latest_activity != False) and (iteration_latest_activity.date() == today):
                 active_sessions.append(session)
 
     # We want to show all announcements on the hompage which have not expired yet
@@ -115,47 +116,32 @@ def session(request, session_id):
 
     # The static data here is simply a list of the available committees (we can assume those don't change during live statistics)
     # and the name and data of the session itself.
-    session_committee_list = Committee.objects.filter(session__id=session_id).order_by('committee_name')
     session = Session.objects.get(pk=session_id)
+    session_committee_list = Committee.objects.filter(session=session).order_by('committee_name')
 
-    no_stats = True
-    # Getting the latest of everything to check if the date of them was today.
-    if Point.objects.filter(session=session):
-        latest_point = Point.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
-        no_stats = False
-    else:
-        latest_point = time.strptime("23/05/1996", "%d/%m/%Y")
-    if ContentPoint.objects.filter(session=session):
-        latest_content = ContentPoint.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
-        no_stats = False
-    else:
-        latest_content = time.strptime("23/05/1996", "%d/%m/%Y")
-    if Vote.objects.filter(session=session):
-        latest_vote = Vote.objects.filter(session=session).order_by('-timestamp')[0].timestamp.date()
-        no_stats = False
-    else:
-        latest_vote = time.strptime("23/05/1996", "%d/%m/%Y")
-
-    today = datetime.now().date()
-
-    if (latest_point == today) or (latest_content == today) or (latest_vote == today):
-        active_debate = ActiveDebate.objects.filter(session=session)[0].active_debate
-        active_debate_committee = Committee.objects.filter(session=session).filter(committee_name=active_debate)[0]
-    else:
-        active_debate = []
-        active_debate_committee = []
-
-    voting_enabled = session.session_voting_enabled
-
+    # We initialise the values of active_debate and active_debate_committee with False, so that we don't get an error when we reference them in the contect dictionary
     context = {
         'session_committee_list': session_committee_list,
-        'session_id': session_id,
         'session': session,
-        'voting_enabled': voting_enabled,
-        'active_debate': active_debate,
-        'active_debate_committee': active_debate_committee,
-        'no_stats': no_stats
+        'active_debate': False,
+        'active_debate_committee': False,
     }
+    # This is the date and time of the latest activity of this session or False, if there was never any activity
+    latest_activity = session.session_latest_activity()
+
+    # In a moment, we will use today's date to check if there was any activity in the session today
+    today = datetime.now().date()
+
+    # It's important we only call date() on the result of session_latest_activity() if we know it's not False
+    # This is why this part of the code is also inside the if latest_activity block
+    # If it was false, we would get an error, because we can't call date() on a boolean
+    if latest_activity and latest_activity.date() == today:
+        active_debate = ActiveDebate.objects.get(session=session).active_debate
+        
+        context.update({
+            'active_debate': active_debate,
+            'active_debate_committee': Committee.objects.filter(session=session).get(committee_name=active_debate),
+        })
 
     return render(request, 'statistics/session.html', context)
 

@@ -110,10 +110,10 @@
 </div>
 
 
-{% if voting_enabled %}
+{% if session.session_voting_enabled %}
 <script>
 var voting_enabled = true;
-var voting_url = '{% url 'statistics:session_vote_api' session_id %}';
+var voting_url = '{% url 'statistics:session_vote_api' session.id %}';
 
 </script>
 
@@ -159,8 +159,8 @@ var voting_url = '{% url 'statistics:session_vote_api' session_id %}';
 </div>
 
 <script type="text/javascript">
-  var session = {{ session_id }};
-  var session_url = '{% url 'statistics:session_api' session_id %}';
+  var session = {{ session.id }};
+  var session_url = '{% url 'statistics:session_api' session.id %}';
 </script>
 
 {% endblock %}
