@@ -81,9 +81,11 @@ def home(request):
     if user.get_username() and not user.is_superuser:
         for session in Session.objects.all():
             if user == session.session_admin_user:
-                admin_session = session
-                context = {'latest_sessions_list': latest_sessions_list, 'active_sessions': active_sessions,
-                           'admin_session': True, 'session': session}
+                # This appends the two key pairs to the context dictionary
+                context.update({
+                    'admin_session': True,
+                    'session': session,
+                })
 
     return render(request, 'statistics/home.html', context)
 
