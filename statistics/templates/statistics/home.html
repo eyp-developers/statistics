@@ -55,7 +55,25 @@
     </div>
 
     {% else %}
-      <p>No sessions are available.</p>
+      <div class="panel-group" id="accordion">
+
+          <div class="panel panel-primary">
+              <div class="panel-heading">
+                  <a data-toggle="collapse" href="#need-help"><h4 class="white">No sessions are available. How do I create a session?</h4></a>
+              </div>
+              <div id="need-help" class="panel-collapse collapse in">
+                  <div class="panel-body">
+                    <p>
+                      It seems you have just got a fresh installation of GA Statistics up and running. Congratulations! Head over to <strong><a href="{% url 'statistics:create_session' %}">{% url 'statistics:create_session' %}</a></strong> to create the first session on this server.
+                    </p>
+
+                    <a class="btn btn-success btn-raised" href="{% url 'statistics:create_session' %}">Create your first session</a>
+
+                  </div>
+              </div>
+          </div>
+
+      </div>
     {% endif %}
 
 {% endblock %} {% block footer_scripts %} {% endblock %}
