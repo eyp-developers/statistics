@@ -135,17 +135,28 @@ def session(request, session_id):
         no_stats = False
     else:
         latest_vote = time.strptime("23/05/1996", "%d/%m/%Y")
+
     today = datetime.now().date()
+
     if (latest_point == today) or (latest_content == today) or (latest_vote == today):
         active_debate = ActiveDebate.objects.filter(session=session)[0].active_debate
         active_debate_committee = Committee.objects.filter(session=session).filter(committee_name=active_debate)[0]
     else:
         active_debate = []
         active_debate_committee = []
+
     voting_enabled = session.session_voting_enabled
-    context = {'session_committee_list': session_committee_list, 'session_id': session_id, 'session': session,
-               'voting_enabled': voting_enabled, 'active_debate': active_debate,
-               'active_debate_committee': active_debate_committee, 'no_stats': no_stats}
+
+    context = {
+        'session_committee_list': session_committee_list,
+        'session_id': session_id,
+        'session': session,
+        'voting_enabled': voting_enabled,
+        'active_debate': active_debate,
+        'active_debate_committee': active_debate_committee,
+        'no_stats': no_stats
+    }
+
     return render(request, 'statistics/session.html', context)
 
 
