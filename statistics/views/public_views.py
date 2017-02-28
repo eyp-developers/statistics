@@ -123,8 +123,8 @@ def session(request, session_id):
     context = {
         'session_committee_list': session_committee_list,
         'session': session,
-        'active_debate': False,
-        'active_debate_committee': False,
+        'active_debate': [],
+        'active_debate_committee': [],
     }
     # This is the date and time of the latest activity of this session or False, if there was never any activity
     latest_activity = session.session_latest_activity()
@@ -137,7 +137,7 @@ def session(request, session_id):
     # If it was false, we would get an error, because we can't call date() on a boolean
     if latest_activity and latest_activity.date() == today:
         active_debate = ActiveDebate.objects.get(session=session).active_debate
-        
+
         context.update({
             'active_debate': active_debate,
             'active_debate_committee': Committee.objects.filter(session=session).get(committee_name=active_debate),
