@@ -6,7 +6,7 @@
     </div>
 {% endif %} <!-- if technical problems  -->
 
-{% if no_stats %}
+{% if session.session_latest_activity == False %}
     <div class="alert alert-primary text-center">
         <p>
             {{ session.session_name }}'s GA hasn't started yet!
