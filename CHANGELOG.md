@@ -1,3 +1,8 @@
+### 2017-02-28
+* We optimised the code which produces the session pages to be more efficient and easier to maintain.
+* This change did not alter the behaviour or features of GA Statistics, it soley improved the *behind the scenes* aspects of GA Statistics.
+
+
 ### 2017-02-25
 * We *drastically* reduced the amount of database queries which were caused by loading the home page.
   * This should make it a little faster to load the home page, especially if there are more sessions in the database.
