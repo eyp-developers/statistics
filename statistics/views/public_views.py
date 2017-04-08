@@ -377,4 +377,4 @@ def handler404(request):
 
 
 def handler500(request):
-    return render(request, 'statistics/404.html')
+    return render(request, 'statistics/500.html')
