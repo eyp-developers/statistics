@@ -1,3 +1,4 @@
+contextlib2==0.5.4
 coverage==4.2
 dj-static==0.0.6
 Django==1.10.5
@@ -8,5 +9,6 @@ mistune==0.7.3
 pilkit==1.1.13
 Pillow==3.1.0
 psycopg2==2.6.2
+raven==6.0.0
 six==1.10.0
 static3==0.7.0
