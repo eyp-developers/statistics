@@ -1,3 +1,8 @@
+### 2017-04-08
+* We have added better error reporting, which will automatically send information about problems to us, should you encounter any.
+* From now on, if you encounter an internal server error, you will be asked to describe what you did before the error happened.
+* This will help us understand what led to the problem and allow us to fix it for you.
+
 ### 2017-02-28
 * We optimised the code which produces the session pages to be more efficient and easier to maintain.
 * This change did not alter the behaviour or features of GA Statistics, it soley improved the *behind the scenes* aspects of GA Statistics.
