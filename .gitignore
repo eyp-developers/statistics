@@ -26,3 +26,5 @@ docs/_build/*
 logs/access.log
 
 logs/gunicorn.log
+
+.vscode/launch.json
