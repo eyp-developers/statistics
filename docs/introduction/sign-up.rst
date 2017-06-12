@@ -30,7 +30,7 @@ Use the password you entered when you created the session. Then you should start
 Examples of usernames
 _________________
 
-We recommend, that you stick to the naming scheme mentioned in :ref:`Sigining up <signing-up>`.
+We recommend, that you stick to the naming scheme mentioned in :ref:`Signing up <signing-up>`.
 If you wish to deviate from this scheme or your session's name contains special charachters, you might find the table below useful.
 
 +-----------------------+---------------------+---------------------------+
