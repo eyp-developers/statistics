@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from statistics import countries, session_types
 
-from ..models import SESSION_NAME_LEN, SESSION_DESCRIPTION_LEN, SESSION_AUTHOR_LEN, SESSION_LICENCE_LEN
+from .models import SESSION_NAME_LEN, SESSION_DESCRIPTION_LEN, SESSION_AUTHOR_LEN, SESSION_LICENCE_LEN
 
 class SessionForm(forms.Form):
 
