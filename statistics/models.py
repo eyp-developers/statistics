@@ -13,24 +13,18 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToCover
 
 class Session(models.Model):
-    #Name of the session, eg. Izmir 2015
     session_name = models.CharField(max_length=100)
-
-    #Description of the session, eg. The 78th International Session of the European Youth Parliament
     session_description = models.CharField(max_length=200)
 
     #Session size
     session_type = models.CharField(max_length=3, choices=session_types.SESSION_TYPES, default=session_types.REGIONAL_SESSION)
 
-    #Session Picture, uploading an image to the stats platform.
     session_picture = models.ImageField(upload_to='session_pictures/')
-
     # Session picture used on front-page to help loading times
     session_picture_thumbnail = ImageSpecField(source='session_picture',
                                                processors=[ResizeToCover(400, 400)],
                                                format='JPEG',
                                                options={'quality': 80})
-
     # Session picture used on session page to help loading times and still acceptable image quality
     session_picture_large_fast = ImageSpecField(source='session_picture',
                                                processors=[ResizeToCover(1280, 400)],
@@ -40,28 +34,17 @@ class Session(models.Model):
 
     # Session picture author link allows users to credit photographers e.g. for Creative Commons content
     session_picture_author = models.CharField(max_length=30, blank=True)
-
-    # Session picture author link allows users to link to photographers e.g. for Creative Commons content
     session_picture_author_link = models.URLField(blank=True)
-
-    # Session picture author link allows users to credit photographers e.g. for Creative Commons content
     session_picture_license = models.CharField(max_length=30, blank=True)
-
-    # Session picture author link allows users to link to photographers e.g. for Creative Commons content
     session_picture_license_link = models.URLField(blank=True)
 
-    #We want a contact email so we can send friendly emails to people.
     session_email = models.EmailField()
 
     # The following links will be displayed on the sessions main page if a link is provided
     session_resolution_link = models.URLField(blank=True)
-
     session_website_link = models.URLField(blank=True)
-
     session_facebook_link = models.URLField(blank=True)
-
     session_twitter_link = models.URLField(blank=True)
-
     session_country = models.CharField(max_length=2, choices=countries.SESSION_COUNTRIES, default=countries.ALBANIA)
 
     #Date Options
@@ -83,24 +66,10 @@ class Session(models.Model):
         (RUNNINGORDER, 'Running Order Statistics'),
         (RUNNINGCONTENT, 'Running Order Statistics with Point Content')
     )
-    #Making the statistics type a selectable option
     session_statistics = models.CharField(max_length=3, choices=STATISTIC_TYPES, default=JOINTFORM)
 
-    #We want to define a color for the session that can be used when styling pages.
-    #Depricated
-    session_color = models.CharField(max_length=20)
-
-    #Then we need a text color depending on if the committee color is light or dark.
-    def session_text_color(self):
-        if self.session_color() in ['cyan', 'light-green', 'lime', 'yellow', 'amber', 'orange']:
-            return('black')
-        else:
-            return('white')
-
-    #We want a boolean to define whether the session should be visible to the public or not.
     session_is_visible = models.BooleanField('is visible')
 
-    #Enabling/Disabling Session Settings
     session_voting_enabled = models.BooleanField('session-wide voting enabled', default=True)
     session_gender_enabled = models.BooleanField('gender statistics enabled', default=False)
     session_max_rounds = models.PositiveSmallIntegerField(default=3)
@@ -117,11 +86,9 @@ class Session(models.Model):
     session_admin_user = models.ForeignKey(User, related_name = 'session_admin', blank = True, null = True)
     session_submission_user = models.ForeignKey(User, related_name = 'session_submit', blank = True, null = True)
 
-    #Definition of the session for admin lists
     def __unicode__(self):
         return unicode(self.session_name)
 
-    #Definition of the session being ongoing or not at the moment, simply checks if the current time is in between the start time and the end time.
     def session_ongoing(self):
         return (self.session_start_date <= timezone.now() and self.session_end_date >= timezone.now())
     session_ongoing.admin_order_field = 'session_start_date'
@@ -169,7 +136,6 @@ class Session(models.Model):
 
         return Decimal(minutes) / Decimal(total_points)
 
-#Defining the Active Debate Class that tells a session which debate is ongoing.
 class ActiveDebate(models.Model):
     session = models.ForeignKey(Session)
     active_debate = models.CharField(max_length=8, blank=True, null=True)
@@ -177,7 +143,6 @@ class ActiveDebate(models.Model):
     def __unicode__(self):
         return unicode(self.active_debate)
 
-#Defining the Active Round which tells a session which round is currently active.
 class ActiveRound(models.Model):
     session = models.ForeignKey(Session)
     active_round = models.PositiveSmallIntegerField(null=True, blank=True)
@@ -210,7 +175,6 @@ class Announcement(models.Model):
 
 #Defining a committee, there should be several of these connected with each session.
 class Committee(models.Model):
-    #Which session the committee should be connected to
     session = models.ForeignKey(Session)
 
     #What the name of the committee is. This should be the acronym of the committee. Aka: AFCO, ENVI, ITRE II

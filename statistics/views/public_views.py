@@ -198,6 +198,17 @@ def create_session(request):
         # Fill an instance of a SessionForm with the request data.
         form = SessionForm(request.POST, request.FILES)
         if form.is_valid():
+            lower_session_name = slugify(''.join(form.cleaned_data['name'].split()).lower())
+
+            admin_username = lower_session_name + '_admin'
+            submit_username = lower_session_name
+
+            if (len(User.objects.filter(username=admin_username))
+                    or len(User.objects.filter(username=submit_username))
+                    or len(Session.objects.filter(session_name=form.cleaned_data['name']))):
+                context = {'form': form, 'errors': ['Session with this name or a similar name already exists']}
+                return render(request, 'statistics/session_create.html', context)
+
             # We need to set up time variables for the start and end of sessions.
             # We do this by creating date objects and combining the date objects with time midnight
             t_start = form.cleaned_data['start_date']
@@ -206,21 +217,15 @@ def create_session(request):
             end_date = datetime.combine(t_end, datetime.min.time())
 
             # We need to turn the voting 'True' and 'False' strings into actual booleans.
-            if form.cleaned_data['voting_enabled'] == 'True':
-                voting = True
-            else:
-                voting = False
+            voting = form.cleaned_data['voting_enabled'] == 'True'
 
-            if form.cleaned_data['gender_statistics'] == 'True':
-                gender = True
-            else:
-                gender = False
+            gender = form.cleaned_data['gender_statistics'] == 'True'
 
             # Creating a lowercase string with no spaces from the session name to use for usernames
-            name = slugify(''.join(form.cleaned_data['name'].split()).lower())
+
 
             # Creating the Admin user
-            admin_user = User.objects.create_user(username=name + '_admin',
+            admin_user = User.objects.create_user(username=lower_session_name + '_admin',
                                                   email=form.cleaned_data['email'],
                                                   password=form.cleaned_data['admin_password'])
 
@@ -231,7 +236,7 @@ def create_session(request):
                 login(request, user)
 
             # Creating the Submit user
-            submit_user = User.objects.create_user(username=name,
+            submit_user = User.objects.create_user(username=lower_session_name,
                                                    email=form.cleaned_data['email'],
                                                    password=form.cleaned_data['submission_password'])
 
@@ -254,7 +259,6 @@ def create_session(request):
                               session_start_date=start_date,
                               session_end_date=end_date,
                               session_statistics=form.cleaned_data['statistics'],
-                              session_color="indigo",
                               session_is_visible=False, # When created, all sessions are initially hidden from the front page.
                               session_voting_enabled=voting,
                               session_gender_enabled=gender,
