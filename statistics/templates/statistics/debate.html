@@ -2,19 +2,19 @@
 
 {% load staticfiles %}
 
-{% block page_title %}Debate: {{ committee.committee_name }}{% endblock %}
+{% block page_title %}Debate: {{ committee.name }}{% endblock %}
 
 {% block jumbotron %}
-    <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.session_picture_large_fast.url }}') no-repeat center/cover;">
-        <h1 style="text-align: center; font-size: 60px; color: white;">{{ committee.committee_name }}</h1>
-        <h3 style="text-align: center; color: white;">{{ committee.committee_topic }}</h3>
+    <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.picture_large_fast.url }}') no-repeat center/cover;">
+        <h1 style="text-align: center; font-size: 60px; color: white;">{{ committee.name }}</h1>
+        <h3 style="text-align: center; color: white;">{{ committee.topic }}</h3>
 
-        {% if session.session_picture_author %}
+        {% if session.picture_author %}
         <div class="picture-credit-link-container text-center">
           <br>
-          <a href="{{ session.session_picture_author_link }}" target="_blank" class="picture-credit-link">Image by {{ session.session_picture_author }} </a>
-          {% if session.session_picture_license %}
-              <a href="{{ session.session_picture_license_link }}" target="_blank" class="picture-credit-link">licensed under {{ session.session_picture_license }}</a>
+          <a href="{{ session.picture_author_link }}" target="_blank" class="picture-credit-link">Image by {{ session.picture_author }} </a>
+          {% if session.picture_licence %}
+              <a href="{{ session.picture_license_link }}" target="_blank" class="picture-credit-link">licensed under {{ session.picture_licence }}</a>
           {% endif %}
         </div> <!-- picture-credit-link-container -->
       {% endif %}
@@ -62,7 +62,7 @@
       <script type="text/javascript">
           var session = {{ session.pk }};
           var committee = {{ committee.pk }};
-          var max_rounds = {{ session.session_max_rounds }};
+          var max_rounds = {{ session.max_rounds }};
           var debate_url = '{% url 'statistics:debate_api' session.pk committee.pk %}';
           var vote_url = '{% url 'statistics:debate_vote_api' session.pk committee.pk %}';
           var content_url = '{% url 'statistics:content_api' session.pk committee.pk %}';

@@ -16,10 +16,10 @@ class SubTopicInline(admin.TabularInline):
 class SessionAdmin(admin.ModelAdmin):
     #The feild set groups for the "Create Session" page, shows groups of data for easy session creation
     fieldsets = [
-        (None,                  {'fields': ['session_name', 'session_description', 'session_type', 'session_country', 'session_picture', 'session_admin_user', 'session_submission_user', 'session_email', 'session_website_link', 'session_resolution_link', 'session_facebook_link', 'session_twitter_link', 'session_picture_author', 'session_picture_author_link', 'session_picture_license', 'session_picture_license_link']}),
-        ('Date information',    {'fields': ['session_start_date', 'session_end_date']}),
-        ('Session Settings',    {'fields': ['session_is_visible', 'session_statistics', 'session_max_rounds', 'session_voting_enabled', 'session_has_technical_problems']}),
-        ('Gender Settings',     {'fields': ['session_gender_enabled', 'gender_number_female', 'gender_number_male', 'gender_number_other']})
+        (None,                  {'fields': ['name', 'description', 'session_type', 'country', 'picture', 'admin_user', 'submission_user', 'email', 'website_link', 'resolution_link', 'facebook_link', 'twitter_link', 'picture_author', 'picture_author_link', 'picture_licence', 'picture_license_link']}),
+        ('Date information',    {'fields': ['start_date', 'end_date']}),
+        ('Session Settings',    {'fields': ['is_visible', 'session_statistics', 'max_rounds', 'voting_enabled', 'has_technical_problems']}),
+        ('Gender Settings',     {'fields': ['gender_enabled', 'gender_number_female', 'gender_number_male', 'gender_number_other']})
 
     ]
 
@@ -27,10 +27,10 @@ class SessionAdmin(admin.ModelAdmin):
     inlines = [CommitteeInline]
 
     #What fields should be shown when the sessinons are displayed in a list
-    list_display = ('session_name', 'session_country', 'session_type', 'session_start_date', 'session_end_date', 'session_is_visible', 'session_ongoing', 'session_statistics', 'session_admin_user', 'session_submission_user')
+    list_display = ('name', 'country', 'session_type', 'start_date', 'end_date', 'is_visible', 'session_ongoing', 'session_statistics', 'admin_user', 'submission_user')
 
     #How the list should be sorted, here by session start date
-    list_filter = ['session_start_date']
+    list_filter = ['start_date']
 
 class CommitteeAdmin(admin.ModelAdmin):
     #Fieldsets don't need to be set here as there isn't really anything above the ordinary that needs to be defined
@@ -39,14 +39,14 @@ class CommitteeAdmin(admin.ModelAdmin):
     inlines = [SubTopicInline]
 
     #What things should be displayed in the Committees list
-    list_display = ('committee_name', 'committee_topic', 'session')
+    list_display = ('name', 'topic', 'session')
 
-    list_filter = ['committee_name']
+    list_filter = ['name']
 
 
 class SubTopicAdmin(admin.ModelAdmin):
     #Which things should be displayed in the subtopics list
-    list_display = ('subtopic_text', 'committee', 'session')
+    list_display = ('text', 'committee', 'session')
 
 class ActiveDebateAdmin(admin.ModelAdmin):
     #Which things should be displayed in the active debate list
@@ -54,7 +54,7 @@ class ActiveDebateAdmin(admin.ModelAdmin):
 
 class AnnouncementAdmin(admin.ModelAdmin):
     #Defines how an announcement should look like in the admin
-    list_display = ('announcement_valid_until', 'announcement_type', 'announcement_content')
+    list_display = ('valid_until', 'announcement_type', 'content')
 
 class ActiveRoundAdmin(admin.ModelAdmin):
     #Which things should be displayed in the active round list

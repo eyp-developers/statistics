@@ -19,43 +19,43 @@ SESSION_LICENCE_LEN=100
 
 
 class Session(models.Model):
-    session_name = models.CharField(max_length=SESSION_NAME_LEN)
-    session_description = models.CharField(max_length=SESSION_DESCRIPTION_LEN)
+    name = models.CharField(max_length=SESSION_NAME_LEN)
+    description = models.CharField(max_length=SESSION_DESCRIPTION_LEN)
 
     #Session size
     session_type = models.CharField(max_length=3, choices=session_types.SESSION_TYPES, default=session_types.REGIONAL_SESSION)
 
-    session_picture = models.ImageField(upload_to='session_pictures/')
+    picture = models.ImageField(upload_to='pictures/')
     # Session picture used on front-page to help loading times
-    session_picture_thumbnail = ImageSpecField(source='session_picture',
+    picture_thumbnail = ImageSpecField(source='picture',
                                                processors=[ResizeToCover(400, 400)],
                                                format='JPEG',
                                                options={'quality': 80})
     # Session picture used on session page to help loading times and still acceptable image quality
-    session_picture_large_fast = ImageSpecField(source='session_picture',
+    picture_large_fast = ImageSpecField(source='picture',
                                                processors=[ResizeToCover(1280, 400)],
                                                format='JPEG',
                                                options={'quality': 100})
 
 
     # Session picture author link allows users to credit photographers e.g. for Creative Commons content
-    session_picture_author = models.CharField(max_length=SESSION_AUTHOR_LEN, blank=True)
-    session_picture_author_link = models.URLField(blank=True)
-    session_picture_license = models.CharField(max_length=SESSION_LICENCE_LEN, blank=True)
-    session_picture_license_link = models.URLField(blank=True)
+    picture_author = models.CharField(max_length=SESSION_AUTHOR_LEN, blank=True)
+    picture_author_link = models.URLField(blank=True)
+    picture_licence = models.CharField(max_length=SESSION_LICENCE_LEN, blank=True)
+    picture_license_link = models.URLField(blank=True)
 
-    session_email = models.EmailField()
+    email = models.EmailField()
 
     # The following links will be displayed on the sessions main page if a link is provided
-    session_resolution_link = models.URLField(blank=True)
-    session_website_link = models.URLField(blank=True)
-    session_facebook_link = models.URLField(blank=True)
-    session_twitter_link = models.URLField(blank=True)
-    session_country = models.CharField(max_length=2, choices=countries.SESSION_COUNTRIES, default=countries.ALBANIA)
+    resolution_link = models.URLField(blank=True)
+    website_link = models.URLField(blank=True)
+    facebook_link = models.URLField(blank=True)
+    twitter_link = models.URLField(blank=True)
+    country = models.CharField(max_length=2, choices=countries.SESSION_COUNTRIES, default=countries.ALBANIA)
 
     #Date Options
-    session_start_date = models.DateTimeField('start date')
-    session_end_date = models.DateTimeField('end date')
+    start_date = models.DateTimeField('start date')
+    end_date = models.DateTimeField('end date')
 
     #Setting up statistic types
     STATISTICS = 'S'
@@ -74,30 +74,30 @@ class Session(models.Model):
     )
     session_statistics = models.CharField(max_length=3, choices=STATISTIC_TYPES, default=JOINTFORM)
 
-    session_is_visible = models.BooleanField('is visible')
+    is_visible = models.BooleanField('is visible')
 
-    session_voting_enabled = models.BooleanField('session-wide voting enabled', default=True)
-    session_gender_enabled = models.BooleanField('gender statistics enabled', default=False)
-    session_max_rounds = models.PositiveSmallIntegerField(default=3)
+    voting_enabled = models.BooleanField('session-wide voting enabled', default=True)
+    gender_enabled = models.BooleanField('gender statistics enabled', default=False)
+    max_rounds = models.PositiveSmallIntegerField(default=3)
 
     gender_number_female = models.IntegerField(blank=True, null=True)
     gender_number_male = models.IntegerField(blank=True, null=True)
     gender_number_other = models.IntegerField(blank=True, null=True)
 
     # If the session has had technical problems some data is probably missing. If this is activated a message will be shown to indidate this.
-    session_has_technical_problems = models.BooleanField('session has technical problems', default=False)
+    has_technical_problems = models.BooleanField('session has technical problems', default=False)
 
     #Defining two users for the session. The Admin user who can alter active debates, change points etc. and the
     #submit user, which will be the login for everyone at any given session who wants to submit a point.
-    session_admin_user = models.ForeignKey(User, related_name = 'session_admin', blank = True, null = True)
-    session_submission_user = models.ForeignKey(User, related_name = 'session_submit', blank = True, null = True)
+    admin_user = models.ForeignKey(User, related_name = 'session_admin', blank = True, null = True)
+    submission_user = models.ForeignKey(User, related_name = 'session_submit', blank = True, null = True)
 
     def __unicode__(self):
-        return unicode(self.session_name)
+        return unicode(self.name)
 
     def session_ongoing(self):
-        return (self.session_start_date <= timezone.now() and self.session_end_date >= timezone.now())
-    session_ongoing.admin_order_field = 'session_start_date'
+        return (self.start_date <= timezone.now() and self.end_date >= timezone.now())
+    session_ongoing.admin_order_field = 'start_date'
     session_ongoing.boolean = True
     session_ongoing.short_description = 'Session Ongoing'
 
@@ -158,9 +158,9 @@ class ActiveRound(models.Model):
 
 
 class Announcement(models.Model):
-    announcement_content = models.TextField()
-    announcement_timestamp = models.DateTimeField(auto_now=True)
-    announcement_valid_until = models.DateTimeField()
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now=True)
+    valid_until = models.DateTimeField()
 
     SUCCESS = 'alert-success'
     INFO = 'alert-info'
@@ -175,7 +175,7 @@ class Announcement(models.Model):
     announcement_type = models.CharField(max_length=15, choices=ANNOUNCEMENT_TYPES, default=INFO)
 
     def __unicode__(self):
-        return unicode(self.announcement_type + self.announcement_content)
+        return unicode(self.announcement_type + self.content)
 
 
 
@@ -184,10 +184,10 @@ class Committee(models.Model):
     session = models.ForeignKey(Session)
 
     #What the name of the committee is. This should be the acronym of the committee. Aka: AFCO, ENVI, ITRE II
-    committee_name = models.CharField(max_length=8)
+    name = models.CharField(max_length=8)
 
     #What the topic of the committee is, can be any length.
-    committee_topic = models.TextField()
+    topic = models.TextField()
 
     next_subtopics = models.ManyToManyField('SubTopic', blank=True, related_name='next_subtopics+')
 
@@ -237,7 +237,7 @@ class Committee(models.Model):
             return('white')
 
     def voting_successful(self):
-        votes = Vote.objects.filter(session=self.session).filter(active_debate=self.committee_name)
+        votes = Vote.objects.filter(session=self.session).filter(active_debate=self.name)
         total = 0
         in_favour = 0
         absent = 0
@@ -253,7 +253,7 @@ class Committee(models.Model):
         return in_favour >= (total - absent) / 2
 
     def num_drs(self):
-        points = Point.objects.filter(session=self.session).filter(active_debate=self.committee_name)
+        points = Point.objects.filter(session=self.session).filter(active_debate=self.name)
         drs = 0
 
         for point in points:
@@ -263,19 +263,19 @@ class Committee(models.Model):
         return drs
 
     def num_points(self):
-        points = Point.objects.filter(session=self.session).filter(active_debate=self.committee_name)
+        points = Point.objects.filter(session=self.session).filter(active_debate=self.name)
         return len(points)
 
     def cleaned_name(self):
         """
         This returns the name of the committee without its enumeration to make it easier to use for categorisation
         """
-        return self.committee_name[:4]
+        return self.name[:4]
 
 
     #Defining how the committee will be displayed in a list.
     def __unicode__(self):
-        return unicode(self.committee_name)
+        return unicode(self.name)
 
 #Defining subtopics of a committee, there should ideally be between 3 and 7 of these, plus a "general" subtopic.
 class SubTopic(models.Model):
@@ -286,7 +286,7 @@ class SubTopic(models.Model):
     committee = models.ForeignKey(Committee, blank=True, null=True)
 
     #Name/Text of the subtopic. Should be short and catchy.
-    subtopic_text = models.CharField(max_length=200, blank=True, null=True)
+    text = models.CharField(max_length=200, blank=True, null=True)
 
     #We want to define an automatic color for the committee in question, based on the list of material design colors.
     def subtopic_color(self):
@@ -327,7 +327,7 @@ class SubTopic(models.Model):
             return('blue-grey')
 
     #Then we need a text color depending on if the committee color is light or dark.
-    def subtopic_text_color(self):
+    def text_color(self):
         if self.subtopic_color() in ['cyan', 'light-green', 'lime', 'yellow', 'amber', 'orange']:
             return('black')
         else:
@@ -335,7 +335,7 @@ class SubTopic(models.Model):
 
     #Defining what should be displayed in the admin list, it should be the suptopic text.
     def __unicode__(self):
-        return unicode(self.subtopic_text)
+        return unicode(self.text)
 
 
 #Defining a Point, which is one peice of data that is submitted for every point of debate.

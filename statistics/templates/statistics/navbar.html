@@ -50,44 +50,44 @@
 
         {% url 'statistics:session' session.pk as session_url %} <!-- here we set a variable session_url which we will compare to the current url in the next line -->
         {% if not request.get_full_path == session_url %}
-        <li><a href="{% url 'statistics:session' session.pk %}">Go to {{ session.session_name }}</a></li>
+        <li><a href="{% url 'statistics:session' session.pk %}">Go to {{ session.name }}</a></li>
         {% endif %} <!-- if not request.get_full_path = session_url -->
 
 
-      {% if user.is_superuser or user == session.session_admin_user or user == session.session_submission_user or admin_session %}
+      {% if user.is_superuser or user == session.admin_user or user == session.submission_user or admin_session %}
 
 
 
         {% if committee %}
 
         <li class="dropdown">
-          <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Manage {{ committee.committee_name }} <b class="caret"></b></a>
+          <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Manage {{ committee.name }} <b class="caret"></b></a>
           <ul class="dropdown-menu">
 
             {% url 'statistics:debate' session.pk committee.pk as committee_url %} <!-- here we set a variable session_url which we will compare to the current url in the next line -->
             {% if not request.get_full_path == committee_url %}
-            <li><a href="{% url 'statistics:debate' session.pk committee.pk %}">Back to {{ committee.committee_name }}</a></li>
+            <li><a href="{% url 'statistics:debate' session.pk committee.pk %}">Back to {{ committee.name }}</a></li>
             {% endif %} <!-- if not request.get_full_path = committee_url -->
 
             {% if session.session_statistics == "R" or session.session_statistics == "RC" %}
-                <li><a href="{% url 'statistics:predict' session.pk committee.pk %}">Manage {{ committee.committee_name }}</a></li>
+                <li><a href="{% url 'statistics:predict' session.pk committee.pk %}">Manage {{ committee.name }}</a></li>
             {% endif %} <!-- if session.session_statistics == "R" or sesssion.session_statistics == "RC" -->
 
             {% if session.session_statistics == "C" or session.session_statistics == "SF" or session.session_statistics == "RC" %}
-            <li><a href="{% url 'statistics:content' session.pk committee.pk %}">Submit Point Content as {{ committee.committee_name }}</a></li>
+            <li><a href="{% url 'statistics:content' session.pk committee.pk %}">Submit Point Content as {{ committee.name }}</a></li>
             {% endif %} <!-- if session.session_statistics = "C" or session.session_statistics = "SF" -->
 
             {% if session.session_statistics == "S" or session.session_statistics == "SF" %}
-            <li><a href="{% url 'statistics:point' session.pk committee.pk %}">Submit Statistics as {{ committee.committee_name }}</a></li>
+            <li><a href="{% url 'statistics:point' session.pk committee.pk %}">Submit Statistics as {{ committee.name }}</a></li>
             {% endif %} <!-- if session.session_statistics = "S" or session.session_statistics = "SF" -->
 
             {% if session.session_statistics == "JF" %}
-            <li><a href="{% url 'statistics:joint' session.pk committee.pk %}">Submit as {{ committee.committee_name }}</a></li>
+            <li><a href="{% url 'statistics:joint' session.pk committee.pk %}">Submit as {{ committee.name }}</a></li>
             {% endif %} <!-- if session.session_statistics = "JF" -->
 
-            {% if session.session_voting_enabled %}
-            <li><a href="{% url 'statistics:vote' session.pk committee.pk %}">Vote as  {{ committee.committee_name }}</a></li>
-            {% endif %} <!-- session.session_voting_enabled -->
+            {% if session.voting_enabled %}
+            <li><a href="{% url 'statistics:vote' session.pk committee.pk %}">Vote as  {{ committee.name }}</a></li>
+            {% endif %} <!-- session.voting_enabled -->
 
           </ul>
         </li>
@@ -95,11 +95,11 @@
         {% endif %} <!-- if committee -->
 
 
-        {% if user.is_superuser or user == session.session_admin_user or admin_session %} <!-- The following part should only be visible to the admins of a specific session or superusers-->
+        {% if user.is_superuser or user == session.admin_user or admin_session %} <!-- The following part should only be visible to the admins of a specific session or superusers-->
 
 
         <li class="dropdown">
-          <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Manage {{ session.session_name }} <b class="caret"></b></a>
+          <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Manage {{ session.name }} <b class="caret"></b></a>
           <ul class="dropdown-menu">
 
             <li><a href="{% url 'statistics:overview' session.pk %}">Management Overview</a></li>
@@ -112,9 +112,9 @@
 
             <li><a href="{% url 'statistics:add' session.pk %}">Committee Management</a></li>
 
-              {% if session.session_gender_enabled %}
+              {% if session.gender_enabled %}
                   <li><a href="{% url 'statistics:gender' session.pk %}">Track Gender</a></li>
-              {% endif %} <!-- if session.session_gender_enabled -->
+              {% endif %} <!-- if session.gender_enabled -->
 
             <li><a href="{% url 'statistics:edit' session.pk %}">Session Settings</a></li>
 
@@ -126,8 +126,8 @@
 
       </ul>
 
-      {% endif %} <!-- if user.is_superuser or user == session.session_admin_user or admin_session -->
-      {% endif %} <!-- if user.is_superuser or user == session.session_admin_user or user == session.session_submission_user or admin_session -->
+      {% endif %} <!-- if user.is_superuser or user == session.admin_user or admin_session -->
+      {% endif %} <!-- if user.is_superuser or user == session.admin_user or user == session.submission_user or admin_session -->
       {% endif %} <!-- if session -->
 
     </div>

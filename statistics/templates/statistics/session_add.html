@@ -2,10 +2,10 @@
 
 {% load staticfiles %}
 
-{% block page_title %}Add - {{ session.session_name }}{% endblock %}
+{% block page_title %}Add - {{ session.name }}{% endblock %}
 
 {% block content %}
-<h1>Edit Committees: {{ session.session_name }}</h1>
+<h1>Edit Committees: {{ session.name }}</h1>
 <div id="results"> <!-- This div is used to inject new information using AJAX -->
 </div>
 <div class="panel panel-primary">
@@ -86,9 +86,9 @@
         {% for committee in committees %}
         <tr id="committee-row-{{ committee.pk }}">
           <td>{{ committee.pk }}</td>
-          <td>{{ committee.committee_name }}</td>
-          <td>{{ committee.committee_topic }}</td>
-          <td>{% if subtopics %}{% for subtopic in subtopics %}{% if subtopic.committee == committee %}{{ subtopic.subtopic_text }}, {% endif %}{% endfor %}{% endif %}</td>
+          <td>{{ committee.name }}</td>
+          <td>{{ committee.topic }}</td>
+          <td>{% if subtopics %}{% for subtopic in subtopics %}{% if subtopic.committee == committee %}{{ subtopic.text }}, {% endif %}{% endfor %}{% endif %}</td>
           <td><a href="javascript:void(0)" class="btn btn-primary btn-raised btn-xs" onclick="editCommittee('{{ committee.pk }}')" ><i class="material-icons" style="font-size: 18px">mode_edit</i></a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-raised btn-xs" onclick="deleteCommittee('{{ committee.pk }}')" ><i class="material-icons" style="font-size: 18px">delete</i></a></td>
         </tr>
         {% endfor %}
