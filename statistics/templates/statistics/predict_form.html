@@ -1,8 +1,8 @@
 {% extends 'statistics/base.html' %} {% load staticfiles %} {% block page_title %}Input:
-    {{ committee.committee_name }}{% endblock %} {% block content %}
+    {{ committee.name }}{% endblock %} {% block content %}
     <div id="results"> <!-- This div is used to inject new information using AJAX -->
     </div>
-    <h1>What's {{ committee.committee_name }}'s next point on {{ active_debate }} about?</h1>
+    <h1>What's {{ committee.name }}'s next point on {{ active_debate }} about?</h1>
     <p>Next Point will be on: {% if next_subtopics %}{% for subtopic in next_subtopics %}
         <span class="label label-primary">{{ subtopic }}</span>{% endfor %}{% else %}
         <span class="label label-primary">None</span>{% endif %}</p>
@@ -30,7 +30,7 @@
 
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">{{ committee.committee_name }}'s Points</h3>
+            <h3 class="panel-title">{{ committee.name }}'s Points</h3>
         </div>
         <div class="panel-body content-div" id="point-div" style="height: 400px;">
             <form role="form">

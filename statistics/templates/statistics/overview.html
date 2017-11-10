@@ -2,12 +2,12 @@
 
 {% load staticfiles %}
 
-{% block page_title %}Welcome - {{ session.session_name }}{% endblock %}
+{% block page_title %}Welcome - {{ session.name }}{% endblock %}
 
 {% block jumbotron %}
     <div class="welcome-jumbo jumbotron">
         <div class="container">
-            <h1>Welcome to GA Statistics, {{ session.session_name }}</h1>
+            <h1>Welcome to GA Statistics, {{ session.name }}</h1>
             <p>Congratulations on creating your GA Statistics Session! There are a few more things you need to do before you're ready to go.</p>
         </div><!--/.container -->
     </div><!--/.jumbotron -->
@@ -15,7 +15,7 @@
 
 {% block content %}
 
-    {% if not session.session_is_visible %}
+    {% if not session.is_visible %}
         <div class="alert alert-dismissable alert-warning">
             <button type="button" class="close" data-dismiss="alert">×</button>
             Your session isn't visible to the public yet. After you have added all your committees, change the visibility setting here: <a href="{% url 'statistics:edit' session.pk %}">{% url 'statistics:edit' session.pk %}</a>
@@ -31,16 +31,16 @@
             <h3 class="panel-title">Usernames</h3>
         </div>
         <div class="panel-body">
-            <h4>Your Admin Username is <b>{{ session.session_admin_user }}</b><h4>
+            <h4>Your Admin Username is <b>{{ session.admin_user }}</b><h4>
                 <h5>The Admin Password that you entered when you signed up.</h5>
                 <br>
-                <h4>Your Submission Username is <b>{{ session.session_submission_user }}</b></h4>
+                <h4>Your Submission Username is <b>{{ session.submission_user }}</b></h4>
                 <h5>The Submission Password that you entered when you signed up.</h5>
         </div>
     </div>
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">{{ session.session_name }} Links</h3>
+            <h3 class="panel-title">{{ session.name }} Links</h3>
         </div>
         <div class="panel-body">
             <h2>Your Session ID is <b>{{ session.pk }}</b></h2>
@@ -56,7 +56,7 @@
                     <h4><a href="{% url 'statistics:manage' session.pk %}">{% url 'statistics:manage' session.pk %}</a> - This is where you let the system know which debate and round is going on at the moment.</h3>
                         <p>It's also where you can edit recent points, contentpoints and votes</p>
 
-                        {% if session.session_gender_enabled %}
+                        {% if session.gender_enabled %}
                             <h3>You can track the equality of your session:</h3>
                             <h4><a href="{% url 'statistics:gender' session.pk %}">{% url 'statistics:gender' session.pk %}</a> - This is where you add "Gender Points" which only show up in the admin.</h3>
                         {% endif %}
@@ -87,7 +87,7 @@
                         {% elif session.session_statistics == 'R' or session.session_statistics == 'RC' %}
                             <th>Running Order URL</th>
                         {% endif %}
-                        {% if session.session_voting_enabled %}
+                        {% if session.voting_enabled %}
                             <th>Voting URL<th>
                         {% endif %}
                     </tr>
@@ -96,7 +96,7 @@
                     {% for committee in committees %}
                         <tr>
                             <td>{{ committee.pk }}</td>
-                            <td>{{ committee.committee_name }}
+                            <td>{{ committee.name }}
                             <td><a href="{% url 'statistics:debate' session.pk committee.pk %}">{% url 'statistics:debate' session.pk committee.pk %}</a></td>
                             {% if session.session_statistics == 'JF' %}
                                 <td><a href="{% url 'statistics:joint' session.pk committee.pk %}">{% url 'statistics:joint' session.pk committee.pk %}</a></td>
@@ -110,7 +110,7 @@
                             {% elif session.session_statistics == 'R' or session.session_statistics == 'RC' %}
                                 <td><a href="{% url 'statistics:predict' session.pk committee.pk %}">{% url 'statistics:predict' session.pk committee.pk %}</a></td>
                             {% endif %}
-                            {% if session.session_voting_enabled %}
+                            {% if session.voting_enabled %}
                                 <td><a href="{% url 'statistics:vote' session.pk committee.pk %}">{% url 'statistics:vote' session.pk committee.pk %}</a><td>
                             {% endif %}
                         </tr>
@@ -129,7 +129,7 @@
                 {% elif session.session_statistics == 'S' %}
                     <h5>Statistics Form for any committee: <a href="{% url 'statistics:point_all' session.pk %}">{% url 'statistics:point_all' session.pk %}</a></h5>
                 {% endif %}
-                {% if session.session_voting_enabled %}
+                {% if session.voting_enabled %}
                     <h5>Voting Form for any committee: <a href="{% url 'statistics:vote_all' session.pk %}">{% url 'statistics:vote_all' session.pk %}</a></h5>
                 {% endif %}
             {% else %}

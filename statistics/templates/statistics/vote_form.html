@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 
-{% block page_title %}Vote: {% if committee %}{{ committee.committee_name }}{% else %}All{% endif %}{% endblock %}
+{% block page_title %}Vote: {% if committee %}{{ committee.name }}{% else %}All{% endif %}{% endblock %}
 
 {% block content %}
     <br>
@@ -10,7 +10,7 @@
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h1 style="text-align: center">{% if all_form %}Submit Votes{% else %}Voting as
-                {{ committee.committee_name }} on
+                {{ committee.name }} on
                 {{ debate }}{% endif %}</h1>
         </div>
         <div class="panel-body ">
