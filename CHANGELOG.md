@@ -1,3 +1,6 @@
+### 2017-11-10
+* Improved the experience of creating a session with more detailed error messages.
+
 ### 2017-04-08
 * We have added better error reporting, which will automatically send information about problems to us, should you encounter any.
 * From now on, if you encounter an internal server error, you will be asked to describe what you did before the error happened.
