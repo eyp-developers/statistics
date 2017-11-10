@@ -54,9 +54,6 @@ class SessionForm(forms.Form):
 
     max_rounds = forms.IntegerField(min_value=1, max_value=10, help_text='The maximum number of rounds of open debate during your GA', widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '4'}))
 
-    #Was used to chose the session color - no longer used as everything is blue.
-    #color = forms.CharField(max_length=20, required=True)
-
     admin_password = forms.CharField(help_text='The password used to alter session settings and manage GA Stats', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     submission_password = forms.CharField(help_text='The password used by Chairs, Journalists or Organisers to submit statistics', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
