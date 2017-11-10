@@ -22,12 +22,11 @@ from django.contrib import messages
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.text import slugify
+from django.conf import settings
 
-# Import the markdown parser used to display the changelog nicely
 import mistune
-
-# Import urllib2 to make a request to GitHub to get the latest changelog
 import urllib2
+from raven import Client
 
 # Importing all models for statistics.
 from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound, Announcement
@@ -36,6 +35,7 @@ from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, Ac
 from ..forms import SessionForm, SessionEditForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, \
     ActiveRoundForm
 
+raven_client = Client(settings.RAVEN_CONFIG['dsn'])
 
 def home(request):
     # The home page needs a list of the first few sessions ordered by the start date, then more pages with the rest of the sessions.
@@ -270,7 +270,18 @@ def create_session(request):
                               session_submission_user=submit_user,
                               )
             session.session_picture = form.cleaned_data['picture']
-            session.save()
+
+            try:
+                session.save()
+            except Exception as e:
+                # In cases of more serious errors, make sure to clean up
+                raven_client.captureException()
+                logout(request)
+                admin_user.delete()
+                submit_user.delete()
+                context = {'form': form, 'errors': ['There was an error creating this session']}
+                return render(request, 'statistics/session_create.html', context)
+
             active_debate = ActiveDebate(session=session, active_debate='')
             active_debate.save()
             active_round = ActiveRound(session=session, active_round=1)
