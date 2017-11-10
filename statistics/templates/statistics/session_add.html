@@ -105,7 +105,6 @@ tbody tr td {
 </style>
 <script>
 var committee_post_url = '{% url 'statistics:add' session.pk %}';
-var session_color = '{{ session.session_color }}';
 var committees_api_url = '{% url 'statistics:committees_api' session.pk %}'
 </script>
 {% endblock %} {% block footer_scripts %}

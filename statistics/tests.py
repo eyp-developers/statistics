@@ -42,7 +42,7 @@ def create_session(name="Leipzig 2015", description="80th International Session 
     # Here, we use create_test_image() to generate an image to use in our testing procedure
     picture = unicode(create_test_image().read(), errors='ignore')
 
-    return Session.objects.create(session_name=name, session_description=description, session_picture=picture, session_email=email, session_country=country, session_start_date=start_date, session_end_date=end_date, session_statistics=statistics_type, session_color=color, session_is_visible=is_visible, session_admin_user=None, session_submission_user=None)
+    return Session.objects.create(session_name=name, session_description=description, session_picture=picture, session_email=email, session_country=country, session_start_date=start_date, session_end_date=end_date, session_statistics=statistics_type, session_is_visible=is_visible, session_admin_user=None, session_submission_user=None)
 
 def create_committee(session, name="ENVI", topic=ips_1_p):
     """

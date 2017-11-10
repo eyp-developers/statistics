@@ -3,18 +3,20 @@ from django import forms
 from django.contrib.auth import get_user_model
 from statistics import countries, session_types
 
+from .models import SESSION_NAME_LEN, SESSION_DESCRIPTION_LEN, SESSION_AUTHOR_LEN, SESSION_LICENCE_LEN
+
 class SessionForm(forms.Form):
 
-    name = forms.CharField(max_length=100, required=True, help_text='Short Session Name - Preferably Place/Year', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Izmir 2015'}))
-    description = forms.CharField(max_length=200, required=True, help_text='Full Session Name', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '78th International Session of the EYP'}))
+    name = forms.CharField(max_length=SESSION_NAME_LEN, required=True, help_text='Short Session Name - Preferably Place/Year', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Izmir 2015'}))
+    description = forms.CharField(max_length=SESSION_DESCRIPTION_LEN, required=True, help_text='Full Session Name', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '78th International Session of the EYP'}))
     type = forms.ChoiceField(choices=session_types.SESSION_TYPES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'john.smith@eyp.org'}))
     country = forms.ChoiceField(choices=countries.SESSION_COUNTRIES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
 
     picture = forms.ImageField(required=True, widget=forms.FileInput(attrs={'class': 'form-control'}))
-    picture_author = forms.CharField(required=False, help_text="Please credit your picture's author appropriately.", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'John Doe'}))
+    picture_author = forms.CharField(max_length=SESSION_AUTHOR_LEN, required=False, help_text="Please credit your picture's author appropriately.", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'John Doe'}))
     picture_author_link = forms.URLField(required=False, help_text="Please link to your picture's author.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://example.com'}))
-    picture_license = forms.CharField(required=False, help_text="If you are allowed to use the picture because of a license like e.g. CC-BY-X.0 you must provide it's name here.", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. CC-BY-4.0'}))
+    picture_license = forms.CharField(max_length=SESSION_LICENCE_LEN, required=False, help_text="If you are allowed to use the picture because of a license like e.g. CC-BY-X.0 you must provide it's name here.", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. CC-BY-4.0'}))
     picture_license_link = forms.URLField(required=False, help_text="If you are allowed to use the picture because of a license like e.g. CC-BY-X.0 you must provide a link to it here.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'e.g. https://creativecommons.org/licenses/by/4.0/'}))
 
 
@@ -53,9 +55,6 @@ class SessionForm(forms.Form):
     number_other_participants = forms.IntegerField(min_value=0, required=False, help_text='If you are tracking the gender equality of your session, please add this value. You can also do this later. Only count Delegates.', widget=forms.NumberInput(attrs={'class': 'form-control'}))
 
     max_rounds = forms.IntegerField(min_value=1, max_value=10, help_text='The maximum number of rounds of open debate during your GA', widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '4'}))
-
-    #Was used to chose the session color - no longer used as everything is blue.
-    #color = forms.CharField(max_length=20, required=True)
 
     admin_password = forms.CharField(help_text='The password used to alter session settings and manage GA Stats', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     submission_password = forms.CharField(help_text='The password used by Chairs, Journalists or Organisers to submit statistics', widget=forms.PasswordInput(attrs={'class': 'form-control'}))

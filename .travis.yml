@@ -2,9 +2,9 @@ language: python
 python:
 - '2.7'
 env:
-- DJANGO=1.8
+- DJANGO=1.10.5
 install:
-- pip install -r requirements.txt --use-mirrors
+- pip install -r requirements.txt
 script: python manage.py test
 notifications:
   slack:

@@ -12,7 +12,7 @@ function addInput(divName, subtopicValue, subtopicId){
     '</div>' +
     '<div class="col-sm-2">' +
     '<span class="input-group-btn">' +
-    '<button class="btn btn-primary btn-material-'+ session_color +'-800 btn-sm" type="button" onclick="deleteInput(' + "'subtopic-div-" + counter_subtopics + "'" + ')">Delete</button>' +
+    '<button class="btn btn-primary btn-material-indigo-800 btn-sm" type="button" onclick="deleteInput(' + "'subtopic-div-" + counter_subtopics + "'" + ')">Delete</button>' +
     '</span>' +
     '</div>';
   document.getElementById(divName).appendChild(newdiv);
@@ -87,7 +87,7 @@ function submit_committee() {
             name.innerHTML = $('#id_name').val();
             topic.innerHTML = $('#id_topic').val();
             subtopics.innerHTML = json.subtopics;
-            actions.innerHTML = '<a href="javascript:void(0)" class="btn btn-primary btn-material-'+ session_color +'-800 btn-xs" onclick="editCommittee(' + "'" + json.pk + "'" + ')" ><span class="mdi-content-create" style="font-size: 10px; margin-right: 4px;"></span>Edit</a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-xs" onclick="deleteCommittee(' + "'" + json.pk + "'" + ')" >Delete</a>';
+            actions.innerHTML = '<a href="javascript:void(0)" class="btn btn-primary btn-material-indigo-800 btn-xs" onclick="editCommittee(' + "'" + json.pk + "'" + ')" ><span class="mdi-content-create" style="font-size: 10px; margin-right: 4px;"></span>Edit</a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-xs" onclick="deleteCommittee(' + "'" + json.pk + "'" + ')" >Delete</a>';
             $(row).css('display', 'none');
             $(row).fadeIn("slow");
 
