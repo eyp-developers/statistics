@@ -12,9 +12,15 @@ from statistics import countries, session_types
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToCover
 
+SESSION_NAME_LEN=100
+SESSION_DESCRIPTION_LEN=200
+SESSION_AUTHOR_LEN=100
+SESSION_LICENCE_LEN=100
+
+
 class Session(models.Model):
-    session_name = models.CharField(max_length=100)
-    session_description = models.CharField(max_length=200)
+    session_name = models.CharField(max_length=SESSION_NAME_LEN)
+    session_description = models.CharField(max_length=SESSION_DESCRIPTION_LEN)
 
     #Session size
     session_type = models.CharField(max_length=3, choices=session_types.SESSION_TYPES, default=session_types.REGIONAL_SESSION)
@@ -33,9 +39,9 @@ class Session(models.Model):
 
 
     # Session picture author link allows users to credit photographers e.g. for Creative Commons content
-    session_picture_author = models.CharField(max_length=30, blank=True)
+    session_picture_author = models.CharField(max_length=SESSION_AUTHOR_LEN, blank=True)
     session_picture_author_link = models.URLField(blank=True)
-    session_picture_license = models.CharField(max_length=30, blank=True)
+    session_picture_license = models.CharField(max_length=SESSION_LICENCE_LEN, blank=True)
     session_picture_license_link = models.URLField(blank=True)
 
     session_email = models.EmailField()
