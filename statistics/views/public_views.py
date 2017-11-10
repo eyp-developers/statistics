@@ -225,7 +225,7 @@ def create_session(request):
 
 
             # Creating the Admin user
-            admin_user = User.objects.create_user(username=lower_session_name + '_admin',
+            admin_user = User.objects.create_user(username=admin_username,
                                                   email=form.cleaned_data['email'],
                                                   password=form.cleaned_data['admin_password'])
 
@@ -236,7 +236,7 @@ def create_session(request):
                 login(request, user)
 
             # Creating the Submit user
-            submit_user = User.objects.create_user(username=lower_session_name,
+            submit_user = User.objects.create_user(username=submit_username,
                                                    email=form.cleaned_data['email'],
                                                    password=form.cleaned_data['submission_password'])
 
