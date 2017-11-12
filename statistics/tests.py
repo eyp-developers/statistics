@@ -4,13 +4,12 @@ from django.test import TestCase
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import AnonymousUser, User
+from django.core.files.base import ContentFile
+from PIL import Image
+from StringIO import StringIO
 
 from views.public_views import home
 from .models import Session, Committee
-
-# Used for the image generation in create_test_image()
-from io import BytesIO
-from PIL import Image
 
 # Create your tests here.
 
@@ -21,16 +20,11 @@ ips_1_p = "Emerging economies: The EUs joint free trade deal with multiple Afric
 lor_1_p = "No mans land: Technologies with the potential to revolutionise transport, such as driverless cars and drone deliveries, will soon be ready to enter the commercial market. Balancing both the risks of introducing these technologies too early with their possible economic benefits, how should the EU position itself when legislating the introduction of these innovations?"
 
 def create_test_image():
-    """
-    We need to generate an image to use for creating a session. This will generate such images.
-    Code from: http://wildfish.com/blog/2014/02/27/generating-in-memory-image-for-tests-python/
-    """
-    file = BytesIO()
-    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
-    image.save(file, 'png')
-    file.name = 'test.png'
-    file.seek(0)
-    return file
+    image_file = StringIO()
+    image = Image.new('RGBA', size=(100, 100), color=(0, 0, 0))
+    image.save(image_file, 'png')
+    image_file.seek(0)
+    return ContentFile(image_file.read(), 'test.png')
 
 def create_session(name="Leipzig 2015", description="80th International Session of the European Youth Parliament", email="test@example.com", country="DE", color="deep-orange", admin_user=None, submission_user=None, timedelta=0, duration=10, statistics_type="JF", is_visible=True):
     """
@@ -40,7 +34,7 @@ def create_session(name="Leipzig 2015", description="80th International Session 
     end_date = timezone.now() + datetime.timedelta(days=timedelta + duration)
 
     # Here, we use create_test_image() to generate an image to use in our testing procedure
-    picture = unicode(create_test_image().read(), errors='ignore')
+    picture = create_test_image()
 
     return Session.objects.create(name=name, description=description, picture=picture, email=email, country=country, start_date=start_date, end_date=end_date, session_statistics=statistics_type, is_visible=is_visible, admin_user=None, submission_user=None)
 
