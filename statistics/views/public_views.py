@@ -28,7 +28,7 @@ import mistune
 import urllib2
 from raven import Client
 
-from ..forms.session_form import SessionForm
+from ..forms.session_create import SessionForm
 from ..models import Session, Committee, Point, ContentPoint, Vote, ActiveDebate, ActiveRound, Announcement
 
 raven_client = Client(settings.RAVEN_CONFIG['dsn'])
