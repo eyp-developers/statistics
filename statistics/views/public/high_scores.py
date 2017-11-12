@@ -1,3 +1,4 @@
+import operator
 from decimal import Decimal
 from django.shortcuts import render
 from statistics.models import Session, Point, Committee, Vote
