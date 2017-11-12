@@ -110,7 +110,7 @@
 
             <li><a href="{% url 'statistics:manage' session.pk %}">Debate Management</a></li>
 
-            <li><a href="{% url 'statistics:add' session.pk %}">Committee Management</a></li>
+            <li><a href="{% url 'statistics:create_committee' session.pk %}">Committee Management</a></li>
 
               {% if session.gender_enabled %}
                   <li><a href="{% url 'statistics:gender' session.pk %}">Track Gender</a></li>
