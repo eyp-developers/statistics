@@ -28,12 +28,8 @@ import mistune
 import urllib2
 from raven import Client
 
-# Importing all models for statistics.
-from ..models import Session, Committee, Point, ContentPoint, Vote, SubTopic, ActiveDebate, ActiveRound, Announcement
-
-# Importing the forms too.
-from ..forms import SessionForm, SessionEditForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, \
-    ActiveRoundForm
+from ..forms.session_form import SessionForm
+from ..models import Session, Committee, Point, ContentPoint, Vote, ActiveDebate, ActiveRound, Announcement
 
 raven_client = Client(settings.RAVEN_CONFIG['dsn'])
 

@@ -6,14 +6,12 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from time import strftime
 
-#Importing all models for statistics.
 from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound, Gender
-
-from ..forms import PointEditForm, ContentEditForm, VoteEditForm, PredictEditForm, RunningOrderForm, DeleteDataForm
-
-# #Importing the forms too.
-# from ..forms import SessionForm,  SessionEditForm, PointForm, VoteForm, ContentForm, JointForm, ActiveDebateForm, ActiveRoundForm
-
+from ..forms.point import PointEditForm
+from ..forms.content import ContentEditForm
+from ..forms.vote import VoteEditForm
+from ..forms.running_order import PredictEditForm, RunningOrderForm
+from ..forms.delete import DeleteDataForm
 
 def session_api(request, session_id):
     #Since the graphs on the session page need to be able to livereload, we need to create
