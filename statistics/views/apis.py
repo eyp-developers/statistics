@@ -6,16 +6,17 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from time import strftime
 
-from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound, Gender
-from ..forms.point import PointEditForm
-from ..forms.content import ContentEditForm
-from ..forms.vote import VoteEditForm
-from ..forms.running_order import PredictEditForm, RunningOrderForm
-from ..forms.delete import DeleteDataForm
+from statistics.models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound, Gender
+from statistics.forms.point import PointEditForm
+from statistics.forms.content import ContentEditForm
+from statistics.forms.vote import VoteEditForm
+from statistics.forms.running_order import PredictEditForm, RunningOrderForm
+from statistics.forms.delete import DeleteDataForm
+
 
 def session_api(request, session_id):
-    #Since the graphs on the session page need to be able to livereload, we need to create
-    #a custom "API" that outputs the neccesary JSON to keep the graph alive
+    # Since the graphs on the session page need to be able to livereload, we need to create
+    # a custom "API" that outputs the neccesary JSON to keep the graph alive
 
     session = Session.objects.get(pk=session_id)
 

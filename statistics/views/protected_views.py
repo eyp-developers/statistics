@@ -15,17 +15,17 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
-from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound, Gender
+from statistics.models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound, Gender
 
-from ..forms.session_edit import SessionEditForm
-from ..forms.committee import CommitteeForm
-from ..forms.point import PointForm, PointEditForm
-from ..forms.vote import VoteForm, VoteEditForm
-from ..forms.content import ContentForm, ContentEditForm
-from ..forms.joint import JointForm
-from ..forms.active import ActiveDebateForm, ActiveRoundForm
-from ..forms.running_order import PredictForm, PredictEditForm
-from ..forms.gender import GenderForm
+from statistics.forms.session_edit import SessionEditForm
+from statistics.forms.committee import CommitteeForm
+from statistics.forms.point import PointForm, PointEditForm
+from statistics.forms.vote import VoteForm, VoteEditForm
+from statistics.forms.content import ContentForm, ContentEditForm
+from statistics.forms.joint import JointForm
+from statistics.forms.active import ActiveDebateForm, ActiveRoundForm
+from statistics.forms.running_order import PredictForm, PredictEditForm
+from statistics.forms.gender import GenderForm
 
 
 # This is a central function. It replaces 'render' in cases where the user has to be authorized to view the page, not just authenticated.
