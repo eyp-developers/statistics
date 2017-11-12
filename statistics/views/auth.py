@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
-from ..forms import LoginForm
+from ..forms.login import LoginForm
 from ..models import Session
 
 def ga_login(request):

@@ -15,12 +15,17 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
-# Importing all models for statistics.
 from ..models import Session, Committee, Point, ContentPoint, RunningOrder, Vote, SubTopic, ActiveDebate, ActiveRound, Gender
 
-# Importing the forms too.
-from ..forms import SessionForm, SessionEditForm, CommitteeForm, PointForm, PointEditForm, VoteForm, VoteEditForm,\
-    ContentForm, ContentEditForm, JointForm, ActiveDebateForm, ActiveRoundForm, PredictForm, PredictEditForm, GenderForm
+from ..forms.session_edit import SessionEditForm
+from ..forms.committee import CommitteeForm
+from ..forms.point import PointForm, PointEditForm
+from ..forms.vote import VoteForm, VoteEditForm
+from ..forms.content import ContentForm, ContentEditForm
+from ..forms.joint import JointForm
+from ..forms.active import ActiveDebateForm, ActiveRoundForm
+from ..forms.running_order import PredictForm, PredictEditForm
+from ..forms.gender import GenderForm
 
 
 # This is a central function. It replaces 'render' in cases where the user has to be authorized to view the page, not just authenticated.
