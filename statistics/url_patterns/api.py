@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from ..views import apis
+from statistics.views import apis
 
 api_urls = [
     url(r'^api/session/(?P<session_id>[0-9]+)/$', apis.session_api, name='session_api'),
