@@ -13,7 +13,7 @@
     <h3 class="panel-title">Add/Edit Committee</h3>
   </div>
   <div class="panel-body">
-    <form class="" id="committee-form" action="{% url 'statistics:add' session.pk %}" method="post" >
+    <form class="" id="committee-form" action="{% url 'statistics:create_committee' session.pk %}" method="post" >
       <fieldset>
         {% csrf_token %}
         <div class="form-group">
@@ -104,7 +104,7 @@ tbody tr td {
 }
 </style>
 <script>
-var committee_post_url = '{% url 'statistics:add' session.pk %}';
+var committee_post_url = '{% url 'statistics:create_committee' session.pk %}';
 var committees_api_url = '{% url 'statistics:committees_api' session.pk %}'
 </script>
 {% endblock %} {% block footer_scripts %}
