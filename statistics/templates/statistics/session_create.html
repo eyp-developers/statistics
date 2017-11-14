@@ -19,7 +19,7 @@
     {% if announcements %}
       {% for announcement in announcements %}
         <div class="alert {{ announcement.announcement_type }}">
-          <h4 style="margin-top: 6px;">{{ announcement.announcement_content|safe }}</h4>
+          <h4 style="margin-top: 6px;">{{ announcement.content|safe }}</h4>
         </div>
       {% endfor %}
     {% endif %}

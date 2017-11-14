@@ -3,7 +3,7 @@
 {% load staticfiles %}
 
 {% block page_title %}Submit Content Point:
-    {% if committee %}{{ committee.committee_name }}{% else %}All{% endif %}{% endblock %}
+    {% if committee %}{{ committee.name }}{% else %}All{% endif %}{% endblock %}
 
 {% block content %}
     <br>
@@ -11,7 +11,7 @@
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h1 style="text-align: center">{% if all_form %}Submit Points{% else %}Submit a content point from
-                {{ committee.committee_name }} on {{ debate }}{% endif %}</h1>
+                {{ committee.name }} on {{ debate }}{% endif %}</h1>
         </div>
         <div class="panel-body ">
             <form class="form-horizontal" role="form" action="

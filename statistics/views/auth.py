@@ -34,14 +34,14 @@ def ga_login(request):
                     # Here we will redirect them to the page they came from when they were sent to the login page
                     return HttpResponseRedirect(next)
 
-                elif Session.objects.filter(session_admin_user=request.user):
+                elif Session.objects.filter(admin_user=request.user):
                     # If the user is an admin of a session, send them to their session's page
-                    session = Session.objects.get(session_admin_user=request.user)
+                    session = Session.objects.get(admin_user=request.user)
                     return HttpResponseRedirect(reverse('statistics:session', args = [session.pk]))
 
-                elif Session.objects.filter(session_submission_user=request.user):
+                elif Session.objects.filter(submission_user=request.user):
                     # If the user is a submission user for a session, send them to their session's page
-                    session = Session.objects.get(session_submission_user=request.user)
+                    session = Session.objects.get(submission_user=request.user)
                     return HttpResponseRedirect(reverse('statistics:session', args = [session.pk]))
 
                 else: # If they didn't have a destionation in the URL and if they have no associated session, then send them to the home page

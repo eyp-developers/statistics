@@ -42,13 +42,13 @@ def create_session(name="Leipzig 2015", description="80th International Session 
     # Here, we use create_test_image() to generate an image to use in our testing procedure
     picture = unicode(create_test_image().read(), errors='ignore')
 
-    return Session.objects.create(session_name=name, session_description=description, session_picture=picture, session_email=email, session_country=country, session_start_date=start_date, session_end_date=end_date, session_statistics=statistics_type, session_is_visible=is_visible, session_admin_user=None, session_submission_user=None)
+    return Session.objects.create(name=name, description=description, picture=picture, email=email, country=country, start_date=start_date, end_date=end_date, session_statistics=statistics_type, is_visible=is_visible, admin_user=None, submission_user=None)
 
 def create_committee(session, name="ENVI", topic=ips_1_p):
     """
     This will create a committee in the provided session.
     """
-    return Committee.objects.create(session=session, committee_name=name, committee_topic=topic)
+    return Committee.objects.create(session=session, name=name, topic=topic)
 
 def create_user_max():
     """

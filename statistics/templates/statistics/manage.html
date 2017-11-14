@@ -1,5 +1,5 @@
-{% extends 'statistics/base.html' %} {% load staticfiles %} {% block page_title %}Manage: {{ session.session_name }}{% endblock %} {% block content %}
-<h1>Manage {{ session.session_name }}</h1>
+{% extends 'statistics/base.html' %} {% load staticfiles %} {% block page_title %}Manage: {{ session.name }}{% endblock %} {% block content %}
+<h1>Manage {{ session.name }}</h1>
 <br>
 <div id="results"> <!-- This div is used to inject new information using AJAX -->
 </div>
@@ -226,7 +226,7 @@
     </div>
   </div>
 </div>
-{% endif %} {% if session.session_voting_enabled %}
+{% endif %} {% if session.voting_enabled %}
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">Edit Votes</h3>
@@ -343,7 +343,7 @@
 requestData('point', 0, 20);
 {% endif %} {% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'C' or session.session_statistics == 'RC' %}
 requestData('content', 0, 20);
-{% endif %} {% if session.session_voting_enabled %}
+{% endif %} {% if session.voting_enabled %}
 requestData('vote', 0, 20);
 {% endif %}
 </script>

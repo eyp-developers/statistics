@@ -15,7 +15,7 @@ function requestVoteData() {
           chart_committee_votes.redraw();
 
           var chart_debate_votes = $('#debate_votes').highcharts();
-          chart_debate_votes.xAxis[0].setCategories(response.committee_name, false);
+          chart_debate_votes.xAxis[0].setCategories(response.name, false);
           chart_debate_votes.series[0].setData(response.debate_in_favour, false);
           chart_debate_votes.series[1].setData(response.debate_against, false);
           chart_debate_votes.series[2].setData(response.debate_abstentions, false);
