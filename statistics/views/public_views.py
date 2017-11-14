@@ -39,7 +39,7 @@ raven_client = Client(settings.RAVEN_CONFIG['dsn'])
 
 def home(request):
     # The home page needs a list of the first few sessions ordered by the start date, then more pages with the rest of the sessions.
-    latest_sessions_list = Session.objects.filter(session_is_visible=True).order_by('-session_start_date')
+    latest_sessions_list = Session.objects.filter(is_visible=True).order_by('-start_date')
 
     # class Paginator(object_list, per_page, orphans=0, allow_empty_first_page=True)
     paginator = Paginator(latest_sessions_list, 12)
@@ -70,7 +70,7 @@ def home(request):
                 active_sessions.append(session)
 
     # We want to show all announcements on the hompage which have not expired yet
-    announcements = Announcement.objects.filter(announcement_valid_until__gte=timezone.now())
+    announcements = Announcement.objects.filter(valid_until__gte=timezone.now())
 
     context = {
         'latest_sessions_list': latest_sessions_list,
@@ -81,7 +81,7 @@ def home(request):
     user = request.user
     if user.get_username() and not user.is_superuser:
         for session in Session.objects.all():
-            if user == session.session_admin_user:
+            if user == session.admin_user:
                 # This appends the two key pairs to the context dictionary
                 context.update({
                     'admin_session': True,
@@ -117,7 +117,7 @@ def session(request, session_id):
     # The static data here is simply a list of the available committees (we can assume those don't change during live statistics)
     # and the name and data of the session itself.
     session = Session.objects.get(pk=session_id)
-    session_committee_list = Committee.objects.filter(session=session).order_by('committee_name')
+    session_committee_list = Committee.objects.filter(session=session).order_by('name')
 
     # We initialise the values of active_debate and active_debate_committee with False, so that we don't get an error when we reference them in the contect dictionary
     context = {
@@ -140,7 +140,7 @@ def session(request, session_id):
 
         context.update({
             'active_debate': active_debate,
-            'active_debate_committee': Committee.objects.filter(session=session).get(committee_name=active_debate),
+            'active_debate_committee': Committee.objects.filter(session=session).get(name=active_debate),
         })
 
     return render(request, 'statistics/session.html', context)
@@ -164,7 +164,7 @@ def debate(request, session_id, committee_id):
         no_stats = False
 
     # The voting enabled option lets us change the html content and js so that the voting is not displayed.
-    voting_enabled = s.session_voting_enabled
+    voting_enabled = s.voting_enabled
     context = {'committee': c, 'session': s, 'statistics_type': statistics_type, 'voting_enabled': voting_enabled,
                'no_stats': no_stats}
 
@@ -198,14 +198,14 @@ def create_session(request):
         # Fill an instance of a SessionForm with the request data.
         form = SessionForm(request.POST, request.FILES)
         if form.is_valid():
-            lower_session_name = slugify(''.join(form.cleaned_data['name'].split()).lower())
+            lower_name = slugify(''.join(form.cleaned_data['name'].split()).lower())
 
-            admin_username = lower_session_name + '_admin'
-            submit_username = lower_session_name
+            admin_username = lower_name + '_admin'
+            submit_username = lower_name
 
             if (len(User.objects.filter(username=admin_username))
                     or len(User.objects.filter(username=submit_username))
-                    or len(Session.objects.filter(session_name=form.cleaned_data['name']))):
+                    or len(Session.objects.filter(name=form.cleaned_data['name']))):
                 context = {'form': form, 'errors': ['Session with this name or a similar name already exists']}
                 return render(request, 'statistics/session_create.html', context)
 
@@ -243,33 +243,33 @@ def create_session(request):
 
             # We need to create a session, active debate and active round.
             # We also need to create 2 new users for the session.
-            session = Session(session_name=form.cleaned_data['name'],
-                              session_description=form.cleaned_data['description'],
+            session = Session(name=form.cleaned_data['name'],
+                              description=form.cleaned_data['description'],
                               session_type=form.cleaned_data['type'],
-                              session_email=form.cleaned_data['email'],
-                              session_picture_author=form.cleaned_data['picture_author'],
-                              session_picture_author_link=form.cleaned_data['picture_author_link'],
-                              session_picture_license=form.cleaned_data['picture_license'],
-                              session_picture_license_link=form.cleaned_data['picture_license_link'],
-                              session_website_link=form.cleaned_data['website'],
-                              session_facebook_link=form.cleaned_data['facebook'],
-                              session_twitter_link=form.cleaned_data['twitter'],
-                              session_resolution_link=form.cleaned_data['resolution'],
-                              session_country=form.cleaned_data['country'],
-                              session_start_date=start_date,
-                              session_end_date=end_date,
+                              email=form.cleaned_data['email'],
+                              picture_author=form.cleaned_data['picture_author'],
+                              picture_author_link=form.cleaned_data['picture_author_link'],
+                              picture_licence=form.cleaned_data['picture_license'],
+                              picture_license_link=form.cleaned_data['picture_license_link'],
+                              website_link=form.cleaned_data['website'],
+                              facebook_link=form.cleaned_data['facebook'],
+                              twitter_link=form.cleaned_data['twitter'],
+                              resolution_link=form.cleaned_data['resolution'],
+                              country=form.cleaned_data['country'],
+                              start_date=start_date,
+                              end_date=end_date,
                               session_statistics=form.cleaned_data['statistics'],
-                              session_is_visible=False, # When created, all sessions are initially hidden from the front page.
-                              session_voting_enabled=voting,
-                              session_gender_enabled=gender,
+                              is_visible=False, # When created, all sessions are initially hidden from the front page.
+                              voting_enabled=voting,
+                              gender_enabled=gender,
                               gender_number_female=form.cleaned_data['number_female_participants'],
                               gender_number_male=form.cleaned_data['number_male_participants'],
                               gender_number_other=form.cleaned_data['number_other_participants'],
-                              session_max_rounds=form.cleaned_data['max_rounds'],
-                              session_admin_user=admin_user,
-                              session_submission_user=submit_user,
+                              max_rounds=form.cleaned_data['max_rounds'],
+                              admin_user=admin_user,
+                              submission_user=submit_user,
                               )
-            session.session_picture = form.cleaned_data['picture']
+            session.picture = form.cleaned_data['picture']
 
             try:
                 session.save()
@@ -293,7 +293,7 @@ def create_session(request):
         # Otherwise, create a nice new form for the user.
         form = SessionForm()
 
-    announcements = Announcement.objects.filter(announcement_valid_until__gte=datetime.now())
+    announcements = Announcement.objects.filter(valid_until__gte=datetime.now())
 
 
     context = {'form': form, 'announcements': announcements}
@@ -317,7 +317,7 @@ def high_scores(request):
         if Point.objects.all().filter(session=s).count() != 0:
             stats = True
 
-        if s.session_is_visible and ((not s.session_has_technical_problems) and stats):
+        if s.is_visible and ((not s.has_technical_problems) and stats):
             total_votes = 0
             in_favour = 0
             against = 0
@@ -331,10 +331,10 @@ def high_scores(request):
                 if in_favour != 0 and total_votes != 0 and against != 0:
                     percent_in_favour = (Decimal(in_favour) / Decimal(total_votes)) * 100
                     percent_against = (Decimal(against) / Decimal(total_votes)) * 100
-                    most_in_favour[s.session_name] = percent_in_favour
-                    most_against[s.session_name] = percent_against
+                    most_in_favour[s.name] = percent_in_favour
+                    most_against[s.name] = percent_against
 
-            most_votes[s.session_name] = total_votes
+            most_votes[s.name] = total_votes
 
             total_points = 0
             total_drs = 0
@@ -352,15 +352,15 @@ def high_scores(request):
 
                 total_points += points
                 total_drs += drs
-                most_points_in_debate[c.committee_name + ', ' + s.session_name] = points
-                most_drs_in_debate[c.committee_name + ', ' + s.session_name] = drs
+                most_points_in_debate[c.name + ', ' + s.name] = points
+                most_drs_in_debate[c.name + ', ' + s.name] = drs
 
-            most_points[s.session_name] = total_points
-            most_drs[s.session_name] = total_drs
-            most_successful[s.session_name] = total_successful
-            most_unsuccessful[s.session_name] = total_unsuccessful
+            most_points[s.name] = total_points
+            most_drs[s.name] = total_drs
+            most_successful[s.name] = total_successful
+            most_unsuccessful[s.name] = total_unsuccessful
             if s.minutes_per_point() != 0:
-                best_mpp[s.session_name] = s.minutes_per_point()
+                best_mpp[s.name] = s.minutes_per_point()
 
     five_most_votes = sorted(most_votes.items(), key=operator.itemgetter(1), reverse=True)[:5]
     five_most_in_favour = sorted(most_in_favour.items(), key=operator.itemgetter(1), reverse=True)[:5]

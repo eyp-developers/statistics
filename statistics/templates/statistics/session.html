@@ -2,51 +2,51 @@
 
 {% load staticfiles %}
 
-{% block page_title %}{{ session.session_name }}{% endblock %}
+{% block page_title %}{{ session.name }}{% endblock %}
 
 {% block jumbotron %}
-    <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.session_picture_large_fast.url }}') no-repeat center/cover;">
-        <h1 class="session-name white">{{ session.session_name }}</h1>
-        <h3 class="session-description white">{{ session.session_description }}</h3>
-        <h3 class="session-date white">{{ session.session_start_date|date:"D, j N Y" }} – {{ session.session_end_date|date:"D, j N Y" }}</h3>
+    <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.picture_large_fast.url }}') no-repeat center/cover;">
+        <h1 class="session-name white">{{ session.name }}</h1>
+        <h3 class="session-description white">{{ session.description }}</h3>
+        <h3 class="session-date white">{{ session.start_date|date:"D, j N Y" }} – {{ session.end_date|date:"D, j N Y" }}</h3>
 
-        {% if session.session_website_link or session.session_resolution_link or session.session_facebook_link or session.session_twitter_link %}
+        {% if session.website_link or session.resolution_link or session.facebook_link or session.twitter_link %}
 
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-1">
 
-                    {% if session.session_website_link %}
-                        <a class="btn btn-sm btn-primary btn-raised" href="{{ session.session_website_link }}" target="_blank">{{ session.session_name }}'s Website</a>
+                    {% if session.website_link %}
+                        <a class="btn btn-sm btn-primary btn-raised" href="{{ session.website_link }}" target="_blank">{{ session.name }}'s Website</a>
                     {% endif %}
 
-                    {% if session.session_resolution_link %}
-                        <a class="btn btn-sm btn-primary btn-raised" href="{{ session.session_resolution_link }}" target="_blank">View Resolutions</a>
+                    {% if session.resolution_link %}
+                        <a class="btn btn-sm btn-primary btn-raised" href="{{ session.resolution_link }}" target="_blank">View Resolutions</a>
                     {% endif %}
 
-                    {% if session.session_facebook_link %}
-                        <a class="btn btn-sm btn-primary btn-raised" href="{{ session.session_facebook_link }}" target="_blank">{{ session.session_name }} on Facebook</a>
+                    {% if session.facebook_link %}
+                        <a class="btn btn-sm btn-primary btn-raised" href="{{ session.facebook_link }}" target="_blank">{{ session.name }} on Facebook</a>
                     {% endif %}
 
-                    {% if session.session_twitter_link %}
-                        <a class="btn btn-sm btn-primary btn-raised" href="{{ session.session_twitter_link }}" target="_blank">{{ session.session_name }} on Twitter</a>
+                    {% if session.twitter_link %}
+                        <a class="btn btn-sm btn-primary btn-raised" href="{{ session.twitter_link }}" target="_blank">{{ session.name }} on Twitter</a>
                     {% endif %}
 
                 </div>
               </div>
 
-        {% endif %} <!-- if session.session_website_link or session.session_resolution_link or session.session_facebook_link or session.session_twitter_link -->
+        {% endif %} <!-- if session.website_link or session.resolution_link or session.facebook_link or session.twitter_link -->
 
 
 
-        {% if session.session_picture_author %}
+        {% if session.picture_author %}
           <div class="picture-credit-link-container">
             <br>
-            <a href="{{ session.session_picture_author_link }}" target="_blank" class="picture-credit-link">Image by {{ session.session_picture_author }} </a>
-            {% if session.session_picture_license %}
-                <a href="{{ session.session_picture_license_link }}" target="_blank" class="picture-credit-link">licensed under {{ session.session_picture_license }}</a>
+            <a href="{{ session.picture_author_link }}" target="_blank" class="picture-credit-link">Image by {{ session.picture_author }} </a>
+            {% if session.picture_licence %}
+                <a href="{{ session.picture_license_link }}" target="_blank" class="picture-credit-link">licensed under {{ session.picture_licence }}</a>
             {% endif %}
           </div> <!-- picture-credit-link-container -->
-        {% endif %} <!-- if session.session_picture_author -->
+        {% endif %} <!-- if session.picture_author -->
 
 
 
@@ -65,7 +65,7 @@
   {% if active_debate %}
       <div class="alert alert-dismissable alert-info">
         <button type="button" class="close" data-dismiss="alert">×</button>
-        <h4 style="margin-top: 6px;"><span class="mdi-social-whatshot"></span>   <strong><a href="{% url 'statistics:debate' session.pk active_debate_committee.pk %}" class="alert-link">{{active_debate_committee.committee_name}}</a></strong> is being debated right now!</h4>
+        <h4 style="margin-top: 6px;"><span class="mdi-social-whatshot"></span>   <strong><a href="{% url 'statistics:debate' session.pk active_debate_committee.pk %}" class="alert-link">{{active_debate_committee.name}}</a></strong> is being debated right now!</h4>
       </div>
   {% endif %}
 
@@ -80,9 +80,9 @@
             <div class="row">
               {% for committee in session_committee_list %}
                 <div class="debate-box col-md-4">
-                    <a href="{% url 'statistics:debate' committee.session.id committee.id %}" class="btn btn-raised btn-primary">{{ committee.committee_name }}</a>
+                    <a href="{% url 'statistics:debate' committee.session.id committee.id %}" class="btn btn-raised btn-primary">{{ committee.name }}</a>
                   <p>
-                    {{ committee.committee_topic }}
+                    {{ committee.topic }}
                   </p>
                 </div>
                 {% cycle "" "" "</div><div class='row'>" %} <!-- this ends the row after every third committee, thus ensuring that they are all properly aligned -->
@@ -110,7 +110,7 @@
 </div>
 
 
-{% if session.session_voting_enabled %}
+{% if session.voting_enabled %}
 <script>
 var voting_enabled = true;
 var voting_url = '{% url 'statistics:session_vote_api' session.id %}';
@@ -144,7 +144,7 @@ var voting_url = '{% url 'statistics:session_vote_api' session.id %}';
         <h4 id="total_type"></h4>
         <h3 id="mpp">Minutes Per Point:</h3>
       </div>
-      {% if session.session_voting_enabled %}
+      {% if session.voting_enabled %}
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="text-align:center;">
         <h2 id="total_votes">Total Votes:</h2>
         <h3 id="total_in_favour">Total In Favour:</h3>
@@ -167,7 +167,7 @@ var voting_url = '{% url 'statistics:session_vote_api' session.id %}';
 
 {% block footer_scripts %}
 <script  type="text/javascript" src="{% static 'statistics/js/session.js' %}"></script>
-{% if session.session_voting_enabled %}
+{% if session.voting_enabled %}
 <script  type="text/javascript" src="{% static 'statistics/js/session_vote.js' %}"></script>
 {% endif %}
 {% endblock %}

@@ -2,14 +2,14 @@
 
 {% load staticfiles %}
 
-{% block page_title %}Submit Point: {% if committee %}{{ committee.committee_name }}{% else %}All{% endif %}{% endblock %}
+{% block page_title %}Submit Point: {% if committee %}{{ committee.name }}{% else %}All{% endif %}{% endblock %}
 
 {% block content %}
 <br>
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h1 style="text-align: center">{% if all_form %}Submit Statistics{% else %}Submit statistics from
-                {{ committee.committee_name }} on {{ debate }}{% endif %}</h1>
+                {{ committee.name }} on {{ debate }}{% endif %}</h1>
         </div>
         <div class="panel-body ">
             <form class="form-horizontal" role="form" action="{% if all_form %}{% url 'statistics:joint_all' session.id %}{% else %}{% url 'statistics:joint' session.id committee.id %}{% endif %}" method="post">

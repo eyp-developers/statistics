@@ -3,13 +3,13 @@
 {% load staticfiles %}
 {% load form_extras %}
 
-{% block page_title %}Edit - {{ session.session_name }}{% endblock %}
+{% block page_title %}Edit - {{ session.name }}{% endblock %}
 
 {% block content %}
     <br>
     <br>
     <div class="well well-lg">
-        <legend>Edit Session: {{ session.session_name }}</legend>
+        <legend>Edit Session: {{ session.name }}</legend>
         <form class="form-horizontal" role="form" enctype="multipart/form-data" action="{% url 'statistics:edit' session.pk %}" method="post">
             <fieldset>
                 {% csrf_token %}

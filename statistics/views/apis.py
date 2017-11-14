@@ -22,7 +22,7 @@ def session_api(request, session_id):
     session = Session.objects.get(pk=session_id)
 
     #First we need all the committees registered for that session
-    committees = Committee.objects.filter(session__id=session_id).order_by('committee_name')
+    committees = Committee.objects.filter(session__id=session_id).order_by('name')
 
     #Then we need all the available points, direct responses and votes
     if session.session_statistics != 'C':
@@ -64,7 +64,7 @@ def session_api(request, session_id):
         #For each committee,
         for committee in committees:
             #Let c be the name
-            c = committee.committee_name
+            c = committee.name
             #p be the count of points
             p = points.filter(committee_by=committee).count()
             #and d be the count of DRs.
@@ -90,7 +90,7 @@ def session_api(request, session_id):
 def active_debate_api(request, session_id):
     session = Session.objects.get(pk=session_id)
     active_debate = ActiveDebate.objects.get(session=session)
-    active_committee = Committee.objects.filter(session=session).filter(committee_name=active_debate.active_debate)[0]
+    active_committee = Committee.objects.filter(session=session).filter(name=active_debate.active_debate)[0]
 
     active_debate_json = json.dumps({
     'active_debate_pk': active_committee.pk,
@@ -109,14 +109,14 @@ def committees_api(request, session_id):
     for subtopic in committee_subtopics:
         this_subtopic = {
         'pk': subtopic.pk,
-        'subtopic': subtopic.subtopic_text
+        'subtopic': subtopic.text
         }
         committee_subtopics_array.append(this_subtopic)
     #Then lets make a JSON object with the data from that committee
     thiscommittee = json.dumps({
     'pk': committee.pk,
-    'name': committee.committee_name,
-    'topic': committee.committee_topic,
+    'name': committee.name,
+    'topic': committee.topic,
     'subtopics': committee_subtopics_array
     })
 
@@ -145,7 +145,7 @@ def gender_api(request, session_id):
                 committees.append(point.committee)
 
         for committee in committees:
-            categories.append(committee.committee_name)
+            categories.append(committee.name)
             male.append(gender_points.filter(committee=committee).filter(gender='M').count())
             female.append(gender_points.filter(committee=committee).filter(gender='F').count())
             other.append(gender_points.filter(committee=committee).filter(gender='O').count())
@@ -172,16 +172,16 @@ def debate_api(request, session_id, committee_id):
     #We get the session, committee, and list of all committees.
     session = Session.objects.get(pk=session_id)
     committee = Committee.objects.filter(pk=committee_id)
-    committees = Committee.objects.filter(session__id=session_id).order_by('committee_name')
+    committees = Committee.objects.filter(session__id=session_id).order_by('name')
 
     #Making an array with the committee name.
     committee_array_name = []
-    committee_array_name.append(committee[0].committee_name)
+    committee_array_name.append(committee[0].name)
 
     #Getting all points (both Point and DR), just points, just DRs and all votes
-    all_points = Point.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name)
-    points = Point.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name).filter(point_type='P')
-    drs = Point.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name).filter(point_type='DR')
+    all_points = Point.objects.filter(session__pk=session_id).filter(active_debate=committee[0].name)
+    points = Point.objects.filter(session__pk=session_id).filter(active_debate=committee[0].name).filter(point_type='P')
+    drs = Point.objects.filter(session__pk=session_id).filter(active_debate=committee[0].name).filter(point_type='DR')
 
     #If the points couldn't be retreived (If there were no points made yet) then don't do anything
     if not all_points:
@@ -189,19 +189,19 @@ def debate_api(request, session_id, committee_id):
     #But if there were points available
     else:
         #We want the name of the committee that made the last point.
-        latest_point_name = all_points.order_by('-timestamp')[0].committee_by.committee_name
+        latest_point_name = all_points.order_by('-timestamp')[0].committee_by.name
         #Then we want the subtopics that that point addressed.
         latest_point_subtopics = all_points.order_by('-timestamp')[0].subtopics.all()
         latest_point_subtopics_array = []
 
         #For each sutopic the latest point addressed, append the text of the subtopic to the array
         for s in latest_point_subtopics:
-            latest_point_subtopics_array.append(s.subtopic_text)
+            latest_point_subtopics_array.append(s.text)
 
         #Now we're moving away from just the latest point, we want all subtopics connected to the committee in question.
-        subtopics = SubTopic.objects.filter(session__pk=session_id).filter(committee__committee_name=committee[0].committee_name)
+        subtopics = SubTopic.objects.filter(session__pk=session_id).filter(committee__name=committee[0].name)
         #Get the maximum number of allowed rounds for the session in question.
-        no_rounds = range(session.session_max_rounds)
+        no_rounds = range(session.max_rounds)
 
         #Set up the needed arrays
         subtopics_array = []
@@ -209,7 +209,7 @@ def debate_api(request, session_id, committee_id):
 
         #For each available subtopic, append the subtopic text to the subtopics array
         for s in subtopics:
-            subtopics_array.append(s.subtopic_text)
+            subtopics_array.append(s.text)
 
         #For each round available
         for r in no_rounds:
@@ -230,7 +230,7 @@ def debate_api(request, session_id, committee_id):
             subtopic_points_array.append(round_array)
 
         #A simple boolean for whether or not the debate in question is the active debate.
-        is_active = active_debate[0].active_debate == committee[0].committee_name
+        is_active = active_debate[0].active_debate == committee[0].name
 
     #Setting up more arrays for the voting graphs and zeroing values.
     committees_list = []
@@ -243,9 +243,9 @@ def debate_api(request, session_id, committee_id):
     drs_made = []
 
     for c in committees:
-        com_name = c.committee_name
-        p = points.filter(committee_by__committee_name=com_name).count()
-        d = drs.filter(committee_by__committee_name=com_name).count()
+        com_name = c.name
+        p = points.filter(committee_by__name=com_name).count()
+        d = drs.filter(committee_by__name=com_name).count()
 
         points_total += p
         points_total += d
@@ -257,17 +257,17 @@ def debate_api(request, session_id, committee_id):
         drs_made.append(d)
 
     running_order = []
-    if active_debate[0].active_debate == committee[0].committee_name:
+    if active_debate[0].active_debate == committee[0].name:
         running = RunningOrder.objects.filter(session=session)
         if running:
             next_three = running.order_by('position')[:3]
             for point in next_three:
-                running_order.append(point.committee_by.committee_name)
+                running_order.append(point.committee_by.name)
 
 
     if not all_points:
         debate_json = json.dumps({
-        'committee_name': committee_array_name,
+        'name': committee_array_name,
         'is_active': 'false',
         'committees_list': committees_list,
         'points_total': points_total,
@@ -283,7 +283,7 @@ def debate_api(request, session_id, committee_id):
         })
     else:
         debate_json = json.dumps({
-        'committee_name': committee_array_name,
+        'name': committee_array_name,
         'is_active': is_active,
         'committees_list': committees_list,
         'points_total': points_total,
@@ -303,7 +303,7 @@ def session_vote_api(request, session_id):
     #This is for returning the specific vote data from the vote API for the voting chart on the session page.
 
     #First we need all the committees registered for that session
-    committees = Committee.objects.filter(session__id=session_id).order_by('committee_name')
+    committees = Committee.objects.filter(session__id=session_id).order_by('name')
     #Then all the votes for that session
     votes = Vote.objects.filter(session_id=session_id)
     total_votes = 0
@@ -323,7 +323,7 @@ def session_vote_api(request, session_id):
     #For each committee,
     for committee in committees:
         #Let c be the name
-        c = committee.committee_name
+        c = committee.name
 
         #Append each newly made variable to our nice lists.
         committee_list.append(c)
@@ -383,14 +383,14 @@ def debate_vote_api(request, session_id, committee_id):
     #We get the session, committee, and list of all committees.
     session = Session.objects.get(pk=session_id)
     committee = Committee.objects.filter(pk=committee_id)
-    committees = Committee.objects.filter(session__id=session_id).order_by('committee_name')
+    committees = Committee.objects.filter(session__id=session_id).order_by('name')
 
     #Making an array with the committee name.
     committee_array_name = []
-    committee_array_name.append(committee[0].committee_name)
+    committee_array_name.append(committee[0].name)
 
     #Getting all votes
-    votes = Vote.objects.filter(session__pk=session_id).filter(active_debate=committee[0].committee_name)
+    votes = Vote.objects.filter(session__pk=session_id).filter(active_debate=committee[0].name)
 
     #Setting up more arrays for the voting graphs and zeroing values.
     committees_list = []
@@ -424,7 +424,7 @@ def debate_vote_api(request, session_id, committee_id):
         committees_abstentions.append(v.abstentions)
         committees_absent.append(v.absent)
 
-        committees_voted_list.append(v.committee_by.committee_name)
+        committees_voted_list.append(v.committee_by.name)
 
     #Count the total committees and the ones that have voted for a nice counted/total fraction
     committees_count = len(committees)
@@ -443,7 +443,7 @@ def debate_vote_api(request, session_id, committee_id):
 
     #Turn everything into JSON and render.
     debate_json = json.dumps({
-    'committee_name': committee_array_name,
+    'name': committee_array_name,
     'committees_voted_list': committees_voted_list,
     'committees_count': committees_count,
     'committees_voted': committees_voted,
@@ -466,9 +466,9 @@ def content_api(request, session_id, committee_id):
     point_from = int(request.GET.get('offset'))
     point_to = int(request.GET.get('offset')) + int(request.GET.get('count'))
     #First we need all contentpoints from that session
-    contentpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.committee_name).order_by('-pk')[point_from:point_to]
+    contentpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.name).order_by('-pk')[point_from:point_to]
     #We also need to count the points for the total
-    totalpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.committee_name).count()
+    totalpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.name).count()
     #If there are no points, do nothing.
     if not contentpoints:
         content_json = json.dumps({
@@ -482,7 +482,7 @@ def content_api(request, session_id, committee_id):
         #Loop through the avaliable contentpoints
         for p in contentpoints:
             #For each contentpoint, we need the id of the point, who the point was by, the kind of point, and the content of the point.
-            committee_by = p.committee_by.committee_name
+            committee_by = p.committee_by.name
             point_type = p.point_type
             content = p.point_content
             pk = p.pk
@@ -513,9 +513,9 @@ def content_latest_api(request, session_id, committee_id):
     #We need the committee to filter by active debate name.
     committee = Committee.objects.get(pk=committee_id)
     #We need to get the contentpoints that have a pk greater than the "since" pk.
-    contentpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.committee_name).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
+    contentpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.name).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
     #We also need to count the points for the total
-    totalpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.committee_name).count()
+    totalpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.name).count()
     #Create an empty array to put the contentpoints in
     contentpoint_list = []
     #If there are no points, do nothing.
@@ -537,7 +537,7 @@ def content_latest_api(request, session_id, committee_id):
         #Loop through the avaliable contentpoints
         for p in contentpoints:
             #For each contentpoint, we need the id of the point, who the point was by, the kind of point, and the content of the point.
-            committee_by = p.committee_by.committee_name
+            committee_by = p.committee_by.name
             point_type = p.point_type
             content = p.point_content
             pk = p.pk
@@ -605,7 +605,7 @@ def data_api(request, session_id):
             thisdata['last_changed'] = d.timestamp.strftime("%H:%M")
 
             if json_datatype != 'gender':
-                thisdata['committee_by'] = d.committee_by.committee_name
+                thisdata['committee_by'] = d.committee_by.name
                 thisdata['active_debate'] = d.active_debate
                 thisdata['committee_color'] = d.committee_by.committee_color()
                 thisdata['committee_text_color'] = d.committee_by.committee_text_color()
@@ -619,7 +619,7 @@ def data_api(request, session_id):
                 thisdata['round_no'] = d.active_round
                 subtopics_array = []
                 for subtopic in d.subtopics.all():
-                    subtopics_array.append(subtopic.subtopic_text)
+                    subtopics_array.append(subtopic.text)
                 thisdata['subtopics'] = ', '.join(subtopics_array)
             elif json_datatype == 'vote':
                 thisdata['in_favour'] = d.in_favour
@@ -628,7 +628,7 @@ def data_api(request, session_id):
                 thisdata['absent'] = d.absent
             elif json_datatype == 'gender':
                 thisdata['gender'] = d.gender
-                thisdata['committee'] = d.committee.committee_name
+                thisdata['committee'] = d.committee.name
 
             data_list.append(thisdata)
         #Then we need to turn the list into JSON.
@@ -686,7 +686,7 @@ def data_latest_api(request, session_id):
             thisdata['last_changed'] = d.timestamp.strftime("%H:%M")
 
             if json_datatype != 'gender':
-                thisdata['committee_by'] = d.committee_by.committee_name
+                thisdata['committee_by'] = d.committee_by.name
                 thisdata['active_debate'] = d.active_debate
                 thisdata['committee_color'] = d.committee_by.committee_color()
                 thisdata['committee_text_color'] = d.committee_by.committee_text_color()
@@ -700,7 +700,7 @@ def data_latest_api(request, session_id):
                 thisdata['round_no'] = d.active_round
                 subtopics_array = []
                 for subtopic in d.subtopics.all():
-                    subtopics_array.append(subtopic.subtopic_text)
+                    subtopics_array.append(subtopic.text)
                 thisdata['subtopics'] = ', '.join(subtopics_array)
             elif json_datatype == 'vote':
                 thisdata['in_favour'] = d.in_favour
@@ -709,7 +709,7 @@ def data_latest_api(request, session_id):
                 thisdata['absent'] = d.absent
             elif json_datatype == 'gender':
                 thisdata['gender'] = d.gender
-                thisdata['committee'] = d.committee.committee_name
+                thisdata['committee'] = d.committee.name
 
             data_list.append(thisdata)
         #Then we need to turn the list into JSON.
@@ -760,11 +760,11 @@ def data_pk_api(request):
                     for s in subtopics:
                         st = SubTopic.objects.get(pk=int(s.get('pk')))
                         p.subtopics.add(st)
-                        subtopics_array.append(st.subtopic_text)
+                        subtopics_array.append(st.text)
 
                     response_data['pk'] = p.pk
                     response_data['last_changed'] = p.timestamp.strftime("%H:%M")
-                    response_data['by'] = p.committee_by.committee_name
+                    response_data['by'] = p.committee_by.name
                     response_data['debate'] = p.active_debate
                     response_data['round_no'] = p.active_round
                     response_data['point_type'] = p.point_type
@@ -796,7 +796,7 @@ def data_pk_api(request):
                         #If the form is valid, get the Point and update it with our values.
                         p = Point.objects.get(pk=form.cleaned_data['pk'])
 
-                        committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(committee_name=form.cleaned_data['committee'])[0]
+                        committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(name=form.cleaned_data['committee'])[0]
                         p.committee_by = committee_by
                         p.active_debate = form.cleaned_data['debate']
                         p.active_round = form.cleaned_data['round_no']
@@ -807,11 +807,11 @@ def data_pk_api(request):
                         for s in subtopics:
                             st = SubTopic.objects.get(pk=int(s.get('pk')))
                             p.subtopics.add(st)
-                            subtopics_array.append(st.subtopic_text)
+                            subtopics_array.append(st.text)
 
                         response_data['pk'] = p.pk
                         response_data['last_changed'] = p.timestamp.strftime("%H:%M")
-                        response_data['by'] = p.committee_by.committee_name
+                        response_data['by'] = p.committee_by.name
                         response_data['debate'] = p.active_debate
                         response_data['round_no'] = p.active_round
                         response_data['point_type'] = p.point_type
@@ -833,7 +833,7 @@ def data_pk_api(request):
                     if form.is_valid():
                         c = ContentPoint.objects.get(pk=form.cleaned_data['pk'])
 
-                        committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(committee_name=form.cleaned_data['committee'])[0]
+                        committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(name=form.cleaned_data['committee'])[0]
                         c.committee_by = committee_by
                         c.active_debate = form.cleaned_data['debate']
                         c.point_type = form.cleaned_data['point_type']
@@ -842,7 +842,7 @@ def data_pk_api(request):
 
                         response_data['pk'] = c.pk
                         response_data['last_changed'] = c.timestamp.strftime("%H:%M")
-                        response_data['by'] = c.committee_by.committee_name
+                        response_data['by'] = c.committee_by.name
                         response_data['debate'] = c.active_debate
                         response_data['point_type'] = c.point_type
                         response_data['content'] = c.point_content
@@ -865,7 +865,7 @@ def data_pk_api(request):
 
                         v = Vote.objects.get(pk=form.cleaned_data['pk'])
 
-                        committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(committee_name=form.cleaned_data['committee'])[0]
+                        committee_by = Committee.objects.filter(session_id=form.cleaned_data['session']).filter(name=form.cleaned_data['committee'])[0]
 
                         v.committee_by = committee_by
                         v.active_debate = form.cleaned_data['debate']
@@ -877,7 +877,7 @@ def data_pk_api(request):
 
                         response_data['pk'] = v.pk
                         response_data['last_changed'] = v.timestamp.strftime("%H:%M")
-                        response_data['by'] = v.committee_by.committee_name
+                        response_data['by'] = v.committee_by.name
                         response_data['debate'] = v.active_debate
                         response_data['in_favour'] = v.in_favour
                         response_data['against'] = v.against
@@ -911,18 +911,18 @@ def data_pk_api(request):
             for subtopic in data.subtopics.all():
                 this_subtopic = {
                 'pk': subtopic.pk,
-                'subtopic': subtopic.subtopic_text
+                'subtopic': subtopic.text
                 }
                 subtopics_array.append(this_subtopic)
             thisdata['subtopics'] = subtopics_array
             #Getting all the subtopics avaliable for a certain point
-            active_committee = Committee.objects.filter(session=data.session).filter(committee_name=data.active_debate)[0]
+            active_committee = Committee.objects.filter(session=data.session).filter(name=data.active_debate)[0]
             all_subtopics = SubTopic.objects.filter(committee=active_committee)
             all_subtopics_array = []
             for subtopic in all_subtopics:
                 this_subtopic = {
                 'pk': subtopic.pk,
-                'subtopic': subtopic.subtopic_text
+                'subtopic': subtopic.text
                 }
                 all_subtopics_array.append(this_subtopic)
             thisdata['all_subtopics'] = all_subtopics_array
@@ -933,18 +933,18 @@ def data_pk_api(request):
             for subtopic in data.subtopics.all():
                 this_subtopic = {
                 'pk': subtopic.pk,
-                'subtopic': subtopic.subtopic_text
+                'subtopic': subtopic.text
                 }
                 subtopics_array.append(this_subtopic)
             thisdata['subtopics'] = subtopics_array
             #Getting all the subtopics avaliable for a certain point
-            active_committee = Committee.objects.filter(session=data.session).filter(committee_name=data.active_debate)[0]
+            active_committee = Committee.objects.filter(session=data.session).filter(name=data.active_debate)[0]
             all_subtopics = SubTopic.objects.filter(committee=active_committee)
             all_subtopics_array = []
             for subtopic in all_subtopics:
                 this_subtopic = {
                 'pk': subtopic.pk,
-                'subtopic': subtopic.subtopic_text
+                'subtopic': subtopic.text
                 }
                 all_subtopics_array.append(this_subtopic)
             thisdata['all_subtopics'] = all_subtopics_array
@@ -956,7 +956,7 @@ def data_pk_api(request):
             thisdata['absent'] = data.absent
 
         thisdata['pk'] = data.pk
-        thisdata['committee_by'] = data.committee_by.committee_name
+        thisdata['committee_by'] = data.committee_by.name
         thisdata['active_debate'] = data.active_debate
 
         content_json = json.dumps(thisdata)
@@ -1075,9 +1075,9 @@ def runningorder_api(request, session_id):
             subtopics_next_array = []
             for subtopic in committee.next_subtopics.all():
                 thissubtopic = {
-                'subtopic': subtopic.subtopic_text,
+                'subtopic': subtopic.text,
                 'color': subtopic.subtopic_color(),
-                'text_color': subtopic.subtopic_text_color()
+                'text_color': subtopic.text_color()
                 }
                 subtopics_next_array.append(thissubtopic)
             thiscommittee = {
@@ -1096,14 +1096,14 @@ def runningorder_api(request, session_id):
             point_subtopics = []
             for subtopic in point.subtopics.all():
                 thissubtopic = {
-                'subtopic': subtopic.subtopic_text,
+                'subtopic': subtopic.text,
                 'color': subtopic.subtopic_color(),
-                'text_color': subtopic.subtopic_text_color()
+                'text_color': subtopic.text_color()
                 }
                 point_subtopics.append(thissubtopic)
             thispoint = {
                 'position': backlog_position,
-                'by': point.committee_by.committee_name,
+                'by': point.committee_by.name,
                 'on': point.active_debate,
                 'round': point.active_round,
                 'type': point.point_type,
@@ -1120,23 +1120,23 @@ def runningorder_api(request, session_id):
             if point.point_type == 'P':
                 for subtopic in point.committee_by.next_subtopics.all():
                     thissubtopic = {
-                    'subtopic': subtopic.subtopic_text,
+                    'subtopic': subtopic.text,
                     'color': subtopic.subtopic_color(),
-                    'text_color': subtopic.subtopic_text_color()
+                    'text_color': subtopic.text_color()
                     }
                     point_subtopics.append(thissubtopic)
             else:
                 for subtopic in last_three[0].subtopics.all():
                     thissubtopic = {
-                    'subtopic': subtopic.subtopic_text,
+                    'subtopic': subtopic.text,
                     'color': subtopic.subtopic_color(),
-                    'text_color': subtopic.subtopic_text_color()
+                    'text_color': subtopic.text_color()
                     }
                     point_subtopics.append(thissubtopic)
 
             thispoint = {
                 'position': point.position,
-                'by': point.committee_by.committee_name,
+                'by': point.committee_by.name,
                 'on': active_debate,
                 'round': active_round,
                 'type': point.point_type,

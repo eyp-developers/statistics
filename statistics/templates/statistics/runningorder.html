@@ -1,4 +1,4 @@
-{% extends 'statistics/base.html' %} {% load staticfiles %} {% block page_title %}Running Order: {{ session.session_name }}{% endblock %} {% block content %}
+{% extends 'statistics/base.html' %} {% load staticfiles %} {% block page_title %}Running Order: {{ session.name }}{% endblock %} {% block content %}
 <div id="results"> <!-- This div is used to inject new information using AJAX -->
 </div>
 </div>
@@ -90,7 +90,7 @@
     {% for committee in committees %}
     <div class="runningorder-committee panel panel-primary" id="committee-{{committee.pk}}" style="margin-bottom: 0px; height: 75%;">
       <div class="runningorder-committeename panel-heading">
-        <h1>{{committee.committee_name}}</h1>
+        <h1>{{committee.name}}</h1>
       </div>
       <div class="runningorder-committeebuttons">
           <div class="runningorder-committeedata">
