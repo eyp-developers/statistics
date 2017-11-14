@@ -7,8 +7,8 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
-from ..forms import LoginForm
-from ..models import Session
+from statistics.forms.login import LoginForm
+from statistics.models import Session
 
 def ga_login(request):
 # This view is shown, when a user tries to view any protected page, but isn't logged in. After they log in, they'll be taken to the appropriate place.

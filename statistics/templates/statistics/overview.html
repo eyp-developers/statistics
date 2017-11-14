@@ -47,7 +47,7 @@
             <p>You can use your session ID for all kinds of things (some only if you're logged in as an admin).</p>
 
             <h3>You can add your committees:</h3>
-            <h4><a href="{% url 'statistics:add' session.pk %}">{% url 'statistics:add' session.pk %}</a> - This is where you add all your committees and subtopics.</h3>
+            <h4><a href="{% url 'statistics:create_committee' session.pk %}">{% url 'statistics:create_committee' session.pk %}</a> - This is where you add all your committees and subtopics.</h3>
 
                 <h3>You can edit the session you just made:</h3>
                 <h4><a href="{% url 'statistics:edit' session.pk %}">{% url 'statistics:edit' session.pk %}</a> - This is where you can change things like the maximum amount of rounds you'll have.</h3>
@@ -134,7 +134,7 @@
                 {% endif %}
             {% else %}
                 <h3>No Committees Yet!</h3>
-                <h4>You can make some here: <a href="{% url 'statistics:add' session.pk %}">{% url 'statistics:add' session.pk %}</a></h4>
+                <h4>You can make some here: <a href="{% url 'statistics:create_committee' session.pk %}">{% url 'statistics:create_committee' session.pk %}</a></h4>
             {% endif %}
         </div>
     </div>
