@@ -8,7 +8,7 @@ gunicorn==19.6.0
 mistune==0.7.3
 pilkit==1.1.13
 Pillow==3.1.0
-psycopg2==2.6.2
+psycopg2==2.7.3.2
 raven==6.0.0
 six==1.10.0
 static3==0.7.0
