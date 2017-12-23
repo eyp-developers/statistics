@@ -187,7 +187,7 @@ class Committee(models.Model):
     name = models.CharField(max_length=8)
 
     #What the topic of the committee is, can be any length.
-    topic = models.TextField()
+    topic_text = models.TextField()
 
     next_subtopics = models.ManyToManyField('SubTopic', blank=True, related_name='next_subtopics+')
 

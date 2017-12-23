@@ -39,7 +39,7 @@ class CommitteeAdmin(admin.ModelAdmin):
     inlines = [SubTopicInline]
 
     #What things should be displayed in the Committees list
-    list_display = ('name', 'topic', 'session')
+    list_display = ('name', 'topic_text', 'session')
 
     list_filter = ['name']
 

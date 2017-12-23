@@ -82,7 +82,7 @@
                 <div class="debate-box col-md-4">
                     <a href="{% url 'statistics:debate' committee.session.id committee.id %}" class="btn btn-raised btn-primary">{{ committee.name }}</a>
                   <p>
-                    {{ committee.topic }}
+                    {{ committee.topic_text }}
                   </p>
                 </div>
                 {% cycle "" "" "</div><div class='row'>" %} <!-- this ends the row after every third committee, thus ensuring that they are all properly aligned -->
