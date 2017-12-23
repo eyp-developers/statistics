@@ -45,7 +45,7 @@ def create_committee(request, session_id):
 
                 c.session = session
                 c.name = form.cleaned_data['name']
-                c.topic = form.cleaned_data['topic']
+                c.topic_text = form.cleaned_data['topic']
                 c.save()
 
                 subtopics_pretty_array = []
