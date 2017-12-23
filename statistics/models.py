@@ -17,6 +17,11 @@ SESSION_DESCRIPTION_LEN=200
 SESSION_AUTHOR_LEN=100
 SESSION_LICENCE_LEN=100
 
+TOPIC_AREA_LEN=200
+TOPIC_TYPE_LEN=200
+
+COMMITTEE_NAME_MAX=8
+
 
 class Session(models.Model):
     name = models.CharField(max_length=SESSION_NAME_LEN)
@@ -178,13 +183,30 @@ class Announcement(models.Model):
         return unicode(self.announcement_type + self.content)
 
 
+class Topic(models.Model):
+    text = models.TextField()
 
-#Defining a committee, there should be several of these connected with each session.
+    area = models.CharField(max_length=TOPIC_AREA_LEN, blank=True, null=True)
+    type = models.CharField(max_length=TOPIC_TYPE_LEN, blank=True, null=True)
+    # Difficulty potentially here
+
+    time_extra = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    country_extra = models.CharField(max_length=2, choices=countries.SESSION_COUNTRIES, blank=True, null=True)
+    session_type_extra = models.CharField(max_length=3, choices=session_types.SESSION_TYPES, blank=True, null=True)
+    committee_name_extra = models.CharField(max_length=COMMITTEE_NAME_MAX)
+
+    def sessions(self):
+        # return a list of objects describing where this topic was used
+        pass
+
+
+# Defining a committee, there should be several of these connected with each session.
 class Committee(models.Model):
     session = models.ForeignKey(Session)
+    topic = models.ForeignKey(Topic, null=True)
 
     #What the name of the committee is. This should be the acronym of the committee. Aka: AFCO, ENVI, ITRE II
-    name = models.CharField(max_length=8)
+    name = models.CharField(max_length=COMMITTEE_NAME_MAX)
 
     #What the topic of the committee is, can be any length.
     topic_text = models.TextField()

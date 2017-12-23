@@ -1,0 +1,11 @@
+{% extends 'statistics/base.html' %}
+
+{% load staticfiles %}
+
+{% block page_title %}All Topics{% endblock %}
+
+{% block content %}
+  {% for topic in topics %}
+    <h4>{{ topic.text }}</h4>
+  {% endfor %}
+{% endblock %}
