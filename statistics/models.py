@@ -25,7 +25,7 @@ class Session(models.Model):
     #Session size
     session_type = models.CharField(max_length=3, choices=session_types.SESSION_TYPES, default=session_types.REGIONAL_SESSION)
 
-    picture = models.ImageField(upload_to='pictures/')
+    picture = models.ImageField(upload_to='session_pictures/')
     # Session picture used on front-page to help loading times
     picture_thumbnail = ImageSpecField(source='picture',
                                                processors=[ResizeToCover(400, 400)],
