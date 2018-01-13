@@ -18,7 +18,6 @@ SESSION_AUTHOR_LEN=100
 SESSION_LICENCE_LEN=100
 
 TOPIC_AREA_LEN=200
-TOPIC_TYPE_LEN=200
 
 COMMITTEE_NAME_MAX=8
 
@@ -183,13 +182,62 @@ class Announcement(models.Model):
         return unicode(self.announcement_type + self.content)
 
 
-class Topic(models.Model):
+class AbstractTopic(models.Model):
     text = models.TextField()
 
     area = models.CharField(max_length=TOPIC_AREA_LEN, blank=True, null=True)
-    type = models.CharField(max_length=TOPIC_TYPE_LEN, blank=True, null=True)
-    # Difficulty potentially here
 
+    CREATIVE = 'CR'
+    CONFLICT = 'CF'
+    STRATEGY = 'ST'
+    TOPIC_TYPES = (
+        (CREATIVE, 'Creative'),
+        (CONFLICT, 'Conflict'),
+        (STRATEGY, 'Strategy')
+    )
+    type = models.CharField(max_length=2, choices=TOPIC_TYPES, blank=True, null=True)
+
+    def sessions(self):
+        # return a list of objects describing where this topic was used
+        pass
+
+    def year(self):
+        pass
+
+    def country(self):
+        pass
+
+    def session_type(self):
+        pass
+
+    def committee_name(self):
+        pass
+
+    class Meta:
+        abstract = True
+
+
+class SessionTopic(models.Model):
+    committee = models.ForeignKey(Committee)
+
+    def sessions(self):
+        # return a list of objects describing where this topic was used
+        pass
+
+    def year(self):
+        pass
+
+    def country(self):
+        pass
+
+    def session_type(self):
+        pass
+
+    def committee_name(self):
+        pass
+
+
+class DatabaseTopic(models.Model):
     time_extra = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     country_extra = models.CharField(max_length=2, choices=countries.SESSION_COUNTRIES, blank=True, null=True)
     session_type_extra = models.CharField(max_length=3, choices=session_types.SESSION_TYPES, blank=True, null=True)
@@ -197,6 +245,18 @@ class Topic(models.Model):
 
     def sessions(self):
         # return a list of objects describing where this topic was used
+        pass
+
+    def year(self):
+        pass
+
+    def country(self):
+        pass
+
+    def session_type(self):
+        pass
+
+    def committee_name(self):
         pass
 
 
