@@ -34,7 +34,7 @@ def create_committee(session, name="ENVI", topic=ips_1_p):
     """
     This will create a committee in the provided session.
     """
-    return Committee.objects.create(session=session, name=name, topic=topic)
+    return Committee.objects.create(session=session, name=name, topic_text=topic)
 
 def create_user_max():
     """
