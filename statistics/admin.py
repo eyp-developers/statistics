@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Session, Committee, SubTopic, ActiveDebate, ActiveRound, Announcement, Point, ContentPoint, RunningOrder, Vote, Gender
+from .models import Session, Committee, SubTopic, ActiveDebate, ActiveRound, Announcement, Point, ContentPoint, RunningOrder, Vote, Gender, StatisticsTopic, DatabaseTopic
 
 #Setting up admin inlines for Committees and Suptopics, allows easy adding of committees in the "Session creation" page,
 #and Subtopics in the "Comiitee creation" page
@@ -44,40 +44,60 @@ class CommitteeAdmin(admin.ModelAdmin):
     list_filter = ['name']
 
 
+class StatisticsTopicAdmin(admin.ModelAdmin):
+    search_fields = ['text']
+    list_display = ('text', 'type', 'area')
+    inlines = [
+        CommitteeInline
+    ]
+
+
+class DatabaseTopicAdmin(admin.ModelAdmin):
+    list_display = ('text', 'type', 'area')
+
+
 class SubTopicAdmin(admin.ModelAdmin):
     #Which things should be displayed in the subtopics list
     list_display = ('text', 'committee', 'session')
+
 
 class ActiveDebateAdmin(admin.ModelAdmin):
     #Which things should be displayed in the active debate list
     list_display = ('active_debate', 'session')
 
+
 class AnnouncementAdmin(admin.ModelAdmin):
     #Defines how an announcement should look like in the admin
     list_display = ('valid_until', 'announcement_type', 'content')
 
+
 class ActiveRoundAdmin(admin.ModelAdmin):
     #Which things should be displayed in the active round list
     list_display =('active_round', 'session')
+
 
 class PointAdmin(admin.ModelAdmin):
     #Which things should be displayed in the list of points, filtered by time
     list_display = ('timestamp', 'session', 'point_type', 'committee_by', 'active_debate', 'active_round')
     list_filter = ['timestamp']
 
+
 class ContentPointAdmin(admin.ModelAdmin):
     #Which things should be displayed in the list of content points, filtered by time.
     list_display = ('timestamp', 'session', 'committee_by', 'active_debate', 'point_content', 'point_type')
     list_filter = ['timestamp']
 
+
 class RunningOrderAdmin(admin.ModelAdmin):
     list_display = ('session', 'position', 'committee_by', 'point_type')
     list_filter = ['position']
+
 
 class VoteAdmin(admin.ModelAdmin):
     #Which things should be displayed in the list of votes, filtered by time
     list_display = ('timestamp', 'session', 'committee_by', 'active_debate', 'in_favour', 'against', 'abstentions', 'absent', 'total_votes')
     list_filter = ['timestamp']
+
 
 class GenderAdmin(admin.ModelAdmin):
     list_display = ('timestamp', 'gender', 'session', 'committee')
@@ -87,6 +107,8 @@ class GenderAdmin(admin.ModelAdmin):
 admin.site.register(Session, SessionAdmin)
 admin.site.register(Committee, CommitteeAdmin)
 admin.site.register(SubTopic, SubTopicAdmin)
+admin.site.register(StatisticsTopic, StatisticsTopicAdmin)
+admin.site.register(DatabaseTopic, DatabaseTopicAdmin)
 admin.site.register(ActiveDebate, ActiveDebateAdmin)
 admin.site.register(Announcement, AnnouncementAdmin)
 admin.site.register(ActiveRound, ActiveRoundAdmin)
