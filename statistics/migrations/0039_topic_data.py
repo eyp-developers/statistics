@@ -7,12 +7,22 @@ from django.db import migrations
 
 def save_topics(apps, schema_editor):
     Committee = apps.get_model('statistics', 'Committee')
-    Topic = apps.get_model('statistics', 'Topic')
+    StatisticsTopic = apps.get_model('statistics', 'StatisticsTopic')
     for committee in Committee.objects.all():
         topic_text = committee.topic_text
-        topic = Topic(text=topic_text)
-        topic.save()
+        existing_topics = StatisticsTopic.objects.all().filter(text=topic_text)
+        if len(existing_topics):
+            topic = existing_topics[0]
+        else:
+            topic = StatisticsTopic(text=topic_text)
+            topic.save()
         committee.topic = topic
+        committee.save()
+
+
+def reverse_topic_saves(apps, schema_editor):
+    StatisticsTopic = apps.get_model('statistics', 'StatisticsTopic')
+    StatisticsTopic.objects.all().delete()
 
 
 class Migration(migrations.Migration):
@@ -22,5 +32,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(save_topics)
+        migrations.RunPython(save_topics, reverse_topic_saves)
     ]
