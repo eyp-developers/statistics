@@ -185,9 +185,9 @@ class Announcement(models.Model):
 # Defining a committee, there should be several of these connected with each session.
 class Committee(models.Model):
     session = models.ForeignKey(Session)
-    # Shouldn't be possible to delete a topic if a committee 'relies' on it,
-    # you should have to delete the committee first
-    topic = models.ForeignKey('StatisticsTopic', models.PROTECT, null=True)
+
+    def topic(self):
+        return self.statistics_topic_place.topic
 
     #What the name of the committee is. This should be the acronym of the committee. Aka: AFCO, ENVI, ITRE II
     name = models.CharField(max_length=COMMITTEE_NAME_MAX)
@@ -299,83 +299,71 @@ class Topic(models.Model):
 
     area = models.CharField(max_length=TOPIC_AREA_LEN, blank=True, null=True)
 
-    def session_names(self):
-        pass
-
-    def years(self):
-        pass
-
-    def countries(self):
-        pass
-
-    def session_types(self):
-        pass
-
-    def committee_names(self):
-        pass
-
     def __unicode__(self):
         return unicode(self.text)
+
+
+class TopicPlace(models.Model):
+    topic = models.ForeignKey(Topic, models.CASCADE)
+
+    def session_type(self):
+        pass
+
+    def committee_name(self):
+        pass
+
+    def year(self):
+        pass
+
+    def country(self):
+        pass
 
     class Meta:
         abstract = True
 
 
-class StatisticsTopic(Topic):
+class StatisticsTopicPlace(TopicPlace):
+    committee = models.OneToOneField(Committee, models.PROTECT)
 
-    def session_names(self):
-        sessions = []
-        for committee in self.committee_set:
-            session = committee.session
-            sessions.append(session.name)
-        return sessions
+    def session_name(self):
+        return self.committee.session.name
 
-    def sessions(self):
-        sessions = []
-        for committee in self.committee_set:
-            sessions.append(committee.session)
-        return sessions
+    def session_type(self):
+        return self.committee.session.type
 
-    def years(self):
-        years = []
-        for session in [committee.session for committee in self.committee_set]:
-            years.append(session.end_date.year)
-        return years
+    def committee_name(self):
+        return self.committee.name
 
-    def countries(self):
-        countries = []
-        for session in [committee.session for committee in self.committee_set]:
-            countries.append(session.country)
-        return countries
+    def year(self):
+        return self.committee.session.end_date.year
 
-    def session_types(self):
-        pass
+    def country(self):
+        return self.committee.session.country
 
-    def committee_names(self):
-        pass
+    def __unicode__(self):
+        return unicode(self.session_name())
 
 
-class DatabaseTopic(Topic):
-    time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    country = models.CharField(max_length=2, choices=countries.SESSION_COUNTRIES, blank=True, null=True)
-    session_type = models.CharField(max_length=3, choices=session_types.SESSION_TYPES, blank=True, null=True)
-    committee_name = models.CharField(max_length=COMMITTEE_NAME_MAX)
+class HistoricTopicPlace(TopicPlace):
+    historic_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    historic_country = models.CharField(max_length=2, choices=countries.SESSION_COUNTRIES, blank=True, null=True)
+    historic_session_type = models.CharField(max_length=3, choices=session_types.SESSION_TYPES, blank=True, null=True)
+    historic_committee_name = models.CharField(max_length=COMMITTEE_NAME_MAX)
 
-    def sessions(self):
-        # return a list of objects describing where this topic was used
-        pass
+    def session_type(self):
+        return self.historic_session_type
 
-    def years(self):
-        pass
+    def committee_name(self):
+        return self.historic_committee_name
 
-    def countreis(self):
-        pass
+    def year(self):
+        return self.historic_time.year
 
-    def session_types(self):
-        pass
+    def country(self):
+        return self.historic_country
 
-    def committee_names(self):
-        pass
+    def __unicode__(self):
+        return unicode(self.historic_country + ' - ' + self.historic_session_type + ' - ' + self.historic_committee_name + ' - ' + self.year())
 
 #Defining subtopics of a committee, there should ideally be between 3 and 7 of these, plus a "general" subtopic.
 class SubTopic(models.Model):
