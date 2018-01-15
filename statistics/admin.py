@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Session, Committee, SubTopic, ActiveDebate, ActiveRound, Announcement, Point, ContentPoint, RunningOrder, Vote, Gender, StatisticsTopic, DatabaseTopic
+from .models import Session, Committee, SubTopic, ActiveDebate, ActiveRound, Announcement, Point, ContentPoint, RunningOrder, Vote, Gender, Topic, TopicPlace
 
 #Setting up admin inlines for Committees and Suptopics, allows easy adding of committees in the "Session creation" page,
 #and Subtopics in the "Comiitee creation" page
@@ -11,6 +11,9 @@ class CommitteeInline(admin.StackedInline):
 class SubTopicInline(admin.TabularInline):
     model = SubTopic
     extra = 2
+
+class TopicPlaceInline(admin.TabularInline):
+    model = TopicPlace
 
 #Setting up the session Admin
 class SessionAdmin(admin.ModelAdmin):
@@ -44,16 +47,12 @@ class CommitteeAdmin(admin.ModelAdmin):
     list_filter = ['name']
 
 
-class StatisticsTopicAdmin(admin.ModelAdmin):
+class TopicAdmin(admin.ModelAdmin):
     search_fields = ['text']
     list_display = ('text', 'type', 'area')
     inlines = [
-        CommitteeInline
+        TopicPlaceInline
     ]
-
-
-class DatabaseTopicAdmin(admin.ModelAdmin):
-    list_display = ('text', 'type', 'area')
 
 
 class SubTopicAdmin(admin.ModelAdmin):
@@ -107,8 +106,7 @@ class GenderAdmin(admin.ModelAdmin):
 admin.site.register(Session, SessionAdmin)
 admin.site.register(Committee, CommitteeAdmin)
 admin.site.register(SubTopic, SubTopicAdmin)
-admin.site.register(StatisticsTopic, StatisticsTopicAdmin)
-admin.site.register(DatabaseTopic, DatabaseTopicAdmin)
+admin.site.register(Topic, TopicAdmin)
 admin.site.register(ActiveDebate, ActiveDebateAdmin)
 admin.site.register(Announcement, AnnouncementAdmin)
 admin.site.register(ActiveRound, ActiveRoundAdmin)
