@@ -285,7 +285,7 @@ class Committee(models.Model):
 
 
 class Topic(models.Model):
-    text = models.TextField()
+    text = models.TextField(unique=True)
 
     CREATIVE = 'CR'
     CONFLICT = 'CF'
@@ -306,24 +306,32 @@ class Topic(models.Model):
 class TopicPlace(models.Model):
     topic = models.ForeignKey(Topic, models.CASCADE)
 
+    def child_method(self, method_name):
+        try:
+            method = getattr(self.statisticstopicplace, method_name)
+            return method()
+        except DoesNotExist:
+            method = getattr(self.statisticstopicplace, method_name)
+            return method()
+
     def session_type(self):
-        pass
+        return self.child_method('session_type')
 
     def committee_name(self):
-        pass
+        return self.child_method('committee_name')
 
     def year(self):
-        pass
+        return self.child_method('year')
 
     def country(self):
-        pass
+        return self.child_method('country')
 
-    class Meta:
-        abstract = True
+    def __unicode__(self):
+        return self.child_method('__unicode__')
 
 
 class StatisticsTopicPlace(TopicPlace):
-    committee = models.OneToOneField(Committee, models.PROTECT)
+    committee = models.OneToOneField(Committee, models.SET_NULL, null=True)
 
     def session_name(self):
         return self.committee.session.name
@@ -341,7 +349,7 @@ class StatisticsTopicPlace(TopicPlace):
         return self.committee.session.country
 
     def __unicode__(self):
-        return unicode(self.session_name())
+        return unicode(self.committee.session.name)
 
 
 class HistoricTopicPlace(TopicPlace):
