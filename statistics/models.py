@@ -299,6 +299,16 @@ class Topic(models.Model):
 
     area = models.CharField(max_length=TOPIC_AREA_LEN, blank=True, null=True)
 
+    EASY = 'E'
+    INTERMEDIATE = 'I'
+    HARD = 'H'
+    DIFFICULTIES = (
+        (EASY, 'Easy'),
+        (INTERMEDIATE, 'Intermediate'),
+        (HARD, 'Hard')
+    )
+    difficulty = models.CharField(max_length=1, choices=DIFFICULTIES, blank=True, null=True)
+
     def __unicode__(self):
         return unicode(self.text)
 
