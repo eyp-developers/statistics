@@ -35,6 +35,8 @@ class SessionAdmin(admin.ModelAdmin):
     #How the list should be sorted, here by session start date
     list_filter = ['start_date']
 
+    search_fields = ['name', 'country']
+
 class CommitteeAdmin(admin.ModelAdmin):
     #Fieldsets don't need to be set here as there isn't really anything above the ordinary that needs to be defined
 

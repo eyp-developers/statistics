@@ -6,6 +6,7 @@ from decimal import Decimal
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from statistics import countries, session_types
 
 # The following imports are used to process images for faster loading times
@@ -320,8 +321,8 @@ class TopicPlace(models.Model):
         try:
             method = getattr(self.statisticstopicplace, method_name)
             return method()
-        except DoesNotExist:
-            method = getattr(self.statisticstopicplace, method_name)
+        except ObjectDoesNotExist:
+            method = getattr(self.historictopicplace, method_name)
             return method()
 
     def session_type(self):
@@ -347,10 +348,10 @@ class StatisticsTopicPlace(TopicPlace):
         return self.committee.session.name
 
     def session_type(self):
-        return self.committee.session.type
+        return self.committee.session.session_type
 
     def committee_name(self):
-        return self.committee.name
+        return self.committee.name.split(' ')[0]
 
     def year(self):
         return self.committee.session.end_date.year
@@ -363,7 +364,7 @@ class StatisticsTopicPlace(TopicPlace):
 
 
 class HistoricTopicPlace(TopicPlace):
-    historic_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    historic_date = models.DateField(blank=True, null=True)
     historic_country = models.CharField(max_length=2, choices=countries.SESSION_COUNTRIES, blank=True, null=True)
     historic_session_type = models.CharField(max_length=3, choices=session_types.SESSION_TYPES, blank=True, null=True)
     historic_committee_name = models.CharField(max_length=COMMITTEE_NAME_MAX)
@@ -375,13 +376,30 @@ class HistoricTopicPlace(TopicPlace):
         return self.historic_committee_name
 
     def year(self):
-        return self.historic_time.year
+        if self.historic_date is not None:
+            return self.historic_date.year
+        return None
 
     def country(self):
         return self.historic_country
 
     def __unicode__(self):
-        return unicode(self.historic_country + ' - ' + self.historic_session_type + ' - ' + self.historic_committee_name + ' - ' + self.year())
+        string = ''
+        if self.get_historic_country_display() is not None:
+            string += self.get_historic_country_display()
+        if self.historic_session_type is not None:
+            if string != '':
+                string += ' - '
+            string += self.historic_session_typev
+        if self.historic_committee_name is not None:
+            if string != '':
+                string += ' - '
+            string += self.historic_committee_name
+        if self.historic_date is not None:
+            if string != '':
+                string += ' - '
+            string += str(self.historic_date.year)
+        return unicode(string)
 
 #Defining subtopics of a committee, there should ideally be between 3 and 7 of these, plus a "general" subtopic.
 class SubTopic(models.Model):
