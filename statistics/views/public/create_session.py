@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from statistics.models import Session, Announcement, ActiveDebate, ActiveRound
 from statistics.forms.session_create import SessionForm
 from helpers import raven_client

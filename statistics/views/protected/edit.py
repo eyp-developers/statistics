@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import timezone
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from statistics.models import Session, Committee
