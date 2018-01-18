@@ -67,16 +67,16 @@ def high_scores(request):
             if s.minutes_per_point() != 0:
                 best_mpp[s.name] = s.minutes_per_point()
 
-    five_most_votes = sorted(most_votes.items(), key=operator.itemgetter(1), reverse=True)[:5]
-    five_most_in_favour = sorted(most_in_favour.items(), key=operator.itemgetter(1), reverse=True)[:5]
-    five_most_against = sorted(most_against.items(), key=operator.itemgetter(1), reverse=True)[:5]
-    five_most_points = sorted(most_points.items(), key=operator.itemgetter(1), reverse=True)[:5]
-    five_most_drs = sorted(most_drs.items(), key=operator.itemgetter(1), reverse=True)[:5]
-    five_most_points_in_debate = sorted(most_points_in_debate.items(), key=operator.itemgetter(1), reverse=True)[:5]
-    five_most_drs_in_debate = sorted(most_drs_in_debate.items(), key=operator.itemgetter(1), reverse=True)[:5]
-    five_most_successful = sorted(most_successful.items(), key=operator.itemgetter(1), reverse=True)[:5]
-    five_most_unsuccessful = sorted(most_unsuccessful.items(), key=operator.itemgetter(1), reverse=True)[:5]
-    five_best_mpp = sorted(best_mpp.items(), key=operator.itemgetter(1))[:5]
+    five_most_votes = sorted(list(most_votes.items()), key=operator.itemgetter(1), reverse=True)[:5]
+    five_most_in_favour = sorted(list(most_in_favour.items()), key=operator.itemgetter(1), reverse=True)[:5]
+    five_most_against = sorted(list(most_against.items()), key=operator.itemgetter(1), reverse=True)[:5]
+    five_most_points = sorted(list(most_points.items()), key=operator.itemgetter(1), reverse=True)[:5]
+    five_most_drs = sorted(list(most_drs.items()), key=operator.itemgetter(1), reverse=True)[:5]
+    five_most_points_in_debate = sorted(list(most_points_in_debate.items()), key=operator.itemgetter(1), reverse=True)[:5]
+    five_most_drs_in_debate = sorted(list(most_drs_in_debate.items()), key=operator.itemgetter(1), reverse=True)[:5]
+    five_most_successful = sorted(list(most_successful.items()), key=operator.itemgetter(1), reverse=True)[:5]
+    five_most_unsuccessful = sorted(list(most_unsuccessful.items()), key=operator.itemgetter(1), reverse=True)[:5]
+    five_best_mpp = sorted(list(best_mpp.items()), key=operator.itemgetter(1))[:5]
 
     context = {'top_voters': five_most_votes,
                'top_in_favour': five_most_in_favour,

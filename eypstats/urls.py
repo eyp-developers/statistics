@@ -17,8 +17,8 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^', include('statistics.urls', namespace="statistics")),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include('statistics.urls')),
+    url(r'^admin/', admin.site.urls),
 ]
 
 handler404 = 'statistics.views.public_views.handler404'
