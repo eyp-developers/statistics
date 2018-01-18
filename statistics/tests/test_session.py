@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 from ..models import Session, Committee
-from helpers import create_session, create_committee, create_user_max, ips_1_p, lor_1_p
+from .helpers import create_session, create_committee, create_user_max, ips_1_p, lor_1_p
 
 
 class SessionViewTests(TestCase):

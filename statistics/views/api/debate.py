@@ -43,7 +43,7 @@ def debate_api(request, session_id, committee_id):
         #Now we're moving away from just the latest point, we want all subtopics connected to the committee in question.
         subtopics = SubTopic.objects.filter(session__pk=session_id).filter(committee__name=committee[0].name)
         #Get the maximum number of allowed rounds for the session in question.
-        no_rounds = range(session.max_rounds)
+        no_rounds = list(range(session.max_rounds))
 
         #Set up the needed arrays
         subtopics_array = []

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 from statistics.views import home
 from ..models import Session, Committee
-from helpers import create_session, create_committee, create_user_max
+from .helpers import create_session, create_committee, create_user_max
 
 
 class HomeViewTests(TestCase):
