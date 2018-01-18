@@ -94,8 +94,21 @@ class Session(models.Model):
 
     #Defining two users for the session. The Admin user who can alter active debates, change points etc. and the
     #submit user, which will be the login for everyone at any given session who wants to submit a point.
-    admin_user = models.ForeignKey(User, related_name = 'session_admin', blank = True, null = True)
-    submission_user = models.ForeignKey(User, related_name = 'session_submit', blank = True, null = True)
+    admin_user = models.ForeignKey(
+                            User,
+                            related_name='session_admin',
+                            blank=True,
+                            null=True,
+                            on_delete=models.CASCADE
+                        )
+
+    submission_user = models.ForeignKey(
+                                User,
+                                related_name='session_submit',
+                                blank=True,
+                                null=True,
+                                on_delete=models.CASCADE
+                            )
 
     def __unicode__(self):
         return unicode(self.name)
@@ -148,14 +161,14 @@ class Session(models.Model):
         return Decimal(minutes) / Decimal(total_points)
 
 class ActiveDebate(models.Model):
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
     active_debate = models.CharField(max_length=8, blank=True, null=True)
 
     def __unicode__(self):
         return unicode(self.active_debate)
 
 class ActiveRound(models.Model):
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
     active_round = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __int__(self):
@@ -185,7 +198,7 @@ class Announcement(models.Model):
 
 # Defining a committee, there should be several of these connected with each session.
 class Committee(models.Model):
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
 
     def topic(self):
         return self.statistics_topic_place.topic
@@ -403,11 +416,12 @@ class HistoricTopicPlace(TopicPlace):
 
 #Defining subtopics of a committee, there should ideally be between 3 and 7 of these, plus a "general" subtopic.
 class SubTopic(models.Model):
-    #Which session the subtopic is connected to (to prevent dupicate problems)
-    session = models.ForeignKey(Session, null=True, blank=True)
+    # Which session the subtopic is connected to (to prevent dupicate problems)
+    # TODO: Remove this
+    session = models.ForeignKey(Session, null=True, blank=True, on_delete=models.CASCADE)
 
     #Which committee within the session the subtopic should be connected to.
-    committee = models.ForeignKey(Committee, blank=True, null=True)
+    committee = models.ForeignKey(Committee, blank=True, null=True, on_delete=models.CASCADE)
 
     #Name/Text of the subtopic. Should be short and catchy.
     text = models.CharField(max_length=200, blank=True, null=True)
@@ -465,13 +479,13 @@ class SubTopic(models.Model):
 #Defining a Point, which is one peice of data that is submitted for every point of debate.
 class Point(models.Model):
     #Which session the point should be connected to.
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
 
     #Timestamp of when the point was last updated.
     timestamp = models.DateTimeField(auto_now=True)
 
     #Which committee the point was by.
-    committee_by = models.ForeignKey(Committee)
+    committee_by = models.ForeignKey(Committee, on_delete=models.CASCADE)
 
     #Which was the active debate at the time the point was made.
     active_debate = models.CharField(max_length=8, blank=True, null=True)
@@ -498,11 +512,11 @@ class Point(models.Model):
 #For the running order, we need to set up a queueing system we can access at any point.
 class RunningOrder(models.Model):
     #The running order has to be affiliated with a certain session
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
     #and it needs a position
     position = models.PositiveSmallIntegerField()
     #then we need to know which committee it is that wants to make a point
-    committee_by = models.ForeignKey(Committee)
+    committee_by = models.ForeignKey(Committee, on_delete=models.CASCADE)
     #Finally we need to know what kind of point it is.
     POINT = 'P'
     DIRECT_RESPONSE = 'DR'
@@ -516,8 +530,8 @@ class RunningOrder(models.Model):
 class ContentPoint(models.Model):
     #The ContentPoint also needs to be affiliated with a certain session and committee
     #(which committee it was made by and which debate was active) in the same way as the statistic points.
-    session = models.ForeignKey(Session)
-    committee_by = models.ForeignKey(Committee)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    committee_by = models.ForeignKey(Committee, on_delete=models.CASCADE)
     active_debate = models.CharField(max_length=8)
 
     #It's also to have a timestamp of when the content point was last edited
@@ -542,7 +556,7 @@ class ContentPoint(models.Model):
 #Defining the voting class, one "vote" is filled in for each voting committee on each topic.
 class Vote(models.Model):
     #Which session the Vote should be connected to.
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
 
     #Timestamp of when the vote was last updated
     timestamp = models.DateTimeField(auto_now=True)
@@ -551,7 +565,7 @@ class Vote(models.Model):
     active_debate = models.CharField(max_length=8)
 
     #Which committee the vote was by
-    committee_by = models.ForeignKey(Committee)
+    committee_by = models.ForeignKey(Committee, on_delete=models.CASCADE)
 
     #How many votes there were in favour
     in_favour = models.PositiveSmallIntegerField()
@@ -580,7 +594,7 @@ class Vote(models.Model):
 class Gender(models.Model):
     #The gender needs to be connected to a session, the committee that was active at the time and the gender
 
-    committee = models.ForeignKey(Committee)
+    committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
 
     def session(self):
         return self.committee.session
