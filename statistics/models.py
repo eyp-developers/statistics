@@ -106,7 +106,7 @@ class Session(models.Model):
                             )
 
     def __unicode__(self):
-        return unicode(self.name)
+        return str(self.name)
 
     def session_ongoing(self):
         return (self.start_date <= timezone.now() and self.end_date >= timezone.now())
@@ -160,14 +160,14 @@ class ActiveDebate(models.Model):
     active_debate = models.CharField(max_length=8, blank=True, null=True)
 
     def __unicode__(self):
-        return unicode(self.active_debate)
+        return str(self.active_debate)
 
 class ActiveRound(models.Model):
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
     active_round = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __int__(self):
-        return unicode(self.active_round)
+        return str(self.active_round)
 
 
 class Announcement(models.Model):
@@ -188,7 +188,7 @@ class Announcement(models.Model):
     announcement_type = models.CharField(max_length=15, choices=ANNOUNCEMENT_TYPES, default=INFO)
 
     def __unicode__(self):
-        return unicode(self.announcement_type + self.content)
+        return str(self.announcement_type + self.content)
 
 
 
@@ -288,7 +288,7 @@ class Committee(models.Model):
 
     #Defining how the committee will be displayed in a list.
     def __unicode__(self):
-        return unicode(self.name)
+        return str(self.name)
 
 #Defining subtopics of a committee, there should ideally be between 3 and 7 of these, plus a "general" subtopic.
 class SubTopic(models.Model):
@@ -349,7 +349,7 @@ class SubTopic(models.Model):
 
     #Defining what should be displayed in the admin list, it should be the suptopic text.
     def __unicode__(self):
-        return unicode(self.text)
+        return str(self.text)
 
 
 #Defining a Point, which is one peice of data that is submitted for every point of debate.
@@ -383,7 +383,7 @@ class Point(models.Model):
 
     #Definition of the point in an admin list will be the point type, "P" or "DR"
     def __unicode__(self):
-        return unicode(self.point_type)
+        return str(self.point_type)
 
 #For the running order, we need to set up a queueing system we can access at any point.
 class RunningOrder(models.Model):
@@ -427,7 +427,7 @@ class ContentPoint(models.Model):
 
     #We can also add a definition for showing in admin panels etc.
     def __unicode__(self):
-        return unicode(self.point_content)
+        return str(self.point_content)
 
 #Defining the voting class, one "vote" is filled in for each voting committee on each topic.
 class Vote(models.Model):
@@ -458,7 +458,7 @@ class Vote(models.Model):
 
     #Definition of the vote in admin lists should be the committee who voted
     def __unicode__(self):
-        return unicode(self.committee_by)
+        return str(self.committee_by)
 
     #The definition of the total votes, which is the sum of all the vote types.
     def total_votes(self):
@@ -489,4 +489,4 @@ class Gender(models.Model):
 
     #Finally we can add an admin definition
     def __unicode__(self):
-        return unicode(self.gender)
+        return str(self.gender)

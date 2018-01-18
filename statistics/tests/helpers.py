@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
 from PIL import Image
-from StringIO import StringIO
+from io import StringIO
 
 from ..models import Session, Committee
 

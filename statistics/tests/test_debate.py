@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from helpers import create_session, create_committee, create_user_max, ips_1_p
+from .helpers import create_session, create_committee, create_user_max, ips_1_p
 
 class DebateViewTests(TestCase):
 
