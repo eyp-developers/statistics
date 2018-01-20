@@ -17,8 +17,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('position', models.PositiveSmallIntegerField()),
                 ('point_type', models.CharField(default=b'P', max_length=2, choices=[(b'P', b'Point'), (b'DR', b'Direct Response')])),
-                ('committee_by', models.ForeignKey(to='statistics.Committee')),
-                ('session', models.ForeignKey(to='statistics.Session')),
+                ('committee_by', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Committee')),
+                ('session', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Session')),
             ],
         ),
     ]
