@@ -15,11 +15,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='session',
             name='session_admin_user',
-            field=models.ForeignKey(related_name='session_admin', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(on_delete=models.deletion.CASCADE, related_name='session_admin', blank=True, to=settings.AUTH_USER_MODEL, null=True),
         ),
         migrations.AlterField(
             model_name='session',
             name='session_submission_user',
-            field=models.ForeignKey(related_name='session_submit', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(on_delete=models.deletion.CASCADE, related_name='session_submit', blank=True, to=settings.AUTH_USER_MODEL, null=True),
         ),
     ]
