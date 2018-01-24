@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
                 ('timestamp', models.DateTimeField(auto_now=True)),
                 ('active_debate', models.CharField(max_length=7, null=True, blank=True)),
                 ('active_round', models.PositiveSmallIntegerField(null=True, blank=True)),
-                ('point_type', models.CharField(default=b'P', max_length=2, choices=[(b'P', b'Point'), (b'DR', b'Direct Response')])),
+                ('point_type', models.CharField(default=b'P', max_length=5, choices=[(b'P', b'Point'), (b'DR', b'Direct Response')])),
                 ('committee_by', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Committee')),
             ],
         ),

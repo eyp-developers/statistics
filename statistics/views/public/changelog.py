@@ -9,7 +9,7 @@ CHANGELOG_URL = "https://raw.githubusercontent.com/" \
 def changelog(request):
 
     # Get the raw markdown from GitHub
-    raw_markdown = urllib.request.urlopen(CHANGELOG_URL).read()
+    raw_markdown = urllib.request.urlopen(CHANGELOG_URL).read().decode('utf-8')
 
     # Render the markdown
     rendered_markdown = mistune.markdown(raw_markdown)
