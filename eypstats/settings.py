@@ -52,6 +52,7 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 )
 
 ROOT_URLCONF = 'eypstats.urls'
@@ -81,12 +82,8 @@ WSGI_APPLICATION = 'eypstats.wsgi.application'
 
 DATABASES = {
         'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'statistics',
-        'USER': 'django',
-        'PASSWORD': 'Superhappytweetdog1',
-        'HOST': '127.0.0.1',
-        'PORT': '5432'
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
 }
 
@@ -125,5 +122,6 @@ RAVEN_CONFIG = {
     'dsn': 'https://e1293cf510704122a3ee1c9a35477c7a:eeabde9a71f54a3a898295146aab5520@sentry.io/156485',
     # If you are using git, you can also automatically configure the
     # release based on the git info.
+    # 'dsn': '',
     'release': raven.fetch_git_sha(BASE_DIR),
 }
