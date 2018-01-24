@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='session',
             name='session_type',
-            field=models.CharField(choices=[(b'IS', b'International Session'), (b'IF', b'International Forum'), (b'NS', b'National Session'), (b'RS', b'Regional Session'), (b'SS', b'Small Scale Session'), (b'OE', b'Other Event')], default=b'RS', max_length=3),
+            field=models.CharField(choices=[(b'IS', b'International Session'), (b'IF', b'International Forum'), (b'NS', b'National Session'), (b'RS', b'Regional Session'), (b'SS', b'Small Scale Session'), (b'OE', b'Other Event')], default=b'RS', max_length=5),
         ),
     ]

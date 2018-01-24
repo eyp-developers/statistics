@@ -77,7 +77,7 @@ class Session(models.Model):
         (RUNNINGORDER, 'Running Order Statistics'),
         (RUNNINGCONTENT, 'Running Order Statistics with Point Content')
     )
-    session_statistics = models.CharField(max_length=3, choices=STATISTIC_TYPES, default=JOINTFORM)
+    session_statistics = models.CharField(max_length=5, choices=STATISTIC_TYPES, default=JOINTFORM)
 
     is_visible = models.BooleanField('is visible')
 
@@ -110,7 +110,7 @@ class Session(models.Model):
                                 on_delete=models.CASCADE
                             )
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.name)
 
     def session_ongoing(self):
@@ -164,7 +164,7 @@ class ActiveDebate(models.Model):
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
     active_debate = models.CharField(max_length=8, blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.active_debate)
 
 class ActiveRound(models.Model):
@@ -192,7 +192,7 @@ class Announcement(models.Model):
     )
     announcement_type = models.CharField(max_length=15, choices=ANNOUNCEMENT_TYPES, default=INFO)
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.announcement_type + self.content)
 
 
@@ -294,7 +294,7 @@ class Committee(models.Model):
 
 
     #Defining how the committee will be displayed in a list.
-    def __unicode__(self):
+    def __str__(self):
         return str(self.name)
 
 
@@ -472,7 +472,7 @@ class SubTopic(models.Model):
             return('white')
 
     #Defining what should be displayed in the admin list, it should be the suptopic text.
-    def __unicode__(self):
+    def __str__(self):
         return str(self.text)
 
 
@@ -500,13 +500,13 @@ class Point(models.Model):
         (POINT, 'Point'),
         (DIRECT_RESPONSE, 'Direct Response'),
     )
-    point_type = models.CharField(max_length=2, choices=POINT_TYPES, default=POINT)
+    point_type = models.CharField(max_length=5, choices=POINT_TYPES, default=POINT)
 
     #Saying that many subtopics can be connected to this point.
     subtopics = models.ManyToManyField(SubTopic, blank=True)
 
     #Definition of the point in an admin list will be the point type, "P" or "DR"
-    def __unicode__(self):
+    def __str__(self):
         return str(self.point_type)
 
 #For the running order, we need to set up a queueing system we can access at any point.
@@ -524,7 +524,7 @@ class RunningOrder(models.Model):
         (POINT, 'Point'),
         (DIRECT_RESPONSE, 'Direct Response'),
     )
-    point_type = models.CharField(max_length=2, choices=POINT_TYPES, default=POINT)
+    point_type = models.CharField(max_length=5, choices=POINT_TYPES, default=POINT)
 
 #Creating the second kind of point, the content point, which contains the text of a given point. Based on Wolfskaempfs GA Stats.
 class ContentPoint(models.Model):
@@ -547,10 +547,10 @@ class ContentPoint(models.Model):
         (POINT, 'Point'),
         (DIRECT_RESPONSE, 'Direct Response'),
     )
-    point_type = models.CharField(max_length=2, choices=POINT_TYPES, default=POINT)
+    point_type = models.CharField(max_length=5, choices=POINT_TYPES, default=POINT)
 
     #We can also add a definition for showing in admin panels etc.
-    def __unicode__(self):
+    def __str__(self):
         return str(self.point_content)
 
 #Defining the voting class, one "vote" is filled in for each voting committee on each topic.
@@ -581,7 +581,7 @@ class Vote(models.Model):
     absent = models.PositiveSmallIntegerField()
 
     #Definition of the vote in admin lists should be the committee who voted
-    def __unicode__(self):
+    def __str__(self):
         return str(self.committee_by)
 
     #The definition of the total votes, which is the sum of all the vote types.
@@ -612,5 +612,5 @@ class Gender(models.Model):
     gender = models.CharField(max_length=1, choices=GENDERS, default=FEMALE)
 
     #Finally we can add an admin definition
-    def __unicode__(self):
+    def __str__(self):
         return str(self.gender)
