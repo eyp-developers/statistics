@@ -9,6 +9,7 @@ BOSNIA_AND_HERZEGOVINA = 'BA'
 CROATIA = 'HR'
 CYPRUS = 'CY'
 CZECH_REPUBLIC = 'CZ'
+DENMAR = 'DK'
 ESTONIA = 'EE'
 FINLAND = 'FI'
 FRANCE = 'FR'
@@ -48,6 +49,7 @@ SESSION_COUNTRIES = (
     (CROATIA, 'Croatia'),
     (CYPRUS, 'Cyprus'),
     (CZECH_REPUBLIC, 'Czech Republic'),
+    (DENMARK, 'Denmark'),
     (ESTONIA, 'Estonia'),
     (FINLAND, 'Finland'),
     (FRANCE, 'France'),
