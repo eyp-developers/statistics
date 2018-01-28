@@ -130,5 +130,5 @@ RAVEN_CONFIG = {
     # If you are using git, you can also automatically configure the
     # release based on the git info.
     # 'dsn': '',
-    'release': raven.fetch_git_sha(BASE_DIR),
+    'release': '15098a2e0423b7149fad67f1294fa182aea08fbf',
 }
