@@ -126,7 +126,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 GOOGLE_ANALYTICS = ""
 
 RAVEN_CONFIG = {
-    'dsn': 'https://e1293cf510704122a3ee1c9a35477c7a:eeabde9a71f54a3a898295146aab5520@sentry.io/156485',
+    'dsn': 'https://e1293cf510704122a3ee1c9a35477c7a:eeabde9a71f54a3a898295146aab5520@sentry.io/156485oooooo',
     # If you are using git, you can also automatically configure the
     # release based on the git info.
     # 'dsn': '',
