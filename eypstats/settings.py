@@ -26,6 +26,7 @@ SECRET_KEY = 'test_#^^3rh08z(1eun9czpb^0-5c%t$!^!fl8ie5-gfa2^i%gwpjtm'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+IS_DEVELOPMENT = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '*']
 
@@ -121,19 +122,10 @@ STATICFILES_DIRS = (
 
 # Media file settings
 
-# The AWS region to connect to.
-AWS_REGION = "eu-west-2"
+# Media file settings
+MEDIA_URL = '/media/'
 
-# The AWS access key to use.
-AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
-
-# The AWS secret access key to use.
-AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
-
-# The name of the bucket to store files in.
-AWS_S3_BUCKET_NAME = os.environ['S3_BUCKET_NAME']
-
-DEFAULT_FILE_STORAGE = "django_s3_storage.storage.S3Storage"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 GOOGLE_ANALYTICS = ""
 

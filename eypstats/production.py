@@ -21,7 +21,7 @@ SECRET_KEY = 'test_#^^3rh08z(1eun9czpb^0-5c%t$!^!fl8ie5-gfa2^i%gwpjtm'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['stats.eyp.org', 'ga-statistics.herokuapp.com']
 
 CSRF_COOKIE_SECURE = True
 
