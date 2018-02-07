@@ -1,6 +1,6 @@
 import sys
 import csv
-import urllib2
+import urllib.request
 import datetime
 
 from statistics.models import Session, Committee, Topic, TopicPlace, HistoricTopicPlace
@@ -147,7 +147,7 @@ def makeNewPlace(stats_topic, csv_topic):
 
 
 def run():
-    doc_response = urllib2.urlopen(DOC_LINK)
+    doc_response = urllib.request.urlopen(DOC_LINK)
     rows = csv.reader(doc_response)
     csv_topics = getTopicsFromCSVRows(rows)
     db_topics = Topic.objects.all()
@@ -158,14 +158,12 @@ def run():
     new_places = 0
 
     for csv_topic in csv_topics:
-        # print "Importing", csv_topic
-        new_topic = False
+        # print("Importing", csv_topic)
         if db_topics.filter(text=csv_topic['text']).exists():
             existing_topics += 1
             stats_topic = db_topics.get(text=csv_topic['text'])
             stats_topic = updateTopicExtras(stats_topic, csv_topic)
         else:
-            new_topic = True
             new_topics += 1
             stats_topic = makeNewTopic(csv_topic)
 
@@ -173,7 +171,7 @@ def run():
             new_places += 1
             place = makeNewPlace(stats_topic, csv_topic)
 
-    print "Total topics", total_topics
-    print "Already existed", existing_topics
-    print "New Topics", new_topics
-    print "New Places", new_places
+    print("Total topics", total_topics)
+    print("Already existed", existing_topics)
+    print("New Topics", new_topics)
+    print("New Places", new_places)
