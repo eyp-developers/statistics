@@ -31,3 +31,6 @@ urlpatterns = [
 
 urlpatterns += api_urls
 urlpatterns += session_urls
+
+if settings.IS_DEVELOPMENT:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
