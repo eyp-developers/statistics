@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'statistics',
     'imagekit',
     'raven.contrib.django.raven_compat',
+    'storages'
 )
 
 MIDDLEWARE = (

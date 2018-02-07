@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'statistics',
     'imagekit',
     'raven.contrib.django.raven_compat',
+    'django_s3_storage',
 )
 
 MIDDLEWARE = (
@@ -119,9 +120,20 @@ STATICFILES_DIRS = (
 )
 
 # Media file settings
-MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# The AWS region to connect to.
+AWS_REGION = "eu-west-2"
+
+# The AWS access key to use.
+AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+
+# The AWS secret access key to use.
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+
+# The name of the bucket to store files in.
+AWS_S3_BUCKET_NAME = os.environ['S3_BUCKET_NAME']
+
+DEFAULT_FILE_STORAGE = "django_s3_storage.storage.S3Storage"
 
 GOOGLE_ANALYTICS = ""
 
