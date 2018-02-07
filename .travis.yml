@@ -5,7 +5,10 @@ env:
 - DJANGO=2.0
 install:
 - pip install -r requirements.txt
-script: python manage.py test
+script:
+- python manage.py makemigrations
+- python manage.py migrate
+- python manage.py test
 notifications:
   slack:
     secure: NoaI8+YDJJ40Sz0hfY9STi0YNQlRNBtJWlX7q4GX4DmTxsuIFcRKZ/QoQT3oiSOFSNBxoDVuvzUR/nNBxI2kfobjNBHhJtjmXFfnCD4A5A0SA2MGnJ95IOluYDsEzlVkHN+X9QrxnCuEO24y+C2EdtB/stlHwE+JLN4tWaMkXRMq+Mib976sRltZk4S1wNDXMCO/4yYnk1Tf+gLe10B/upyl9w4HVmk+vTjeCYnGlQHzvm3fcLmgc4xTUOsSjMI4OLmMMiQEYJJMavLztqd/yhj+kWiCYHwXXN9Mu5v/RcRnTNE4VNaq953NTU/k3OOztsoodFqNw05IeJGL8TV+VZa2IeX4b792bx96MWgzDv1+dj2jsR10px07I7jVc2LkbeIgcvmHPg80pPGdweG/9BcS76qZaUYSyyMzKv248ng7e5tmaXgX8O+ncno2/8nTI9o5Fh5Wt6QJD0DBeDf9+vI7bC+hDccNvRGqer55rGi+28e2MXW4IYOKnLYOPLo+civcj9wtyw8rQPXrKuk5xubIc0ZpFYUfaWEGZcnK4H7v1EqZNrHCsR7gCIlYZuG+YXqnRipbjcLDcj0fIKN2+x1n38QWJBnmlGjby2x/lcHQbrMY4saxKONzp4N14DJWobuytTCdnts+atMQu70EbsdzuN7SDAZD9irVM73ihfk=
