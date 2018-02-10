@@ -1,11 +1,21 @@
 {% extends 'statistics/base.html' %}
 
 {% load staticfiles %}
+{% load render_table from django_tables2 %}
 
 {% block page_title %}All Topics{% endblock %}
 
 {% block content %}
-  {% for topic in topics %}
-    <h4>{{ topic.text }}</h4>
-  {% endfor %}
+<br>
+<div class="panel panel-primary">
+
+  <div class="panel-heading">
+    <h4>Topics</h4>
+  </div>
+
+  <div class="panel-body">
+    {% render_table table %}
+  </div>
+
+</div>
 {% endblock %}
