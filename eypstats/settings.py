@@ -45,6 +45,8 @@ INSTALLED_APPS = (
     'imagekit',
     'raven.contrib.django.raven_compat',
     'django_s3_storage',
+    'django_tables2',
+    'django_extensions'
 )
 
 MIDDLEWARE = (
@@ -89,6 +91,7 @@ DATABASES = {
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
 }
+
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 if db_from_env:
