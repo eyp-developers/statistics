@@ -200,20 +200,18 @@ class Announcement(models.Model):
 class Committee(models.Model):
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
 
-    def topic(self):
-        return self.statistics_topic_place.topic
-
-    #What the name of the committee is. This should be the acronym of the committee. Aka: AFCO, ENVI, ITRE II
-    name = models.CharField(max_length=COMMITTEE_NAME_MAX)
-
-    #What the topic of the committee is, can be any length.
+    # Currently updating both until topics are stable
     topic_text = models.TextField()
 
+    def get_topic(self):
+        return self.statisticstopicplace.topic
+
+    name = models.CharField(max_length=COMMITTEE_NAME_MAX)
     next_subtopics = models.ManyToManyField('SubTopic', blank=True, related_name='next_subtopics+')
 
     #We want to define an automatic color for the committee in question, based on the list of material design colors.
     def committee_color(self):
-        color_id = self.pk%17
+        color_id = self.pk % 17
         if color_id == 1:
             return('red')
         elif color_id == 2:
