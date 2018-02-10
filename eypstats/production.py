@@ -44,7 +44,9 @@ INSTALLED_APPS = (
     'raven.contrib.django.raven_compat',
     'django_s3_storage',
     'django_tables2',
-    'django_extensions'
+    'django_extensions',
+    'django_filters',
+    'bootstrap3'
 )
 
 MIDDLEWARE = (
