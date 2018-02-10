@@ -2,6 +2,7 @@ import sys
 import csv
 import urllib.request
 import datetime
+import codecs
 
 from statistics.models import Session, Committee, Topic, TopicPlace, HistoricTopicPlace
 from statistics import countries
@@ -10,8 +11,8 @@ DOC_LINK = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHPOM9M0nSZUh-2tupR
 
 
 def firstLineValid(row):
-    print "First Row:"
-    print row
+    print("First Row:")
+    print(row)
     rules = [
         row[0] == 'Topic',
         row[1] == 'National Committee',
@@ -31,10 +32,10 @@ def getTopicsFromCSVRows(rows):
     for row in rows:
         if firstLine:
             if not firstLineValid(row):
-                print "The CSV was not formatted as expected! Cowardly exiting"
+                print("The CSV was not formatted as expected! Cowardly exiting")
                 sys.exit()
             firstLine = False
-            print "First row according to format"
+            print("First row according to format")
             continue
         topic = {
             'text': row[0],
@@ -148,8 +149,9 @@ def makeNewPlace(stats_topic, csv_topic):
 
 def run():
     doc_response = urllib.request.urlopen(DOC_LINK)
-    rows = csv.reader(doc_response)
+    rows = csv.reader(codecs.iterdecode(doc_response, 'utf-8'))
     csv_topics = getTopicsFromCSVRows(rows)
+    print("CSV TOPICS", len(csv_topics))
     db_topics = Topic.objects.all()
 
     total_topics = len(csv_topics)

@@ -321,8 +321,8 @@ class Topic(models.Model):
     )
     difficulty = models.CharField(max_length=1, choices=DIFFICULTIES, blank=True, null=True)
 
-    def __unicode__(self):
-        return unicode(self.text)
+    def __str__(self):
+        return self.text
 
 
 class TopicPlace(models.Model):
@@ -348,8 +348,8 @@ class TopicPlace(models.Model):
     def country(self):
         return self.child_method('country')
 
-    def __unicode__(self):
-        return self.child_method('__unicode__')
+    def __str__(self):
+        return self.child_method('__str__')
 
 
 class StatisticsTopicPlace(TopicPlace):
@@ -370,8 +370,8 @@ class StatisticsTopicPlace(TopicPlace):
     def country(self):
         return self.committee.session.country
 
-    def __unicode__(self):
-        return unicode(self.committee.session.name)
+    def __str__(self):
+        return self.committee.session.name
 
 
 class HistoricTopicPlace(TopicPlace):
@@ -394,7 +394,7 @@ class HistoricTopicPlace(TopicPlace):
     def country(self):
         return self.historic_country
 
-    def __unicode__(self):
+    def __str__(self):
         string = ''
         if self.get_historic_country_display() is not None:
             string += self.get_historic_country_display()
@@ -410,7 +410,7 @@ class HistoricTopicPlace(TopicPlace):
             if string != '':
                 string += ' - '
             string += str(self.historic_date.year)
-        return unicode(string)
+        return string
 
 #Defining subtopics of a committee, there should ideally be between 3 and 7 of these, plus a "general" subtopic.
 class SubTopic(models.Model):

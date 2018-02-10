@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^changelog/$', changelog, name='changelog'),
     url(r'^create_session/$', create_session, name='create_session'),
     url(r'^highscores/$', high_scores, name='high_scores'),
+    url(r'^topics/$', topics, name='topics'),
     url(r'^overview/(?P<session_id>[0-9]+)/$', overview, name='overview'),
     url(r'^edit/(?P<session_id>[0-9]+)/$', edit, name='edit'),
     url(r'^committees/(?P<session_id>[0-9]+)/$', create_committee, name='create_committee'),
