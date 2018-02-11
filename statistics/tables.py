@@ -29,7 +29,7 @@ class TopicTable(tables.Table):
 
         committee_links = format_html_join(
                 '\n', '<a class="btn btn-primary" href="{}" role="button">{}</a>',
-                ((reverse('statistics:debate', args=[c.session.id, c.id]), c.name) for c in committees)
+                ((reverse('statistics:debate', args=[c.session.id, c.id]), c.session.name) for c in committees)
             )
 
         return committee_links
