@@ -1,0 +1,29 @@
+{% extends 'statistics/base.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block page_title %}Edit Topic{% endblock %}
+
+{% block content %}
+<br>
+<div class="panel panel-primary">
+
+  <div class="panel-heading">
+    <h4>Edit Topic</h4>
+  </div>
+
+  <div class="panel-body">
+    <form action="" method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">
+                Update
+            </button>
+        {% endbuttons %}
+    </form>
+  </div>
+
+</div>
+{% endblock %}
