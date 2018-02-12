@@ -2,6 +2,8 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.conf import settings
 
+from django.urls import path
+
 from statistics.views import *
 from .url_patterns.api import api_urls
 from .url_patterns.session import session_urls
@@ -22,6 +24,7 @@ urlpatterns = [
     url(r'^create_session/$', create_session, name='create_session'),
     url(r'^highscores/$', high_scores, name='high_scores'),
     url(r'^topics/$', FilteredTopicsListView.as_view(), name='topics'),
+    path('topics/<int:pk>/', TopicUpdate.as_view(), name='update_topic'),
     url(r'^overview/(?P<session_id>[0-9]+)/$', overview, name='overview'),
     url(r'^edit/(?P<session_id>[0-9]+)/$', edit, name='edit'),
     url(r'^committees/(?P<session_id>[0-9]+)/$', create_committee, name='create_committee'),
