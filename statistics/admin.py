@@ -1,6 +1,20 @@
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy
+from .models import *
 
-from .models import Session, Committee, SubTopic, ActiveDebate, ActiveRound, Announcement, Point, ContentPoint, RunningOrder, Vote, Gender, Topic, TopicPlace
+
+class StatisticsAdminSite(admin.AdminSite):
+    # Text to put at the end of each page's <title>.
+    site_title = ugettext_lazy('Statistics Administration')
+
+    # Text to put in each page's <h1> (and above login form).
+    site_header = ugettext_lazy('Statistics Administration')
+
+    # Text to put at the top of the admin index page.
+    index_title = ugettext_lazy('Statistics Administration')
+
+
+admin_site = StatisticsAdminSite()
 
 #Setting up admin inlines for Committees and Suptopics, allows easy adding of committees in the "Session creation" page,
 #and Subtopics in the "Comiitee creation" page
@@ -105,15 +119,15 @@ class GenderAdmin(admin.ModelAdmin):
     list_filter = ['timestamp']
 
 #Registering all the admin pages and the model for each admin page.
-admin.site.register(Session, SessionAdmin)
-admin.site.register(Committee, CommitteeAdmin)
-admin.site.register(SubTopic, SubTopicAdmin)
-admin.site.register(Topic, TopicAdmin)
-admin.site.register(ActiveDebate, ActiveDebateAdmin)
-admin.site.register(Announcement, AnnouncementAdmin)
-admin.site.register(ActiveRound, ActiveRoundAdmin)
-admin.site.register(Point, PointAdmin)
-admin.site.register(ContentPoint, ContentPointAdmin)
-admin.site.register(RunningOrder, RunningOrderAdmin)
-admin.site.register(Vote, VoteAdmin)
-admin.site.register(Gender, GenderAdmin)
+admin_site.register(Session, SessionAdmin)
+admin_site.register(Committee, CommitteeAdmin)
+admin_site.register(SubTopic, SubTopicAdmin)
+admin_site.register(Topic, TopicAdmin)
+admin_site.register(ActiveDebate, ActiveDebateAdmin)
+admin_site.register(Announcement, AnnouncementAdmin)
+admin_site.register(ActiveRound, ActiveRoundAdmin)
+admin_site.register(Point, PointAdmin)
+admin_site.register(ContentPoint, ContentPointAdmin)
+admin_site.register(RunningOrder, RunningOrderAdmin)
+admin_site.register(Vote, VoteAdmin)
+admin_site.register(Gender, GenderAdmin)

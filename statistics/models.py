@@ -401,7 +401,7 @@ class HistoricTopicPlace(TopicPlace):
         if self.historic_session_type is not None:
             if string != '':
                 string += ' - '
-            string += self.historic_session_typev
+            string += self.historic_session_type
         if self.historic_committee_name is not None:
             if string != '':
                 string += ' - '
