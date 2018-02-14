@@ -7,6 +7,7 @@ from django.urls import reverse
 class TopicTable(tables.Table):
     committee = tables.Column(empty_values=())
     used_at = tables.Column(empty_values=())
+    text = tables.Column(attrs={'td': {'style': 'font-size: 14px'}})
 
     def render_committee(self, record):
         places = record.topicplace_set.all()
@@ -32,7 +33,15 @@ class TopicTable(tables.Table):
                 ((reverse('statistics:debate', args=[c.session.id, c.id]), c.session.name) for c in committees)
             )
 
-        return committee_links
+        historic_places = []
+        for place in places:
+            if hasattr(place, 'historictopicplace'):
+                historic_places.append(place.historictopicplace)
+
+        historic_places_html = format_html_join(
+            '', '<p>{}</p>', ((str(h),) for h in historic_places)
+        )
+        return format_html("{} {}", committee_links, historic_places_html)
 
     class Meta:
         model = Topic
