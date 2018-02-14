@@ -1,5 +1,8 @@
+from django import forms
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy
+from django.utils.translation import ugettext as _
+from django.conf.urls import url
 from .models import *
 
 
@@ -63,12 +66,89 @@ class CommitteeAdmin(admin.ModelAdmin):
     list_filter = ['name']
 
 
+class TopicPlaceTypeFilter(admin.SimpleListFilter):
+    title = _('topic_place_type')
+    parameter_name = 'topic_place_type'
+
+    def lookups(self, request, model_admin):
+      return TopicPlace.SUBCLASS_CHOICES
+
+    def queryset(self, request, queryset):
+      if self.value():
+        return queryset.exclude(**{self.value(): None})
+      return queryset
+
+
 class TopicAdmin(admin.ModelAdmin):
-    search_fields = ['text']
+    search_fields = ['text', 'type', 'area', 'difficulty']
     list_display = ('text', 'type', 'area')
-    inlines = [
-        TopicPlaceInline
+    # inlines = [
+    #     TopicPlaceInline
+    # ]
+
+
+class TopicPlaceAdmin(admin.ModelAdmin):
+    list_display = [
+        'topic',
+        'topic_place_type'
     ]
+    list_filter = [TopicPlaceTypeFilter]
+
+    def get_queryset(self, request):
+      return super(TopicPlaceAdmin, self).get_queryset(request).select_subclasses()
+
+    def gender(self, obj):
+        return obj._meta.verbose_name
+
+    def get_form(self, request, obj=None, **kwargs):
+        if obj is None:
+            Model = TopicPlace.SUBCLASS(request.GET.get('topic_place_type'))
+        else:
+            Model = obj.__class__
+
+        # When we change the selected gender in the create form, we want to reload the page.
+        RELOAD_PAGE = "window.location.search='?topic_place_type=' + this.value"
+        # We should also grab all existing field values, and pass them as query string values.
+
+        class ModelForm(forms.ModelForm):
+            if not obj:
+                gender = forms.ChoiceField(
+                    choices=[('', _('Please select...'))] + TopicPlace.SUBCLASS_CHOICES,
+                    widget=forms.Select(attrs={'onchange': RELOAD_PAGE})
+                )
+
+            class Meta:
+                model = Model
+                exclude = ()
+
+        return ModelForm
+
+    def get_fields(self, request, obj=None):
+        # We want gender to be the first field.
+        fields = super(TopicPlaceAdmin, self).get_fields(request, obj)
+
+        if 'topic_place_type' in fields:
+            fields.remove('topic_place_type')
+            fields = ['topic_place_type'] + fields
+
+        return fields
+
+    def get_urls(self):
+        # We want to install named urls that match the subclass ones, but bounce to the relevant
+        # superclass ones (since they should be able to handle rendering the correct form).
+        urls = super(TopicPlaceAdmin, self).get_urls()
+        print(urls)
+        existing = '{}_{}_'.format(self.model._meta.app_label, self.model._meta.model_name)
+        subclass_urls = []
+        # for name, model in TopicPlace.SUBCLASS_OBJECT_CHOICES.items():
+        #     opts = model._meta
+        #     replace = '{}_{}_'.format(opts.app_label, opts.model_name)
+        #     subclass_urls.extend([
+        #         url(pattern.regex.pattern, pattern.callback, name=pattern.name.replace(existing, replace))
+        #         for pattern in urls if pattern.name
+        #     ])
+
+        return urls + subclass_urls
 
 
 class SubTopicAdmin(admin.ModelAdmin):
@@ -123,6 +203,7 @@ admin_site.register(Session, SessionAdmin)
 admin_site.register(Committee, CommitteeAdmin)
 admin_site.register(SubTopic, SubTopicAdmin)
 admin_site.register(Topic, TopicAdmin)
+admin_site.register(TopicPlace, TopicPlaceAdmin)
 admin_site.register(ActiveDebate, ActiveDebateAdmin)
 admin_site.register(Announcement, AnnouncementAdmin)
 admin_site.register(ActiveRound, ActiveRoundAdmin)
