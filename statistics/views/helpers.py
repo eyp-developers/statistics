@@ -23,5 +23,5 @@ def check_authorization_and_render(request, template, context, session, admin_on
             return render(request, template, context)
         else:
             messages.add_message(request, messages.ERROR,
-                                 'You are not authorized to view this page. You need to log in as the ' + session.name + ' admin.')
+                                 'You are not authorized to view this page. You need to log in as a ' + session.name + ' user.')
             return HttpResponseRedirect(reverse('statistics:login'))
