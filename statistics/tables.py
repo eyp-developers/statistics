@@ -6,9 +6,9 @@ from django.urls import reverse
 
 class TopicTable(tables.Table):
     committee = tables.Column(empty_values=())
-    used_at = tables.Column(empty_values=(), attrs={'td': {'style': 'text-align: center'}})
-    text = tables.Column(attrs={'td': {'style': 'font-size: 14px'}})
-    extra = tables.Column(empty_values=(), attrs={'td': {'style': 'font-size: 14px'}})
+    used_at = tables.Column(empty_values=(), attrs={'td': {'class': 'topics__used_at'}})
+    text = tables.Column(attrs={'td': {'class': 'topics__text'}})
+    extra = tables.Column(empty_values=(), attrs={'td': {'class': 'topics__extra'}})
 
     def render_extra(self, record):
         extras = []
