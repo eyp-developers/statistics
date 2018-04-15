@@ -6,20 +6,28 @@ from django.urls import reverse
 
 class TopicTable(tables.Table):
     committee = tables.Column(empty_values=())
-    used_at = tables.Column(empty_values=())
+    used_at = tables.Column(empty_values=(), attrs={'td': {'style': 'text-align: center'}})
     text = tables.Column(attrs={'td': {'style': 'font-size: 14px'}})
+    extra = tables.Column(empty_values=(), attrs={'td': {'style': 'font-size: 14px'}})
+
+    def render_extra(self, record):
+        extras = []
+        if record.area:
+            extras.append(('Area:', record.area))
+        if record.type:
+            type = next(t[1] for t in Topic.TOPIC_TYPES if t[0] == record.type)
+            extras.append(('Type:', type))
+        if record.difficulty:
+            difficulty = next(d[1] for d in Topic.DIFFICULTIES if d[0] == record.difficulty)
+            extras.append(('Difficulty: ', difficulty))
+
+        return format_html_join(', ', '<b>{}</b> {}', extras)
 
     def render_committee(self, record):
         places = record.topicplace_set.all()
+        committee_names = set([p.committee_name() for p in places])
 
-        if len(places) == 1:
-            return places[0].committee_name()
-
-        committees = ''
-        for place in places:
-            committees += place.committee_name() + ', '
-
-        return committees
+        return ", ".join(committee_names)
 
     def render_used_at(self, record):
         places = record.topicplace_set.all()
