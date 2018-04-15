@@ -45,6 +45,6 @@ class TopicTable(tables.Table):
 
     class Meta:
         model = Topic
-        exclude = ('id',)
-        sequence = ('text', 'committee', 'type', 'area', 'difficulty', 'used_at')
+        exclude = ('id', 'type', 'area', 'difficulty')
+        sequence = ('text', 'committee', 'used_at')
         template_name = 'django_tables2/bootstrap.html'
