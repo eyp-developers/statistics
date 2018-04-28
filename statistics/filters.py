@@ -26,9 +26,9 @@ class TopicFilter(FilterSet):
             JOIN ( \
                 SELECT topic_id FROM ( \
                     SELECT topicplace_ptr_id \
-                    FROM statistics_statisticstopicplace AS sp \
+                    FROM statistics_statisticstopicplace AS stp \
                     JOIN statistics_committee AS c \
-                    ON sp.committee_id=c.id \
+                    ON stp.committee_id=c.id \
                     WHERE c.name ILIKE '%%' || %s || '%%' \
                     UNION \
                     SELECT topicplace_ptr_id \
@@ -43,7 +43,7 @@ class TopicFilter(FilterSet):
 
         committee_name_topic_ids = [t.id for t in topics_by_committee_name]
 
-        return queryset.filter(topicplace__in=committee_name_topic_ids)
+        return queryset.filter(id__in=committee_name_topic_ids)
 
     class Meta:
         model = Topic
