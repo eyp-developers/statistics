@@ -1,4 +1,6 @@
-# statistics [![Build Status](https://travis-ci.org/eyp-developers/statistics.svg?branch=master)](https://travis-ci.org/eyp-developers/statistics) [![Documentation Status](http://readthedocs.org/projects/ga-statistics/badge/?version=latest)](http://ga-statistics.readthedocs.io/en/latest/?badge=latest) [![Waffle.io - Columns and their card count](https://badge.waffle.io/eyp-developers/statistics.svg?columns=all)](https://waffle.io/eyp-developers/statistics)
+# statistics 
+
+[![Build Status](https://travis-ci.org/eyp-developers/statistics.svg?branch=master)](https://travis-ci.org/eyp-developers/statistics) [![Documentation Status](http://readthedocs.org/projects/ga-statistics/badge/?version=latest)](http://ga-statistics.readthedocs.io/en/latest/?badge=latest) [![Waffle.io - Columns and their card count](https://badge.waffle.io/eyp-developers/statistics.svg?columns=all)](https://waffle.io/eyp-developers/statistics)
 
 Catering all the statistics lovers of the European Youth Parliament
 
