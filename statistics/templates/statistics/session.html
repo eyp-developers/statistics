@@ -10,7 +10,7 @@
         <h3 class="session-description white">{{ session.description }}</h3>
         <h3 class="session-date white">{{ session.start_date|date:"D, j N Y" }} – {{ session.end_date|date:"D, j N Y" }}</h3>
 
-        {% if session.website_link or session.resolution_link or session.facebook_link or session.twitter_link %}
+        {% if session.website_link or session.resolution_link or session.topic_overview_link or session.facebook_link or session.twitter_link %}
 
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-1">
@@ -21,6 +21,10 @@
 
                     {% if session.resolution_link %}
                         <a class="btn btn-sm btn-primary btn-raised" href="{{ session.resolution_link }}" target="_blank">View Resolutions</a>
+                    {% endif %}
+
+                    {% if session.topic_overview_link %}
+                        <a class="btn btn-sm btn-primary btn-raised" href="{{ session.topic_overview_link }}" target="_blank">View Topic Overviews</a>
                     {% endif %}
 
                     {% if session.facebook_link %}
@@ -34,7 +38,7 @@
                 </div>
               </div>
 
-        {% endif %} <!-- if session.website_link or session.resolution_link or session.facebook_link or session.twitter_link -->
+        {% endif %}
 
 
 
@@ -45,8 +49,8 @@
             {% if session.picture_licence %}
                 <a href="{{ session.picture_license_link }}" target="_blank" class="picture-credit-link">licensed under {{ session.picture_licence }}</a>
             {% endif %}
-          </div> <!-- picture-credit-link-container -->
-        {% endif %} <!-- if session.picture_author -->
+          </div>
+        {% endif %}
 
 
 

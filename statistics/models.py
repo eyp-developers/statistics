@@ -56,6 +56,8 @@ class Session(models.Model):
     website_link = models.URLField(blank=True)
     facebook_link = models.URLField(blank=True)
     twitter_link = models.URLField(blank=True)
+    topic_overview_link = models.URLField(blank=True)
+
     country = models.CharField(max_length=2, choices=countries.SESSION_COUNTRIES, default=countries.ALBANIA)
 
     #Date Options
