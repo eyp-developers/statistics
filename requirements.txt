@@ -1,5 +1,4 @@
 Django==2.0.1
-django-extensions==1.9.9
 django-imagekit==3.3
 gunicorn==19.6.0
 mistune==0.7.3
