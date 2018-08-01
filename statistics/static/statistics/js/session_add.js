@@ -156,7 +156,7 @@ function editCommittee(pk) {
       console.log('ajax success for: ' + response.name);
       $('#id_pk').val(response.pk);
       $('#id_name').val(response.name);
-      $('#id_topic').val(response.topic);
+      $('#id_topic').val(response.topic_text);
       deleteSubtopics(0);
       response.subtopics.forEach(function(subtopic) {
         if (subtopic.subtopic != 'General'){

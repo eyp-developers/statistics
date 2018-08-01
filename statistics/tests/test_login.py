@@ -1,6 +1,6 @@
 from django.test import TestCase
-from django.core.urlresolvers import reverse
-from helpers import create_user_max
+from django.urls import reverse
+from .helpers import create_user_max
 
 
 class LoginViewTests(TestCase):

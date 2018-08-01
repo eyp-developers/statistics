@@ -1,0 +1,28 @@
+{% extends 'statistics/base.html' %}
+
+{% load staticfiles %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+
+{% block page_title %}All Topics{% endblock %}
+
+{% block content %}
+<br>
+<div class="panel panel-primary">
+
+  <div class="panel-heading">
+    <h4>Topics</h4>
+  </div>
+
+  <div class="panel-body">
+    {% if filter %}
+        <form action="" method="get" class="form form-inline">
+            {% bootstrap_form filter.form layout='inline' %}
+            {% bootstrap_button 'filter' %}
+        </form>
+    {% endif %}
+    {% render_table table 'django_tables2/bootstrap.html' %}
+  </div>
+
+</div>
+{% endblock %}

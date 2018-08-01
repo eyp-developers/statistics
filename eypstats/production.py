@@ -11,18 +11,18 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import raven
-
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open('/etc/secretkey.txt') as f:
-    SECRET_KEY = f.read().strip()
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+IS_DEVELOPMENT = False
 
-ALLOWED_HOSTS = ["stats.eyp.org"]
+ALLOWED_HOSTS = ['stats.eyp.org', 'ga-statistics.herokuapp.com']
 
 CSRF_COOKIE_SECURE = True
 
@@ -42,17 +42,21 @@ INSTALLED_APPS = (
     'statistics',
     'imagekit',
     'raven.contrib.django.raven_compat',
+    'django_s3_storage',
+    'django_tables2',
+    'django_filters',
+    'bootstrap3'
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 )
 
 ROOT_URLCONF = 'eypstats.urls'
@@ -80,19 +84,15 @@ WSGI_APPLICATION = 'eypstats.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-with open('/etc/databases.txt') as f:
-    DB_PASSWORD = f.read().strip()
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'statistics',
-        'USER': 'django',
-        'PASSWORD': DB_PASSWORD,
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
 }
+
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -112,22 +112,37 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
 # Media file settings
-MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# The AWS region to connect to.
+AWS_REGION = "eu-west-2"
+
+# The AWS access key to use.
+AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+
+# The AWS secret access key to use.
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+
+# The name of the bucket to store files in.
+AWS_S3_BUCKET_NAME = os.environ['S3_BUCKET_NAME']
+
+DEFAULT_FILE_STORAGE = "django_s3_storage.storage.S3Storage"
 
 
-GOOGLE_ANALYTICS = "UA-73435932-1"
+# GOOGLE_ANALYTICS = "UA-73435932-1"
+GOOGLE_ANALYTICS = ""
 
 RAVEN_CONFIG = {
     'dsn': 'https://e1293cf510704122a3ee1c9a35477c7a:eeabde9a71f54a3a898295146aab5520@sentry.io/156485',
     # If you are using git, you can also automatically configure the
     # release based on the git info.
-    'release': raven.fetch_git_sha(BASE_DIR),
+    'release': 'static-release',
 }

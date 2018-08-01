@@ -1,6 +1,6 @@
 from django.test import TestCase
-from django.core.urlresolvers import reverse
-from helpers import create_session, create_committee, create_user_max, ips_1_p
+from django.urls import reverse
+from .helpers import create_session, create_committee, create_user_max, ips_1_p
 
 class DebateViewTests(TestCase):
 
@@ -10,7 +10,7 @@ class DebateViewTests(TestCase):
         self.committee = create_committee(session=self.session)
 
     def test_debate_view_with_no_points(self):
-        response = self.client.get(reverse("statistics:debate", args = [self.session.pk, self.committee.pk]))
+        response = self.client.get(reverse("statistics:debate", args=[self.session.pk, self.committee.pk]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Debate: ENVI")
         self.assertContains(response, ips_1_p)

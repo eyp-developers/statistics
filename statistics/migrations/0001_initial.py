@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.db import models, migrations
 from django.conf import settings
@@ -41,8 +41,8 @@ class Migration(migrations.Migration):
                 ('timestamp', models.DateTimeField(auto_now=True)),
                 ('active_debate', models.CharField(max_length=7, null=True, blank=True)),
                 ('active_round', models.PositiveSmallIntegerField(null=True, blank=True)),
-                ('point_type', models.CharField(default=b'P', max_length=2, choices=[(b'P', b'Point'), (b'DR', b'Direct Response')])),
-                ('committee_by', models.ForeignKey(to='statistics.Committee')),
+                ('point_type', models.CharField(default=b'P', max_length=5, choices=[(b'P', b'Point'), (b'DR', b'Direct Response')])),
+                ('committee_by', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Committee')),
             ],
         ),
         migrations.CreateModel(
@@ -59,8 +59,8 @@ class Migration(migrations.Migration):
                 ('session_subtopics_enabled', models.BooleanField(default=True, verbose_name=b'committee subtopics enabled')),
                 ('session_voting_enabled', models.BooleanField(default=True, verbose_name=b'session-wide voting enabled')),
                 ('session_max_rounds', models.PositiveSmallIntegerField(default=3)),
-                ('session_admin_user', models.ForeignKey(related_name='session_admin', blank=True, to=settings.AUTH_USER_MODEL)),
-                ('session_submission_user', models.ForeignKey(related_name='session_submit', blank=True, to=settings.AUTH_USER_MODEL)),
+                ('session_admin_user', models.ForeignKey(on_delete=models.deletion.CASCADE, related_name='session_admin', blank=True, to=settings.AUTH_USER_MODEL)),
+                ('session_submission_user', models.ForeignKey(on_delete=models.deletion.CASCADE, related_name='session_submit', blank=True, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -68,8 +68,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('subtopic_text', models.CharField(max_length=200, null=True, blank=True)),
-                ('committee', models.ForeignKey(blank=True, to='statistics.Committee', null=True)),
-                ('session', models.ForeignKey(blank=True, to='statistics.Session', null=True)),
+                ('committee', models.ForeignKey(on_delete=models.deletion.CASCADE, blank=True, to='statistics.Committee', null=True)),
+                ('session', models.ForeignKey(on_delete=models.deletion.CASCADE, blank=True, to='statistics.Session', null=True)),
             ],
         ),
         migrations.CreateModel(
@@ -82,14 +82,14 @@ class Migration(migrations.Migration):
                 ('against', models.PositiveSmallIntegerField()),
                 ('abstentions', models.PositiveSmallIntegerField()),
                 ('absent', models.PositiveSmallIntegerField()),
-                ('committee_by', models.ForeignKey(to='statistics.Committee')),
-                ('session', models.ForeignKey(to='statistics.Session')),
+                ('committee_by', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Committee')),
+                ('session', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Session')),
             ],
         ),
         migrations.AddField(
             model_name='point',
             name='session',
-            field=models.ForeignKey(to='statistics.Session'),
+            field=models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Session'),
         ),
         migrations.AddField(
             model_name='point',
@@ -99,16 +99,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='committee',
             name='session',
-            field=models.ForeignKey(to='statistics.Session'),
+            field=models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Session'),
         ),
         migrations.AddField(
             model_name='activeround',
             name='session',
-            field=models.ForeignKey(to='statistics.Session'),
+            field=models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Session'),
         ),
         migrations.AddField(
             model_name='activedebate',
             name='session',
-            field=models.ForeignKey(to='statistics.Session'),
+            field=models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Session'),
         ),
     ]

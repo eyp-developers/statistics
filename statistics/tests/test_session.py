@@ -1,9 +1,9 @@
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.models import User
 
 from ..models import Session, Committee
-from helpers import create_session, create_committee, create_user_max, ips_1_p, lor_1_p
+from .helpers import create_session, create_committee, create_user_max, ips_1_p, lor_1_p
 
 
 class SessionViewTests(TestCase):
@@ -16,7 +16,7 @@ class SessionViewTests(TestCase):
         """
         This test makes sure an empty (no committees) session will be shown correctly.
         """
-        response = self.client.get(reverse("statistics:session", args = [self.session.pk]))
+        response = self.client.get(reverse("statistics:session", args=[self.session.pk]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Leipzig 2015")
         self.assertContains(response, "80th International Session of the European Youth Parliament")

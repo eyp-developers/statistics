@@ -6,6 +6,7 @@ from decimal import Decimal
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from statistics import countries, session_types
 
 # The following imports are used to process images for faster loading times
@@ -16,6 +17,10 @@ SESSION_NAME_LEN=100
 SESSION_DESCRIPTION_LEN=200
 SESSION_AUTHOR_LEN=100
 SESSION_LICENCE_LEN=100
+
+TOPIC_AREA_LEN=200
+
+COMMITTEE_NAME_MAX=8
 
 
 class Session(models.Model):
@@ -51,6 +56,8 @@ class Session(models.Model):
     website_link = models.URLField(blank=True)
     facebook_link = models.URLField(blank=True)
     twitter_link = models.URLField(blank=True)
+    topic_overview_link = models.URLField(blank=True)
+
     country = models.CharField(max_length=2, choices=countries.SESSION_COUNTRIES, default=countries.ALBANIA)
 
     #Date Options
@@ -72,7 +79,7 @@ class Session(models.Model):
         (RUNNINGORDER, 'Running Order Statistics'),
         (RUNNINGCONTENT, 'Running Order Statistics with Point Content')
     )
-    session_statistics = models.CharField(max_length=3, choices=STATISTIC_TYPES, default=JOINTFORM)
+    session_statistics = models.CharField(max_length=5, choices=STATISTIC_TYPES, default=JOINTFORM)
 
     is_visible = models.BooleanField('is visible')
 
@@ -89,11 +96,24 @@ class Session(models.Model):
 
     #Defining two users for the session. The Admin user who can alter active debates, change points etc. and the
     #submit user, which will be the login for everyone at any given session who wants to submit a point.
-    admin_user = models.ForeignKey(User, related_name = 'session_admin', blank = True, null = True)
-    submission_user = models.ForeignKey(User, related_name = 'session_submit', blank = True, null = True)
+    admin_user = models.ForeignKey(
+                            User,
+                            related_name='session_admin',
+                            blank=True,
+                            null=True,
+                            on_delete=models.CASCADE
+                        )
 
-    def __unicode__(self):
-        return unicode(self.name)
+    submission_user = models.ForeignKey(
+                                User,
+                                related_name='session_submit',
+                                blank=True,
+                                null=True,
+                                on_delete=models.CASCADE
+                            )
+
+    def __str__(self):
+        return str(self.name)
 
     def session_ongoing(self):
         return (self.start_date <= timezone.now() and self.end_date >= timezone.now())
@@ -143,18 +163,18 @@ class Session(models.Model):
         return Decimal(minutes) / Decimal(total_points)
 
 class ActiveDebate(models.Model):
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
     active_debate = models.CharField(max_length=8, blank=True, null=True)
 
-    def __unicode__(self):
-        return unicode(self.active_debate)
+    def __str__(self):
+        return str(self.active_debate)
 
 class ActiveRound(models.Model):
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
     active_round = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __int__(self):
-        return unicode(self.active_round)
+        return str(self.active_round)
 
 
 class Announcement(models.Model):
@@ -174,26 +194,26 @@ class Announcement(models.Model):
     )
     announcement_type = models.CharField(max_length=15, choices=ANNOUNCEMENT_TYPES, default=INFO)
 
-    def __unicode__(self):
-        return unicode(self.announcement_type + self.content)
+    def __str__(self):
+        return str(self.announcement_type + self.content)
 
 
-
-#Defining a committee, there should be several of these connected with each session.
+# Defining a committee, there should be several of these connected with each session.
 class Committee(models.Model):
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
 
-    #What the name of the committee is. This should be the acronym of the committee. Aka: AFCO, ENVI, ITRE II
-    name = models.CharField(max_length=8)
+    # Currently updating both until topics are stable
+    topic_text = models.TextField()
 
-    #What the topic of the committee is, can be any length.
-    topic = models.TextField()
+    def get_topic(self):
+        return self.statisticstopicplace.topic
 
+    name = models.CharField(max_length=COMMITTEE_NAME_MAX)
     next_subtopics = models.ManyToManyField('SubTopic', blank=True, related_name='next_subtopics+')
 
     #We want to define an automatic color for the committee in question, based on the list of material design colors.
     def committee_color(self):
-        color_id = self.pk%17
+        color_id = self.pk % 17
         if color_id == 1:
             return('red')
         elif color_id == 2:
@@ -274,16 +294,134 @@ class Committee(models.Model):
 
 
     #Defining how the committee will be displayed in a list.
-    def __unicode__(self):
-        return unicode(self.name)
+    def __str__(self):
+        return str(self.name)
+
+
+class Topic(models.Model):
+    text = models.TextField(unique=True)
+
+    CREATIVE = 'CR'
+    CONFLICT = 'CF'
+    STRATEGY = 'ST'
+    TOPIC_TYPES = (
+        (CREATIVE, 'Creative'),
+        (CONFLICT, 'Conflict'),
+        (STRATEGY, 'Strategy')
+    )
+    type = models.CharField(max_length=2, choices=TOPIC_TYPES, blank=True, null=True)
+
+    area = models.CharField(max_length=TOPIC_AREA_LEN, blank=True, null=True)
+
+    EASY = 'E'
+    INTERMEDIATE = 'I'
+    HARD = 'H'
+    DIFFICULTIES = (
+        (EASY, 'Easy'),
+        (INTERMEDIATE, 'Intermediate'),
+        (HARD, 'Hard')
+    )
+    difficulty = models.CharField(max_length=1, choices=DIFFICULTIES, blank=True, null=True)
+
+    def __str__(self):
+        return self.text
+
+
+class TopicPlace(models.Model):
+    topic = models.ForeignKey(Topic, models.CASCADE)
+
+    def child_method(self, method_name):
+        try:
+            method = getattr(self.statisticstopicplace, method_name)
+            return method()
+        except ObjectDoesNotExist:
+            method = getattr(self.historictopicplace, method_name)
+            return method()
+
+    def session_type(self):
+        return self.child_method('session_type')
+
+    def committee_name(self):
+        return self.child_method('committee_name')
+
+    def year(self):
+        return self.child_method('year')
+
+    def country(self):
+        return self.child_method('country')
+
+    def __str__(self):
+        return self.child_method('__str__')
+
+
+class StatisticsTopicPlace(TopicPlace):
+    committee = models.OneToOneField(Committee, models.SET_NULL, null=True)
+
+    def session_name(self):
+        return self.committee.session.name
+
+    def session_type(self):
+        return self.committee.session.session_type
+
+    def committee_name(self):
+        return self.committee.name.split(' ')[0]
+
+    def year(self):
+        return self.committee.session.end_date.year
+
+    def country(self):
+        return self.committee.session.country
+
+    def __str__(self):
+        return self.committee.session.name
+
+
+class HistoricTopicPlace(TopicPlace):
+    historic_date = models.DateField(blank=True, null=True)
+    historic_country = models.CharField(max_length=2, choices=countries.SESSION_COUNTRIES, blank=True, null=True)
+    historic_session_type = models.CharField(max_length=3, choices=session_types.SESSION_TYPES, blank=True, null=True)
+    historic_committee_name = models.CharField(max_length=COMMITTEE_NAME_MAX)
+
+    def session_type(self):
+        return self.historic_session_type
+
+    def committee_name(self):
+        return self.historic_committee_name
+
+    def year(self):
+        if self.historic_date is not None:
+            return self.historic_date.year
+        return None
+
+    def country(self):
+        return self.historic_country
+
+    def __str__(self):
+        string = ''
+        if self.get_historic_country_display() is not None:
+            string += self.get_historic_country_display()
+        if self.historic_session_type is not None:
+            if string != '':
+                string += ' - '
+            string += self.historic_session_type
+        if self.historic_committee_name is not None:
+            if string != '':
+                string += ' - '
+            string += self.historic_committee_name
+        if self.historic_date is not None:
+            if string != '':
+                string += ' - '
+            string += str(self.historic_date.year)
+        return string
 
 #Defining subtopics of a committee, there should ideally be between 3 and 7 of these, plus a "general" subtopic.
 class SubTopic(models.Model):
-    #Which session the subtopic is connected to (to prevent dupicate problems)
-    session = models.ForeignKey(Session, null=True, blank=True)
+    # Which session the subtopic is connected to (to prevent dupicate problems)
+    # TODO: Remove this
+    session = models.ForeignKey(Session, null=True, blank=True, on_delete=models.CASCADE)
 
     #Which committee within the session the subtopic should be connected to.
-    committee = models.ForeignKey(Committee, blank=True, null=True)
+    committee = models.ForeignKey(Committee, blank=True, null=True, on_delete=models.CASCADE)
 
     #Name/Text of the subtopic. Should be short and catchy.
     text = models.CharField(max_length=200, blank=True, null=True)
@@ -334,20 +472,20 @@ class SubTopic(models.Model):
             return('white')
 
     #Defining what should be displayed in the admin list, it should be the suptopic text.
-    def __unicode__(self):
-        return unicode(self.text)
+    def __str__(self):
+        return str(self.text)
 
 
 #Defining a Point, which is one peice of data that is submitted for every point of debate.
 class Point(models.Model):
     #Which session the point should be connected to.
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
 
     #Timestamp of when the point was last updated.
     timestamp = models.DateTimeField(auto_now=True)
 
     #Which committee the point was by.
-    committee_by = models.ForeignKey(Committee)
+    committee_by = models.ForeignKey(Committee, on_delete=models.CASCADE)
 
     #Which was the active debate at the time the point was made.
     active_debate = models.CharField(max_length=8, blank=True, null=True)
@@ -362,23 +500,23 @@ class Point(models.Model):
         (POINT, 'Point'),
         (DIRECT_RESPONSE, 'Direct Response'),
     )
-    point_type = models.CharField(max_length=2, choices=POINT_TYPES, default=POINT)
+    point_type = models.CharField(max_length=5, choices=POINT_TYPES, default=POINT)
 
     #Saying that many subtopics can be connected to this point.
     subtopics = models.ManyToManyField(SubTopic, blank=True)
 
     #Definition of the point in an admin list will be the point type, "P" or "DR"
-    def __unicode__(self):
-        return unicode(self.point_type)
+    def __str__(self):
+        return str(self.point_type)
 
 #For the running order, we need to set up a queueing system we can access at any point.
 class RunningOrder(models.Model):
     #The running order has to be affiliated with a certain session
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
     #and it needs a position
     position = models.PositiveSmallIntegerField()
     #then we need to know which committee it is that wants to make a point
-    committee_by = models.ForeignKey(Committee)
+    committee_by = models.ForeignKey(Committee, on_delete=models.CASCADE)
     #Finally we need to know what kind of point it is.
     POINT = 'P'
     DIRECT_RESPONSE = 'DR'
@@ -386,14 +524,14 @@ class RunningOrder(models.Model):
         (POINT, 'Point'),
         (DIRECT_RESPONSE, 'Direct Response'),
     )
-    point_type = models.CharField(max_length=2, choices=POINT_TYPES, default=POINT)
+    point_type = models.CharField(max_length=5, choices=POINT_TYPES, default=POINT)
 
 #Creating the second kind of point, the content point, which contains the text of a given point. Based on Wolfskaempfs GA Stats.
 class ContentPoint(models.Model):
     #The ContentPoint also needs to be affiliated with a certain session and committee
     #(which committee it was made by and which debate was active) in the same way as the statistic points.
-    session = models.ForeignKey(Session)
-    committee_by = models.ForeignKey(Committee)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    committee_by = models.ForeignKey(Committee, on_delete=models.CASCADE)
     active_debate = models.CharField(max_length=8)
 
     #It's also to have a timestamp of when the content point was last edited
@@ -409,16 +547,16 @@ class ContentPoint(models.Model):
         (POINT, 'Point'),
         (DIRECT_RESPONSE, 'Direct Response'),
     )
-    point_type = models.CharField(max_length=2, choices=POINT_TYPES, default=POINT)
+    point_type = models.CharField(max_length=5, choices=POINT_TYPES, default=POINT)
 
     #We can also add a definition for showing in admin panels etc.
-    def __unicode__(self):
-        return unicode(self.point_content)
+    def __str__(self):
+        return str(self.point_content)
 
 #Defining the voting class, one "vote" is filled in for each voting committee on each topic.
 class Vote(models.Model):
     #Which session the Vote should be connected to.
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
 
     #Timestamp of when the vote was last updated
     timestamp = models.DateTimeField(auto_now=True)
@@ -427,7 +565,7 @@ class Vote(models.Model):
     active_debate = models.CharField(max_length=8)
 
     #Which committee the vote was by
-    committee_by = models.ForeignKey(Committee)
+    committee_by = models.ForeignKey(Committee, on_delete=models.CASCADE)
 
     #How many votes there were in favour
     in_favour = models.PositiveSmallIntegerField()
@@ -443,8 +581,8 @@ class Vote(models.Model):
     absent = models.PositiveSmallIntegerField()
 
     #Definition of the vote in admin lists should be the committee who voted
-    def __unicode__(self):
-        return unicode(self.committee_by)
+    def __str__(self):
+        return str(self.committee_by)
 
     #The definition of the total votes, which is the sum of all the vote types.
     def total_votes(self):
@@ -456,7 +594,7 @@ class Vote(models.Model):
 class Gender(models.Model):
     #The gender needs to be connected to a session, the committee that was active at the time and the gender
 
-    committee = models.ForeignKey(Committee)
+    committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
 
     def session(self):
         return self.committee.session
@@ -474,5 +612,5 @@ class Gender(models.Model):
     gender = models.CharField(max_length=1, choices=GENDERS, default=FEMALE)
 
     #Finally we can add an admin definition
-    def __unicode__(self):
-        return unicode(self.gender)
+    def __str__(self):
+        return str(self.gender)

@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -11,9 +11,12 @@ from helpers import check_authorization_and_render
 def predict(request, session_id, committee_id):
     session = Session.objects.get(pk=session_id)
     committee = Committee.objects.get(pk=committee_id)
-    active_debate = ActiveDebate.objects.filter(session_id=session_id)[0].active_debate
-    active_committee = Committee.objects.filter(session__pk=session_id).filter(name=active_debate)[0]
-    active_subtopics = SubTopic.objects.filter(committee=active_committee)
+    active_debate = ActiveDebate.objects.get(session_id=session_id).active_debate
+    active_committee = Committee.objects.filter(session__pk=session_id).filter(name=active_debate)
+    if active_committee:
+        active_subtopics = SubTopic.objects.filter(committee=active_committee[0])
+    else:
+        active_subtopics = []
     subtopics_next_array = []
     subtopics_array = []
     for subtopic in active_subtopics:

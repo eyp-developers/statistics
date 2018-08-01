@@ -1,0 +1,25 @@
+{% extends 'statistics/base.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block page_title %}Topic{% endblock %}
+
+{% block content %}
+<br>
+<div class="panel panel-primary">
+
+  <div class="panel-body">
+    <h2 class="text-center">{{ topic.text }}</h2>
+    <h3>Used at:</h3>
+    {% for topic_place in topic.topicplace_set.all %}
+      {{ topic_place }}
+    {% endfor %}
+    <br>
+    <div class="row">
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

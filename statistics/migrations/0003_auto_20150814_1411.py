@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.db import models, migrations
 
@@ -18,8 +18,8 @@ class Migration(migrations.Migration):
                 ('active_debate', models.CharField(max_length=8)),
                 ('timestamp', models.DateTimeField(auto_now=True)),
                 ('point_content', models.TextField()),
-                ('committee_by', models.ForeignKey(to='statistics.Committee')),
-                ('session', models.ForeignKey(to='statistics.Session')),
+                ('committee_by', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Committee')),
+                ('session', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Session')),
             ],
         ),
         migrations.AlterField(
