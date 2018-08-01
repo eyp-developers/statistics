@@ -16,10 +16,10 @@ import dj_database_url
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'test_#^^3rh08z(1eun9czpb^0-5c%t$!^!fl8ie5-gfa2^i%gwpjtm'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 IS_DEVELOPMENT = False
 
 ALLOWED_HOSTS = ['stats.eyp.org', 'ga-statistics.herokuapp.com']
@@ -144,5 +144,5 @@ RAVEN_CONFIG = {
     'dsn': 'https://e1293cf510704122a3ee1c9a35477c7a:eeabde9a71f54a3a898295146aab5520@sentry.io/156485',
     # If you are using git, you can also automatically configure the
     # release based on the git info.
-    'release': '15098a2e0423b7149fad67f1294fa182aea08fbf',
+    'release': 'static-release',
 }
