@@ -13,12 +13,13 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
+from django.conf import settings
 from django.conf.urls import include, url
-from django.contrib import admin
+from statistics.admin import admin_site
 
 urlpatterns = [
-    url(r'^', include('statistics.urls', namespace="statistics")),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include('statistics.urls')),
+    url(r'^admin/', admin_site.urls),
 ]
 
 handler404 = 'statistics.views.public_views.handler404'

@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import timezone
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from statistics.models import Session, Committee
@@ -34,7 +34,8 @@ def edit(request, session_id):
             s.picture_author_link = form.cleaned_data['picture_author_link']
             s.picture_licence = form.cleaned_data['picture_license']
             s.picture_license_link = form.cleaned_data['picture_license_link']
-            s.resolution_link = form.cleaned_data['resolution']
+            s.topic_overview_link = form.cleaned_data['topic_overviews'],
+            s.resolution_link = form.cleaned_data['resolutions']
             s.website_link = form.cleaned_data['website']
             s.facebook_link = form.cleaned_data['facebook']
             s.twitter_link = form.cleaned_data['twitter']
@@ -75,7 +76,8 @@ def edit(request, session_id):
                                 'website': s.website_link,
                                 'facebook': s.facebook_link,
                                 'twitter': s.twitter_link,
-                                'resolution': s.resolution_link,
+                                'topic_overviews': s.topic_overview_link,
+                                'resolutions': s.resolution_link,
                                 'start_date': timezone.make_naive(s.start_date).strftime("%Y-%m-%d"),
                                 'end_date': timezone.make_naive(s.end_date).strftime("%Y-%m-%d"),
                                 'statistics': s.session_statistics,

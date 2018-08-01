@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import raven
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,8 +26,9 @@ SECRET_KEY = 'test_#^^3rh08z(1eun9czpb^0-5c%t$!^!fl8ie5-gfa2^i%gwpjtm'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+IS_DEVELOPMENT = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,17 +44,21 @@ INSTALLED_APPS = (
     'statistics',
     'imagekit',
     'raven.contrib.django.raven_compat',
+    'django_s3_storage',
+    'django_tables2',
+    'django_filters',
+    'bootstrap3'
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 )
 
 ROOT_URLCONF = 'eypstats.urls'
@@ -81,11 +87,16 @@ WSGI_APPLICATION = 'eypstats.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
 }
+
+
+db_from_env = dj_database_url.config(conn_max_age=500)
+if db_from_env:
+    DATABASES['default'].update(db_from_env)
 
 
 # Internationalization
@@ -106,10 +117,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+# Media file settings
 
 # Media file settings
 MEDIA_URL = '/media/'
@@ -122,5 +137,6 @@ RAVEN_CONFIG = {
     'dsn': 'https://e1293cf510704122a3ee1c9a35477c7a:eeabde9a71f54a3a898295146aab5520@sentry.io/156485',
     # If you are using git, you can also automatically configure the
     # release based on the git info.
-    'release': raven.fetch_git_sha(BASE_DIR),
+    # 'dsn': '',
+    'release': '15098a2e0423b7149fad67f1294fa182aea08fbf',
 }

@@ -20,7 +20,7 @@ def committees_api(request, session_id):
     thiscommittee = json.dumps({
     'pk': committee.pk,
     'name': committee.name,
-    'topic': committee.topic,
+    'topic_text': committee.topic_text,
     'subtopics': committee_subtopics_array
     })
 

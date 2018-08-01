@@ -72,6 +72,6 @@ def session_api(request, session_id):
         'total_points': total_points,
         'type_point': type_point,
         'type_dr': type_dr,
-        'mpp': round(mpp, 3),
+        'mpp': str(round(mpp, 3)),
         })
     return HttpResponse(session_json, content_type='json')

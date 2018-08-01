@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from statistics.models import Session, Announcement, ActiveDebate, ActiveRound
 from statistics.forms.session_create import SessionForm
 from helpers import raven_client
@@ -72,7 +72,8 @@ def create_session(request):
                               website_link=form.cleaned_data['website'],
                               facebook_link=form.cleaned_data['facebook'],
                               twitter_link=form.cleaned_data['twitter'],
-                              resolution_link=form.cleaned_data['resolution'],
+                              topic_overview_link=form.cleaned_data['topic_overviews'],
+                              resolution_link=form.cleaned_data['resolutions'],
                               country=form.cleaned_data['country'],
                               start_date=start_date,
                               end_date=end_date,

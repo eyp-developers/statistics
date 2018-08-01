@@ -22,7 +22,8 @@ class SessionEditForm(forms.Form):
         website = forms.URLField(required=False, help_text="Please add your NC's website if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
         facebook = forms.URLField(required=False, help_text="Please add your NC's Facebook page if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
         twitter = forms.URLField(required=False, help_text="Please add your NC's Twitter account if you do not have one for your event.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
-        resolution = forms.URLField(required=False, help_text="Please add a link to an online version of your resolution booklet as soon as you can.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
+        topic_overviews = forms.URLField(required=False, help_text="Add a link to your sessions topic overviews.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
+        resolutions = forms.URLField(required=False, help_text="Please add a link to an online version of your resolution booklet as soon as you can.", widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional ...'}))
 
         #Setting up statistic types
         STATISTICS = 'S'
