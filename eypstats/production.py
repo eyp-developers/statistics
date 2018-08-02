@@ -23,6 +23,7 @@ DEBUG = False
 IS_DEVELOPMENT = False
 
 ALLOWED_HOSTS = ['stats.eyp.org', 'ga-statistics.herokuapp.com']
+SECURE_SSL_REDIRECT = True
 
 CSRF_COOKIE_SECURE = True
 
