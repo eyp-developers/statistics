@@ -2,10 +2,10 @@
 Django production settings for eypstats project.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/1.8/topics/settings/
+https://docs.djangoproject.com/en/dev/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.8/ref/settings/
+https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'eypstats.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+# https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
 DATABASES = {
         'default': {
@@ -96,7 +96,7 @@ db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.8/topics/i18n/
+# https://docs.djangoproject.com/en/dev/topics/i18n/
 
 LANGUAGE_CODE = 'en-gb'
 
@@ -110,7 +110,7 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.8/howto/static-files/
+# https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
