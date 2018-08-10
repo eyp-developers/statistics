@@ -34,7 +34,8 @@ class TopicTable(tables.Table):
         committees = []
         for place in places:
             if hasattr(place, 'statisticstopicplace'):
-                committees.append(place.statisticstopicplace.committee)
+                if place.statisticstopicplace.committee:
+                    committees.append(place.statisticstopicplace.committee)
 
         committee_links = format_html_join(
                 '\n', '<a class="btn btn-primary" href="{}" role="button">{}</a>',
