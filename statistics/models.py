@@ -358,21 +358,33 @@ class StatisticsTopicPlace(TopicPlace):
     committee = models.OneToOneField(Committee, models.SET_NULL, null=True)
 
     def session_name(self):
+        if not self.committee:
+            return ''
         return self.committee.session.name
 
     def session_type(self):
+        if not self.committee:
+            return ''
         return self.committee.session.session_type
 
     def committee_name(self):
+        if not self.committee:
+            return ''
         return self.committee.name.split(' ')[0]
 
     def year(self):
+        if not self.committee:
+            return ''
         return self.committee.session.end_date.year
 
     def country(self):
+        if not self.committee:
+            return ''
         return self.committee.session.country
 
     def __str__(self):
+        if not self.committee:
+            return ''
         return self.committee.session.name
 
 
