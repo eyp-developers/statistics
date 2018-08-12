@@ -34,7 +34,7 @@ def edit(request, session_id):
             s.picture_author_link = form.cleaned_data['picture_author_link']
             s.picture_licence = form.cleaned_data['picture_license']
             s.picture_license_link = form.cleaned_data['picture_license_link']
-            s.topic_overview_link = form.cleaned_data['topic_overviews'],
+            s.topic_overview_link = form.cleaned_data['topic_overviews']
             s.resolution_link = form.cleaned_data['resolutions']
             s.website_link = form.cleaned_data['website']
             s.facebook_link = form.cleaned_data['facebook']
