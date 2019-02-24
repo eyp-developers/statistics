@@ -1,3 +1,10 @@
+### 2019-02-23
+* Fixed a bug which prevented the creation of a session with voting disabled.
+* Fixed a bug which prevented the creation of a session with gender statistics disabled.
+
+### 2018-08-05
+* GA Statistics now supports a beta version of the topic database.
+
 ### 2017-11-10
 * Improved the experience of creating a session with more detailed error messages.
 
