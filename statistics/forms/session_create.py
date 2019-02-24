@@ -46,8 +46,8 @@ class SessionForm(forms.Form):
     statistics = forms.ChoiceField(choices=STATISTIC_TYPES, help_text='What kind of statistics you want to run at your session', required=True, widget=forms.Select(attrs={'class': 'form-control'}))
 
     #Since the voting choice is not a checkbox per se, the input type will be a CharField instead
-    voting_enabled = forms.CharField(max_length=5, required=True, help_text='Enables digital voting for your session', widget=forms.CheckboxInput(attrs={'checked': ''}))
-    gender_statistics = forms.CharField(max_length=5, required=True, help_text='Lets you track the gender equality of your GA', widget=forms.CheckboxInput(attrs={'checked': ''}))
+    voting_enabled = forms.CharField(max_length=5, required=False, help_text='Enables digital voting for your session', widget=forms.CheckboxInput(attrs={'checked': ''}))
+    gender_statistics = forms.CharField(max_length=5, required=False, help_text='Lets you track the gender equality of your GA', widget=forms.CheckboxInput(attrs={'checked': ''}))
 
     number_female_participants = forms.IntegerField(min_value=0, required=False, help_text='If you are tracking the gender equality of your session, please add this value. You can also do this later. Only count Delegates.', widget=forms.NumberInput(attrs={'class': 'form-control'}))
     number_male_participants = forms.IntegerField(min_value=0, required=False, help_text='If you are tracking the gender equality of your session, please add this value. You can also do this later. Only count Delegates.', widget=forms.NumberInput(attrs={'class': 'form-control'}))
