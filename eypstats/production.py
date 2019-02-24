@@ -22,7 +22,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = False
 IS_DEVELOPMENT = False
 
-ALLOWED_HOSTS = ['stats.eyp.org', 'ga-statistics.herokuapp.com']
+ALLOWED_HOSTS = ['stats.eyp.org', 'ga-statistics.herokuapp.com', 'ga-statistics-staging.herokuapp.com']
 SECURE_SSL_REDIRECT = True
 
 CSRF_COOKIE_SECURE = True
