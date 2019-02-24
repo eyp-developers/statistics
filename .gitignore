@@ -30,3 +30,4 @@ logs/gunicorn.log
 .vscode/launch.json
 
 .env
+set_db_url
