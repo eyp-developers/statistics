@@ -1,3 +1,6 @@
+### 2019-03-22
+* Patched a vulnerability which allowed attackers to redirect users to an external site after a successful login.
+
 ### 2019-02-23
 * Fixed a bug which prevented the creation of a session with voting disabled.
 * Fixed a bug which prevented the creation of a session with gender statistics disabled.
