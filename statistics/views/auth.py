@@ -6,9 +6,11 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.utils.http import is_safe_url
 
 from statistics.forms.login import LoginForm
 from statistics.models import Session
+from django.conf import settings
 
 def ga_login(request):
 # This view is shown, when a user tries to view any protected page, but isn't logged in. After they log in, they'll be taken to the appropriate place.
@@ -30,9 +32,9 @@ def ga_login(request):
                 # The next line gets arguments from URLs like this http://stats.eyp.org/login/?next=/overview/9/
                 next = request.GET.get("next")
 
-                if next:
+                if is_safe_url(next, settings.ALLOWED_HOSTS):
                     # Here we will redirect them to the page they came from when they were sent to the login page
-                    return HttpResponseRedirect(next)
+                    return HttpResponseRedirect(next, )
 
                 elif Session.objects.filter(admin_user=request.user):
                     # If the user is an admin of a session, send them to their session's page
