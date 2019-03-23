@@ -5,8 +5,8 @@ from django.conf import settings
 from django.urls import path
 
 from statistics.views import *
-from .url_patterns.api import api_urls
-from .url_patterns.session import session_urls
+from statistics.url_patterns.api import api_urls
+from statistics.url_patterns.session import session_urls
 
 # The URLs are quite important to the GA Stats system, as there's a custom API and system for accessing various forms
 # Sessions, Debates, Point Submit and Vote Submit pages are accessed using the id's of the session/committee.
