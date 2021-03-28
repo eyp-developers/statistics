@@ -8,7 +8,7 @@ def committee(request, session_id, committee_id):
     pass
 
 
-def handler404(request):
+def handler404(request, exception):
     return render(request, 'statistics/404.html')
 
 
