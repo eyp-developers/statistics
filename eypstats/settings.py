@@ -41,7 +41,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'statistics',
+    'statisticscore',
+    'django_rename_app',
     'imagekit',
     'raven.contrib.django.raven_compat',
     'django_s3_storage',
@@ -70,7 +71,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'statistics.context_processors.analytics',
+                'statisticscore.context_processors.analytics',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',

@@ -1,0 +1,29 @@
+{% extends 'statisticscore/debate.html' %}
+
+{% load static %}
+
+{% block statistics %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+      {% include 'statisticscore/debate_elements/points_made.html' %}
+
+      {% include 'statisticscore/debate_elements/subtopics.html' %}
+
+    </div>
+    
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+      {% include 'statisticscore/debate_elements/point_summaries.html' %}
+    </div>
+  </div>
+<div>
+{% endblock %}
+
+{% block footer_scripts %}
+<script  type="text/javascript" src="{% static 'statistics/js/statistics_debate.js' %}"></script>
+<script  type="text/javascript" src="{% static 'statistics/js/content_debate.js' %}"></script>
+<script type="text/javascript" src="{% static 'statistics/js/auto_debate_redirect.js' %}" charset="utf-8"></script>
+{% if voting_enabled %}
+<script  type="text/javascript" src="{% static 'statistics/js/vote_debate.js' %}"></script>
+{% endif %}
+{% endblock %}

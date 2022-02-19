@@ -1,0 +1,251 @@
+{% extends 'statisticscore/base.html' %}
+
+{% load static %}
+
+{% block page_title %}High Scores{% endblock %}
+
+{% block content %}
+    <br>
+    <br>
+    <div class="well">
+        {% if top_voters %}
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-sm-12 col-sm-offset-0">
+                    <h1>Most Votes at a Session:</h1>
+                    <table class="table table-striped table-hover ">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Session</th>
+                            <th>Total Votes</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for voter in top_voters %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ voter.0 }}</td>
+                                <td>{{ voter.1 }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if top_in_favour and top_against %}
+            <div class="row">
+                <div class="col-lg-6 col-sm-12">
+                    <h2>Most Votes In Favour at a Session:</h2>
+                    <table class="table table-striped table-hover ">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Session</th>
+                            <th>% In Favour</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for voter in top_in_favour %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ voter.0 }}</td>
+                                <td>{{ voter.1 | floatformat:"2" }}%</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <h2>Most Votes Against at a Session:</h2>
+                    <table class="table table-striped table-hover ">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Session</th>
+                            <th>% Against</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for voter in top_against %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ voter.0 }}</td>
+                                <td>{{ voter.1 | floatformat:"2" }}%</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if top_points and top_drs %}
+            <div class="row">
+                <div class="col-lg-6 col-sm-12">
+                    <h2>Most Points at a Session:</h2>
+                    <table class="table table-striped table-hover ">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Session</th>
+                            <th>Points</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for session in top_points %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ session.0 }}</td>
+                                <td>{{ session.1 }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <h2>Most DRs at a Session:</h2>
+                    <table class="table table-striped table-hover ">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Session</th>
+                            <th>DRs</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for session in top_drs %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ session.0 }}</td>
+                                <td>{{ session.1 }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if top_points_in_debate and top_drs_in_debate %}
+            <div class="row">
+                <div class="col-lg-6 col-sm-12">
+                    <h2>Most Points in a Single Debate:</h2>
+                    <table class="table table-striped table-hover ">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Session</th>
+                            <th>Points</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for session in top_points_in_debate %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ session.0 }}</td>
+                                <td>{{ session.1 }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <h2>Most DRs in a Single Debate:</h2>
+                    <table class="table table-striped table-hover ">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Session</th>
+                            <th>DRs</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for session in top_drs_in_debate %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ session.0 }}</td>
+                                <td>{{ session.1 }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if top_successful and top_unsuccessful %}
+            <div class="row">
+                <div class="col-lg-6 col-sm-12">
+                    <h2>Most Successful Resolutions:</h2>
+                    <table class="table table-striped table-hover ">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Session</th>
+                            <th>Successful Resolutions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for session in top_successful %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ session.0 }}</td>
+                                <td>{{ session.1 }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <h2>Most Unsuccessful Resolutions:</h2>
+                    <table class="table table-striped table-hover ">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Session</th>
+                            <th>Unsuccessful Resolutions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for session in top_unsuccessful %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ session.0 }}</td>
+                                <td>{{ session.1 }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if top_mpp %}
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-sm-12 col-sm-offset-0">
+                    <h1>Best Minutes Per Point:</h1>
+                    <table class="table table-striped table-hover ">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Session</th>
+                            <th>MPP</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for session in top_mpp %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ session.0 }}</td>
+                                <td>{{ session.1 | floatformat:"2" }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
