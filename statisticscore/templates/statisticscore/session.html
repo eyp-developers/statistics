@@ -170,8 +170,8 @@ var voting_url = '{% url 'statisticscore:session_vote_api' session.id %}';
 {% endblock %}
 
 {% block footer_scripts %}
-<script  type="text/javascript" src="{% static 'statistics/js/session.js' %}"></script>
+<script  type="text/javascript" src="{% static 'statisticscore/js/session.js' %}"></script>
 {% if session.voting_enabled %}
-<script  type="text/javascript" src="{% static 'statistics/js/session_vote.js' %}"></script>
+<script  type="text/javascript" src="{% static 'statisticscore/js/session_vote.js' %}"></script>
 {% endif %}
 {% endblock %}
