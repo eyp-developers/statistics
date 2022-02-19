@@ -1,3 +1,7 @@
+# 2022-02-19
+* Patched potentially vulnerable dependencies
+* Removed leftover Google Analytics code, which has not been in use for years
+
 ### 2019-03-22
 * Patched a vulnerability which allowed attackers to redirect users to an external site after a successful login.
 
