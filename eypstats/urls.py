@@ -15,12 +15,12 @@ Including another URLconf
 """
 from django.conf import settings
 from django.conf.urls import include, url
-from statistics.admin import admin_site
+from statisticscore.admin import admin_site
 
 urlpatterns = [
-    url(r'^', include('statistics.urls')),
+    url(r'^', include('statisticscore.urls')),
     url(r'^admin/', admin_site.urls),
 ]
 
-handler404 = 'statistics.views.public_views.handler404'
-handler500 = 'statistics.views.public_views.handler500'
+handler404 = 'statisticscore.views.public_views.handler404'
+handler500 = 'statisticscore.views.public_views.handler500'

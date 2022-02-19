@@ -1,0 +1,85 @@
+{% extends 'statisticscore/base.html' %}
+
+{% load static %}
+
+{% block page_title %}Debate: {{ committee.name }}{% endblock %}
+
+{% block jumbotron %}
+    <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.picture_large_fast.url }}') no-repeat center/cover;">
+        <h1 style="text-align: center; font-size: 60px; color: white;">{{ committee.name }}</h1>
+        <h3 style="text-align: center; color: white;">{{ committee.topic_text }}</h3>
+
+        {% if session.picture_author %}
+        <div class="picture-credit-link-container text-center">
+          <br>
+          <a href="{{ session.picture_author_link }}" target="_blank" class="picture-credit-link">Image by {{ session.picture_author }} </a>
+          {% if session.picture_licence %}
+              <a href="{{ session.picture_license_link }}" target="_blank" class="picture-credit-link">licensed under {{ session.picture_licence }}</a>
+          {% endif %}
+        </div> <!-- picture-credit-link-container -->
+      {% endif %}
+
+
+    </div>
+{% endblock %}
+
+{% block content %}
+  </div>
+
+  {% include "statisticscore/alerts/session_alerts.html" %}
+
+  <br>
+  {% block statistics %}
+
+  {% endblock %}
+
+{% if voting_enabled %}
+  <div class="panel panel-primary">
+
+    <div class="panel-heading">
+      <h4>Voting Summary</h4>
+    </div>
+
+
+    <div class="row panel-body">
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="text-align:center;">
+        <br>
+        <h1 id="total_counted">Votes Counted:</h1>
+        <h2 id="committees_counted">Committees Counted:</h2>
+        <h1 id="in_favour" style="color: #02c75f">In Favour:</h1>
+        <h1 id="against" style="color: #b62424">Against:</h1>
+        <h3 id="abstentions" style="color: #1e4e8a">Abstentions:</h3>
+        <h3 id="absent" style="color: #ffd326">Absent:</h3>
+
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div id="debate_votes" style="min-width: 200px; height: 400px; margin: 0 auto"></div>
+      </div>
+    </div>
+    <div id="committee_votes" style="min-width: 200px; height: 150px; margin: 0 auto"></div>
+  </div>
+{% endif %}
+      <script type="text/javascript">
+          var session = {{ session.pk }};
+          var committee = {{ committee.pk }};
+          var max_rounds = {{ session.max_rounds }};
+          var debate_url = '{% url 'statisticscore:debate_api' session.pk committee.pk %}';
+          var vote_url = '{% url 'statisticscore:debate_vote_api' session.pk committee.pk %}';
+          var content_url = '{% url 'statisticscore:content_api' session.pk committee.pk %}';
+          var newcontenturl = '{% url 'statisticscore:content_latest_api' session.pk committee.pk %}';
+          var active_debate_url = '{% url 'statisticscore:active_debate_api' session.pk %}';
+          var dr_img = '{% static 'statistics/images/dr.png' %}';
+          var point_img = '{% static 'statistics/images/point.png' %}';
+      </script>
+
+
+{% endblock %} <!--/ voting block-->
+
+{% block footer_scripts %} <!--- This block will only be loaded when the statistics type is N/A which means only voting. In all other cases the content of this gets overwritten by the specific other pages such as joint.html, statistics.html and content.html  --->
+<script  type="text/javascript" src="{% static 'statistics/js/debate.js' %}"></script>
+<script type="text/javascript" src="{% static 'statistics/js/auto_debate_redirect.js' %}" charset="utf-8"></script>
+{% if voting_enabled %}
+<script  type="text/javascript" src="{% static 'statistics/js/vote_debate.js' %}"></script>
+
+{% endif %}
+{% endblock %} <!--/ footer_scripts block -->

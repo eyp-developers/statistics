@@ -1,0 +1,44 @@
+{% extends 'statisticscore/base.html' %}
+
+{% load static %}
+{% load form_extras %}
+
+{% block page_title %}Edit - {{ session.name }}{% endblock %}
+
+{% block content %}
+    <br>
+    <br>
+    <div class="well well-lg">
+        <legend>Edit Session: {{ session.name }}</legend>
+        <form class="form-horizontal" role="form" enctype="multipart/form-data" action="{% url 'statisticscore:edit' session.pk %}" method="post">
+            <fieldset>
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group {% if field.errors %}has-error{% endif %}">
+                        <label class="control-label col-sm-2" for="{{ field.id_for_label }}">{{ field.label }} {{ field.errors }}</label>
+                        <div class="col-sm-10">
+                            {% if field.field.widget|klass == "CheckboxInput" %}
+                                <div class="togglebutton">
+                                    <label>
+                                        {{ field }} {{ field.label }}
+                                    </label>
+                                </div>
+                            {% else %}
+                                {% if field.field.widget|klass == "FileInput" %}
+                                    <input type="text" readonly="" class="form-control" placeholder="Browse...">
+                                {% endif %}
+                                {{ field }}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                        <button type="submit" class="btn btn-primary btn-raised">Save</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+{% endblock %} {% block footer_scripts %} {% endblock %}

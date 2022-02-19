@@ -1,0 +1,106 @@
+{% extends 'statisticscore/base.html' %}
+
+{% load static %}
+{% load form_extras %}
+
+{% block page_title %}Create Session{% endblock %}
+
+{% block content %}
+    </div>
+    <div class="welcome-jumbo jumbotron">
+        <div class="container">
+            <h1>Create your GA Statistics Session</h1>
+            <p>Not sure which statistics type to pick? Head over to <a style="color: #FFD700" href="{% url 'statisticscore:get_started' %}">get started</a> and take a look.</p>
+        </div><!--/.container -->
+    </div><!--/.jumbotron -->
+    <br>
+    <div class="container">
+
+    {% if announcements %}
+      {% for announcement in announcements %}
+        <div class="alert {{ announcement.announcement_type }}">
+          <h4 style="margin-top: 6px;">{{ announcement.content|safe }}</h4>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+
+    <div class="well well-lg">
+        {% if errors %}
+          {% for error in errors %}
+          <div class="alert alert-danger">
+            {{ error }}
+          </div>
+          {% endfor %}
+        {% endif %}
+        <legend>Create Session:</legend>
+        <form id="create-session" class="form-horizontal" enctype="multipart/form-data" role="form" action="{% url 'statisticscore:create_session' %}" method="post">
+            <fieldset>
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group {% if field.errors %}has-error{% endif %}">
+                        <label class="control-label col-sm-2" for="{{ field.id_for_label }}">{{ field.label }} {{ field.errors }}</label>
+                        <div class="col-sm-10">
+                            {% if field.field.widget|klass == "CheckboxInput" %}
+                                <div class="togglebutton">
+                                    <label>
+                                        {{ field }} {{ field.label }}
+                                    </label>
+                                </div>
+                            {% else %}
+                                 {% if field.field.widget|klass == "FileInput" %}
+                                     <input type="text" readonly="" class="form-control" placeholder="Browse...">
+                                 {% endif %}
+                                {{ field }}
+                            {% endif %}
+                            <p class="help-block">
+                                {{ field.help_text }}
+                            </p>
+
+                        </div>
+                    </div>
+                    {% if field.id_for_label == "id_picture" %}
+                        <div class="col-sm-10 col-sm-offset-2">
+                            <p>
+
+                                <em>Your picture should not contain text.</em>
+
+                                It should feature the city and ideally show a well-known landmark it is known for.
+                                Please do not upload your logo or Facebook header image, as those will not play nicely with the layout of the website.
+
+                            </p>
+                            <p>
+                                Please be careful which picture you upload here so that it does not violate copyright law.
+                                When you want to use a picture you found through a search engine, you have to make sure that you are allowed to use it.
+                                Usually, pictures found through a regular search engine are not licensed freely and must not be uploaded here.
+                                In order not to violate any copyright, use pictures taken by other EYPers or use the recommended websites below, which allow you to search by license.
+                                Make sure to search for pictures under one of the <em>Creative Commons licenses</em>, which allow you to use the picture as long as you credit the original author.
+                            </p>
+                                <ul>
+                                    <li>https://www.flickr.com/</li>
+                                    <li>http://search.creativecommons.org/</li>
+                                </ul>
+                            <p>
+                                You need to make sure that the picture you use entails the respective (Creative Commons) license and then correctly attribute the author and license version below.
+                            </p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                        <button type="submit" class="btn btn-primary btn-raised">Create Session</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+{% endblock %}
+
+{% block footer_scripts %}
+    <script>
+
+        $('#id_start_date').bootstrapMaterialDatePicker({ weekStart : 0, time: false });
+        $('#id_end_date').bootstrapMaterialDatePicker({ weekStart : 0, time: false });
+
+    </script>
+{% endblock %}

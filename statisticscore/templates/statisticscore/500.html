@@ -1,0 +1,60 @@
+{% extends 'statisticscore/base.html' %}
+
+{% load static %}
+
+{% block page_title %}Error{% endblock %}
+
+
+{% block jumbotron %}
+
+    <div class="welcome-jumbo jumbotron">
+        <div class="container">
+            <h1>Unfortunately there was an error</h1>
+            <p>There are different possible reasons for this. To figure out what went wrong, an error report was submitted to us.</p>
+        </div><!--/.container -->
+    </div><!--/.jumbotron -->
+
+{% endblock %}
+
+
+{% block content %}
+
+
+    {% if request.sentry.id %}
+        <script src="https://cdn.ravenjs.com/2.3.0/raven.min.js"></script>
+        <script>
+        Raven.showReportDialog({
+            eventId: '{{ request.sentry.id }}',
+
+            // use the public DSN (dont include your secret!)
+            dsn: 'https://e1293cf510704122a3ee1c9a35477c7a@sentry.io/156485'
+        });
+        </script>
+    {% endif %}
+
+
+    <div class="panel-group" id="accordion">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <a data-toggle="collapse" href="#need-help"><h4 class="white">What should I do if I need help?</h4></a>
+            </div>
+            <div id="need-help" class="panel-collapse collapse in">
+                <div class="panel-body">
+                  <p>
+                    If you would like us to help you, please report the error and leave your e-mail address. This way, we can get in touch with you.
+                  </p>
+
+                  <a href="https://gitreports.com/issue/eyp-developers/statistics" target="_blank" class="btn btn-success btn-raised btn-lg">Get help</a>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block footer_scripts %}
+{% endblock %}

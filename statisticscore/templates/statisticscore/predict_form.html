@@ -1,0 +1,92 @@
+{% extends 'statisticscore/base.html' %} {% load static %} {% block page_title %}Input:
+    {{ committee.name }}{% endblock %} {% block content %}
+    <div id="results"> <!-- This div is used to inject new information using AJAX -->
+    </div>
+    <h1>What's {{ committee.name }}'s next point on {{ active_debate }} about?</h1>
+    <p>Next Point will be on: {% if next_subtopics %}{% for subtopic in next_subtopics %}
+        <span class="label label-primary">{{ subtopic }}</span>{% endfor %}{% else %}
+        <span class="label label-primary">None</span>{% endif %}</p>
+    <form class="form-horizontal" role="form" action="{% url 'statisticscore:predict' session.id committee.id %}"
+          method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="{{ form.next_subtopics.id_for_label }}">Next Subtopics:</label>
+            <div class="col-sm-10">
+                {{ form.next_subtopics.errors }}
+                <select multiple class="form-control" name="{{ form.next_subtopics.html_name }}"
+                        id="{{ form.next_subtopics.id_for_label }}">
+                    {% for id,text in form.fields.next_subtopics.choices %}
+                        <option value="{{ id }}">{{ text }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary btn-raised">Submit</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ committee.name }}'s Points</h3>
+        </div>
+        <div class="panel-body content-div" id="point-div" style="height: 400px;">
+            <form role="form">
+                {% csrf_token %}
+                <table class="table table-hover table-responsive" id="point-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Last Changed</th>
+                        <th>Committee On</th>
+                        <th>Round No.</th>
+                        <th>Point Type</th>
+                        <th>Subtopics</th>
+                        <th>Edit</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <div id="edit-subtopics" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form" id="point-form">
+                        <input type="hidden" class="form-control" name="{{ edit_form.pk.html_name }}"
+                               id="point_{{ edit_form.pk.id_for_label }}" value="">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="point_id_subtopics">Subtopics Addressed:</label>
+                            <div class="col-sm-10">
+                                <select multiple class="form-control" name="subtopics" id="point_id_subtopics">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-primary btn-raised">Save Point</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var data_url = '{% url 'statisticscore:data_api' session.pk %}',
+                data_latest_url = '{% url 'statisticscore:data_latest_api' session.pk %}',
+                data_pk_url = '{% url 'statisticscore:data_pk_api' %}'
+        dr_img = '{% static 'statistics/images/dr.png' %}',
+                point_img = '{% static 'statistics/images/point.png' %}',
+                committee_id = {{committee.pk}};
+    </script>
+{% endblock %} {% block footer_scripts %}
+    <script type="text/javascript" src="{% static 'statistics/js/predict_form.js' %}" charset="utf-8"></script>
+{% endblock %}
