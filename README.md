@@ -14,7 +14,7 @@ Welcome! We aim to provide a GA Statistics platform, which can be used on any gi
 
 Yes, you can now use it for your own session.
 
-Alternatively, you can help to improve it if you like! Submit ideas as issues, [via our web-form without an account](https://gitreports.com/issue/eyp-developers/statistics) or contact us for cooperation opportunities.
+Alternatively, you can help to improve it if you like! Submit ideas as issues, [via GitHub](https://github.com/eyp-developers/statistics/issues) or contact us for cooperation opportunities.
 
 #### What does it look like?
 
