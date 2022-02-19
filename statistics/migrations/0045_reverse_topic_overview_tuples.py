@@ -3,7 +3,7 @@
 from django.db import migrations
 
 def fix_topic_overview_tuples(apps, schema_editor):
-    Session = apps.get_model('statistics', 'Session')
+    Session = apps.get_model('statisticscore', 'Session')
     for session in Session.objects.all():
         if session.topic_overview_link == "('',)":
             session.topic_overview_link = ''
@@ -15,7 +15,7 @@ def reverse_fix_topic_overview_tuples(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('statistics', '0044_topic_overview_link'),
+        ('statisticscore', '0044_topic_overview_link'),
     ]
 
     operations = [

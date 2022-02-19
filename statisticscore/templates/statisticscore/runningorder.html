@@ -119,8 +119,8 @@
       runningorder_url = '{% url 'statisticscore:runningorder_api' session.pk %}',
       data_latest_url = '{% url 'statisticscore:data_latest_api' session.pk %}',
       data_pk_url = '{% url 'statisticscore:data_pk_api' %}'
-      dr_img = '{% static 'statistics/images/dr.png' %}',
-      point_img = '{% static 'statistics/images/point.png' %}';
+      dr_img = '{% static 'statisticscore/images/dr.png' %}',
+      point_img = '{% static 'statisticscore/images/point.png' %}';
 </script>
 <style>
   tbody tr td {
@@ -128,5 +128,5 @@
   }
 </style>
 {% endblock %} {% block footer_scripts %}
-<script type="text/javascript" src="{% static 'statistics/js/runningorder.js' %}" charset="utf-8"></script>
+<script type="text/javascript" src="{% static 'statisticscore/js/runningorder.js' %}" charset="utf-8"></script>
 {% endblock %}

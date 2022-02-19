@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('statistics', '0036_auto_20171223_1209'),
+        ('statisticscore', '0036_auto_20171223_1209'),
     ]
 
     operations = [
@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='session',
             name='gender_enabled',
-            field=models.BooleanField(default=False, verbose_name='gender statistics enabled'),
+            field=models.BooleanField(default=False, verbose_name='gender statisticscore enabled'),
         ),
         migrations.AlterField(
             model_name='session',

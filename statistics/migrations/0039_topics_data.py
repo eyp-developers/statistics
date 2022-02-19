@@ -5,9 +5,9 @@ from django.db import migrations
 
 
 def save_topics(apps, schema_editor):
-    Committee = apps.get_model('statistics', 'Committee')
-    Topic = apps.get_model('statistics', 'Topic')
-    StatisticsTopicPlace = apps.get_model('statistics', 'StatisticsTopicPlace')
+    Committee = apps.get_model('statisticscore', 'Committee')
+    Topic = apps.get_model('statisticscore', 'Topic')
+    StatisticsTopicPlace = apps.get_model('statisticscore', 'StatisticsTopicPlace')
     for committee in Committee.objects.all():
         topic_text = committee.topic_text
         if Topic.objects.filter(text=topic_text).exists():
@@ -21,14 +21,14 @@ def save_topics(apps, schema_editor):
 
 
 def reverse_topic_saves(apps, schema_editor):
-    Topic = apps.get_model('statistics', 'Topic')
+    Topic = apps.get_model('statisticscore', 'Topic')
     Topic.objects.all().delete()
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('statistics', '0038_topics'),
+        ('statisticscore', '0038_topics'),
     ]
 
     operations = [

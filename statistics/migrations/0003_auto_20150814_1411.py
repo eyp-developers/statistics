@@ -7,7 +7,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('statistics', '0002_auto_20150810_1524'),
+        ('statisticscore', '0002_auto_20150810_1524'),
     ]
 
     operations = [
@@ -18,8 +18,8 @@ class Migration(migrations.Migration):
                 ('active_debate', models.CharField(max_length=8)),
                 ('timestamp', models.DateTimeField(auto_now=True)),
                 ('point_content', models.TextField()),
-                ('committee_by', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Committee')),
-                ('session', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Session')),
+                ('committee_by', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statisticscore.Committee')),
+                ('session', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statisticscore.Session')),
             ],
         ),
         migrations.AlterField(

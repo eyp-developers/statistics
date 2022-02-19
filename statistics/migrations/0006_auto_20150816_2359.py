@@ -7,7 +7,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('statistics', '0005_contentpoint_point_type'),
+        ('statisticscore', '0005_contentpoint_point_type'),
     ]
 
     operations = [

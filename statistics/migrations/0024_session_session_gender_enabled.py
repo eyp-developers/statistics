@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('statistics', '0023_gender_timestamp'),
+        ('statisticscore', '0023_gender_timestamp'),
     ]
 
     operations = [
         migrations.AddField(
             model_name='session',
             name='session_gender_enabled',
-            field=models.BooleanField(default=False, verbose_name=b'gender statistics enabled'),
+            field=models.BooleanField(default=False, verbose_name=b'gender statisticscore enabled'),
         ),
     ]
