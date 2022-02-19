@@ -1,4 +1,5 @@
 # 2022-02-19
+* Major internal changes have been made, if you notice any problems please report them to us by opening an issue [here](https://github.com/eyp-developers/statistics/issues)
 * Patched potentially vulnerable dependencies
 * Removed leftover Google Analytics code, which has not been in use for years
 
