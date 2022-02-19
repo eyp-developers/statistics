@@ -1,0 +1,132 @@
+{% extends 'statisticscore/base.html' %} {% load static %} {% block page_title %}Running Order: {{ session.name }}{% endblock %} {% block content %}
+<div id="results"> <!-- This div is used to inject new information using AJAX -->
+</div>
+</div>
+<div class="container-fluid runningorder-flex">
+  <div class="runningorder-manage">
+    <div class="panel panel-primary runningorder-panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Active Debate: {{ active }}</h3>
+      </div>
+      <div class="panel-body">
+        <form class="form-horizontal" role="form" action="{% url 'statisticscore:runningorder' session.id %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" class="form-control" name="{{ debate_form.session.html_name }}" id="{{ debate_form.session.id_for_label }}" maxlength=100 value="{{ debate_form.session.value }}">
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="{{ debate_form.active_debate.id_for_label }}">Set Active Debate:</label>
+            <div class="col-sm-4">
+              <select class="form-control" name="{{ debate_form.active_debate.html_name }}" id="{{ debate_form.active_debate.id_for_label }}">
+                {% for id,text in debate_form.fields.active_debate.choices %}
+                <option value="{{ id }}" {% if text == active %} selected {% endif %}>{{ text }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 0px;">
+            <div class="col-sm-offset-2 col-sm-4">
+              <button type="submit" class="btn btn-flat btn-primary">Update Active Debate</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="panel panel-primary runningorder-panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Active Round: {{ active_round }}</h3>
+      </div>
+      <div class="panel-body">
+        <form class="form-horizontal" role="form" action="{% url 'statisticscore:runningorder' session.id %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" class="form-control" name="{{ round_form.session.html_name }}" id="{{ round_form.session.id_for_label }}" maxlength=100 value="{{ round_form.session.value }}">
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="{{ round_form.active_round.id_for_label }}">Set Active Debate:</label>
+            <div class="col-sm-4">
+              <select class="form-control" name="{{ round_form.active_round.html_name }}" id="{{ round_form.active_round.id_for_label }}">
+                {% for id,text in round_form.fields.active_round.choices %}
+                <option value="{{ id }}" {% if text == active_round %} selected {% endif %}>{{ text }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 0px;">
+            <div class="col-sm-offset-2 col-sm-4">
+              <button type="submit" class="btn btn-flat btn-primary">Update Active Round</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="runningorder-order">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h4>Running Order</h4>
+      </div>
+      <div class="panel-body">
+        <table class="table table-hover" id="runningorder-table">
+          <thead>
+              <tr>
+                  <th>#</th>
+                  <th>By</th>
+                  <th>On</th>
+                  <th>Round No.</th>
+                  <th>Point Type</th>
+                  <th>Subtopics</th>
+                  <th class="col-xs-2">Actions</th>
+              </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="runningorder-buttons">
+      <a href="javascript:void(0)" class="btn runningorder-button btn-primary btn-raised" onclick="runningOrderAction('R')"><h1>Recognise</h1></a>
+      <a href="javascript:void(0)" class="btn runningorder-button btn-warning btn-raised" onclick="runningOrderAction('U')"><h3>Undo last<br>recognition</h3></a>
+      <a href="javascript:void(0)" class="btn runningorder-button btn-danger btn-raised" onclick="clearAction('C')"><h2>Clear Queue</h2></a>
+  </div>
+  <div class="runningorder-committees">
+    {% for committee in committees %}
+    <div class="runningorder-committee panel panel-primary" id="committee-{{committee.pk}}" style="margin-bottom: 0px; height: 75%;">
+      <div class="runningorder-committeename panel-heading">
+        <h1>{{committee.name}}</h1>
+      </div>
+      <div class="runningorder-committeebuttons">
+          <div class="runningorder-committeedata">
+            <p style="vertical-align: middle;" id="subtopics-{{committee.pk}}"></p>
+          </div>
+          <div class="runningorder-committeebutton">
+            <a href="javascript:void(0)" class="btn btn-default btn-xs" style="margin: 6px 1px;"><span class="badge" id="debate-{{committee.pk}}">0</span></a>
+          </div>
+          <div class="runningorder-committeebutton">
+            <a href="javascript:void(0)" class="btn btn-default btn-xs" style="margin: 6px 1px;"><span class="badge" id="session-{{committee.pk}}">0</span></a>
+          </div>
+          <div class="runningorder-committeebutton">
+            <a href="javascript:void(0)" class="btn btn-info btn-raised btn-xs" onclick="addToRunningOrder('{{ committee.pk }}', 'P')" style="margin: 6px 1px;">Point</a>
+          </div>
+          <div class="runningorder-committeebutton">
+            <a href="javascript:void(0)" class="btn btn-danger btn-raised btn-xs" onclick="addToRunningOrder('{{ committee.pk }}', 'DR')" style="margin: 6px 1px;">DR</a>
+          </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  var data_url = '{% url 'statisticscore:data_api' session.pk %}',
+      runningorder_url = '{% url 'statisticscore:runningorder_api' session.pk %}',
+      data_latest_url = '{% url 'statisticscore:data_latest_api' session.pk %}',
+      data_pk_url = '{% url 'statisticscore:data_pk_api' %}'
+      dr_img = '{% static 'statistics/images/dr.png' %}',
+      point_img = '{% static 'statistics/images/point.png' %}';
+</script>
+<style>
+  tbody tr td {
+    font-size: 15px;
+  }
+</style>
+{% endblock %} {% block footer_scripts %}
+<script type="text/javascript" src="{% static 'statistics/js/runningorder.js' %}" charset="utf-8"></script>
+{% endblock %}
