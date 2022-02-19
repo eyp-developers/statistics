@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('statistics', '0034_remove_session_session_color'),
+        ('statisticscore', '0034_remove_session_session_color'),
     ]
 
     operations = [

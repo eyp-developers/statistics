@@ -8,7 +8,7 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('statistics', '0016_merge'),
+        ('statisticscore', '0016_merge'),
     ]
 
     operations = [

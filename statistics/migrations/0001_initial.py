@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
                 ('active_debate', models.CharField(max_length=7, null=True, blank=True)),
                 ('active_round', models.PositiveSmallIntegerField(null=True, blank=True)),
                 ('point_type', models.CharField(default=b'P', max_length=5, choices=[(b'P', b'Point'), (b'DR', b'Direct Response')])),
-                ('committee_by', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Committee')),
+                ('committee_by', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statisticscore.Committee')),
             ],
         ),
         migrations.CreateModel(
@@ -68,8 +68,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('subtopic_text', models.CharField(max_length=200, null=True, blank=True)),
-                ('committee', models.ForeignKey(on_delete=models.deletion.CASCADE, blank=True, to='statistics.Committee', null=True)),
-                ('session', models.ForeignKey(on_delete=models.deletion.CASCADE, blank=True, to='statistics.Session', null=True)),
+                ('committee', models.ForeignKey(on_delete=models.deletion.CASCADE, blank=True, to='statisticscore.Committee', null=True)),
+                ('session', models.ForeignKey(on_delete=models.deletion.CASCADE, blank=True, to='statisticscore.Session', null=True)),
             ],
         ),
         migrations.CreateModel(
@@ -82,33 +82,33 @@ class Migration(migrations.Migration):
                 ('against', models.PositiveSmallIntegerField()),
                 ('abstentions', models.PositiveSmallIntegerField()),
                 ('absent', models.PositiveSmallIntegerField()),
-                ('committee_by', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Committee')),
-                ('session', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Session')),
+                ('committee_by', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statisticscore.Committee')),
+                ('session', models.ForeignKey(on_delete=models.deletion.CASCADE, to='statisticscore.Session')),
             ],
         ),
         migrations.AddField(
             model_name='point',
             name='session',
-            field=models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Session'),
+            field=models.ForeignKey(on_delete=models.deletion.CASCADE, to='statisticscore.Session'),
         ),
         migrations.AddField(
             model_name='point',
             name='subtopics',
-            field=models.ManyToManyField(to='statistics.SubTopic', blank=True),
+            field=models.ManyToManyField(to='statisticscore.SubTopic', blank=True),
         ),
         migrations.AddField(
             model_name='committee',
             name='session',
-            field=models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Session'),
+            field=models.ForeignKey(on_delete=models.deletion.CASCADE, to='statisticscore.Session'),
         ),
         migrations.AddField(
             model_name='activeround',
             name='session',
-            field=models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Session'),
+            field=models.ForeignKey(on_delete=models.deletion.CASCADE, to='statisticscore.Session'),
         ),
         migrations.AddField(
             model_name='activedebate',
             name='session',
-            field=models.ForeignKey(on_delete=models.deletion.CASCADE, to='statistics.Session'),
+            field=models.ForeignKey(on_delete=models.deletion.CASCADE, to='statisticscore.Session'),
         ),
     ]

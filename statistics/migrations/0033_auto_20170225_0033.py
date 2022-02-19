@@ -9,7 +9,7 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('statistics', '0032_announcement_announcement_type'),
+        ('statisticscore', '0032_announcement_announcement_type'),
     ]
 
     operations = [

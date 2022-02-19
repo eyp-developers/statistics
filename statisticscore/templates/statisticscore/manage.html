@@ -328,8 +328,8 @@
   var data_url = '{% url 'statisticscore:data_api' session.pk %}',
       data_latest_url = '{% url 'statisticscore:data_latest_api' session.pk %}',
       data_pk_url = '{% url 'statisticscore:data_pk_api' %}'
-      dr_img = '{% static 'statistics/images/dr.png' %}',
-      point_img = '{% static 'statistics/images/point.png' %}';
+      dr_img = '{% static 'statisticscore/images/dr.png' %}',
+      point_img = '{% static 'statisticscore/images/point.png' %}';
 </script>
 <style>
   tbody tr td {
@@ -337,7 +337,7 @@
   }
 </style>
 {% endblock %} {% block footer_scripts %}
-<script type="text/javascript" src="{% static 'statistics/js/manage.js' %}" charset="utf-8"></script>
+<script type="text/javascript" src="{% static 'statisticscore/js/manage.js' %}" charset="utf-8"></script>
 <script>
 {% if session.session_statistics == 'JF' or session.session_statistics == 'SF' or session.session_statistics == 'S' or session.session_statistics == 'R' or session.session_statistics == 'RC' %}
 requestData('point', 0, 20);
