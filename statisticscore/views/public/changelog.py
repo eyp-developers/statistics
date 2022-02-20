@@ -1,15 +1,16 @@
-import urllib.request, urllib.error, urllib.parse
+import os
 import mistune
 from django.shortcuts import render
+from django.conf import settings
 
-CHANGELOG_URL = "https://raw.githubusercontent.com/" \
-                "eyp-developers/statistics/master/CHANGELOG.md"
+
+CHANGELOG_URL = os.path.join(settings.BASE_DIR, "CHANGELOG.md")
 
 
 def changelog(request):
 
     # Get the raw markdown from GitHub
-    raw_markdown = urllib.request.urlopen(CHANGELOG_URL).read().decode('utf-8')
+    raw_markdown = open(CHANGELOG_URL).read()
 
     # Render the markdown
     rendered_markdown = mistune.markdown(raw_markdown)
