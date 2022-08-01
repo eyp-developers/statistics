@@ -1,8 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from statisticscore.views import changelog
-
 
 class ChangelogTests(TestCase):
 
