@@ -99,6 +99,10 @@ db_from_env = dj_database_url.config(conn_max_age=500)
 if db_from_env:
     DATABASES['default'].update(db_from_env)
 
+# Starting with Django 3.2 it is possible to alter the automatically generated primary key field type
+# We want to keep the pre-3.2 default behaviour which is to set implicit primary key fields to be of the type
+# AutoField, which is internally represented as an Integer
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/

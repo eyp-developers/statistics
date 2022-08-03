@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from statisticscore.forms.login import LoginForm
 from statisticscore.models import Session
@@ -32,7 +32,7 @@ def ga_login(request):
                 # The next line gets arguments from URLs like this http://stats.eyp.org/login/?next=/overview/9/
                 next = request.GET.get("next")
 
-                if is_safe_url(next, settings.ALLOWED_HOSTS):
+                if url_has_allowed_host_and_scheme(next, settings.ALLOWED_HOSTS):
                     # Here we will redirect them to the page they came from when they were sent to the login page
                     return HttpResponseRedirect(next, )
 
