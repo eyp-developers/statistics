@@ -14,12 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf import settings
-from django.conf.urls import include, url
+from django.urls import include, re_path
 from statisticscore.admin import admin_site
 
 urlpatterns = [
-    url(r'^', include('statisticscore.urls')),
-    url(r'^admin/', admin_site.urls),
+    re_path(r'^', include('statisticscore.urls')),
+    re_path(r'^admin/', admin_site.urls),
 ]
 
 handler404 = 'statisticscore.views.public_views.handler404'
