@@ -1,19 +1,18 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
-from django.utils.translation import ugettext_lazy
 from .models import *
 
 
 class StatisticsAdminSite(admin.AdminSite):
     # Text to put at the end of each page's <title>.
-    site_title = ugettext_lazy('Statistics Administration')
+    site_title = 'Statistics Administration'
 
     # Text to put in each page's <h1> (and above login form).
-    site_header = ugettext_lazy('Statistics Administration')
+    site_header = 'Statistics Administration'
 
     # Text to put at the top of the admin index page.
-    index_title = ugettext_lazy('Statistics Administration')
+    index_title = 'Statistics Administration'
 
 
 admin_site = StatisticsAdminSite()

@@ -1,8 +1,6 @@
-from django.conf.urls import url
+from django.urls import re_path
 from django.conf.urls.static import static
 from django.conf import settings
-
-from django.urls import path
 
 from statisticscore.views import *
 from statisticscore.url_patterns.api import api_urls
@@ -16,22 +14,22 @@ from statisticscore.url_patterns.session import session_urls
 app_name = 'statisticscore'
 
 urlpatterns = [
-    url(r'^$', home, name='home'),
-    url(r'^login/$', ga_login, name='login'),
-    url(r'^logout/$', ga_logout, name='logout'),
-    url(r'^get_started/$', get_started, name='get_started'),
-    url(r'^changelog/$', changelog, name='changelog'),
-    url(r'^create_session/$', create_session, name='create_session'),
-    url(r'^highscores/$', high_scores, name='high_scores'),
-    url(r'^topics/$', FilteredTopicsListView.as_view(), name='topics'),
+    re_path(r'^$', home, name='home'),
+    re_path(r'^login/$', ga_login, name='login'),
+    re_path(r'^logout/$', ga_logout, name='logout'),
+    re_path(r'^get_started/$', get_started, name='get_started'),
+    re_path(r'^changelog/$', changelog, name='changelog'),
+    re_path(r'^create_session/$', create_session, name='create_session'),
+    re_path(r'^highscores/$', high_scores, name='high_scores'),
+    re_path(r'^topics/$', FilteredTopicsListView.as_view(), name='topics'),
     # path('topics/<int:pk>/edit', TopicUpdate.as_view(), name='update_topic'),
     # path('topics/<int:pk>/', TopicDetail.as_view(), name='topic_detail'),
-    url(r'^overview/(?P<session_id>[0-9]+)/$', overview, name='overview'),
-    url(r'^edit/(?P<session_id>[0-9]+)/$', edit, name='edit'),
-    url(r'^committees/(?P<session_id>[0-9]+)/$', create_committee, name='create_committee'),
-    url(r'^manage/(?P<session_id>[0-9]+)/$', manage, name='manage'),
-    url(r'^gender/(?P<session_id>[0-9]+)/$', gender, name='gender'),
-    url(r'^runningorder/(?P<session_id>[0-9]+)/$', runningorder, name='runningorder'),
+    re_path(r'^overview/(?P<session_id>[0-9]+)/$', overview, name='overview'),
+    re_path(r'^edit/(?P<session_id>[0-9]+)/$', edit, name='edit'),
+    re_path(r'^committees/(?P<session_id>[0-9]+)/$', create_committee, name='create_committee'),
+    re_path(r'^manage/(?P<session_id>[0-9]+)/$', manage, name='manage'),
+    re_path(r'^gender/(?P<session_id>[0-9]+)/$', gender, name='gender'),
+    re_path(r'^runningorder/(?P<session_id>[0-9]+)/$', runningorder, name='runningorder'),
 ]
 
 urlpatterns += api_urls
