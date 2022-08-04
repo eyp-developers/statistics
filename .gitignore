@@ -3,6 +3,7 @@
 *.codekit
 bin/*
 include/*
+staticfiles/*
 
 lib/*
 pip-selfcheck.json
