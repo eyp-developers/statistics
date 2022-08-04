@@ -122,13 +122,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
-)
-
 # Media file settings
-
+# In production, media files are stored on AWS S3
 # The AWS region to connect to.
 AWS_REGION = "eu-west-2"
 
