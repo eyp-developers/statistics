@@ -1,3 +1,14 @@
+### 2022-08-04
+* Major internal changes have been made, if you notice any problems please report them to us by opening an issue [here](https://github.com/eyp-developers/statistics/issues)
+* Updated GA Statistics to become up to date with current versions of its underlying software
+
+**Facts for nerds (and some history for the curious)**
+* When GA Statistics first became a standalone web application in 2015 (it started out as a highly customised Google Spreadsheet, believe it or not), we used the [Django Web Framework](https://www.djangoproject.com/) version 1.8.2, which came out on May 20th of that year.
+* Over seven years later, we have gone through three major upgrades all the way to today, when GA Statistics was upgraded to version 4.1 of our beloved web framework.
+* During all that time, over 53.000 points have been tracked through GA Statistics with over 188.000 individuals' votes counted by our platform.
+* To make all of this possible, over 860 changes and additions have been made by us (Oliver and Tom) to improve and extend GA Statistics for the benefit of you and your session's participants.
+* If you are interested in becoming part of this incredible journey, please do not hesitate to [contact us](mailto:welcometogastatistics@wolfskaempf.de). We will be happy to welcome you to the team and guide you through your first contributions to GA Statistics.
+
 ### 2022-08-01
 * Patched potentially vulnerable dependencies
 
