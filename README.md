@@ -23,7 +23,7 @@ You can have a look yourself. At the moment, the project is available at [stats.
 #### How can I use `statistics` during my session?
 
 At the moment, you are able to add your session by visiting [stats.eyp.org/create_session](https://stats.eyp.org/create_session/).
-If you'd like more information fist, please have a look at [our documentation](https://ga-statistics.readthedocs.io).
+If you'd like more information first, please have a look at [our documentation](https://ga-statistics.readthedocs.io).
 
 ## Features
 
