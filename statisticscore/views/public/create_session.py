@@ -8,8 +8,9 @@ from django.urls import reverse
 from statisticscore.models import Session, Announcement, ActiveDebate, ActiveRound
 from statisticscore.forms.session_create import SessionForm
 from helpers import raven_client
+from django.views.decorators.csrf import csrf_exempt
 
-
+@csrf_exempt
 def create_session(request):
     # If the user is trying to create a session
     if request.method == 'POST':
