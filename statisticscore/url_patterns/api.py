@@ -15,4 +15,5 @@ api_urls = [
     re_path(r'^api/session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/$', content_api, name='content_api'),
     re_path(r'^api/session/(?P<session_id>[0-9]+)/content/(?P<committee_id>[0-9]+)/since/$', content_latest_api, name='content_latest_api'),
     re_path(r'^api/gender/(?P<session_id>[0-9]+)/$', gender_api, name='gender_api'),
+    re_path(r'^api/create_session/$', create_session_api, name='create_session_api'),
 ]
