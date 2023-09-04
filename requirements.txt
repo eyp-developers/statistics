@@ -1,4 +1,5 @@
-django>=4.2.5
+django~=4.2
+pillow~=9.5
 boto3
 dj-database-url
 urllib3
@@ -13,7 +14,6 @@ gunicorn
 jmespath
 mistune>=2.0.4
 pilkit
-pillow
 psycopg2-binary>=2.8.6
 python-dateutil
 pytz
