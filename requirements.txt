@@ -1,7 +1,7 @@
+django>=4.2.5
 boto3
 dj-database-url
 urllib3
-django
 django-appconf
 django-bootstrap3
 django-filter
