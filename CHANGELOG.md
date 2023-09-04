@@ -1,3 +1,6 @@
+### 2023-09-04
+* Upgrade Django to latest version
+
 ### 2022-08-04
 * Major internal changes have been made, if you notice any problems please report them to us by opening an issue [here](https://github.com/eyp-developers/statistics/issues)
 * Updated GA Statistics to become up to date with current versions of its underlying software
