@@ -1,3 +1,6 @@
+### 2024-04-08
+* Maintenance update
+
 ### 2023-09-04
 * Upgrade Django to latest version
 
