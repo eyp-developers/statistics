@@ -1,5 +1,6 @@
+from django.db.models import Q
 from django_filters import FilterSet, CharFilter
-from .models import Topic, StatisticsTopicPlace, HistoricTopicPlace
+from .models import Topic
 
 
 class TopicFilter(FilterSet):
@@ -20,30 +21,10 @@ class TopicFilter(FilterSet):
         return by_text | by_area | by_type
 
     def filter_committee(self, queryset, name, value):
-        # Warning: important to format string in this fashion to prevent SQL injection
-        topics_by_committee_name = Topic.objects.raw("\
-            SELECT * FROM statistics_topic AS t \
-            JOIN ( \
-                SELECT topic_id FROM ( \
-                    SELECT topicplace_ptr_id \
-                    FROM statistics_statisticstopicplace AS stp \
-                    JOIN statistics_committee AS c \
-                    ON stp.committee_id=c.id \
-                    WHERE c.name ILIKE '%%' || %s || '%%' \
-                    UNION \
-                    SELECT topicplace_ptr_id \
-                    FROM statistics_historictopicplace AS hp \
-                    WHERE hp.historic_committee_name ILIKE '%%' || %s || '%%' \
-                ) AS tp_ptrs \
-                JOIN statistics_topicplace AS tp \
-                ON tp_ptrs.topicplace_ptr_id = tp.id \
-            ) AS fp \
-            ON t.id = fp.topic_id \
-        ", [value, value])
+        by_statistics_committee = Q(topicplace__statisticstopicplace__committee__name__icontains=value)
+        by_historic_committee = Q(topicplace__historictopicplace__historic_committee_name__icontains=value)
 
-        committee_name_topic_ids = [t.id for t in topics_by_committee_name]
-
-        return queryset.filter(id__in=committee_name_topic_ids)
+        return queryset.filter(by_statistics_committee | by_historic_committee).distinct()
 
     class Meta:
         model = Topic

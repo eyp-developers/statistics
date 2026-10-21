@@ -46,9 +46,6 @@ test.describe('public pages', () => {
   });
 
   test('topics page filters by committee name', async ({ page, createSession }) => {
-    // Bug: the committee filter's raw SQL uses the old statistics_* table names and ILIKE (statisticscore/filters.py),
-    // so filtering by committee crashes with a 500.
-    test.fail();
     const topic = `Topic ${crypto.randomUUID()}`;
     await createSession({ committees: [{ name: 'SEDE', topic }] });
 
