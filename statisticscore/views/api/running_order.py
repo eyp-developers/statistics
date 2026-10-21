@@ -1,6 +1,6 @@
 import json
 from decimal import Decimal
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from statisticscore.models import Session, Committee, Point, RunningOrder, Vote, \
                               ActiveDebate, ActiveRound
 from statisticscore.forms.running_order import RunningOrderForm
@@ -51,6 +51,9 @@ def runningorder_api(request, session_id):
     active_round = ActiveRound.objects.get(session=session).active_round
     thisdata = {}
     if request.method == 'POST':
+        #Only the session admin (or a superuser) runs the running order, like the running order page itself.
+        if not request.user.is_authenticated or not (request.user.is_superuser or request.user == session.admin_user):
+            return JsonResponse({'error': 'You are not allowed to change this running order'}, status=403)
         if request.POST.get('action') == 'R':
             if Point.objects.filter(session=session).count() < 0:
                 dr_subtopics = Point.objects.filter(session=session).order_by('-pk')[0].subtopics.all()

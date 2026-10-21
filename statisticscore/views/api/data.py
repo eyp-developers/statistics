@@ -1,5 +1,5 @@
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from time import strftime
 from statisticscore.models import Committee, Point, ContentPoint, Vote, SubTopic, Gender
 from statisticscore.forms.point import PointEditForm
@@ -167,8 +167,42 @@ def data_latest_api(request, session_id):
 
     return HttpResponse(content_json, content_type='json')
 
+# The kinds of data the data_pk_api can edit or delete, by the 'data-type' they are posted with.
+EDITABLE_DATA = {'point': Point, 'predict': Point, 'content': ContentPoint, 'vote': Vote, 'gender': Gender}
+
+
+def can_edit_data(user, session, allow_submission_user=False):
+    # Matches check_authorization_and_render: the session admin and superusers may edit, and the submission user may too
+    # where the page making the request is open to them (the predict page).
+    if not user.is_authenticated:
+        return False
+    if user.is_superuser or user == session.admin_user:
+        return True
+    return allow_submission_user and user == session.submission_user
+
+
 def data_pk_api(request):
     if request.method == 'POST':
+        #Find the data that is being changed, so we can check that the user is allowed to change it.
+        json_datatype = str(request.POST.get('data-type'))
+        model = EDITABLE_DATA.get(json_datatype)
+        try:
+            pk = int(request.POST.get('pk'))
+        except (TypeError, ValueError):
+            pk = None
+        if model is None or pk is None:
+            return JsonResponse({'error': 'Unknown data'}, status=400)
+        d = model.objects.filter(pk=pk).first()
+        if d is None:
+            return JsonResponse({'error': 'Data not found'}, status=404)
+        data_session = d.committee.session if json_datatype == 'gender' else d.session
+        is_delete = request.POST.get('delete') == 'true'
+        if not can_edit_data(request.user, data_session, allow_submission_user=(json_datatype == 'predict' and not is_delete)):
+            return JsonResponse({'error': 'You are not allowed to change this data'}, status=403)
+        #Edits look up the new committee in the posted session, so that has to be the data's own session.
+        if not is_delete and json_datatype != 'predict' and request.POST.get('session') != str(data_session.pk):
+            return JsonResponse({'error': 'You are not allowed to change this data'}, status=403)
+
         #If the user is trying to save/delete a piece of data.
         if request.POST.get('delete') == 'true':
             json_datatype = str(request.POST.get('data-type'))
