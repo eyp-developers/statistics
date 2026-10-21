@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import timezone
 from django.urls import reverse
@@ -11,7 +12,7 @@ from helpers import check_authorization_and_render
 
 @login_required(login_url='/login/')
 def edit(request, session_id):
-    s = Session.objects.get(pk=session_id)
+    s = get_object_or_404(Session, pk=session_id)
     # If the User is trying to edit the session
     if request.method == 'POST':
         # Fill an instance of the form with the request data.

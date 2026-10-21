@@ -1,10 +1,10 @@
 from datetime import datetime
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from statisticscore.models import Session, Committee, ActiveDebate
 
 
 def session(request, session_id):
-    session = Session.objects.get(pk=session_id)
+    session = get_object_or_404(Session, pk=session_id)
     session_committee_list = Committee.objects.filter(session=session).order_by('name')
 
     # We initialise the values of active_debate and active_debate_committee

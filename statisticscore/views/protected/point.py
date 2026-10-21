@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from statisticscore.models import Session, Committee, SubTopic, ActiveDebate, \
@@ -12,11 +13,11 @@ from helpers import check_authorization_and_render
 def point(request, session_id, committee_id=None):
     # The Point view handles the submission of points, both creating the form from the data given, validating the form,
     # and sending the user to the right place if the data submission was successful.
-    session = Session.objects.get(pk=session_id)
+    session = get_object_or_404(Session, pk=session_id)
     # Get the committee and session of the committee that wants to make a point.
 
     if committee_id:
-        render_committee = Committee.objects.get(pk=committee_id)
+        render_committee = get_object_or_404(Committee, pk=committee_id, session_id=session_id)
         all_form = False
     else:
         render_committee = ''

@@ -9,8 +9,8 @@ def committee(request, session_id, committee_id):
 
 
 def handler404(request, exception):
-    return render(request, 'statisticscore/404.html')
+    return render(request, 'statisticscore/404.html', status=404)
 
 
 def handler500(request):
-    return render(request, 'statisticscore/500.html')
+    return render(request, 'statisticscore/500.html', status=500)

@@ -1,4 +1,5 @@
 import json
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from statisticscore.models import Session, Committee, SubTopic, Topic, StatisticsTopicPlace
@@ -124,7 +125,7 @@ def edit_committee(request, session, committees):
 
 @login_required(login_url='/login/')
 def create_committee(request, session_id):
-    session = Session.objects.get(pk=session_id)
+    session = get_object_or_404(Session, pk=session_id)
     committees = Committee.objects.filter(session=session).order_by('name')
     session_subtopics = SubTopic.objects.filter(session=session)
     if request.method == 'POST':

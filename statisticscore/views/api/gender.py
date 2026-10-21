@@ -1,9 +1,10 @@
 import json
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from statisticscore.models import Session, Committee, Gender
 
 def gender_api(request, session_id):
-    session = Session.objects.get(pk=session_id)
+    session = get_object_or_404(Session, pk=session_id)
     gender_points = Gender.objects.filter(committee__session__pk=session_id)
 
     committees = []

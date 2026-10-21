@@ -1,6 +1,7 @@
 import json
 from decimal import Decimal
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from statisticscore.models import Session, Committee, Point, RunningOrder, Vote, \
                               ActiveDebate, ActiveRound
 from statisticscore.forms.running_order import RunningOrderForm
@@ -46,7 +47,7 @@ def position(data, session, position=0):
                     point.save()
 
 def runningorder_api(request, session_id):
-    session = Session.objects.get(pk=session_id)
+    session = get_object_or_404(Session, pk=session_id)
     active_debate = ActiveDebate.objects.get(session=session).active_debate
     active_round = ActiveRound.objects.get(session=session).active_round
     thisdata = {}

@@ -1,12 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from statisticscore.models import Session, Committee, Point, ContentPoint, Vote
 
 
 def debate(request, session_id, committee_id):
     # Same for debates as for sessions, the only static content is the name and data of the committee and the session.
     # The rest of the point/voting data comes through the api that can constantly be updated.
-    c = Committee.objects.get(pk=committee_id)
-    s = Session.objects.get(pk=session_id)
+    s = get_object_or_404(Session, pk=session_id)
+    c = get_object_or_404(Committee, pk=committee_id, session=s)
     # The statistics_type will let us render different templates based on the statistics selected by the user.
     statistics_type = s.session_statistics
 

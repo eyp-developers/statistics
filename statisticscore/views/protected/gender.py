@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from statisticscore.models import Session, Committee, SubTopic, ActiveDebate, Gender
@@ -9,7 +10,7 @@ from helpers import check_authorization_and_render
 
 @login_required(login_url='/login/')
 def gender(request, session_id):
-    session = Session.objects.get(pk=session_id)
+    session = get_object_or_404(Session, pk=session_id)
     active_debate = ActiveDebate.objects.filter(session_id=session_id)[0]
     committees = Committee.objects.filter(session__pk=session_id)
     committees_array = []

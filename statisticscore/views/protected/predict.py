@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from statisticscore.models import Session, Committee, SubTopic, ActiveDebate, \
@@ -9,8 +10,8 @@ from helpers import check_authorization_and_render
 
 @login_required(login_url='/login/')
 def predict(request, session_id, committee_id):
-    session = Session.objects.get(pk=session_id)
-    committee = Committee.objects.get(pk=committee_id)
+    session = get_object_or_404(Session, pk=session_id)
+    committee = get_object_or_404(Committee, pk=committee_id, session_id=session_id)
     active_debate = ActiveDebate.objects.get(session_id=session_id).active_debate
     active_committee = Committee.objects.filter(session__pk=session_id).filter(name=active_debate)
     if active_committee:

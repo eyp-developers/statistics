@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from statisticscore.models import Session, Committee, ActiveDebate, Vote
@@ -12,9 +13,9 @@ def vote(request, session_id, committee_id=None):
     # The Vote form is just as complex as the Point form, and is made in a very similar manner.
 
     # We get the current session and debate of the user, then get the active committee from the active debate.
-    session = Session.objects.get(pk=session_id)
+    session = get_object_or_404(Session, pk=session_id)
     if committee_id:
-        render_committee = Committee.objects.get(pk=committee_id)
+        render_committee = get_object_or_404(Committee, pk=committee_id, session_id=session_id)
         all_form = False
     else:
         render_committee = ''

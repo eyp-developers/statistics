@@ -1,5 +1,6 @@
 import json
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from statisticscore.models import Session, Committee, Point, ContentPoint, Vote, \
                               ActiveDebate, ActiveRound
 
@@ -7,13 +8,16 @@ from statisticscore.models import Session, Committee, Point, ContentPoint, Vote,
 def debate_vote_api(request, session_id, committee_id):
     #The Debate API is very similar to the session API, but more complex due to more graphs and subtopics.
 
+    #Unknown sessions and committees should 404 rather than crash further down.
+    session = get_object_or_404(Session, pk=session_id)
+    get_object_or_404(Committee, pk=committee_id, session=session)
+
     #We get the active debate and active round
     active_debate = ActiveDebate.objects.filter(session__pk=session_id)
     active_round = ActiveRound.objects.filter(session__pk=session_id)
     active_round_no = active_round[0].active_round
 
-    #We get the session, committee, and list of all committees.
-    session = Session.objects.get(pk=session_id)
+    #We get the committee and list of all committees.
     committee = Committee.objects.filter(pk=committee_id)
     committees = Committee.objects.filter(session__id=session_id).order_by('name')
 
@@ -93,7 +97,7 @@ def debate_vote_api(request, session_id, committee_id):
 
 def content_api(request, session_id, committee_id):
     #We need the committee to filter by active debate name.
-    committee = Committee.objects.get(pk=committee_id)
+    committee = get_object_or_404(Committee, pk=committee_id, session_id=session_id)
     #For the 'offset' and 'count' arguments to work, we need to be able to tell the filter from which point and to which point to filter from.
     point_from = int(request.GET.get('offset'))
     point_to = int(request.GET.get('offset')) + int(request.GET.get('count'))

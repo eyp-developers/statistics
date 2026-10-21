@@ -1,6 +1,7 @@
 import json
 from decimal import Decimal
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from statisticscore.models import Session, Committee, Point, ContentPoint
 
 
@@ -8,7 +9,7 @@ def session_api(request, session_id):
     # Since the graphs on the session page need to be able to livereload, we need to create
     # a custom "API" that outputs the neccesary JSON to keep the graph alive
 
-    session = Session.objects.get(pk=session_id)
+    session = get_object_or_404(Session, pk=session_id)
 
     #First we need all the committees registered for that session
     committees = Committee.objects.filter(session__id=session_id).order_by('name')

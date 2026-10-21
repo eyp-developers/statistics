@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from statisticscore.models import Session, Committee, SubTopic, ActiveDebate, \
@@ -11,7 +12,7 @@ from helpers import check_authorization_and_render
 @login_required(login_url='/login/')
 def runningorder(request, session_id):
     # First we set up our variables, we need the session, the active debate, the active round, the max rounds and a list of committees
-    session = Session.objects.get(pk=session_id)
+    session = get_object_or_404(Session, pk=session_id)
     active_debate = ActiveDebate.objects.filter(session_id=session_id)[0]
     active = ActiveDebate.objects.filter(session_id=session_id)[0].active_debate
     active_round = ActiveRound.objects.filter(session__pk=session_id)[0].active_round

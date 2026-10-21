@@ -60,9 +60,29 @@ test.describe('public pages', () => {
 
   test('unknown pages answer 404 with a not-found page', async ({ page }) => {
     const response = await page.goto(`/no-such-page-${crypto.randomUUID()}/`);
-    // Locally the e2e server runs with DEBUG on, so Django's own 404 page is shown with status 404. On a target with
-    // DEBUG off the custom 404 page is shown instead, with status 200 (known bug 8), and this assertion fails there.
+    // Locally the e2e server runs with DEBUG on, so Django's own 404 page is shown. With DEBUG off it's the custom one.
     expect(response?.status()).toBe(404);
+    await expect(page.getByText(/page not found/i).first()).toBeVisible();
+  });
+
+  // No session will ever get this ID in the e2e database.
+  const unknownId = 2_147_483_000;
+
+  test('an unknown session answers 404', async ({ page }) => {
+    const response = await page.goto(`/session/${unknownId}/`);
+    expect(response?.status()).toBe(404);
+    await expect(page.getByText(/page not found/i).first()).toBeVisible();
+  });
+
+  test('the debate page of an unknown session or committee answers 404', async ({ page, createSession }) => {
+    const session = await createSession({ committees: [{ name: 'ENVI' }] });
+
+    const unknownSession = await page.goto(`/session/${unknownId}/debate/${session.committees[0].id}/`);
+    expect(unknownSession?.status()).toBe(404);
+    await expect(page.getByText(/page not found/i).first()).toBeVisible();
+
+    const unknownCommittee = await page.goto(`/session/${session.id}/debate/${unknownId}/`);
+    expect(unknownCommittee?.status()).toBe(404);
     await expect(page.getByText(/page not found/i).first()).toBeVisible();
   });
 });

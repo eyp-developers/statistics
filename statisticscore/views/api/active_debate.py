@@ -1,9 +1,10 @@
 import json
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from statisticscore.models import Session, Committee, ActiveDebate
 
 def active_debate_api(request, session_id):
-    session = Session.objects.get(pk=session_id)
+    session = get_object_or_404(Session, pk=session_id)
     active_debate = ActiveDebate.objects.get(session=session)
     try:
         active_committee = Committee.objects.filter(session=session).get(name=active_debate.active_debate)

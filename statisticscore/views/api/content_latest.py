@@ -1,11 +1,12 @@
 import json
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from statisticscore.models import Committee, Point, ContentPoint
 
 
 def content_latest_api(request, session_id, committee_id):
     #We need the committee to filter by active debate name.
-    committee = Committee.objects.get(pk=committee_id)
+    committee = get_object_or_404(Committee, pk=committee_id, session_id=session_id)
     #We need to get the contentpoints that have a pk greater than the "since" pk.
     contentpoints = ContentPoint.objects.filter(session_id=session_id).filter(active_debate=committee.name).filter(pk__gt=request.GET.get('pk')).order_by('-pk')
     #We also need to count the points for the total
