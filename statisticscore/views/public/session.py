@@ -1,5 +1,5 @@
-from datetime import datetime
 from django.shortcuts import render
+from django.utils import timezone
 from statisticscore.models import Session, Committee, ActiveDebate
 
 
@@ -19,12 +19,13 @@ def session(request, session_id):
     # This is the date and time of the latest activity of this session or False, if there was never any activity
     latest_activity = session.session_latest_activity()
 
-    today = datetime.now().date()
+    # Compare local (TIME_ZONE) dates on both sides, latest_activity is an aware UTC datetime
+    today = timezone.localdate()
 
     # It's important we only call date() on the result of session_latest_activity() if we know it's not False
     # This is why this part of the code is also inside the if latest_activity block
     # If it was false, we would get an error, because we can't call date() on a boolean
-    if latest_activity and latest_activity.date() == today:
+    if latest_activity and timezone.localtime(latest_activity).date() == today:
         active_debate = ActiveDebate.objects.get(session=session).active_debate
 
         context.update({

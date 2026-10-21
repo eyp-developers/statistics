@@ -24,7 +24,7 @@ def home(request):
 
     # In this array we will store all the sessions which had activity today
     active_sessions = []
-    today = timezone.now().date()
+    today = timezone.localdate()
     # We could check all sessions, but if a session is so old it's not on the front-page anymore, we won't show it's activity.
     # Therefore, using latest_sessions_list saves a lot of database queries
     # latest_sessions_list only contains the sessions which show on the current page, due to how it's modified through the paginator.
@@ -33,7 +33,7 @@ def home(request):
     if (not page) or (int(page) == 1):
         for session in latest_sessions_list:
             iteration_latest_activity = session.session_latest_activity()
-            if (iteration_latest_activity != False) and (iteration_latest_activity.date() == today):
+            if (iteration_latest_activity != False) and (timezone.localtime(iteration_latest_activity).date() == today):
                 active_sessions.append(session)
 
     # We want to show all announcements on the hompage which have not expired yet

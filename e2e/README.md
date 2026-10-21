@@ -58,7 +58,7 @@ Tests are grouped by domain, not priority.
 tests/<domain>/*.spec.ts   e.g. tests/sessions/create-session.spec.ts
 support/e2e-api/           plain functions calling /__e2e__/: sessions.ts, login.ts
 support/fixtures.ts        test + expect with createSession and cleanUpSession
-support/                   env, small UI helpers (datepicker.ts, home-page.ts), known-bugs.ts
+support/                   env, small UI helpers (datepicker.ts, home-page.ts)
 assets/                    files tests upload
 ```
 

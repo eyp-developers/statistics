@@ -1,11 +1,9 @@
 import { loginAs } from '../../support/e2e-api/login';
 import { addSessionData } from '../../support/e2e-api/sessions';
 import { expect, test } from '../../support/fixtures';
-import { berlinAndUtcDatesDiffer } from '../../support/known-bugs';
 
 test.describe('active debate and round', () => {
   test('setting the active debate announces it on the session page', async ({ page, createSession }) => {
-    test.fail(berlinAndUtcDatesDiffer(), 'Known bug 13: the banner is missing just after midnight Berlin time');
     const session = await createSession({ active_debate: 'ENVI', committees: [{ name: 'ENVI' }, { name: 'AFCO' }] });
     // The session page only announces the active debate when the session had activity today.
     await addSessionData(session.id, { points: [{ committee: 'AFCO' }] });

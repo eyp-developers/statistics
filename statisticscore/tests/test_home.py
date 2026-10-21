@@ -1,7 +1,12 @@
+import datetime
+from unittest import mock
+
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
-from .helpers import create_session, create_user_max
+from ..models import Point
+from .helpers import create_session, create_committee, create_user_max
 
 
 class HomeViewTests(TestCase):
@@ -77,3 +82,21 @@ class HomeViewTests(TestCase):
         self.assertContains(response, "Account")
         self.assertContains(response, "Login")
         self.assertQuerysetEqual(response.context['latest_sessions_list'], [session_leipzig_public])
+
+    def test_home_view_activity_today_uses_local_dates(self):
+        """
+        Activity before midnight Berlin time is not today's activity, even though the UTC date is the same.
+        """
+        berlin = timezone.get_default_timezone()
+        now = timezone.make_aware(datetime.datetime(2026, 1, 15, 0, 30), berlin)
+        today_session = create_session(name="Today 2026")
+        yesterday_session = create_session(name="Yesterday 2026")
+        for session, minutes_ago in ((today_session, 10), (yesterday_session, 40)):
+            committee = create_committee(session=session)
+            with mock.patch('django.utils.timezone.now', return_value=now - datetime.timedelta(minutes=minutes_ago)):
+                Point.objects.create(session=session, committee_by=committee)
+
+        with mock.patch('django.utils.timezone.now', return_value=now):
+            response = self.client.get(reverse("statisticscore:home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['active_sessions'], [today_session])
