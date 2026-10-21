@@ -23,8 +23,8 @@ function requestContentPointData() {
           var content = row.insertCell(1);
           var type = row.insertCell(2);
           $(row).attr('id', point.pk);
-          committee.innerHTML = point.committee_by;
-          content.innerHTML = point.contentpoint;
+          committee.textContent = point.committee_by;
+          content.textContent = point.contentpoint;
           if (point.point_type === 'P') {
             type.innerHTML = '<img src="' + point_img + '" height="30" alt="Point">';
           } else {
@@ -57,8 +57,8 @@ function requestMoreContent() {
           var content = row.insertCell(1);
           var type = row.insertCell(2);
           $(row).attr('id', point.pk);
-          committee.innerHTML = point.committee_by;
-          content.innerHTML = point.contentpoint;
+          committee.textContent = point.committee_by;
+          content.textContent = point.contentpoint;
           if (point.point_type === 'P') {
             type.innerHTML = '<img src="' + point_img + '" height="30" alt="Point">';
           } else {
@@ -92,8 +92,8 @@ function requestNewContent() {
           var content = row.insertCell(1);
           var type = row.insertCell(2);
           $(row).attr('id', point.pk);
-          committee.innerHTML = point.committee_by;
-          content.innerHTML = point.contentpoint;
+          committee.textContent = point.committee_by;
+          content.textContent = point.contentpoint;
           if (point.point_type === 'P') {
             type.innerHTML = '<img src="' + point_img + '" height="30" alt="Point">';
           } else {

@@ -12,6 +12,10 @@ NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
 function deleteInput(id) {
   document.getElementById(id).remove();
 }
+function escapeHtml(text) {
+  return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 var backlog_count,
     last_postition;
 
@@ -25,12 +29,12 @@ function getCommittees() {
           subtopicHTML += '<span class="label label-primary">None</span>';
         } else {
           committee.next_subtopics.forEach(function(subtopic) {
-            subtopicHTML += '<span class="label ' + subtopic.color + '" style="color: ' + subtopic.text_color + '">' + subtopic.subtopic + '</span> ';
+            subtopicHTML += '<span class="label ' + escapeHtml(subtopic.color) + '" style="color: ' + escapeHtml(subtopic.text_color) + '">' + escapeHtml(subtopic.subtopic) + '</span> ';
           });
         }
         document.getElementById("subtopics-" + committee.pk).innerHTML = subtopicHTML;
-        document.getElementById("debate-" + committee.pk).innerHTML = committee.debate_total;
-        document.getElementById("session-" + committee.pk).innerHTML = committee.session_total;
+        document.getElementById("debate-" + committee.pk).textContent = committee.debate_total;
+        document.getElementById("session-" + committee.pk).textContent = committee.session_total;
         committee_box = document.getElementById("committee-" + committee.pk);
 
         $(committee_box).css('height', committee.height + "%");
@@ -206,10 +210,10 @@ function createPoint(kind, id, pos, where, by, on, round, type, subtopics) {
   $(row).attr('id', id);
   //Hiding the row so we can fade it in.
   //Assigning cell values
-  point_order.innerHTML = pos;
-  point_by.innerHTML = by;
-  point_on.innerHTML = on;
-  point_round.innerHTML = round;
+  point_order.textContent = pos;
+  point_by.textContent = by;
+  point_on.textContent = on;
+  point_round.textContent = round;
   if (type === 'P') {
     point_type.innerHTML = 'Point';
   } else {
@@ -221,7 +225,7 @@ function createPoint(kind, id, pos, where, by, on, round, type, subtopics) {
     pointsubtopicHTML += '<span class="label label-primary">None</span>';
   } else {
     subtopics.forEach(function(subtopic) {
-      pointsubtopicHTML += '<span class="label ' + subtopic.color + '" style="color: ' + subtopic.text_color + '">' + subtopic.subtopic + '</span> ';
+      pointsubtopicHTML += '<span class="label ' + escapeHtml(subtopic.color) + '" style="color: ' + escapeHtml(subtopic.text_color) + '">' + escapeHtml(subtopic.subtopic) + '</span> ';
     });
   }
   point_subtopics.innerHTML = pointsubtopicHTML;

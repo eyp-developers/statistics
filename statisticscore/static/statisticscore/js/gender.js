@@ -83,10 +83,10 @@ function createGender(where, pk, last_changed, committee, gender) {
   //Hiding the row so we can fade it in.
   $(row).css('display', 'none');
   //Assigning cell values
-  gender_id.innerHTML = pk;
-  gender_last_changed.innerHTML = last_changed;
-  gender_committee.innerHTML = committee;
-  gender_gender.innerHTML = gender;
+  gender_id.textContent = pk;
+  gender_last_changed.textContent = last_changed;
+  gender_committee.textContent = committee;
+  gender_gender.textContent = gender;
   gender_actions.innerHTML = '<a href="javascript:void(0)" class="btn btn-danger btn-xs btn-raised" onclick="deleteData(' + "'gender', " + "'" + pk + "'" + ')" ><i class="material-icons" style="font-size: 18px">delete</i></a>';
   $(row).fadeIn("slow");
 }

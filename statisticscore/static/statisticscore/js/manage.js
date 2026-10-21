@@ -165,17 +165,17 @@ function createPoint(where, pk, last_changed, by, on, round, type, subtopics, co
   //Hiding the row so we can fade it in.
   $(row).css('display', 'none');
   //Assigning cell values
-  point_id.innerHTML = pk;
-  point_last_changed.innerHTML = last_changed;
-  point_by.innerHTML = by;
-  point_on.innerHTML = on;
-  point_round.innerHTML = round;
+  point_id.textContent = pk;
+  point_last_changed.textContent = last_changed;
+  point_by.textContent = by;
+  point_on.textContent = on;
+  point_round.textContent = round;
   if (type === 'P') {
     point_type.innerHTML = '<img src="' + point_img + '" height="30" >';
   } else {
     point_type.innerHTML = '<img src="' + dr_img + '" height="30" >';
   }
-  point_subtopics.innerHTML = subtopics;
+  point_subtopics.textContent = subtopics;
   point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-primary btn-raised" data-toggle="modal" data-target="#edit-point" aria-label="Edit point ' + pk + '" onclick="editPoint(' + "'" + pk + "'" + ')" ><i class="material-icons" style="font-size: 18px">mode_edit</i></a><a href="javascript:void(0)" class="btn btn-danger btn-xs btn-raised" aria-label="Delete point ' + pk + '" onclick="deleteData(' + "'point', " + "'" + pk + "'" + ')" ><i class="material-icons" style="font-size: 18px">delete</i></a>';
   //Adding pretty color classes
   $(point_by).addClass(color);
@@ -199,11 +199,11 @@ function createContent(where, pk, last_changed, by, on, content, type, color, te
   $(row).attr('id', 'content-' + pk);
   //Hiding the row so we can fade it in
   $(row).css('display', 'none');
-  content_id.innerHTML = pk;
-  content_last_changed.innerHTML = last_changed;
-  content_by.innerHTML = by;
-  content_on.innerHTML = on;
-  content_content.innerHTML = content;
+  content_id.textContent = pk;
+  content_last_changed.textContent = last_changed;
+  content_by.textContent = by;
+  content_on.textContent = on;
+  content_content.textContent = content;
   if (type === 'P') {
     content_type.innerHTML = '<img src="' + point_img + '" height="30" >';
   } else {
@@ -234,14 +234,14 @@ function createVote(where, pk, last_changed, by, on, in_favour, against, abstent
   $(row).attr('id', 'vote-' + pk);
   //Hiding the row so we can fade it in
   $(row).css('display', 'none');
-  vote_id.innerHTML = pk;
-  vote_last_changed.innerHTML = last_changed;
-  vote_by.innerHTML = by;
-  vote_on.innerHTML = on;
-  vote_in_favour.innerHTML = in_favour;
-  vote_against.innerHTML = against;
-  vote_abstentions.innerHTML = abstentions;
-  vote_absent.innerHTML = absent;
+  vote_id.textContent = pk;
+  vote_last_changed.textContent = last_changed;
+  vote_by.textContent = by;
+  vote_on.textContent = on;
+  vote_in_favour.textContent = in_favour;
+  vote_against.textContent = against;
+  vote_abstentions.textContent = abstentions;
+  vote_absent.textContent = absent;
   vote_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-primary btn-raised" data-toggle="modal" data-target="#edit-vote" aria-label="Edit vote ' + pk + '" onclick="editVote(' + "'" + pk + "'" + ')" ><i class="material-icons" style="font-size: 18px">mode_edit</i></a><a href="javascript:void(0)" class="btn btn-danger btn-xs btn-raised" aria-label="Delete vote ' + pk + '" onclick="deleteData(' + "'vote', " + "'" + pk + "'" + ')" ><i class="material-icons" style="font-size: 18px">delete</i></a>';
   //Adding pretty color classes and fading in
   $(vote_by).addClass(color);

@@ -83,16 +83,16 @@ function createPoint(where, pk, last_changed, on, round, type, subtopics) {
   //Hiding the row so we can fade it in.
   $(row).css('display', 'none');
   //Assigning cell values
-  point_id.innerHTML = pk;
-  point_last_changed.innerHTML = last_changed;
-  point_on.innerHTML = on;
-  point_round.innerHTML = round;
+  point_id.textContent = pk;
+  point_last_changed.textContent = last_changed;
+  point_on.textContent = on;
+  point_round.textContent = round;
   if (type === 'P') {
     point_type.innerHTML = '<img src="' + point_img + '" height="30" >';
   } else {
     point_type.innerHTML = '<img src="' + dr_img + '" height="30" >';
   }
-  point_subtopics.innerHTML = subtopics;
+  point_subtopics.textContent = subtopics;
   point_action.innerHTML = '<a href="javascript:void(0)" class="btn btn-xs btn-primary btn-raised mdi-content-create" data-toggle="modal" data-target="#edit-subtopics" onclick="editPoint(' + "'" + pk + "'" + ')" ><i class="material-icons" style="font-size: 18px">mode_edit</i></a>';
   $(row).fadeIn("slow");
 }
