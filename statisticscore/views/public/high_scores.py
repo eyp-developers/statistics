@@ -16,11 +16,9 @@ def high_scores(request):
     most_successful = dict()
     most_unsuccessful = dict()
     best_mpp = dict()
-    stats = False
 
     for s in Session.objects.all():
-        if Point.objects.all().filter(session=s).count() != 0:
-            stats = True
+        stats = Point.objects.filter(session=s).exists()
 
         if s.is_visible and ((not s.has_technical_problems) and stats):
             total_votes = 0
@@ -33,11 +31,10 @@ def high_scores(request):
                 against += vote.against
                 abstentions += vote.abstentions
                 total_votes += vote.total_votes()
-                if in_favour != 0 and total_votes != 0 and against != 0:
-                    percent_in_favour = (Decimal(in_favour) / Decimal(total_votes)) * 100
-                    percent_against = (Decimal(against) / Decimal(total_votes)) * 100
-                    most_in_favour[s.name] = percent_in_favour
-                    most_against[s.name] = percent_against
+
+            if total_votes != 0:
+                most_in_favour[s.name] = (Decimal(in_favour) / Decimal(total_votes)) * 100
+                most_against[s.name] = (Decimal(against) / Decimal(total_votes)) * 100
 
             most_votes[s.name] = total_votes
 
