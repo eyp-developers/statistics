@@ -81,7 +81,7 @@
   </div>
 </div>
 
-<div id="edit-point" class="modal fade" tabindex="-1">
+<div id="edit-point" class="modal fade" tabindex="-1" role="dialog" aria-label="Edit point">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
@@ -89,7 +89,7 @@
           <input type="hidden" class="form-control" name="{{ point_form.pk.html_name }}" id="point_{{ point_form.pk.id_for_label }}" value="">
           <input type="hidden" class="form-control" name="{{ point_form.session.html_name }}" id="point_{{ point_form.session.id_for_label }}" maxlength=100 value="{{ session.pk }}">
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ point_form.committee.id_for_label }}">Commitee:</label>
+            <label class="control-label col-sm-2" for="point_{{ point_form.committee.id_for_label }}">Committee:</label>
             <div class="col-sm-10">
               <select class="form-control" name="{{ point_form.committee.html_name }}" id="point_{{ point_form.committee.id_for_label }}">
                 {% for id,text in debate_form.fields.active_debate.choices %}
@@ -99,7 +99,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ point_form.debate.id_for_label }}">Debate:</label>
+            <label class="control-label col-sm-2" for="point_{{ point_form.debate.id_for_label }}">Debate:</label>
             <div class="col-sm-10">
               <select class="form-control" name="{{ point_form.debate.html_name }}" id="point_{{ point_form.debate.id_for_label }}">
                 {% for id,text in debate_form.fields.active_debate.choices %}
@@ -109,7 +109,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ point_form.round_no.id_for_label }}">Round Number:</label>
+            <label class="control-label col-sm-2" for="point_{{ point_form.round_no.id_for_label }}">Round Number:</label>
             <div class="col-sm-10">
               <select class="form-control" name="{{ point_form.round_no.html_name }}" id="point_{{ point_form.round_no.id_for_label }}">
                 {% for id,text in round_form.fields.active_round.choices %}
@@ -119,7 +119,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ point_form.point_type.id_for_label }}">Point Type:</label>
+            <label class="control-label col-sm-2" for="point_{{ point_form.point_type.id_for_label }}">Point Type:</label>
             <div class="col-sm-10">
               <select class="form-control" name="{{ point_form.point_type.html_name }}" id="point_{{ point_form.point_type.id_for_label }}">
                 {% for id,text in point_form.fields.point_type.choices %}
@@ -172,7 +172,7 @@
   </div>
 </div>
 
-<div id="edit-content" class="modal fade" tabindex="-1">
+<div id="edit-content" class="modal fade" tabindex="-1" role="dialog" aria-label="Edit content point">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
@@ -181,7 +181,7 @@
           <input type="hidden" class="form-control" name="{{ content_form.pk.html_name }}" id="content_{{ content_form.pk.id_for_label }}" value="">
           <input type="hidden" class="form-control" name="{{ content_form.session.html_name }}" id="content_{{ content_form.session.id_for_label }}" maxlength=100 value="{{ session.pk }}">
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ content_form.committee.id_for_label }}">Commitee:</label>
+            <label class="control-label col-sm-2" for="content_{{ content_form.committee.id_for_label }}">Committee:</label>
             <div class="col-sm-10">
               <select class="form-control" name="{{ content_form.committee.html_name }}" id="content_{{ content_form.committee.id_for_label }}">
                 {% for id,text in debate_form.fields.active_debate.choices %}
@@ -191,7 +191,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ content_form.debate.id_for_label }}">Debate:</label>
+            <label class="control-label col-sm-2" for="content_{{ content_form.debate.id_for_label }}">Debate:</label>
             <div class="col-sm-10">
               <select class="form-control" name="{{ content_form.debate.html_name }}" id="content_{{ content_form.debate.id_for_label }}">
                 {% for id,text in debate_form.fields.active_debate.choices %}
@@ -201,7 +201,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ content_form.point_type.id_for_label }}">Point Type:</label>
+            <label class="control-label col-sm-2" for="content_{{ content_form.point_type.id_for_label }}">Point Type:</label>
             <div class="col-sm-10">
               <select class="form-control" name="{{ content_form.point_type.html_name }}" id="content_{{ content_form.point_type.id_for_label }}">
                 {% for id,text in content_form.fields.point_type.choices %}
@@ -211,7 +211,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ content_form.content.id_for_label }}">Content:</label>
+            <label class="control-label col-sm-2" for="content_{{ content_form.content.id_for_label }}">Content:</label>
             <div class="col-sm-10">
               <textarea class="form-control" name="{{ content_form.content.html_name }}" rows="5" id="content_{{ content_form.content.id_for_label }}"></textarea>
             </div>
@@ -255,7 +255,7 @@
   </div>
 </div>
 
-<div id="edit-vote" class="modal fade" tabindex="-1">
+<div id="edit-vote" class="modal fade" tabindex="-1" role="dialog" aria-label="Edit vote">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
@@ -264,7 +264,7 @@
           <input type="hidden" class="form-control" name="{{ vote_form.pk.html_name }}" id="vote_{{ vote_form.pk.id_for_label }}" value="">
           <input type="hidden" class="form-control" name="{{ vote_form.session.html_name }}" id="vote_id_session" maxlength=100 value="{{ session.pk }}">
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ vote_form.committee.id_for_label }}">Commitee:</label>
+            <label class="control-label col-sm-2" for="vote_{{ vote_form.committee.id_for_label }}">Committee:</label>
             <div class="col-sm-10">
               <select class="form-control" name="{{ vote_form.committee.html_name }}" id="vote_{{ vote_form.committee.id_for_label }}">
                 {% for id,text in debate_form.fields.active_debate.choices %}
@@ -274,7 +274,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ vote_form.debate.id_for_label }}">Debate:</label>
+            <label class="control-label col-sm-2" for="vote_{{ vote_form.debate.id_for_label }}">Debate:</label>
             <div class="col-sm-10">
               <select class="form-control" name="{{ vote_form.debate.html_name }}" id="vote_{{ vote_form.debate.id_for_label }}">
                 {% for id,text in debate_form.fields.active_debate.choices %}
@@ -284,25 +284,25 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ vote_form.in_favour.id_for_label }}">In Favour:</label>
+            <label class="control-label col-sm-2" for="vote_{{ vote_form.in_favour.id_for_label }}">In Favour:</label>
             <div class="col-sm-10">
               <input type="number" min="0" max="50" class="form-control" name="{{ vote_form.in_favour.html_name }}" id="vote_{{ vote_form.in_favour.id_for_label }}" value="">
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ vote_form.against.id_for_label }}">Against:</label>
+            <label class="control-label col-sm-2" for="vote_{{ vote_form.against.id_for_label }}">Against:</label>
             <div class="col-sm-10">
               <input type="number" min="0" max="50" class="form-control" name="{{ vote_form.against.html_name }}" id="vote_{{ vote_form.against.id_for_label }}" value="">
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ vote_form.abstentions.id_for_label }}">Abstentions:</label>
+            <label class="control-label col-sm-2" for="vote_{{ vote_form.abstentions.id_for_label }}">Abstentions:</label>
             <div class="col-sm-10">
               <input type="number" min="0" max="50" class="form-control" name="{{ vote_form.abstentions.html_name }}" id="vote_{{ vote_form.abstentions.id_for_label }}" value="">
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-sm-2" for="{{ vote_form.absent.id_for_label }}">Absent:</label>
+            <label class="control-label col-sm-2" for="vote_{{ vote_form.absent.id_for_label }}">Absent:</label>
             <div class="col-sm-10">
               <input type="number" min="0" max="50" class="form-control" name="{{ vote_form.absent.html_name }}" id="vote_{{ vote_form.absent.id_for_label }}" value="">
             </div>
@@ -310,7 +310,7 @@
           <div class="form-group">
             <label class="control-label col-sm-2" >Total:</label>
             <div class="col-sm-10">
-              <h5 id="vote-total"><h5>
+              <h5 id="vote-total"></h5>
               </div>
             </div>
             <div class="form-group">

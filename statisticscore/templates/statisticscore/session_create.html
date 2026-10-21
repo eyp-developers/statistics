@@ -39,7 +39,12 @@
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="form-group {% if field.errors %}has-error{% endif %}">
-                        <label class="control-label col-sm-2" for="{{ field.id_for_label }}">{{ field.label }} {{ field.errors }}</label>
+                        {% if field.field.widget|klass == "CheckboxInput" %}
+                            {# The toggle below carries the label; a second one here would give the checkbox a doubled name. #}
+                            <div class="control-label col-sm-2">{{ field.errors }}</div>
+                        {% else %}
+                            <label class="control-label col-sm-2" for="{{ field.id_for_label }}">{{ field.label }} {{ field.errors }}</label>
+                        {% endif %}
                         <div class="col-sm-10">
                             {% if field.field.widget|klass == "CheckboxInput" %}
                                 <div class="togglebutton">

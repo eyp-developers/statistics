@@ -18,6 +18,7 @@ from django.urls import include, re_path
 from statisticscore.admin import admin_site
 
 urlpatterns = [
+    re_path(r'^__e2e__/', include('statisticscore.e2e.urls')),
     re_path(r'^', include('statisticscore.urls')),
     re_path(r'^admin/', admin_site.urls),
 ]

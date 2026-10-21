@@ -43,11 +43,11 @@
               <label class="control-label col-sm-2" for="inputLarge"></label>
               <div class="col-sm-8">
                 <input type="hidden" name="subtopic_pk[]" id="subtopic-pk-2" value="">
-                <input class="form-control input-sm" type="text" name="subtopic[]" id="subtopic-2" value="">
+                <input class="form-control input-sm" type="text" name="subtopic[]" id="subtopic-2" value="" aria-label="Subtopic">
               </div>
               <div class="col-sm-2">
                 <span class="input-group-btn">
-                  <button class="btn btn-primary btn-raised btn-sm" type="button" onclick="deleteInput('subtopic-div-1')">Delete</button>
+                  <button class="btn btn-primary btn-raised btn-sm" type="button" onclick="deleteInput('subtopic-div-1')" aria-label="Delete subtopic">Delete</button>
                 </span>
               </div>
             </div>
@@ -89,7 +89,7 @@
           <td>{{ committee.name }}</td>
           <td>{{ committee.topic_text }}</td>
           <td>{% if subtopics %}{% for subtopic in subtopics %}{% if subtopic.committee == committee %}{{ subtopic.text }}, {% endif %}{% endfor %}{% endif %}</td>
-          <td><a href="javascript:void(0)" class="btn btn-primary btn-raised btn-xs" onclick="editCommittee('{{ committee.pk }}')" ><i class="material-icons" style="font-size: 18px">mode_edit</i></a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-raised btn-xs" onclick="deleteCommittee('{{ committee.pk }}')" ><i class="material-icons" style="font-size: 18px">delete</i></a></td>
+          <td><a href="javascript:void(0)" class="btn btn-primary btn-raised btn-xs" onclick="editCommittee('{{ committee.pk }}')" aria-label="Edit {{ committee.name }}"><i class="material-icons" style="font-size: 18px">mode_edit</i></a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-raised btn-xs" onclick="deleteCommittee('{{ committee.pk }}')" aria-label="Delete {{ committee.name }}"><i class="material-icons" style="font-size: 18px">delete</i></a></td>
         </tr>
         {% endfor %}
         {% else %}

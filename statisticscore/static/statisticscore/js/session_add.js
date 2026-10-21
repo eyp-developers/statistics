@@ -8,11 +8,11 @@ function addInput(divName, subtopicValue, subtopicId){
   newdiv.innerHTML = '<label class="control-label col-sm-2" for="inputLarge"></label>' +
     '<div class="col-sm-8">' +
     '<input type="hidden" name="subtopic_pk[]" id="subtopic-pk-'+ counter_subtopics +'" value="'+ subtopicId +'">' +
-    '<input class="form-control input-sm" type="text" name="subtopic[]" id="subtopic-'+ counter_subtopics +'" value="'+ subtopicValue +'">' +
+    '<input class="form-control input-sm" type="text" name="subtopic[]" id="subtopic-'+ counter_subtopics +'" value="'+ subtopicValue +'" aria-label="Subtopic">' +
     '</div>' +
     '<div class="col-sm-2">' +
     '<span class="input-group-btn">' +
-    '<button class="btn btn-primary btn-material-indigo-800 btn-sm" type="button" onclick="deleteInput(' + "'subtopic-div-" + counter_subtopics + "'" + ')">Delete</button>' +
+    '<button class="btn btn-primary btn-material-indigo-800 btn-sm" type="button" aria-label="Delete subtopic" onclick="deleteInput(' + "'subtopic-div-" + counter_subtopics + "'" + ')">Delete</button>' +
     '</span>' +
     '</div>';
   document.getElementById(divName).appendChild(newdiv);
@@ -87,7 +87,7 @@ function submit_committee() {
             name.innerHTML = $('#id_name').val();
             topic.innerHTML = $('#id_topic').val();
             subtopics.innerHTML = json.subtopics;
-            actions.innerHTML = '<a href="javascript:void(0)" class="btn btn-primary btn-material-indigo-800 btn-xs" onclick="editCommittee(' + "'" + json.pk + "'" + ')" ><span class="mdi-content-create" style="font-size: 10px; margin-right: 4px;"></span>Edit</a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-xs" onclick="deleteCommittee(' + "'" + json.pk + "'" + ')" >Delete</a>';
+            actions.innerHTML = '<a href="javascript:void(0)" class="btn btn-primary btn-material-indigo-800 btn-xs" aria-label="Edit ' + $('#id_name').val() + '" onclick="editCommittee(' + "'" + json.pk + "'" + ')" ><span class="mdi-content-create" style="font-size: 10px; margin-right: 4px;"></span>Edit</a><a href="javascript:void(0)" class="btn btn-primary btn-danger btn-xs" aria-label="Delete ' + $('#id_name').val() + '" onclick="deleteCommittee(' + "'" + json.pk + "'" + ')" >Delete</a>';
             $(row).css('display', 'none');
             $(row).fadeIn("slow");
 

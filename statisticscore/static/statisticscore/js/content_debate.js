@@ -26,9 +26,9 @@ function requestContentPointData() {
           committee.innerHTML = point.committee_by;
           content.innerHTML = point.contentpoint;
           if (point.point_type === 'P') {
-            type.innerHTML = '<img src="' + point_img + '" height="30" >';
+            type.innerHTML = '<img src="' + point_img + '" height="30" alt="Point">';
           } else {
-            type.innerHTML = '<img src="' + dr_img + '" height="30" >';
+            type.innerHTML = '<img src="' + dr_img + '" height="30" alt="Direct Response">';
           }
           $(row).css('display', 'none');
           $(committee).addClass(point.committee_color);
@@ -60,9 +60,9 @@ function requestMoreContent() {
           committee.innerHTML = point.committee_by;
           content.innerHTML = point.contentpoint;
           if (point.point_type === 'P') {
-            type.innerHTML = '<img src="' + point_img + '" height="30" >';
+            type.innerHTML = '<img src="' + point_img + '" height="30" alt="Point">';
           } else {
-            type.innerHTML = '<img src="' + dr_img + '" height="30" >';
+            type.innerHTML = '<img src="' + dr_img + '" height="30" alt="Direct Response">';
           }
           $(row).css('display', 'none');
           $(committee).addClass(point.committee_color);
@@ -95,9 +95,9 @@ function requestNewContent() {
           committee.innerHTML = point.committee_by;
           content.innerHTML = point.contentpoint;
           if (point.point_type === 'P') {
-            type.innerHTML = '<img src="' + point_img + '" height="30" >';
+            type.innerHTML = '<img src="' + point_img + '" height="30" alt="Point">';
           } else {
-            type.innerHTML = '<img src="' + dr_img + '" height="30" >';
+            type.innerHTML = '<img src="' + dr_img + '" height="30" alt="Direct Response">';
           }
           $(row).css('display', 'none');
           $(committee).addClass(point.committee_color);
