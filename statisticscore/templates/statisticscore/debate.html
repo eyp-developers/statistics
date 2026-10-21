@@ -1,11 +1,12 @@
 {% extends 'statisticscore/base.html' %}
 
 {% load static %}
+{% load image_extras %}
 
 {% block page_title %}Debate: {{ committee.name }}{% endblock %}
 
 {% block jumbotron %}
-    <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.picture_large_fast.url }}') no-repeat center/cover;">
+    <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.picture_large_fast|image_url }}') no-repeat center/cover;">
         <h1 style="text-align: center; font-size: 60px; color: white;">{{ committee.name }}</h1>
         <h3 style="text-align: center; color: white;">{{ committee.topic_text }}</h3>
 

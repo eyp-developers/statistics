@@ -1,11 +1,12 @@
 {% extends 'statisticscore/base.html' %}
 
 {% load static %}
+{% load image_extras %}
 
 {% block page_title %}{{ session.name }}{% endblock %}
 
 {% block jumbotron %}
-    <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.picture_large_fast.url }}') no-repeat center/cover;">
+    <div class="container-fluid top-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ session.picture_large_fast|image_url }}') no-repeat center/cover;">
         <h1 class="session-name white">{{ session.name }}</h1>
         <h3 class="session-description white">{{ session.description }}</h3>
         <h3 class="session-date white">{{ session.start_date|date:"D, j N Y" }} – {{ session.end_date|date:"D, j N Y" }}</h3>
