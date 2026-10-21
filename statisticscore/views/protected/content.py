@@ -41,7 +41,10 @@ def content(request, session_id, committee_id=None):
                                         )
             contentpoint.save()
             messages.add_message(request, messages.SUCCESS, 'Content Point Successfully Submitted')
-            return HttpResponseRedirect(reverse('statisticscore:content', args=[session_id, committee_id]))
+            if all_form:
+                return HttpResponseRedirect(reverse('statisticscore:content_all', args=[session_id]))
+            else:
+                return HttpResponseRedirect(reverse('statisticscore:content', args=[session_id, committee_id]))
     else:
         if all_form:
             form = ContentForm({'session': session.name, 'committee': '', 'debate': active})

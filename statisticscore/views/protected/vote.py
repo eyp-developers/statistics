@@ -50,7 +50,10 @@ def vote(request, session_id, committee_id=None):
             vote.save()
             # Then send the user a success message.
             messages.add_message(request, messages.SUCCESS, "Your Committee's Votes were successfully submitted")
-            return HttpResponseRedirect(reverse('statisticscore:vote', args=[session_id, committee_id]))
+            if all_form:
+                return HttpResponseRedirect(reverse('statisticscore:vote_all', args=[session_id]))
+            else:
+                return HttpResponseRedirect(reverse('statisticscore:vote', args=[session_id, committee_id]))
 
     else:
         # Otherwise, if the user isn't trying to submit anything, set up a nice new form for the user.

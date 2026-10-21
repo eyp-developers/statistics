@@ -27,9 +27,6 @@ test.describe('voting', () => {
   });
 
   test('the all-committees vote form saves and returns to the form', async ({ page, createSession }) => {
-    // Bug 3: the view redirects to the per-committee URL with no committee (views/protected/vote.py:53), so the
-    // vote is saved but the chair gets a 500 and is likely to submit again, counting the votes twice.
-    test.fail();
     const session = await createSession({ ...debateSetup, mode: 'JF' });
 
     await openAsChair(page, session, 'vote/all/');
@@ -37,6 +34,13 @@ test.describe('voting', () => {
     await fillVotes(page, { inFavour: 8, against: 5, abstentions: 2, absent: 1 });
     await page.getByRole('button', { name: 'Submit' }).click();
     await expect(page.getByText("Your Committee's Votes were successfully submitted")).toBeVisible();
+    await expect(page).toHaveURL(`/session/${session.id}/vote/all/`);
+
+    await openDebatePage(page, session);
+    await expect(page.getByRole('heading', { name: 'Votes Counted: 16' })).toBeVisible(liveUpdate);
+    await expect(page.getByRole('heading', { name: 'Committees Counted: 1/3' })).toBeVisible(liveUpdate);
+    await expect(page.getByRole('heading', { name: 'In Favour: 8' })).toBeVisible(liveUpdate);
+    await expect(page.getByRole('heading', { name: 'Against: 5' })).toBeVisible(liveUpdate);
   });
 
   test('with voting turned off, the voting sections are not shown', async ({ page, createSession }) => {

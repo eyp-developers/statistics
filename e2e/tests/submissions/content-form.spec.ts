@@ -25,16 +25,20 @@ test.describe('content form', () => {
     page,
     createSession,
   }) => {
-    // Bug: the view redirects to the per-committee URL with no committee (views/protected/content.py:44),
-    // so the point is saved but the chair gets a 500 instead of the form. Same cause as the vote form bug.
-    test.fail();
     const session = await createSession({ ...debateSetup, mode: 'C' });
+    const content = 'Energy prices matter';
 
     await openAsChair(page, session, 'content/all/');
     await page.getByLabel('Committee').selectOption('ITRE');
-    await page.getByLabel('Content').fill('Energy prices matter');
+    await page.getByLabel('Content').fill(content);
     await page.getByRole('button', { name: 'Submit' }).click();
     await expect(page.getByText('Content Point Successfully Submitted')).toBeVisible();
+    await expect(page).toHaveURL(`/session/${session.id}/content/all/`);
+
+    await openDebatePage(page, session);
+    const row = page.getByRole('row').filter({ hasText: content });
+    await expect(row).toBeVisible(liveUpdate);
+    await expect(row.getByRole('cell', { name: 'ITRE', exact: true })).toBeVisible();
   });
 
   test('Split Form: points and content submitted separately both appear on the debate page', async ({
