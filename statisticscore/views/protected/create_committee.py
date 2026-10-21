@@ -1,13 +1,21 @@
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from statisticscore.models import Session, Committee, SubTopic, Topic, StatisticsTopicPlace
 from statisticscore.forms.committee import CommitteeForm
 from helpers import check_authorization_and_render
 
 
-def delete_committee(request):
-    committee = Committee.objects.get(pk=request.POST.get('pk'))
+def forbidden(msg):
+    return JsonResponse({'msg': msg}, status=403)
+
+
+def can_edit_committees(user, session):
+    return user == session.admin_user or user.is_superuser
+
+
+def delete_committee(request, committees):
+    committee = committees.get(pk=request.POST.get('pk'))
 
     committee.delete()
 
@@ -128,8 +136,15 @@ def create_committee(request, session_id):
     committees = Committee.objects.filter(session=session).order_by('name')
     session_subtopics = SubTopic.objects.filter(session=session)
     if request.method == 'POST':
-        if request.POST.get('delete') == 'true':
-            return delete_committee(request)
+        if not can_edit_committees(request.user, session):
+            return forbidden('You need to log in as the ' + session.name + ' admin to change its committees.')
+        # Saving with an empty pk creates a new committee; any other pk must be one of this session's committees.
+        delete = request.POST.get('delete') == 'true'
+        pk = request.POST.get('pk', '')
+        if (delete or pk != '') and not (pk.isdigit() and committees.filter(pk=pk).exists()):
+            return forbidden('This committee does not belong to ' + session.name + '.')
+        if delete:
+            return delete_committee(request, committees)
         else:
             return edit_committee(request, session, committees)
     else:

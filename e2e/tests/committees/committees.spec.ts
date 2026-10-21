@@ -81,3 +81,25 @@ test.describe('managing committees', () => {
     await expect(page.getByRole('row').filter({ hasText: 'TOOLONGNAME' })).toHaveCount(0);
   });
 });
+
+test.describe('committee permissions', () => {
+  test("another session's admin cannot delete a committee", async ({ page, createSession }) => {
+    const session = await createSession({ committees: [{ name: 'ENVI' }] });
+    const otherSession = await createSession();
+    await loginAs(page, otherSession.id, 'admin');
+    // The other session's committees page can't be opened, so post the delete the way that page's script does,
+    // with the CSRF token the admin's own committees page hands out.
+    await page.goto(`/committees/${otherSession.id}/`);
+    const csrfToken = (await page.context().cookies()).find((cookie) => cookie.name === 'csrftoken')?.value ?? '';
+
+    const response = await page.request.post(`/committees/${session.id}/`, {
+      headers: { 'X-CSRFToken': csrfToken },
+      form: { delete: 'true', pk: session.committees[0].id },
+    });
+    expect(response.status()).toBe(403);
+
+    await loginAs(page, session.id, 'admin');
+    await page.goto(`/committees/${session.id}/`);
+    await expect(page.getByRole('row').filter({ hasText: 'ENVI' })).toBeVisible();
+  });
+});
