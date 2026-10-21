@@ -1,3 +1,4 @@
+import { addSessionData } from '../../support/e2e-api/sessions';
 import { expect, test } from '../../support/fixtures';
 
 test.describe('public pages', () => {
@@ -19,10 +20,26 @@ test.describe('public pages', () => {
     await expect(page.getByRole('heading', { level: 3, name: /^\d{4}-\d{2}-\d{2}$/ }).first()).toBeVisible();
   });
 
-  test('high scores page loads', async ({ page }) => {
-    const response = await page.goto('/highscores/');
-    expect(response?.status()).toBe(200);
-    await expect(page).toHaveTitle(/GA Statistics/);
+  test('high scores rank sessions by total votes and leave out hidden ones', async ({ page, createSession }) => {
+    const committees = [{ name: 'ENVI' }, { name: 'AFCO' }];
+    const busy = await createSession({ visible: true, committees, active_debate: 'ENVI' });
+    const hidden = await createSession({ visible: false, committees, active_debate: 'ENVI' });
+    // Far more votes than any other test creates, so the visible session makes the top 5.
+    for (const session of [busy, hidden]) {
+      await addSessionData(session.id, {
+        points: [{ committee: 'AFCO' }],
+        votes: [{ committee: 'AFCO', in_favour: 20000, against: 12000 }],
+      });
+    }
+
+    await page.goto('/highscores/');
+    const mostVotes = page.getByRole('table').filter({ has: page.getByRole('columnheader', { name: 'Total Votes' }) });
+    await expect(mostVotes.getByRole('row', { name: busy.name })).toContainText('32000');
+    await expect(page.getByText(hidden.name)).toHaveCount(0);
+
+    const rankedRows = await mostVotes.getByRole('row').filter({ has: page.getByRole('cell') }).all();
+    const totals = await Promise.all(rankedRows.map(async (row) => Number(await row.getByRole('cell').last().textContent())));
+    expect(totals, 'ranked by total votes, highest first').toEqual([...totals].sort((a, b) => b - a));
   });
 
   test('topics page lists the topics of committees and filters them by text', async ({ page, createSession }) => {

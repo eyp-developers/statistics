@@ -3,6 +3,7 @@ import { closeDatePickers } from '../../support/datepicker';
 import { loginAs } from '../../support/e2e-api/login';
 import { uniqueSessionName, type CreatedSession } from '../../support/e2e-api/sessions';
 import { expect, test } from '../../support/fixtures';
+import { findSessionCard } from '../../support/home-page';
 
 async function openEditPage(page: Page, session: CreatedSession) {
   await loginAs(page, session.id, 'admin');
@@ -17,13 +18,8 @@ async function save(page: Page) {
 
 test.describe('editing a session', () => {
   test('making a session visible puts it on the home page', async ({ page, createSession }) => {
-    // The home page lists sessions newest first, 12 per page. A start date far in the future keeps this one
-    // on page 1 while other tests create sessions in parallel.
-    const session = await createSession({ start_date: '2099-11-01', end_date: '2099-11-10' });
-    const sessionCard = page.getByRole('heading', { name: session.name, exact: true });
-
-    await page.goto('/');
-    await expect(sessionCard).toBeHidden();
+    const session = await createSession();
+    expect(await findSessionCard(page, session.name), 'hidden sessions are not listed').toBeNull();
 
     await openEditPage(page, session);
     // The styled toggle hides the real checkbox, so click its label like a user would.
@@ -33,8 +29,7 @@ test.describe('editing a session', () => {
     await expect(visible).toBeChecked();
     await save(page);
 
-    await page.goto('/');
-    await expect(sessionCard).toBeVisible();
+    expect(await findSessionCard(page, session.name), 'visible sessions are listed').not.toBeNull();
   });
 
   test('saves changed details', async ({ page, createSession }) => {

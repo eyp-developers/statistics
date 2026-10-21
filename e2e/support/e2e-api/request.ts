@@ -5,11 +5,15 @@ export const tokenHeader = { 'X-E2E-Token': env.token };
 /** Calls a /__e2e__/ endpoint on the target and returns its JSON (or undefined for 204). */
 export async function e2eRequest<T = unknown>(method: string, path: string, body?: unknown): Promise<T> {
   const url = `${env.baseURL}/__e2e__/${path}`;
-  const response = await fetch(url, {
-    method,
-    headers: { ...tokenHeader, 'Content-Type': 'application/json' },
-    body: body === undefined ? undefined : JSON.stringify(body),
-  });
+  const send = () =>
+    fetch(url, {
+      method,
+      headers: { ...tokenHeader, 'Content-Type': 'application/json' },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+  // fetch rejects (rather than returning a response) when the connection drops, e.g. when a server closes an idle
+  // keep-alive connection just as it's reused. The request never got an answer, so one retry is safe.
+  const response = await send().catch(() => send());
 
   // The endpoints answer 404 for everything when they are switched off or the token doesn't match.
   if (response.status === 404) {

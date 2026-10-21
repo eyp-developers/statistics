@@ -3,6 +3,7 @@ import type { Page } from '@playwright/test';
 import { setSessionState, uniqueSessionName } from '../../support/e2e-api/sessions';
 import { closeDatePickers } from '../../support/datepicker';
 import { expect, test } from '../../support/fixtures';
+import { findSessionCard } from '../../support/home-page';
 
 const picturePath = path.join(import.meta.dirname, '../../assets/session.jpg');
 
@@ -51,24 +52,17 @@ test.describe('creating a session', () => {
 
   test('new sessions are hidden from the home page until made visible', async ({ page, cleanUpSession }) => {
     const name = uniqueSessionName();
-    // The home page lists sessions newest first, 12 per page. A start date far in the future keeps this one
-    // on page 1 while other tests create sessions in parallel.
-    await fillCreateSessionForm(page, name, { start: '2099-12-01', end: '2099-12-10' });
+    await fillCreateSessionForm(page, name);
     await page.getByRole('button', { name: 'Create Session' }).click();
 
     const sessionId = await sessionIdFromOverview(page);
     cleanUpSession(sessionId);
     await expect(page.getByText("Your session isn't visible to the public yet.")).toBeVisible();
+    expect(await findSessionCard(page, name), 'new sessions are not listed').toBeNull();
 
-    // Each session on the home page is a card headed by the session's name.
-    const sessionCard = page.getByRole('heading', { name, exact: true });
-    await page.goto('/');
-    await expect(sessionCard).toBeHidden();
-
-    // Making it visible shows the card, which also proves the check above looked in the right place.
+    // Making it visible lists it, which also proves the search above looked in the right place.
     await setSessionState(sessionId, { visible: true });
-    await page.reload();
-    await expect(sessionCard).toBeVisible();
+    expect(await findSessionCard(page, name), 'visible sessions are listed').not.toBeNull();
   });
 
   test('rejects a name that is already taken, even with different spacing or case', async ({ page, createSession }) => {

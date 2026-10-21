@@ -8,7 +8,6 @@ from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
-from django.core.management import call_command
 from django.db import transaction
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.utils import timezone
@@ -98,11 +97,6 @@ def session_state_json(session):
         'voting_enabled': session.voting_enabled,
         'gender_enabled': session.gender_enabled,
     }
-
-
-@e2e_endpoint('GET')
-def health(request):
-    return JsonResponse({'ok': True, 'reset_allowed': getattr(settings, 'E2E_ALLOW_RESET', False)})
 
 
 @e2e_endpoint('POST')
@@ -259,11 +253,3 @@ def login_as(request):
 
     login(request, user, backend='django.contrib.auth.backends.ModelBackend')
     return JsonResponse({'username': user.username})
-
-
-@e2e_endpoint('POST')
-def reset(request):
-    if not getattr(settings, 'E2E_ALLOW_RESET', False):
-        return JsonResponse({'error': 'Reset is not allowed on this server'}, status=403)
-    call_command('flush', interactive=False, verbosity=0)
-    return HttpResponse(status=204)

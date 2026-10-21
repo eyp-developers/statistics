@@ -15,7 +15,6 @@ RAVEN_CONFIG = {'dsn': None}
 
 E2E_ENDPOINTS_ENABLED = True
 E2E_TOKEN = os.environ.get('E2E_TOKEN', 'local-e2e-token')
-E2E_ALLOW_RESET = True
 
 if not os.environ.get('DATABASE_URL'):
     DATABASES['default'] = {

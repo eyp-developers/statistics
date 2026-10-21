@@ -35,6 +35,7 @@
       {% endfor %}
     {% endif %}
     {% if latest_sessions_list %}
+      <section aria-label="Sessions">
       {% for session in latest_sessions_list %}
         <div class="home-header" style="background: #253746 url('{{ session.picture_thumbnail.url }}') no-repeat center/cover;">
           <a href="{% url 'statisticscore:session' session.pk %}" class="no-decoration white white-on-hover">
@@ -44,6 +45,7 @@
             <span class="session-type" style="background-color: {% if session.session_type == 'RS' %}#618ECA{% elif session.session_type == 'NS' %}#558B2F{% elif session.session_type == 'IF' %}#253746{% elif session.session_type == 'IS' %}#FF5722{% endif %};">{{ session.session_type }}</span>
         </div><!--/.home-header well well-lg -->
     {% endfor %}
+      </section>
 
     <div class="container row">
         {% if latest_sessions_list.has_previous %}

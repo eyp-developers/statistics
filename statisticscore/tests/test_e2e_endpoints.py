@@ -10,12 +10,16 @@ from ..models import ActiveDebate, ActiveRound, Committee, Point, Session, SubTo
 TOKEN = 'test-token'
 
 
-@override_settings(E2E_ENDPOINTS_ENABLED=True, E2E_TOKEN=TOKEN, E2E_ALLOW_RESET=False)
+@override_settings(E2E_ENDPOINTS_ENABLED=True, E2E_TOKEN=TOKEN)
 class E2EEndpointTests(TestCase):
 
     def post(self, name, data=None, token=TOKEN, args=None):
         return self.client.post(reverse(name, args=args), json.dumps(data or {}),
                                 content_type='application/json', HTTP_X_E2E_TOKEN=token)
+
+    def delete_missing_session(self, **headers):
+        # Deleting a session that doesn't exist answers 204, so this checks only the flag and token.
+        return self.client.delete(reverse('e2e:delete_session', args=[999999]), **headers)
 
     def create_session(self, **data):
         data.setdefault('name', 'E2E Berlin 2026')
@@ -28,20 +32,18 @@ class E2EEndpointTests(TestCase):
         """
         With the setting off (the default) the endpoints must look like they don't exist, even with the right token.
         """
-        response = self.client.get(reverse('e2e:health'), HTTP_X_E2E_TOKEN=TOKEN)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(self.delete_missing_session(HTTP_X_E2E_TOKEN=TOKEN).status_code, 404)
         self.assertEqual(self.post('e2e:create_session', {'name': 'Nope'}).status_code, 404)
         self.assertFalse(Session.objects.exists())
 
     def test_wrong_or_missing_token_is_rejected(self):
-        self.assertEqual(self.client.get(reverse('e2e:health')).status_code, 404)
-        self.assertEqual(self.client.get(reverse('e2e:health'), HTTP_X_E2E_TOKEN='wrong').status_code, 404)
-        self.assertEqual(self.client.get(reverse('e2e:health'), HTTP_X_E2E_TOKEN=TOKEN).status_code, 200)
+        self.assertEqual(self.delete_missing_session().status_code, 404)
+        self.assertEqual(self.delete_missing_session(HTTP_X_E2E_TOKEN='wrong').status_code, 404)
+        self.assertEqual(self.delete_missing_session(HTTP_X_E2E_TOKEN=TOKEN).status_code, 204)
 
     @override_settings(E2E_TOKEN='')
     def test_empty_token_setting_never_matches(self):
-        response = self.client.get(reverse('e2e:health'), HTTP_X_E2E_TOKEN='')
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(self.delete_missing_session(HTTP_X_E2E_TOKEN='').status_code, 404)
 
     def test_create_session_with_committees(self):
         data = self.create_session(mode='C', visible=True, active_debate='ENVI', active_round=2, committees=[
@@ -115,12 +117,3 @@ class E2EEndpointTests(TestCase):
         # Deleting again is fine, so test cleanup can always run.
         response = self.client.delete(reverse('e2e:delete_session', args=[data['id']]), HTTP_X_E2E_TOKEN=TOKEN)
         self.assertEqual(response.status_code, 204)
-
-    def test_reset_needs_its_own_setting(self):
-        self.create_session()
-        self.assertEqual(self.post('e2e:reset').status_code, 403)
-        self.assertTrue(Session.objects.exists())
-
-        with self.settings(E2E_ALLOW_RESET=True):
-            self.assertEqual(self.post('e2e:reset').status_code, 204)
-        self.assertFalse(Session.objects.exists())

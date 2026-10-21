@@ -22,9 +22,11 @@ fi
 
 "$PYTHON" manage.py collectstatic --no-input -v 0
 
+# Keep-alive above Node fetch's 4 s, so the test runner never reuses a connection gunicorn has just closed.
 exec "$PYTHON" -m gunicorn eypstats.wsgi \
   --bind "127.0.0.1:$PORT" \
   --workers "${E2E_SERVER_WORKERS:-2}" \
   --threads "${E2E_SERVER_THREADS:-4}" \
+  --keep-alive 10 \
   --access-logfile - \
   --log-level warning

@@ -146,7 +146,6 @@ GOOGLE_ANALYTICS = ""
 # only on preview deployments that the Playwright suite runs against.
 E2E_ENDPOINTS_ENABLED = os.environ.get('E2E_ENDPOINTS_ENABLED', '').lower() == 'true'
 E2E_TOKEN = os.environ.get('E2E_TOKEN', '')
-E2E_ALLOW_RESET = os.environ.get('E2E_ALLOW_RESET', '').lower() == 'true'
 
 RAVEN_CONFIG = {
     'dsn': 'https://e1293cf510704122a3ee1c9a35477c7a:eeabde9a71f54a3a898295146aab5520@sentry.io/156485',

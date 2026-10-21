@@ -18,11 +18,8 @@ Then, from `e2e/`:
 npm test                      # starts a local server on SQLite with a fresh database, runs everything
 npx playwright test --workers=8
 npm run test:ui               # Playwright UI mode
-npx playwright test --project parallel --repeat-each=3 --workers=8   # stability check
+npx playwright test --repeat-each=3 --workers=8   # stability check
 ```
-
-Playwright never repeats a project that another project depends on, and `fresh-db` depends on `parallel`, so
-`--repeat-each` only works with `--project parallel`.
 
 With no `E2E_BASE_URL`, Playwright runs `start-server.sh`. It recreates the database, migrates, collects static files
 and starts gunicorn on port 8765 with `eypstats.e2e` settings. SQLite is the default. Set `DATABASE_URL` to use
@@ -37,15 +34,13 @@ E2E_BASE_URL=https://preview.example.com E2E_TOKEN=... npm test
 This also works for a local server you keep running between runs, which is handy while writing tests:
 
 ```bash
-e2e/start-server.sh                                          # from the repository root, in one terminal
-E2E_BASE_URL=http://127.0.0.1:8765 npx playwright test --project parallel --no-deps   # in e2e/
+e2e/start-server.sh                                    # from the repository root, in one terminal
+E2E_BASE_URL=http://127.0.0.1:8765 npx playwright test # in e2e/
 ```
 
-`--project parallel --no-deps` leaves out the `@fresh-db` tests, which would empty that server's database.
-
-The target must run with `E2E_ENDPOINTS_ENABLED=true` and the same `E2E_TOKEN`. `E2E_ALLOW_RESET=true` is only for
-throwaway targets; without it the `@fresh-db` tests are skipped. Tests delete the sessions they create; set
-`E2E_KEEP_DATA=1` to keep them for debugging.
+The target must run with `E2E_ENDPOINTS_ENABLED=true` and the same `E2E_TOKEN`. Tests only touch the sessions they
+create and delete them afterwards, so any number of runs can share one server. Set `E2E_KEEP_DATA=1` to keep the
+sessions for debugging.
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
@@ -61,9 +56,9 @@ Tests are grouped by domain, not priority.
 
 ```
 tests/<domain>/*.spec.ts   e.g. tests/sessions/create-session.spec.ts
-support/e2e-api/           plain functions calling /__e2e__/: sessions.ts, login.ts, database.ts
-support/fixtures.ts        test + expect with createSession, cleanUpSession and freshDatabase
-support/                   env, small UI helpers (datepicker.ts)
+support/e2e-api/           plain functions calling /__e2e__/: sessions.ts, login.ts
+support/fixtures.ts        test + expect with createSession and cleanUpSession
+support/                   env, small UI helpers (datepicker.ts, home-page.ts), known-bugs.ts
 assets/                    files tests upload
 ```
 
@@ -72,9 +67,11 @@ assets/                    files tests upload
 - The functions in `support/e2e-api/` (`createSession`, `addSessionData`, `setSessionState`, `loginAs`, ...) are
   plain `fetch` calls and can be used directly.
 - Set up data through the endpoints, not the UI, unless the UI flow is what the test is about.
-- Give every session a unique name (`uniqueSessionName()`); never assume the database is empty.
-- Tests that need an empty database get the `@fresh-db` tag and the `freshDatabase` fixture. They run last, on one
-  worker, in the `fresh-db` project, so a failure there never hides the rest of the suite.
+- Give every session a unique name (`uniqueSessionName()`). Never assume anything about data the test didn't
+  create: other tests run against the same server at the same time. Check properties of your own data instead
+  (e.g. "my sessions are listed newest first", not "page 1 shows exactly these 12"). `findSessionCard()` walks the
+  home page's pages to find a session.
+- Known bugs are pinned with `test.fail` and a comment naming the bug, so they start reporting once fixed.
 - Locate things the way a user finds them: `getByRole`, `getByLabel`, `getByText`. When the page's markup makes
   that impossible, fix the markup (add a label, close a tag, add an accessible name) rather than reaching for CSS
   selectors. No page objects for now; a small helper function in the spec file is enough.
@@ -84,10 +81,6 @@ assets/                    files tests upload
 Defined in `statisticscore/e2e/`. Every endpoint answers 404 unless `E2E_ENDPOINTS_ENABLED` is true and the request
 carries a matching `X-E2E-Token` header. Requests and responses are JSON. A rewritten backend has to keep this
 contract.
-
-### `GET /__e2e__/`
-
-Health check. `{"ok": true, "reset_allowed": false}`
 
 ### `POST /__e2e__/sessions/` → 201
 
@@ -159,7 +152,3 @@ Deletes the session, both its accounts and all its data. Also 204 if it's alread
 
 `{"session_id": 12, "role": "admin" | "submission"}` or `{"username": "..."}`. Logs the caller in (sets the session
 cookie) and returns `{"username": "..."}`.
-
-### `POST /__e2e__/reset/` → 204
-
-Empties the database. 403 unless `E2E_ALLOW_RESET` is true.

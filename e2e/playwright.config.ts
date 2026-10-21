@@ -13,29 +13,14 @@ export default defineConfig({
   workers: process.env.CI ? 4 : undefined,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : [['list'], ['html', { open: 'never' }]],
 
+  // Every test sets up its own data and never assumes anything about the rest of the database, so all of them
+  // run in parallel against one server, local or shared.
   use: {
+    ...devices['Desktop Chrome'],
     baseURL: env.baseURL,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
-
-  projects: [
-    {
-      name: 'parallel',
-      grepInvert: /@fresh-db/,
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      // Tests that look at the whole site (empty home page, pagination, high scores). Each one empties the
-      // database first, so they run after everything else, one at a time, and are skipped on targets that
-      // don't allow a reset.
-      name: 'fresh-db',
-      grep: /@fresh-db/,
-      dependencies: ['parallel'],
-      workers: 1,
-      use: { ...devices['Desktop Chrome'] },
-    },
-  ],
 
   webServer: env.isLocal
     ? {

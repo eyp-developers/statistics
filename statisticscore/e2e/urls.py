@@ -8,11 +8,9 @@ from statisticscore.e2e import views
 app_name = 'e2e'
 
 urlpatterns = [
-    path('', views.health, name='health'),
     path('sessions/', views.create_session, name='create_session'),
     path('sessions/<int:session_id>/', views.delete_session, name='delete_session'),
     path('sessions/<int:session_id>/state/', views.session_state, name='session_state'),
     path('sessions/<int:session_id>/data/', views.session_data, name='session_data'),
     path('login/', views.login_as, name='login'),
-    path('reset/', views.reset, name='reset'),
 ]
