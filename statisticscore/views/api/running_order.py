@@ -52,7 +52,7 @@ def runningorder_api(request, session_id):
     thisdata = {}
     if request.method == 'POST':
         if request.POST.get('action') == 'R':
-            if Point.objects.filter(session=session).count() < 0:
+            if Point.objects.filter(session=session).count() > 0:
                 dr_subtopics = Point.objects.filter(session=session).order_by('-pk')[0].subtopics.all()
             else:
                 dr_subtopics = []
@@ -128,7 +128,7 @@ def runningorder_api(request, session_id):
                 'session_total': committee_session_points,
                 'debate_total': committee_debate_points,
                 'next_subtopics': subtopics_next_array,
-                'height': round(height, 4)
+                'height': float(round(height, 4))
             }
             committees_array.append(thiscommittee)
         thisdata['committees'] = committees_array

@@ -28,9 +28,6 @@ test.describe('running order', () => {
   });
 
   test('loads for a session with points', async ({ page, createSession }) => {
-    // Known bug 5: once the session has points, /api/runningorder/<id>/ returns 500 because it tries to put a
-    // Decimal into JSON (views/api/running_order.py:192). The page doesn't show an error; it just stops updating.
-    test.fail();
     const session = await createSession({ mode: 'R', active_debate: 'ENVI', committees: [{ name: 'ENVI' }, { name: 'AFCO' }] });
     await addSessionData(session.id, { points: [{ committee: 'AFCO' }] });
     await loginAs(page, session.id, 'admin');
