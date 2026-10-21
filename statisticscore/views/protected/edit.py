@@ -80,7 +80,7 @@ def edit(request, session_id):
                                 'resolutions': s.resolution_link,
                                 'start_date': timezone.make_naive(s.start_date).strftime("%Y-%m-%d"),
                                 'end_date': timezone.make_naive(s.end_date).strftime("%Y-%m-%d"),
-                                'statisticscore': s.session_statistics,
+                                'statistics': s.session_statistics,
                                 'voting_enabled': s.voting_enabled,
                                 'gender_statistics': s.gender_enabled,
                                 'number_female_participants': s.gender_number_female,

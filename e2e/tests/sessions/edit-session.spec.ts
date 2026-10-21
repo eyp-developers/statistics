@@ -60,15 +60,9 @@ test.describe('editing a session', () => {
   });
 
   test('keeps the statistics mode when saving without changing it', async ({ page, createSession }) => {
-    // Known bug 4: the edit view pre-fills the key 'statisticscore' instead of 'statistics'
-    // (statisticscore/views/protected/edit.py), so the dropdown always shows "Statistics Only" and saving
-    // quietly switches the session to that mode.
-    test.fail();
-
     const session = await createSession({ mode: 'C' });
     await openEditPage(page, session);
-    // Matched by its start: with the bug, the label also carries a "This field is required." error.
-    const mode = page.getByLabel(/^Statistics\b/);
+    const mode = page.getByLabel('Statistics', { exact: true });
     await expect(mode).toHaveValue('C');
 
     await save(page);
