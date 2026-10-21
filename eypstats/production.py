@@ -142,6 +142,12 @@ DEFAULT_FILE_STORAGE = "django_s3_storage.storage.S3Storage"
 # GOOGLE_ANALYTICS = "UA-73435932-1"
 GOOGLE_ANALYTICS = ""
 
+# Test-only data endpoints under /__e2e__/ (see e2e/README.md). Never enable these on the live site,
+# only on preview deployments that the Playwright suite runs against.
+E2E_ENDPOINTS_ENABLED = os.environ.get('E2E_ENDPOINTS_ENABLED', '').lower() == 'true'
+E2E_TOKEN = os.environ.get('E2E_TOKEN', '')
+E2E_ALLOW_RESET = os.environ.get('E2E_ALLOW_RESET', '').lower() == 'true'
+
 RAVEN_CONFIG = {
     'dsn': 'https://e1293cf510704122a3ee1c9a35477c7a:eeabde9a71f54a3a898295146aab5520@sentry.io/156485',
     # If you are using git, you can also automatically configure the
