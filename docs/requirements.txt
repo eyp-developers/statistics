@@ -1,0 +1,4 @@
+sphinx==9.2.0
+    # via eypstats (pyproject.toml:docs)
+sphinx-rtd-theme==3.1.0
+    # via eypstats (pyproject.toml:docs)

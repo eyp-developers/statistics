@@ -35,6 +35,10 @@ build-backend = "uv_build"
 dev = [
     "django-stubs>=6.1.0",
 ]
+docs = [
+    "sphinx>=9.2.0",
+    "sphinx-rtd-theme>=3.1.0",
+]
 
 [tool.uv.extra-build-dependencies]
 django-grip = ["setuptools"]
