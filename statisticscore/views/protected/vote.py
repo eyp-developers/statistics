@@ -1,10 +1,11 @@
-from django.urls import reverse
-from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from statisticscore.models import Session, Committee, ActiveDebate, Vote
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 from statisticscore.forms.vote import VoteForm
-from helpers import check_authorization_and_render
+from statisticscore.models import ActiveDebate, Committee, Session, Vote
+from statisticscore.views.helpers import check_authorization_and_render
 
 
 @login_required(login_url='/login/')

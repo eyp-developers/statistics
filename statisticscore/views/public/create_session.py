@@ -1,13 +1,14 @@
 from datetime import datetime
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.utils.text import slugify
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from statisticscore.models import Session, Announcement, ActiveDebate, ActiveRound
+from django.utils.text import slugify
+
 from statisticscore.forms.session_create import SessionForm
-from helpers import raven_client
+from statisticscore.models import ActiveDebate, ActiveRound, Announcement, Session
 
 
 def create_session(request):
@@ -94,7 +95,6 @@ def create_session(request):
                 session.save()
             except Exception as e:
                 # In cases of more serious errors, make sure to clean up
-                raven_client.captureException()
                 logout(request)
                 admin_user.delete()
                 submit_user.delete()

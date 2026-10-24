@@ -1,11 +1,18 @@
-from django.urls import reverse
-from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from statisticscore.models import Session, Committee, SubTopic, ActiveDebate, \
-                                ActiveRound, Point
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 from statisticscore.forms.point import PointForm
-from helpers import check_authorization_and_render
+from statisticscore.models import (
+    ActiveDebate,
+    ActiveRound,
+    Committee,
+    Point,
+    Session,
+    SubTopic,
+)
+from statisticscore.views.helpers import check_authorization_and_render
 
 
 @login_required(login_url='/login/')

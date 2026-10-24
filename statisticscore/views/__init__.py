@@ -1,14 +1,7 @@
-__all__ = []
+from statisticscore.hacks import import_submodules
 
-import pkgutil
-import inspect
-
-for loader, name, is_pkg in pkgutil.walk_packages(__path__):
-    module = loader.find_module(name).load_module(name)
-
-    for name, value in inspect.getmembers(module):
-        if name.startswith('__'):
-            continue
-
-        globals()[name] = value
-        __all__.append(name)
+# Terrible import system crimes are committed here in order to not need to
+# refactor the entire codebase right now
+result = import_submodules(__name__)
+globals().update(result.globals_dict)
+__all__ = result.all_names

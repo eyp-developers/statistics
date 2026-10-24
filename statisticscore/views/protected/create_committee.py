@@ -1,9 +1,17 @@
 import json
-from django.http import HttpResponse
+
 from django.contrib.auth.decorators import login_required
-from statisticscore.models import Session, Committee, SubTopic, Topic, StatisticsTopicPlace
+from django.http import HttpResponse
+
 from statisticscore.forms.committee import CommitteeForm
-from helpers import check_authorization_and_render
+from statisticscore.models import (
+    Committee,
+    Session,
+    StatisticsTopicPlace,
+    SubTopic,
+    Topic,
+)
+from statisticscore.views.helpers import check_authorization_and_render
 
 
 def delete_committee(request):

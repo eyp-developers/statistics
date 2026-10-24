@@ -1,12 +1,14 @@
 from datetime import datetime
-from django.http import HttpResponse, HttpResponseRedirect
-from django.utils import timezone
-from django.urls import reverse
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from statisticscore.models import Session, Committee
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+from django.utils import timezone
+
 from statisticscore.forms.session_edit import SessionEditForm
-from helpers import check_authorization_and_render
+from statisticscore.models import Committee, Session
+from statisticscore.views.helpers import check_authorization_and_render
 
 
 @login_required(login_url='/login/')

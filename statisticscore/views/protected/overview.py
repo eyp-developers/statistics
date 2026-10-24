@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
-from statisticscore.models import Session, Committee
-from helpers import check_authorization_and_render
+
+from statisticscore.models import Committee, Session
+from statisticscore.views.helpers import check_authorization_and_render
 
 
 @login_required(login_url='/login/')
