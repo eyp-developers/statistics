@@ -32,3 +32,5 @@ logs/gunicorn.log
 
 .env
 set_db_url
+
+.direnv/*
