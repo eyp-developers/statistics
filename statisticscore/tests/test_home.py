@@ -19,7 +19,7 @@ class HomeViewTests(TestCase):
         self.assertContains(response, "No sessions are available.")
         self.assertContains(response, "Account")
         self.assertContains(response, "Login")
-        self.assertQuerysetEqual(response.context['latest_sessions_list'], [])
+        self.assertQuerySetEqual(response.context['latest_sessions_list'], [])
 
     def test_home_view_with_one_session_created(self):
         """
@@ -32,7 +32,7 @@ class HomeViewTests(TestCase):
         self.assertContains(response, "80th International Session of the European Youth Parliament")
         self.assertContains(response, "Account")
         self.assertContains(response, "Login")
-        self.assertQuerysetEqual(response.context['latest_sessions_list'], [session_leipzig])
+        self.assertQuerySetEqual(response.context['latest_sessions_list'], [session_leipzig])
 
     def test_home_view_with_two_sessions_created(self):
         """
@@ -48,7 +48,7 @@ class HomeViewTests(TestCase):
         self.assertContains(response, "4th International Forum of EYP Spain")
         self.assertContains(response, "Account")
         self.assertContains(response, "Login")
-        self.assertQuerysetEqual(response.context['latest_sessions_list'], [session_hiber, session_leipzig])
+        self.assertQuerySetEqual(response.context['latest_sessions_list'], [session_hiber, session_leipzig])
 
     def test_home_view_with_one_non_public_session_created(self):
         """
@@ -61,7 +61,7 @@ class HomeViewTests(TestCase):
         self.assertContains(response, "No sessions are available.")
         self.assertContains(response, "Account")
         self.assertContains(response, "Login")
-        self.assertQuerysetEqual(response.context['latest_sessions_list'], [])
+        self.assertQuerySetEqual(response.context['latest_sessions_list'], [])
 
     def test_home_view_with_one_public_and_one_non_public_session_created(self):
         """
@@ -76,4 +76,4 @@ class HomeViewTests(TestCase):
         self.assertContains(response, "80th International Session of the European Youth Parliament")
         self.assertContains(response, "Account")
         self.assertContains(response, "Login")
-        self.assertQuerysetEqual(response.context['latest_sessions_list'], [session_leipzig_public])
+        self.assertQuerySetEqual(response.context['latest_sessions_list'], [session_leipzig_public])
