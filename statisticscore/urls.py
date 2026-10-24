@@ -1,10 +1,11 @@
-from django.urls import re_path
-from django.conf.urls.static import static
 from django.conf import settings
+from django.conf.urls.static import static
+from django.urls import path, re_path
 
-from statisticscore.views import *
 from statisticscore.url_patterns.api import api_urls
 from statisticscore.url_patterns.session import session_urls
+from statisticscore.views import *
+from statisticscore.views.helpers import trigger_bugsink
 
 # The URLs are quite important to the GA Stats system, as there's a custom API and system for accessing various forms
 # Sessions, Debates, Point Submit and Vote Submit pages are accessed using the id's of the session/committee.
@@ -30,6 +31,8 @@ urlpatterns = [
     re_path(r'^manage/(?P<session_id>[0-9]+)/$', manage, name='manage'),
     re_path(r'^gender/(?P<session_id>[0-9]+)/$', gender, name='gender'),
     re_path(r'^runningorder/(?P<session_id>[0-9]+)/$', runningorder, name='runningorder'),
+    path("trigger_bugsink/", trigger_bugsink, name="trigger_bugsink"),
+
 ]
 
 urlpatterns += api_urls

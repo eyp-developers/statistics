@@ -1,5 +1,6 @@
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.contrib.admin.views.decorators import staff_member_required
+from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -20,3 +21,8 @@ def check_authorization_and_render(request, template, context, session, admin_on
             messages.add_message(request, messages.ERROR,
                                  'You are not authorized to view this page. You need to log in as a ' + session.name + ' user.')
             return HttpResponseRedirect(reverse('statisticscore:login'))
+
+
+@staff_member_required
+def trigger_bugsink(request: HttpRequest):
+    raise Exception("Raised Exception on purpose to send it to Bugsink")  # noqa: TRY002
