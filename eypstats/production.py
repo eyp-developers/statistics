@@ -128,10 +128,11 @@ STORAGES = {
     "default": {
         "BACKEND": "storages.backends.s3.S3Storage",
         "OPTIONS": {
-            "bucket_name": os.environ['S3_BUCKET_NAME'],
-            "access_key": os.environ['AWS_ACCESS_KEY_ID'],
-            "secret_key": os.environ['AWS_SECRET_ACCESS_KEY'],
-            "region_name": "eu-west-2",
+            "bucket_name": os.environ['DEFAULT_STORAGE_BUCKET_NAME'],
+            "access_key": os.environ['DEFAULT_STORAGE_ACCESS_KEY_ID'],
+            "secret_key": os.environ['DEFAULT_STORAGE_SECRET_ACCESS_KEY'],
+            "region_name": os.environ['DEFAULT_STORAGE_REGION'],
+            "endpoint_url": os.environ['DEFAULT_STORAGE_ENDPOINT_URL'],
         },
     },
 }
