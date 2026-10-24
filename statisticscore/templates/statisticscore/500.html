@@ -19,20 +19,6 @@
 
 {% block content %}
 
-
-    {% if request.sentry.id %}
-        <script src="https://cdn.ravenjs.com/2.3.0/raven.min.js"></script>
-        <script>
-        Raven.showReportDialog({
-            eventId: '{{ request.sentry.id }}',
-
-            // use the public DSN (dont include your secret!)
-            dsn: 'https://e1293cf510704122a3ee1c9a35477c7a@sentry.io/156485'
-        });
-        </script>
-    {% endif %}
-
-
     <div class="panel-group" id="accordion">
 
         <div class="panel panel-primary">

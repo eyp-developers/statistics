@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import raven
 import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,7 +44,6 @@ INSTALLED_APPS = (
     'statisticscore',
     'django_rename_app',
     'imagekit',
-    'raven.contrib.django.raven_compat',
     'django_s3_storage',
     'django_tables2',
     'django_filters',
@@ -72,7 +70,6 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'statisticscore.context_processors.analytics',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -130,13 +127,3 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-GOOGLE_ANALYTICS = ""
-
-RAVEN_CONFIG = {
-    'dsn': 'https://e1293cf510704122a3ee1c9a35477c7a:eeabde9a71f54a3a898295146aab5520@sentry.io/156485',
-    # If you are using git, you can also automatically configure the
-    # release based on the git info.
-    # 'dsn': '',
-    'release': '15098a2e0423b7149fad67f1294fa182aea08fbf',
-}

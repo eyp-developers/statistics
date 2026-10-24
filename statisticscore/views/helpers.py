@@ -1,12 +1,7 @@
-from raven import Client
-from django.conf import settings
-from django.shortcuts import render
-from django.urls import reverse
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-
-
-raven_client = Client(settings.RAVEN_CONFIG['dsn'])
+from django.shortcuts import render
+from django.urls import reverse
 
 
 # This is a central function. It replaces 'render' in cases where the user has to be authorized to view the page, not just authenticated.

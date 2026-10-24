@@ -10,8 +10,9 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import raven
+
 import dj_database_url
+import sentry_sdk
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -43,7 +44,6 @@ INSTALLED_APPS = (
     'statisticscore',
     'django_rename_app',
     'imagekit',
-    'raven.contrib.django.raven_compat',
     'django_s3_storage',
     'django_tables2',
     'django_filters',
@@ -70,7 +70,6 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'statisticscore.context_processors.analytics',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -138,13 +137,13 @@ AWS_S3_BUCKET_NAME = os.environ['S3_BUCKET_NAME']
 
 DEFAULT_FILE_STORAGE = "django_s3_storage.storage.S3Storage"
 
-
-# GOOGLE_ANALYTICS = "UA-73435932-1"
-GOOGLE_ANALYTICS = ""
-
-RAVEN_CONFIG = {
-    'dsn': 'https://e1293cf510704122a3ee1c9a35477c7a:eeabde9a71f54a3a898295146aab5520@sentry.io/156485',
-    # If you are using git, you can also automatically configure the
-    # release based on the git info.
-    'release': 'static-release',
-}
+# Initialise sentry sdk, send to self-hosted bugsink
+sentry_sdk.init(
+    dsn=os.environ['BUGSINK_DSN'],
+    send_default_pii=True,
+    traces_sample_rate=0,
+    # Check https://docs.sentry.io/platforms/python/data-management/data-collected/ to configure what data is collected
+    data_collection={
+        "user_info": True,
+    },
+)
