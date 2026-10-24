@@ -44,7 +44,6 @@ INSTALLED_APPS = (
     'statisticscore',
     'django_rename_app',
     'imagekit',
-    'django_s3_storage',
     'django_tables2',
     'django_filters',
     'bootstrap3'
@@ -121,7 +120,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Media file settings
 MEDIA_URL = '/media/'

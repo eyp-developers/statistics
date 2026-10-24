@@ -6,14 +6,12 @@ requires-python = ">=3.14"
 dependencies = [
     "django>=6.1.2",
     "pillow>=13.0",
-    "boto3",
     "dj-database-url",
     "urllib3",
     "django-appconf",
     "django-bootstrap3",
     "django-filter",
     "django-imagekit",
-    "django-s3-storage",
     "django-tables2",
     "docutils",
     "gunicorn",
@@ -27,6 +25,7 @@ dependencies = [
     "six",
     "whitenoise",
     "django_rename_app",
+    "django-storages[s3]>=1.14.6",
 ]
 [build-system]
 requires = ["uv_build>=0.10.0,<0.11.0"]

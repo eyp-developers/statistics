@@ -44,7 +44,6 @@ INSTALLED_APPS = (
     'statisticscore',
     'django_rename_app',
     'imagekit',
-    'django_s3_storage',
     'django_tables2',
     'django_filters',
     'bootstrap3'
