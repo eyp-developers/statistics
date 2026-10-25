@@ -34,3 +34,5 @@ logs/gunicorn.log
 set_db_url
 
 .direnv/*
+
+node_modules/*
