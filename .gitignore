@@ -35,4 +35,4 @@ set_db_url
 
 .direnv/*
 
-node_modules/*
+**/node_modules/*

@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@sentry/browser": "^11.9.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  },
+  "scripts": {
+    "build": "esbuild statisticscore/app.jsx --bundle --outfile=statisticscore/static/statisticscore/js/bundle.js"
+  }
+}

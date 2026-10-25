@@ -68,6 +68,7 @@
       in {
         default = pkgs.mkShell {
           packages = [
+            pkgs.nodejs_latest
             pkgs.ruff
             pkgs.ty
             pkgs.uv
